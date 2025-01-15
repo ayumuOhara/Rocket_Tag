@@ -1,19 +1,39 @@
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerController : MonoBehaviour
+// PUNのコールバックを受け取れるようにする為のMonoBehaviourPunCallbacks
+public class PlayerController : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Vector3 velocity;              // 移動方向
-    [SerializeField] private float moveSpeed = 5.0f;        // 移動速度
+    [SerializeField] private float moveSpeed = 6.0f;        // 移動速度
     [SerializeField] private float applySpeed = 0.2f;       // 回転の適用速度
-    [SerializeField] private CameraController refCamera;  // カメラの水平回転を参照する用
+    [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
     [SerializeField] Rigidbody rb;
+    [SerializeField] public bool hasRocket { get; private set; }  // ロケットを所持しているか
 
-    void Start()
+    private void Awake()
     {
         
     }
 
+    void Start()
+    {
+        hasRocket = false;
+        refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
+    }
+
     void Update()
+    {
+        if(photonView.IsMine)
+        {
+            GetVelocity();
+            MovePlayer();
+            PlayerAction();
+        }
+    }
+
+    // 押下された移動キーに応じてベクトルを取得
+    void GetVelocity()
     {
         // WASD入力から、XZ平面(水平な地面)を移動する方向(velocity)を得ます
         velocity = Vector3.zero;
@@ -28,7 +48,11 @@ public class PlayerController : MonoBehaviour
 
         // 速度ベクトルの長さを1秒でmoveSpeedだけ進むように調整します
         velocity = velocity.normalized * moveSpeed * Time.deltaTime;
+    }
 
+    // 取得したベクトルの方向に移動&回転させる
+    void MovePlayer()
+    {
         // いずれかの方向に移動している場合
         if (velocity.magnitude > 0)
         {
@@ -42,6 +66,25 @@ public class PlayerController : MonoBehaviour
             // プレイヤーの位置(transform.position)の更新
             // カメラの水平回転(refCamera.hRotation)で回した移動方向(velocity)を足し込みます
             transform.position += refCamera.hRotation * velocity;
+        }
+    }
+
+    // 押下されたキーに応じてアクション
+    void PlayerAction()
+    {
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("ロケットを投擲した");
+        }
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("スキルを使用した");
+        }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            Debug.Log("タッチ");
         }
     }
 }
