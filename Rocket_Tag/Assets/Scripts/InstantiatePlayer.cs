@@ -31,6 +31,5 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
         //Resourcesフォルダから"Player/PlayerCamera"を探してきてそれを生成
         GameObject player = PhotonNetwork.Instantiate("Player", position, Quaternion.identity);
         _camera.SetActive(true);
-        _camera.transform.parent = player.transform;
     }
 }
