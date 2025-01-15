@@ -238,6 +238,7 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   moveSpeed: 6
   applySpeed: 0.2
+  jumpForce: 1000
   refCamera: {fileID: 0}
   rb: {fileID: 5867222108199720115}
 --- !u!54 &5867222108199720115

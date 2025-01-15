@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] private Vector3 velocity;              // 移動方向
     [SerializeField] private float moveSpeed = 6.0f;        // 移動速度
     [SerializeField] private float applySpeed = 0.2f;       // 回転の適用速度
+    [SerializeField] private float jumpForce = 10.0f;        // ジャンプ力
+    private bool isGround = false;
     [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
     [SerializeField] Rigidbody rb;
     [SerializeField] public bool hasRocket { get; private set; }  // ロケットを所持しているか
@@ -72,7 +74,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
     // 押下されたキーに応じてアクション
     void PlayerAction()
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        if(Input.GetKeyDown(KeyCode.Space) && isGround)
+        {
+            isGround = false;
+            rb.AddForce(Vector3.up * jumpForce);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("ロケットを投擲した");
         }
@@ -85,6 +93,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if(Input.GetMouseButtonDown(1))
         {
             Debug.Log("タッチ");
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            isGround = true;
         }
     }
 }
