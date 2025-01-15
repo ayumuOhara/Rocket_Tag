@@ -1217,10 +1217,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  distance: 15
+  distance: 5
   vRotation: {x: 0, y: 0, z: 0, w: 0}
   hRotation: {x: 0, y: 0, z: 0, w: 0}
-  turnSpeed: 10
+  turnSpeed: 5
 --- !u!114 &504838160
 MonoBehaviour:
   m_ObjectHideFlags: 0
