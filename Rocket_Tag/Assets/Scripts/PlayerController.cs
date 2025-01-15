@@ -13,11 +13,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private bool isGround = false;                          // 接地判定
     [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
     [SerializeField] Rigidbody rb;
-    [SerializeField] private bool hasRocket;                // ロケットを所持しているか
     public float detectionRadius = 5f;                      // 検知する範囲の半径
-    private string targetTag = "Player";                     // タッチ時の検知対象のtag(実装時にはPlayerに変更する)
+    private string targetTag = "Player";                    // タッチ時の検知対象のtag(実装時にはPlayerに変更する)
     public float maxDistance = 10f;                         // 検知する最大距離
-
+    [SerializeField] private bool hasRocket;                // ロケットを所持しているか
 
     private void Awake()
     {
@@ -106,22 +105,37 @@ public class PlayerController : MonoBehaviourPunCallbacks
             Debug.Log("ロケットを投擲した");
         }
 
-        if(Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1))
         {
             GameObject target = GetTargetDistance();
-            if(target != null)
+            if (target != null)
             {
-                PlayerController player = target.GetComponent<PlayerController>();
-                SetHasRocket(player);
+                // 自分の hasRocket を切り替え
+                photonView.RPC("ToggleHasRocket", RpcTarget.All, !hasRocket);
+
+                // ターゲットの hasRocket を切り替え
+                PhotonView targetPhotonView = target.GetComponent<PhotonView>();
+                if (targetPhotonView != null)
+                {
+                    targetPhotonView.RPC("ToggleHasRocket", RpcTarget.All, !target.GetComponent<PlayerController>().hasRocket);
+                }
             }
         }
     }
 
-    // ロケットの受け渡し
-    void SetHasRocket(PlayerController player)
+    [PunRPC]
+    void ToggleHasRocket(bool newHasRocket)
     {
-        this.hasRocket = !this.hasRocket;
-        player.hasRocket = !player.hasRocket;
+        hasRocket = newHasRocket;
+        Debug.Log($"hasRocket を {hasRocket} に更新しました");
+    }
+
+    // hasRocket を設定し、同期
+    [PunRPC]
+    public void SetHasRocket(bool newHasRocket)
+    {
+        hasRocket = newHasRocket;
+        Debug.Log($"{photonView.Owner.NickName} の hasRocket を {hasRocket} に設定しました");
     }
 
     // 他のプレイヤーとの距離を測る
