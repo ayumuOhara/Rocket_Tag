@@ -4,7 +4,6 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-//PUNのコールバックを受け取れるようにする為のMonoBehaviourPunCallbacks
 public class InstantiatePlayer : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject playerCamera;
@@ -15,26 +14,72 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
     {
         Application.targetFrameRate = 60;
 
-        //マスターサーバーに接続
+        // マスターサーバーに接続
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    //マスターサーバーに接続成功した時に呼ばれる
+    // マスターサーバーに接続成功した時に呼ばれる
     public override void OnConnectedToMaster()
     {
-        //Roomという名前のルームを作成する、既存の場合は参加する
+        // ルームの作成または参加
         PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions(), TypedLobby.Default);
     }
 
-    //ルームへの接続が成功したら呼ばれる
+    // ルーム作成時または参加時に呼ばれる
     public override void OnJoinedRoom()
     {
-        //Playerを生成する座量をランダムに決める
-        var position = new Vector3(Random.Range(-3f, 3f), 0.5f, Random.Range(-3f, 3f));
+        // カスタムプロパティでプレイヤー人数を初期化または更新
+        UpdatePlayerCount(1);
 
-        //Resourcesフォルダから"Player/PlayerCamera"を探してきてそれを生成
+        // プレイヤーをランダムな位置に生成
+        var position = new Vector3(Random.Range(-3f, 3f), 0.5f, Random.Range(-3f, 3f));
         GameObject player = PhotonNetwork.Instantiate("Player", position, Quaternion.identity);
         playerCamera.SetActive(true);
         waitCamera.SetActive(false);
+
+        gameManager.CheckJoinedPlayer();
+        Debug.Log("プレイヤーがルームに参加しました。");
+    }
+
+    // プレイヤーがルームから退出した場合に呼ばれる
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        // プレイヤー人数を減らす
+        UpdatePlayerCount(-1);
+        Debug.Log($"プレイヤーが退出しました: {otherPlayer.NickName}");
+    }
+
+    // プレイヤー人数を更新するメソッド
+    private void UpdatePlayerCount(int delta)
+    {
+        if (PhotonNetwork.CurrentRoom != null)
+        {
+            // 現在の人数を取得
+            int currentCount = 0;
+            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("PlayerCount", out object count))
+            {
+                currentCount = (int)count;
+            }
+
+            // 人数を更新
+            currentCount += delta;
+
+            // カスタムプロパティに保存
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+            props["PlayerCount"] = currentCount;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+
+            Debug.Log($"現在のプレイヤー数: {currentCount}");
+        }
+    }
+
+    // カスタムプロパティから現在のプレイヤー人数を取得するメソッド
+    public int GetCurrentPlayerCount()
+    {
+        if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("PlayerCount", out object count))
+        {
+            return (int)count;
+        }
+        return 0;
     }
 }
