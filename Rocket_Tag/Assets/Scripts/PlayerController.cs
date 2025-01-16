@@ -1,5 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 // PUNのコールバックを受け取れるようにする為のMonoBehaviourPunCallbacks
 public class PlayerController : MonoBehaviourPunCallbacks
@@ -7,11 +9,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] private Vector3 velocity;              // 移動方向
     [SerializeField] private float moveSpeed = 6.0f;        // 移動速度
     [SerializeField] private float applySpeed = 0.2f;       // 回転の適用速度
-    [SerializeField] private float jumpForce = 10.0f;        // ジャンプ力
-    private bool isGround = false;
+    [SerializeField] private float jumpForce = 10.0f;       // ジャンプ力
+    private bool isGround = false;                          // 接地判定
     [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
     [SerializeField] Rigidbody rb;
-    [SerializeField] public bool hasRocket { get; private set; }  // ロケットを所持しているか
+    public float detectionRadius = 5f;                      // 検知する範囲の半径
+    private string targetTag = "Player";                    // タッチ時の検知対象のtag(実装時にはPlayerに変更する)
+    public float maxDistance = 10f;                         // 検知する最大距離
+    [SerializeField] private bool hasRocket;                // ロケットを所持しているか
 
     private void Awake()
     {
@@ -20,7 +25,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        hasRocket = false;
+        //hasRocket = false;
         refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
     }
 
@@ -30,7 +35,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             GetVelocity();
             MovePlayer();
-            PlayerAction();
+
+            if (hasRocket)
+            {
+                PlayerAction();
+            }
         }
     }
 
@@ -50,6 +59,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         // 速度ベクトルの長さを1秒でmoveSpeedだけ進むように調整します
         velocity = velocity.normalized * moveSpeed * Time.deltaTime;
+
+        // ジャンプ処理
+        if (Input.GetKeyDown(KeyCode.Space) && isGround)
+        {
+            isGround = false;
+            rb.AddForce(Vector3.up * jumpForce);
+        }
     }
 
     // 取得したベクトルの方向に移動&回転させる
@@ -74,28 +90,99 @@ public class PlayerController : MonoBehaviourPunCallbacks
     // 押下されたキーに応じてアクション
     void PlayerAction()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && isGround)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            isGround = false;
-            rb.AddForce(Vector3.up * jumpForce);
+            Debug.Log("スキル１を使用した");
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Debug.Log("スキル２を使用した");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
         {
             Debug.Log("ロケットを投擲した");
         }
 
-        if(Input.GetKeyDown(KeyCode.F))
+        if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log("スキルを使用した");
-        }
+            GameObject target = GetTargetDistance();
+            if (target != null)
+            {
+                // 自分の hasRocket を切り替え
+                photonView.RPC("ToggleHasRocket", RpcTarget.All, !hasRocket);
 
-        if(Input.GetMouseButtonDown(1))
-        {
-            Debug.Log("タッチ");
+                // ターゲットの hasRocket を切り替え
+                PhotonView targetPhotonView = target.GetComponent<PhotonView>();
+                if (targetPhotonView != null)
+                {
+                    targetPhotonView.RPC("ToggleHasRocket", RpcTarget.All, !target.GetComponent<PlayerController>().hasRocket);
+                }
+            }
         }
     }
 
+    [PunRPC]
+    void ToggleHasRocket(bool newHasRocket)
+    {
+        hasRocket = newHasRocket;
+        Debug.Log($"hasRocket を {hasRocket} に更新しました");
+    }
+
+    // hasRocket を設定し、同期
+    [PunRPC]
+    public void SetHasRocket(bool newHasRocket)
+    {
+        hasRocket = newHasRocket;
+        Debug.Log($"{photonView.Owner.NickName} の hasRocket を {hasRocket} に設定しました");
+    }
+
+    // 他のプレイヤーとの距離を測る
+    GameObject GetTargetDistance()
+    {
+        GameObject[] targets = GameObject.FindGameObjectsWithTag(targetTag);
+        GameObject nearestObject = null;
+        float nearestDistance = Mathf.Infinity;
+
+        foreach (GameObject target in targets)
+        {
+            Vector3 direction = target.transform.position - transform.position;
+            float distance = direction.magnitude;
+
+            // 距離が範囲内かチェック
+            if (distance <= maxDistance)
+            {
+                // Raycastを発射して障害物がないか確認
+                Ray ray = new Ray(transform.position, direction.normalized);
+                if (Physics.Raycast(ray, out RaycastHit hit, maxDistance))
+                {
+                    if (hit.collider.gameObject == target)
+                    {
+                        // 最短距離を更新
+                        if (distance < nearestDistance)
+                        {
+                            nearestDistance = distance;
+                            nearestObject = target;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (nearestObject != null)
+        {
+            Debug.Log($"最も近いオブジェクト: {nearestObject.name}, 距離: {nearestDistance}");
+        }
+        else
+        {
+            Debug.Log("検知対象が見つかりませんでした");
+        }
+
+        return nearestObject;
+    }
+
+    // 接地判定
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.CompareTag("Ground"))
