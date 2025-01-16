@@ -13,17 +13,16 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
     [SerializeField] GameObject[] ReadyUI;              // マッチ開始前のUI
     private const int JOIN_CNT_MIN = 2;       // 参加人数の最小値
+    private bool isGameStarted = false;      // ゲームが開始されたかどうかのフラグ
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         StartCoroutine(WaitPlayersReady());
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     // プレイヤーの準備完了を待つ
@@ -34,7 +33,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             int readyCount = GetReadyPlayerCount();
             playerCntText.text = $"{readyCount}/{JOIN_CNT_MIN}";
 
-            if (CheckJoinedPlayer() && CheckAllPlayersReady())
+            if (CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
             {
                 StartGame();
                 yield break;
@@ -43,7 +42,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             yield return null;
         }
     }
-
 
     // プレイヤーが指定の人数以上参加しているか
     public bool CheckJoinedPlayer()
@@ -54,7 +52,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             return true;
         }
-        
+
         return false;
     }
 
@@ -63,7 +61,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Player[] players = PhotonNetwork.PlayerList;
 
-        // 全プレイヤーの「IsReady」フラグをチェック
         foreach (var player in players)
         {
             if (!player.CustomProperties.ContainsKey("IsReady") || !(bool)player.CustomProperties["IsReady"])
@@ -96,7 +93,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     // ゲームスタート
     void StartGame()
     {
+        if (isGameStarted) return; // すでにゲームが開始されていれば何もしない
+
         Debug.Log("プレイヤーが揃ったのでゲームを開始します");
+        isGameStarted = true; // ゲーム開始フラグを立てる
         ReadyUI[0].SetActive(false);
         ReadyUI[1].SetActive(false);
         ChooseRocketPlayer();
@@ -106,7 +106,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     // 参加しているプレイヤーから１人を選び、ロケットを付与
     void ChooseRocketPlayer()
     {
-        // "Player" タグを持つすべてのプレイヤーを取得
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
         if (players.Length == 0)
@@ -115,15 +114,12 @@ public class GameManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        // ランダムにプレイヤーを抽選
         int rnd = Random.Range(0, players.Length);
         GameObject selectedPlayer = players[rnd];
 
-        // 抽選したプレイヤーの PhotonView を取得
         PhotonView targetPhotonView = selectedPlayer.GetComponent<PhotonView>();
         if (targetPhotonView != null)
         {
-            // hasRocket を true に設定し、同期
             targetPhotonView.RPC("SetHasRocket", RpcTarget.All, true);
         }
         else
@@ -149,6 +145,5 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
             yield return null;
         }
-        
     }
 }
