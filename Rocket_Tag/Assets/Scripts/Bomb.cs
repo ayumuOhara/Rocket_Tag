@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -60,12 +61,14 @@ public class Bomb : MonoBehaviour
             ApproachPos(bomb, player, playerOffset);
         }
         DecreeseLevelUp();
-        
+            bombRB.transform.Translate(0, floatForce, 0);
+
     }
     void Explosion()    //  ”š’e”š”­
     {
         if((floatingTime -= Time.deltaTime) > 0)
         {
+            Debug.Log(99);
             player.transform.Translate(0, floatForce, 0);
         }
         bombRB.linearVelocity = new Vector3(0, riseSpeed, 0);
