@@ -664,6 +664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5cd7fe17f1866f429243416a9e0b540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
 --- !u!54 &1807629765
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -704,7 +705,7 @@ GameObject:
   - component: {fileID: 1915035894}
   - component: {fileID: 1915035893}
   m_Layer: 0
-  m_Name: Faker
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
