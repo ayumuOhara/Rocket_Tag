@@ -4,10 +4,10 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField] private Transform player;          // 注視対象プレイヤー
 
-    [SerializeField] private float distance = 15.0f;    // 注視対象プレイヤーからカメラを離す距離
+    [SerializeField] private float distance = 5.0f;    // 注視対象プレイヤーからカメラを離す距離
     [SerializeField] private Quaternion vRotation;      // カメラの垂直回転(見下ろし回転)
     [SerializeField] public Quaternion hRotation;      // カメラの水平回転
-    [SerializeField] private float turnSpeed = 10.0f;   // 回転速度
+    [SerializeField] private float turnSpeed = 5.0f;   // 回転速度
 
     private void Awake()
     {

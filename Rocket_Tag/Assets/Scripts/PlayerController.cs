@@ -6,10 +6,12 @@ using Unity.VisualScripting;
 // PUNのコールバックを受け取れるようにする為のMonoBehaviourPunCallbacks
 public class PlayerController : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private GameObject rocketObj;          // ロケット
+
     [SerializeField] private Vector3 velocity;              // 移動方向
-    [SerializeField] private float moveSpeed = 6.0f;        // 移動速度
+    [SerializeField] private float moveSpeed = 10.0f;       // 移動速度
     [SerializeField] private float applySpeed = 0.2f;       // 回転の適用速度
-    [SerializeField] private float jumpForce = 10.0f;       // ジャンプ力
+    [SerializeField] private float jumpForce = 20.0f;       // ジャンプ力
     private bool isGround = false;                          // 接地判定
     [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
     [SerializeField] Rigidbody rb;
@@ -20,12 +22,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        
+        // ロケットの状態を初期化
+        photonView.RPC("SetHasRocket", RpcTarget.All, false);
     }
 
     void Start()
-    {
-        //hasRocket = false;
+    {   
         refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
     }
 
@@ -59,18 +61,18 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         // 速度ベクトルの長さを1秒でmoveSpeedだけ進むように調整します
         velocity = velocity.normalized * moveSpeed * Time.deltaTime;
+    }
 
+    // 取得したベクトルの方向に移動&回転させる+ジャンプ処理
+    void MovePlayer()
+    {
         // ジャンプ処理
         if (Input.GetKeyDown(KeyCode.Space) && isGround)
         {
             isGround = false;
-            rb.AddForce(Vector3.up * jumpForce);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
-    }
 
-    // 取得したベクトルの方向に移動&回転させる
-    void MovePlayer()
-    {
         // いずれかの方向に移動している場合
         if (velocity.magnitude > 0)
         {
@@ -127,6 +129,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     void ToggleHasRocket(bool newHasRocket)
     {
         hasRocket = newHasRocket;
+        rocketObj.SetActive(hasRocket);
         Debug.Log($"hasRocket を {hasRocket} に更新しました");
     }
 
@@ -135,6 +138,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public void SetHasRocket(bool newHasRocket)
     {
         hasRocket = newHasRocket;
+        rocketObj.SetActive(hasRocket);
         Debug.Log($"{photonView.Owner.NickName} の hasRocket を {hasRocket} に設定しました");
     }
 
