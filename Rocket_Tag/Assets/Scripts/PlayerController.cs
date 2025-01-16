@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private string targetTag = "Player";                    // タッチ時の検知対象のtag(実装時にはPlayerに変更する)
     public float maxDistance = 0;                           // 検知する最大距離
     [SerializeField] private bool hasRocket;                // ロケットを所持しているか
+    public bool isDead;                                     // 死亡判定
 
     private void Awake()
     {

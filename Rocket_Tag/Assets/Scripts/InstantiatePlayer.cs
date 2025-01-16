@@ -7,7 +7,9 @@ using Photon.Realtime;
 //PUNのコールバックを受け取れるようにする為のMonoBehaviourPunCallbacks
 public class InstantiatePlayer : MonoBehaviourPunCallbacks
 {
-    [SerializeField] GameObject _camera;
+    [SerializeField] GameObject playerCamera;
+    [SerializeField] GameObject waitCamera;
+    [SerializeField] GameManager gameManager;
 
     void Start()
     {
@@ -32,6 +34,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
 
         //Resourcesフォルダから"Player/PlayerCamera"を探してきてそれを生成
         GameObject player = PhotonNetwork.Instantiate("Player", position, Quaternion.identity);
-        _camera.SetActive(true);
+        playerCamera.SetActive(true);
+        waitCamera.SetActive(false);
     }
 }
