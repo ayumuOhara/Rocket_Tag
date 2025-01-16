@@ -413,6 +413,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rocketObj: {fileID: 6752579603462179444}
+  colorMaterial:
+  - {fileID: 2100000, guid: a8edfef2db8e56746951a3bd39a1beef, type: 2}
+  - {fileID: 2100000, guid: cb592ad768b45de41be4039b10be8901, type: 2}
+  - {fileID: 2100000, guid: 4d300f39525deba4281761a75be83250, type: 2}
   velocity: {x: 0, y: 0, z: 0}
   moveSpeed: 10
   applySpeed: 0.2
@@ -421,3 +425,4 @@ MonoBehaviour:
   rb: {fileID: 5867222108199720115}
   maxDistance: 5
   hasRocket: 0
+  finishSkill: 1
