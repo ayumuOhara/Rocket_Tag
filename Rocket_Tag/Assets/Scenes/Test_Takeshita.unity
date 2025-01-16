@@ -1477,7 +1477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fedf3cbcceb1214bae7612ff3891760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instantiatePlayer: {fileID: 0}
+  instantiatePlayer: {fileID: 2058844072}
 --- !u!4 &570120167
 Transform:
   m_ObjectHideFlags: 0
@@ -4099,7 +4099,7 @@ GameObject:
   - component: {fileID: 2058844071}
   - component: {fileID: 2058844072}
   m_Layer: 0
-  m_Name: PUNTest
+  m_Name: InstantiatePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
