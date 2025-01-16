@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
     [SerializeField] Rigidbody rb;
     private string targetTag = "Player";                    // タッチ時の検知対象のtag(実装時にはPlayerに変更する)
-    public float maxDistance = 5f;                         // 検知する最大距離
+    public float maxDistance = 1f;                         // 検知する最大距離
     [SerializeField] private bool hasRocket;                // ロケットを所持しているか
 
     private void Awake()
