@@ -5,8 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - PlayerCamera
-  - Ground
   - Decoy
+  - Ground
   layers:
   - Default
   - TransparentFX

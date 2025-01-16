@@ -34,10 +34,13 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
         // プレイヤーをランダムな位置に生成
         var position = new Vector3(Random.Range(-3f, 3f), 0.5f, Random.Range(-3f, 3f));
         GameObject player = PhotonNetwork.Instantiate("Player", position, Quaternion.identity);
+
+        // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
+        gameManager.playerController = player.GetComponent<PlayerController>();
+
         playerCamera.SetActive(true);
         waitCamera.SetActive(false);
 
-        gameManager.CheckJoinedPlayer();
         Debug.Log("プレイヤーがルームに参加しました。");
     }
 

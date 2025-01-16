@@ -1,46 +1,106 @@
-using NUnit.Framework;
-using UnityEngine;
-using System.Collections.Generic;
 using Photon.Pun;
-using Photon.Pun.Demo.PunBasics;
+using Photon.Realtime;
+using System.Collections;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
 
-public class GameManager : MonoBehaviourPun
+public class GameManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] public PlayerController playerController;
     [SerializeField] InstantiatePlayer instantiatePlayer;
-    private const int JOIN_CNT_MIN = 4;       // 参加人数の最小値
-    bool isStart = false;                     // ゲームが始まっているか
+    [SerializeField] PlayerReady playerReady;
+    [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
+    [SerializeField] GameObject[] ReadyUI;              // マッチ開始前のUI
+    private const int JOIN_CNT_MIN = 2;       // 参加人数の最小値
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        StartCoroutine(WaitPlayersReady());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isStart)
+        
+    }
+
+    // プレイヤーの準備完了を待つ
+    IEnumerator WaitPlayersReady()
+    {
+        while (true)
         {
-            CheckSuvivorCnt();
+            int readyCount = GetReadyPlayerCount();
+            playerCntText.text = $"{readyCount}/{JOIN_CNT_MIN}";
+
+            if (CheckJoinedPlayer() && CheckAllPlayersReady())
+            {
+                StartGame();
+                yield break;
+            }
+
+            yield return null;
         }
     }
 
+
     // プレイヤーが指定の人数以上参加しているか
-    public void CheckJoinedPlayer()
+    public bool CheckJoinedPlayer()
     {
         var currentCnt = instantiatePlayer.GetCurrentPlayerCount();
-        Debug.Log($"現在の参加人数：{currentCnt}");
 
-        if (currentCnt >= JOIN_CNT_MIN)       // 全員が準備完了を押したら開始にする
+        if (currentCnt >= JOIN_CNT_MIN)
         {
-            Debug.Log("プレイヤーが揃ったのでゲームを開始します");
-            isStart = true;
-            ChooseRocketPlayer();
+            return true;
         }
-        else
+        
+        return false;
+    }
+
+    // 参加しているプレイヤー全員がReadyしたか
+    bool CheckAllPlayersReady()
+    {
+        Player[] players = PhotonNetwork.PlayerList;
+
+        // 全プレイヤーの「IsReady」フラグをチェック
+        foreach (var player in players)
         {
-            Debug.Log("プレイヤーが揃うまで待機します");
+            if (!player.CustomProperties.ContainsKey("IsReady") || !(bool)player.CustomProperties["IsReady"])
+            {
+                Debug.Log($"プレイヤー {player.NickName} がまだ準備完了していません");
+                return false;
+            }
         }
+
+        return true;
+    }
+
+    // Readyが完了したプレイヤーの数を取得
+    int GetReadyPlayerCount()
+    {
+        Player[] players = PhotonNetwork.PlayerList;
+        int readyCount = 0;
+
+        foreach (var player in players)
+        {
+            if (player.CustomProperties.ContainsKey("IsReady") && (bool)player.CustomProperties["IsReady"])
+            {
+                readyCount++;
+            }
+        }
+
+        return readyCount;
+    }
+
+    // ゲームスタート
+    void StartGame()
+    {
+        Debug.Log("プレイヤーが揃ったのでゲームを開始します");
+        ReadyUI[0].SetActive(false);
+        ReadyUI[1].SetActive(false);
+        ChooseRocketPlayer();
+        CheckSuvivorCnt();
     }
 
     // 参加しているプレイヤーから１人を選び、ロケットを付与
@@ -72,18 +132,23 @@ public class GameManager : MonoBehaviourPun
         }
     }
 
-    // 生き残っている人が何人か判定
-    void CheckSuvivorCnt()
+    // 残り人数を確認し、残り１人になったら終了
+    IEnumerator CheckSuvivorCnt()
     {
-        GameObject[] player = GameObject.FindGameObjectsWithTag("Player");
-        if (player.Length == 1)
+        while (true)
         {
-            Debug.Log("生存人数が１人になったのでゲームを終了します");
-            isStart = false;
+            GameObject[] player = GameObject.FindGameObjectsWithTag("Player");
+            if (player.Length <= 1)
+            {
+                Debug.Log("生存人数が１人になったのでゲームを終了します");
+                ReadyUI[0].SetActive(true);
+                ReadyUI[1].SetActive(true);
+                playerReady.SetReady(false);
+                playerController.SetPlayerCondition();
+                yield break;
+            }
+            yield return null;
         }
-        else
-        {
-            Debug.Log("生存人数が残１人になるまで待機");
-        }
+        
     }
 }
