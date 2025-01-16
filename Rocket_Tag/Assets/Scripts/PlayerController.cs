@@ -2,13 +2,22 @@ using UnityEngine;
 using Photon.Pun;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using System.Collections;
 
 // PUNのコールバックを受け取れるようにする為のMonoBehaviourPunCallbacks
 public class PlayerController : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject rocketObj;          // ロケット
+    [SerializeField]
+    List<Material> colorMaterial = new List<Material>();
+    // [0] DefaultBodyColor
+    // [1] DefaultEyeColor
+    // [2] UseSkillBodyColor
+
+    private float skillCT; // スキルのクールタイム(α版のみ。マスター版ではCSVファイルを使用)
 
     [SerializeField] private Vector3 velocity;              // 移動方向
+    private float defaultMoveSpeed = 10.0f;                 // 移動速度(初期値)
     [SerializeField] private float moveSpeed = 10.0f;       // 移動速度
     [SerializeField] private float applySpeed = 0.2f;       // 回転の適用速度
     [SerializeField] private float jumpForce = 20.0f;       // ジャンプ力
@@ -16,7 +25,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
     [SerializeField] Rigidbody rb;
     private string targetTag = "Player";                    // タッチ時の検知対象のtag(実装時にはPlayerに変更する)
-    public float maxDistance = 0;                         // 検知する最大距離
+    public float maxDistance = 0;                           // 検知する最大距離
     [SerializeField] private bool hasRocket;                // ロケットを所持しているか
 
     private void Awake()
@@ -25,6 +34,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
         photonView.RPC("SetHasRocket", RpcTarget.All, false);
 
         maxDistance = 2f;
+
+        // α版以外では削除
+        skillCT = 30.0f;
     }
 
     void Start()
@@ -38,6 +50,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             GetVelocity();
             MovePlayer();
+            if(skillCT < 30 && finishSkill)
+            {
+                // α版のみ使用(マスター版では削除)
+                SkillCool();
+            }           
 
             if (hasRocket)
             {
@@ -45,6 +62,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
         }
     }
+
+
+    //--- プレイヤーの移動処理 ---//
 
     // 押下された移動キーに応じてベクトルを取得
     void GetVelocity()
@@ -89,20 +109,57 @@ public class PlayerController : MonoBehaviourPunCallbacks
             transform.position += refCamera.hRotation * velocity;
         }
     }
+    
+    // 接地判定
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGround = true;
+        }
+    }
+
+
+    //--- プレイヤーの特殊アクション処理 ---//
 
     // 押下されたキーに応じてアクション
     void PlayerAction()
     {
+        UseSkill();
+        RocketAction();        
+    }
+    // スキル使用
+    void UseSkill()
+    {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("スキル１を使用した");
+            Debug.Log($"スキルCT：{skillCT}");
+            if(skillCT >= 30.0f)
+            {
+                Debug.Log("スキル１を使用した");
+                StartCoroutine(DashSkill());
+            }
+            else
+            {
+                Debug.Log("スキル１の使用条件を満たしていません");
+            }            
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Debug.Log("スキル２を使用した");
+            if (skillCT >= 30.0f)
+            {
+                Debug.Log("スキル２を使用した");
+            }
+            else
+            {
+                Debug.Log("スキル２の使用条件を満たしていません");
+            }
         }
-
+    }
+    // タッチ/投擲アクション
+    void RocketAction()
+    {
         if (Input.GetKeyDown(KeyCode.F))
         {
             Debug.Log("ロケットを投擲した");
@@ -126,6 +183,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
     }
 
+
+    //--- タッチアクション関係 ---//
+
+    // 自身の hasRocket を変更するときのみ使用
     [PunRPC]
     void ToggleHasRocket(bool newHasRocket)
     {
@@ -133,8 +194,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         rocketObj.SetActive(hasRocket);
         Debug.Log($"hasRocket を {hasRocket} に更新しました");
     }
-
     // hasRocket を設定し、同期
+    // 他プレイヤーから hasRocket を変更するときのみ使用
     [PunRPC]
     public void SetHasRocket(bool newHasRocket)
     {
@@ -142,7 +203,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         rocketObj.SetActive(hasRocket);
         Debug.Log($"{photonView.Owner.NickName} の hasRocket を {hasRocket} に設定しました");
     }
-
     // 他のプレイヤーとの距離を測る
     GameObject GetTargetDistance()
     {
@@ -187,12 +247,49 @@ public class PlayerController : MonoBehaviourPunCallbacks
         return nearestObject;
     }
 
-    // 接地判定
-    private void OnCollisionEnter(Collision collision)
+
+    //--- スキル関係 ---//
+
+    // ダッシュスキル効果(修正版)
+    IEnumerator DashSkill()
     {
-        if(collision.gameObject.CompareTag("Ground"))
+        skillCT = 0;
+        finishSkill = false;
+
+        // スキルを使用した状態
+        moveSpeed *= 2.0f;
+        photonView.RPC("ChangeColor", RpcTarget.All, colorMaterial[2].color.r, colorMaterial[2].color.g, colorMaterial[2].color.b, colorMaterial[2].color.a);
+
+        yield return new WaitForSeconds(3.0f);
+
+        // スキルを使用する前の状態
+        moveSpeed = defaultMoveSpeed;
+        photonView.RPC("ChangeColor", RpcTarget.All, colorMaterial[0].color.r, colorMaterial[0].color.g, colorMaterial[0].color.b, colorMaterial[0].color.a);
+
+        finishSkill = true;
+
+        yield break;
+    }
+
+    // プレイヤーの色変更 (修正版)
+    [PunRPC]
+    void ChangeColor(float r, float g, float b, float a)
+    {
+        Color newColor = new Color(r, g, b, a);
+        GetComponent<Renderer>().material.color = newColor;
+    }
+
+    float time = 0;
+    public bool finishSkill = true;
+
+    // スキルクールタイム管理
+    void SkillCool()
+    {
+        time += Time.deltaTime;
+        if(time > 1)
         {
-            isGround = true;
+            skillCT = Mathf.Clamp(skillCT + 1, 0, 30.0f);
+            time = 0;
         }
     }
 }
