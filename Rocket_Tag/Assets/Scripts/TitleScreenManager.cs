@@ -3,10 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class TitleScreenManager : MonoBehaviour
 {
-    // ゲーム画面への遷移
-    public void LoadGameScene()
+    // ロビー画面への遷移
+    public void LoadLobbyScene()
     {
-        SceneManager.LoadScene("Test_Takeshita"); // ゲーム画面のシーン名
+        SceneManager.LoadScene("Lobby"); // ロビー画面のシーン名
     }
 
     // オプション画面への遷移
