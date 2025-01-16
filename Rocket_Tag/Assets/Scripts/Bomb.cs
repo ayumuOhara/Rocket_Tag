@@ -9,21 +9,19 @@ public class Bomb : MonoBehaviour
         normal,
         fast
     }
-
+    
     DecreeseLevel decreeseLevel = DecreeseLevel.slow;
 
-    //float bombLimit = 1000;
-    //float bombCount = 0;
     float bombLimit = 0;
     float bombCount = 1000;
-    float vibeTime = 10;
+    float vibeTime;
+    float vibeStartTime = 100f;
     float riseSpeed = 60;
     float floatingTime = 2;
+    float floatForce = 200f;
     float possesingTime = 0;
     float[] decreeseValue = { 0.4f, 0.8f, 100f };
     float[] decreeseUpTime = {5f, 10f, 15f };
-
-
     bool isExplode = false;
 
     Vector3 playerOffset = new Vector3(0, 5, 5);
@@ -31,25 +29,27 @@ public class Bomb : MonoBehaviour
 
     Rigidbody bombRB;
     [SerializeField] GameObject player;
-    GameObject Camera;
+    GameObject camera;
+    GameObject bomb;
     Transform playerTransform;
     Transform cameraTransform;
     void Start()
     {
+        vibeTime = 2;
         bombRB = this.GetComponent<Rigidbody>();
-        player = GameObject.Find("Player");    //  âºplayer
-        Camera = GameObject.Find("Main Camera");
+        player = GameObject.Find("Player");
+        camera = GameObject.Find("Main Camera");
+        bomb = GameObject.Find("Bomb");
         playerTransform = player.transform;
-        cameraTransform = Camera.transform;
+        cameraTransform = camera.transform;
         explodeInpact = new Vector3(0.2f, cameraTransform.position.y, cameraTransform.position.z);
     }
     void Update()
     {
-      //  Debug.Log(decreeseLevel);
         CountElaps();
-        if((bombLimit > bombCount - 0.5f || isExplode) && vibeTime > 0)
+        if((vibeStartTime > bombCount || isExplode) && vibeTime > 0)
         {
-            ExplodeVibing();
+            CameraVibe();
         }
         if (bombLimit > bombCount)
         {
@@ -57,17 +57,17 @@ public class Bomb : MonoBehaviour
         }
         if(isExplode)
         {
-            playerTransform.transform.position = bombRB.transform.position + playerOffset;
+            ApproachPos(bomb, player, playerOffset);
         }
-        //if(Input.GetKey(KeyCode.Space))
-        //{
-
-        //}
         DecreeseLevelUp();
+        
     }
     void Explosion()    //  îöíeîöî≠
     {
-        Debug.Log(8);
+        if((floatingTime -= Time.deltaTime) > 0)
+        {
+            player.transform.Translate(0, floatForce, 0);
+        }
         bombRB.linearVelocity = new Vector3(0, riseSpeed, 0);
         isExplode = true;
         bombCount = 1000;
@@ -77,9 +77,8 @@ public class Bomb : MonoBehaviour
     {
         bombCount -= (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime);
         possesingTime += Time.deltaTime;
-        Debug.Log(bombCount);
     }
-    void ExplodeVibing()    //  îöî≠èuä‘ÇÃÉJÉÅÉâêUìÆ
+    void CameraVibe()    //  îöî≠èuä‘ÇÃÉJÉÅÉâêUìÆ
     {
         cameraTransform.transform.position = explodeInpact;
         explodeInpact.x *= -1;
@@ -97,6 +96,10 @@ public class Bomb : MonoBehaviour
     {
         possesingTime = 0;
         decreeseLevel = 0;
+    }
+    void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)
+    {
+        Approcher.transform.position = axis.transform.position + offset;
     }
 }
 
