@@ -419,6 +419,5 @@ MonoBehaviour:
   jumpForce: 20
   refCamera: {fileID: 0}
   rb: {fileID: 5867222108199720115}
-  detectionRadius: 5
-  maxDistance: 10
+  maxDistance: 5
   hasRocket: 0
