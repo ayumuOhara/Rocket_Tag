@@ -28,7 +28,10 @@ public class GameManager : MonoBehaviourPun
     // プレイヤーが指定の人数以上参加しているか
     public void CheckJoinedPlayer()
     {
-        if (instantiatePlayer.GetCurrentPlayerCount() >= JOIN_CNT_MIN)       // 全員が準備完了を押したら開始にする
+        var currentCnt = instantiatePlayer.GetCurrentPlayerCount();
+        Debug.Log($"現在の参加人数：{currentCnt}");
+
+        if (currentCnt >= JOIN_CNT_MIN)       // 全員が準備完了を押したら開始にする
         {
             Debug.Log("プレイヤーが揃ったのでゲームを開始します");
             isStart = true;
