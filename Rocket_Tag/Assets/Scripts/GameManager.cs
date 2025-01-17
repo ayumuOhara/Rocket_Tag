@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         while (true)
         {
             int readyCount = GetReadyPlayerCount();
-            playerCntText.text = $"{readyCount}/{JOIN_CNT_MIN}";
+            playerCntText.text = $"{readyCount}/{instantiatePlayer.GetCurrentPlayerCount()}";
 
             if (CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
             {
