@@ -9,6 +9,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
     [SerializeField] GameObject playerCamera;
     [SerializeField] GameObject waitCamera;
     [SerializeField] GameManager gameManager;
+    [SerializeField] Transform respawnPoint;
 
     void Start()
     {
@@ -31,9 +32,8 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
         // カスタムプロパティでプレイヤー人数を初期化または更新
         UpdatePlayerCount(1);
 
-        // プレイヤーをランダムな位置に生成
-        var position = new Vector3(Random.Range(-3f, 3f), 0.5f, Random.Range(-3f, 3f));
-        GameObject player = PhotonNetwork.Instantiate("Player", position, Quaternion.identity);
+        // プレイヤーをリスポーン地点に生成
+        GameObject player = PhotonNetwork.Instantiate("Player", respawnPoint.position, Quaternion.identity);
 
         // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
         gameManager.playerController = player.GetComponent<PlayerController>();
