@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ObjectBouncer : MonoBehaviour
 {
-    // はじく力の大きさ（距離に比例）
+    // はじく力の大きさ
     public float bounceForce = 5f;
 
     void OnCollisionEnter(Collision collision)
@@ -14,7 +14,11 @@ public class ObjectBouncer : MonoBehaviour
             // 衝突の法線（接触面の方向）を取得
             Vector3 bounceDirection = collision.contacts[0].normal;
 
-            // はじく力を適用
+            // Y軸成分を無視して水平方向の力だけにする
+            bounceDirection.y = 0f;
+            bounceDirection.Normalize(); // 正規化
+
+            // 水平方向に力を適用
             otherRigidbody.AddForce(bounceDirection * bounceForce, ForceMode.Impulse);
         }
     }
