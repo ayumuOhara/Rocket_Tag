@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Collections;
 using TMPro;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+using static UnityEngine.GraphicsBuffer;
 
 // PUNのコールバックを受け取れるようにする為のMonoBehaviourPunCallbacks
 public class PlayerController : MonoBehaviourPunCallbacks
@@ -29,7 +31,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
     [SerializeField] Rigidbody rb;
     private string targetTag = "Player";                    // タッチ時の検知対象のtag(実装時にはPlayerに変更する)
-    public float maxDistance = 0;                           // 検知する最大距離
+    public float maxDistance = 5;                           // 検知する最大距離
     [SerializeField] private bool hasRocket;                // ロケットを所持しているか
     public bool isDead;                                     // 死亡判定
 
@@ -52,9 +54,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             GetVelocity();
             MovePlayer();
-            if(skillCT >= 0 && finishSkill)
+            if (skillCT >= 0 && finishSkill)
             {
-                if(skillCT <= 0)
+                if (skillCT <= 0)
                 {
                     skillCTUI.SetActive(false);
                 }
@@ -69,7 +71,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 PlayerAction();
             }
-        }
+        }        
     }
 
     // プレイヤーの初期化
@@ -82,6 +84,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         // α版以外では削除
         skillCT = 0;
+    }
+
+    // 死亡処理
+    void PlayerDead()
+    {
+        isDead = true;
     }
 
 
@@ -131,7 +139,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
     }
 
-    // 接地判定
+    // 衝突判定
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
@@ -147,7 +155,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
         }
     }
-
 
 
     //--- プレイヤーの特殊アクション処理 ---//

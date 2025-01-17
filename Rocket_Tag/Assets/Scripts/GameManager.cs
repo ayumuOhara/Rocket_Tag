@@ -2,7 +2,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviourPunCallbacks
@@ -12,8 +11,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] PlayerReady playerReady;
     [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
     [SerializeField] GameObject[] ReadyUI;              // マッチ開始前のUI
-    private const int JOIN_CNT_MIN = 2;       // 参加人数の最小値
-    private bool isGameStarted = false;      // ゲームが開始されたかどうかのフラグ
+    private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
+    private bool isGameStarted = false;                 // ゲームが開始されたかどうかのフラグ
 
     void Start()
     {
@@ -31,11 +30,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         while (true)
         {
             int readyCount = GetReadyPlayerCount();
-            playerCntText.text = $"{readyCount}/{JOIN_CNT_MIN}";
+            playerCntText.text = $"{readyCount}/{instantiatePlayer.GetCurrentPlayerCount()}";
 
-            if (CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
+            // マスタークライアントのみゲーム開始処理を実行
+            if (PhotonNetwork.IsMasterClient && CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
             {
-                StartGame();
+                photonView.RPC(nameof(StartGame), RpcTarget.All); // 全員にゲーム開始を通知
                 yield break;
             }
 
@@ -47,13 +47,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public bool CheckJoinedPlayer()
     {
         var currentCnt = instantiatePlayer.GetCurrentPlayerCount();
-
-        if (currentCnt >= JOIN_CNT_MIN)
-        {
-            return true;
-        }
-
-        return false;
+        return currentCnt >= JOIN_CNT_MIN;
     }
 
     // 参加しているプレイヤー全員がReadyしたか
@@ -90,7 +84,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         return readyCount;
     }
 
-    // ゲームスタート
+    // ゲームスタート（全クライアントで呼び出される）
+    [PunRPC]
     void StartGame()
     {
         if (isGameStarted) return; // すでにゲームが開始されていれば何もしない
@@ -99,8 +94,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         isGameStarted = true; // ゲーム開始フラグを立てる
         ReadyUI[0].SetActive(false);
         ReadyUI[1].SetActive(false);
-        ChooseRocketPlayer();
-        CheckSuvivorCnt();
+
+        // マスタークライアントのみロケット付与処理を実行
+        if (PhotonNetwork.IsMasterClient)
+        {
+            ChooseRocketPlayer();
+        }
+
+        StartCoroutine(CheckSuvivorCnt());
     }
 
     // 参加しているプレイヤーから１人を選び、ロケットを付与
