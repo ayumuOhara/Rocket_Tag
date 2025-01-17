@@ -63961,6 +63961,7 @@ MonoBehaviour:
   playerCamera: {fileID: 504838158}
   waitCamera: {fileID: 868873593}
   gameManager: {fileID: 570120166}
+  respawnPoint: {fileID: 1722992760}
 --- !u!1 &2065880369
 GameObject:
   m_ObjectHideFlags: 0
