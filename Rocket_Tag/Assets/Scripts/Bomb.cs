@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
-    enum DecreeseLevel
+    enum DecreeseLevel    //  爆弾カウント減少レベル
     {
         slow,
         normal,
@@ -14,12 +14,13 @@ public class Bomb : MonoBehaviour
     DecreeseLevel decreeseLevel = DecreeseLevel.slow;
 
     float bombLimit = 0;
-    float bombCount = 1000;
+    public float bombCount = 1000;
     float vibeTime;
     float vibeStartTime = 100f;
     float riseSpeed = 60;
     float floatingTime = 2;
-    float floatForce = 1f;
+    float floatSpeed = 1f;
+    float throwForce = 100f;
     float possesingTime = 0;
     float[] decreeseValue = { 0.4f, 0.8f, 100f };
     float[] decreeseUpTime = {5f, 10f, 15f };
@@ -27,6 +28,7 @@ public class Bomb : MonoBehaviour
 
     Vector3 playerOffset = new Vector3(0, 5, 5);
     Vector3 explodeInpact;
+    Vector3 thorwDir = Vector3.forward;
 
     Rigidbody bombRB;
     [SerializeField] GameObject player;
@@ -36,10 +38,10 @@ public class Bomb : MonoBehaviour
     Transform cameraTransform;
     void Start()
     {
-        vibeTime = 2;
+        vibeTime = 4;
         bombRB = this.GetComponent<Rigidbody>();
-        //player = GameObject.Find("Player");
-        //camera = GameObject.Find("Main Camera");
+        player = GameObject.Find("Player");
+        camera = GameObject.Find("Main Camera");
         bomb = GameObject.Find("Bomb");
         playerTransform = player.transform;
         cameraTransform = camera.transform;
@@ -61,13 +63,27 @@ public class Bomb : MonoBehaviour
             ApproachPos(bomb, player, playerOffset);
         }
         DecreeseLevelUp();
+
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0);
+            Debug.Log(screenCenter);
+            Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
+            Debug.Log(worldCenter);
+            worldCenter.z = camera.transform.position.z * -1 ;
+            Vector3 direction = (worldCenter - transform.position).normalized;
+            bombRB.AddForce(direction * throwForce, ForceMode.Impulse);
+
+            //  bombRB.AddForce(worldCenter.normalized * throwForce, ForceMode.Impulse);
+            // bombRB.linearVelocity = new Vector3(0,0,100);
+        }
     }
     void Explosion()    //  爆弾爆発
     {
         bombRB.useGravity = false;
         if ((floatingTime -= Time.deltaTime) > 0)
         {
-            transform.position += Vector3.up * floatForce * Time.deltaTime;
+            Floating(transform, floatSpeed);
         }
         else
         {
@@ -79,16 +95,16 @@ public class Bomb : MonoBehaviour
     }
     void CountElaps()    //  経過秒数カウント
     {
-        bombCount -= (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime);
+        bombCount -= Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime;
         possesingTime += Time.deltaTime;
     }
-    void CameraVibe()    //  爆発瞬間のカメラ振動
+    void CameraVibe()    //  ロケット爆発瞬間のカメラ振動
     {
         cameraTransform.transform.position = explodeInpact;
         explodeInpact.x *= -1;
         vibeTime -= Time.deltaTime;
     }
-    void DecreeseLevelUp()
+    void DecreeseLevelUp()    //  ロケットカウント加速
     {
         if (decreeseLevel != DecreeseLevel.fast && possesingTime > decreeseUpTime[(int)decreeseLevel])
         {
@@ -96,15 +112,23 @@ public class Bomb : MonoBehaviour
             Debug.Log(decreeseLevel);
         }
     }
-    void ResetPossesing()
+    public void ResetPossesing()    //  所持における数値の変動リセット
     {
         possesingTime = 0;
         decreeseLevel = 0;
     }
-    void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)
+    void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)    //  オブジェクトの位置を近づける
     {
         Approcher.transform.position = axis.transform.position + offset;
     }
+    void Floating(Transform floated, float floatForce)    //  オブジェクト浮遊
+    {
+        floated.position += Vector3.up * floatForce * Time.deltaTime;
+    }
+    //void BomCouuntDecreese(int value)    //  ロケットカウントを減らす;
+    //{
+    //    bombCount -= value * Time.deltaTime;
+    //}
 }
 
 //修正必
