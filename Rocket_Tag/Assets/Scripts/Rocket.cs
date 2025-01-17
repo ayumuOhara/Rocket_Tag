@@ -27,7 +27,7 @@ public class Bomb : MonoBehaviour
     float[] decreeseValue = { 0.4f, 0.8f, 100f };
     float[] decreeseUpTime = {5f, 10f, 15f };
     bool isExplode = false;
-    bool isThrowing = false;
+    bool isReturning = false;
 
     Vector3 playerOffset = new Vector3(0, 5, 5);
     Vector3 rocketOffset = new Vector3(0, 5, 5);
@@ -36,7 +36,7 @@ public class Bomb : MonoBehaviour
     Rigidbody rocketRB;
     [SerializeField] GameObject player;
     [SerializeField] GameObject camera;
-    GameObject bomb;
+    GameObject rocket;
     Transform playerTransform;
     Transform cameraTransform;
 
@@ -48,7 +48,7 @@ public class Bomb : MonoBehaviour
         rocketRB = this.GetComponent<Rigidbody>();
         player = GameObject.Find("Player");
         camera = GameObject.Find("Main Camera");
-        bomb = GameObject.Find("Bomb");
+        rocket = GameObject.Find("Bomb");
         playerTransform = player.transform;
         cameraTransform = camera.transform;
         explodeInpact = new Vector3(0.2f, cameraTransform.position.y, cameraTransform.position.z);
@@ -67,20 +67,18 @@ public class Bomb : MonoBehaviour
         }
         if(isExplode)
         {
-            ApproachPos(bomb, player, playerOffset);
+            ApproachPos(rocket, player, playerOffset);
         }
         DecreeseLevelUp();
         if(Input.GetKeyDown(KeyCode.E))
         {
             ThrowRocket();
         }
-        if (Mathf.Abs(rocketRB.position.x - playerPosX) < 2 && isThrowing)
+        if (Mathf.Abs(rocketRB.position.x - playerPosX) < 2 && isReturning)
         {
-            rocketRB.transform.position = player.transform.position + rocketOffset;
-        }
-        else 
-        {
-            isThrowing = true;
+            // ‰^“®ƒGƒlƒ‹ƒM[’âŽ~
+            ApproachPos(player, rocket, rocketOffset);
+            isReturning = false;
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -137,7 +135,7 @@ public class Bomb : MonoBehaviour
     {
         floated.position += Vector3.up * floatForce * Time.deltaTime;
     }
-    Vector3 GetScreenCeterPos()
+    Vector3 GetScreenCeterPos()  
     {
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 1000);
         Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
@@ -146,6 +144,7 @@ public class Bomb : MonoBehaviour
     }
     void ThrowRocket()
     {
+        isReturning = false;
         rocketRB.AddForce(GetScreenCeterPos() * throwForce, ForceMode.Impulse);
     }
     private void OnCollisionEnter(Collision collision)
@@ -160,7 +159,7 @@ public class Bomb : MonoBehaviour
         {
             rocketRB.AddForce(GetLineDir() * returnForce, ForceMode.Impulse);
             Debug.Log(1);
-           
+            isReturning = true;
         }
     }
     Vector3 GetLineDir()
