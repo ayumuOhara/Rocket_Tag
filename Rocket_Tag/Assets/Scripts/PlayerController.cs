@@ -142,8 +142,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             // プレイヤーの位置(transform.position)の更新
             // カメラの水平回転(refCamera.hRotation)で回した移動方向(velocity)を足し込みます
-            Vector3 targetPos = refCamera.hRotation * velocity;
-            rb.MovePosition(rb.position + targetPos);
+            transform.position += refCamera.hRotation * velocity;
         }
     }
 
