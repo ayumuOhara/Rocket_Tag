@@ -52,6 +52,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if(photonView.IsMine)
         {
+            GetVelocity();
+            MovePlayer();
             if (skillCT >= 0 && finishSkill)
             {
                 if (skillCT <= 0)
@@ -70,15 +72,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 PlayerAction();
             }
         }        
-    }
-
-    private void FixedUpdate()
-    {
-        if (photonView.IsMine)
-        {
-            GetVelocity();
-            MovePlayer();
-        }
     }
 
     // ƒvƒŒƒCƒ„[‚Ì‰Šú‰»
