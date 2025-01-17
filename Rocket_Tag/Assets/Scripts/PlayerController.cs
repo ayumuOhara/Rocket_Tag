@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             velocity.x += 1;
 
         // 速度ベクトルの長さを1秒でmoveSpeedだけ進むように調整します
-        velocity = velocity.normalized * moveSpeed * Time.fixedDeltaTime;
+        velocity = velocity.normalized * moveSpeed * Time.deltaTime;
     }
 
     // 取得したベクトルの方向に移動&回転させる+ジャンプ処理
