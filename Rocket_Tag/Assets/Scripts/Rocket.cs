@@ -74,10 +74,14 @@ public class Bomb : MonoBehaviour
         {
             ThrowRocket();
         }
-        //if (Mathf.Abs(rocketRB.position.x - playerPosX) < 2 && isThrowing)
-        //{
-        //    rocketRB.transform.position = player.transform.position + rocketOffset;
-        //}
+        if (Mathf.Abs(rocketRB.position.x - playerPosX) < 2 && isThrowing)
+        {
+            rocketRB.transform.position = player.transform.position + rocketOffset;
+        }
+        else 
+        {
+            isThrowing = true;
+        }
         if (Input.GetKeyDown(KeyCode.R))
         {
             this.transform.position = startpos;
@@ -143,7 +147,6 @@ public class Bomb : MonoBehaviour
     void ThrowRocket()
     {
         rocketRB.AddForce(GetScreenCeterPos() * throwForce, ForceMode.Impulse);
-        isThrowing = true;
     }
     private void OnCollisionEnter(Collision collision)
     {
