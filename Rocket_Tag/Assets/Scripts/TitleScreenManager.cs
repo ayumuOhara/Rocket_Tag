@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class TitleScreenManager : MonoBehaviour
@@ -7,12 +8,6 @@ public class TitleScreenManager : MonoBehaviour
     public void LoadLobbyScene()
     {
         SceneManager.LoadScene("Lobby"); // ロビー画面のシーン名
-    }
-
-    // オプション画面への遷移
-    public void LoadOptionScene()
-    {
-        SceneManager.LoadScene(""); // オプション画面のシーン名
     }
 
     //ゲーム終了

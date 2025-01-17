@@ -9,12 +9,6 @@ public class LobbyManager : MonoBehaviour
         SceneManager.LoadScene("Test_Takeshita"); // ゲーム画面のシーン名
     }
 
-    // オプション画面への遷移
-    public void LoadOptionScene()
-    {
-        SceneManager.LoadScene(""); // オプション画面のシーン名
-    }
-
     // ショップ画面への遷移
     public void LoadShopScene()
     {
