@@ -30,6 +30,6 @@ public class LobbyManager : MonoBehaviour
     // ロッカー画面への遷移
     public void LoadLockerScene()
     {
-        SceneManager.LoadScene(""); // ロッカー画面のシーン名
+        SceneManager.LoadScene("Locker"); // ロッカー画面のシーン名
     }
 }
