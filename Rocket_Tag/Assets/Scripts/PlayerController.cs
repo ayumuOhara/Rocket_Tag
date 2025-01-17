@@ -3,6 +3,7 @@ using Photon.Pun;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Collections;
+using TMPro;
 
 // PUNのコールバックを受け取れるようにする為のMonoBehaviourPunCallbacks
 public class PlayerController : MonoBehaviourPunCallbacks
@@ -15,6 +16,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     // [2] UseSkillBodyColor
 
     private float skillCT; // スキルのクールタイム(α版のみ。マスター版ではCSVファイルを使用)
+    [SerializeField] TextMeshProUGUI skillTimerText;
+    [SerializeField] GameObject skillCTUI;
 
     [SerializeField] private Vector3 velocity;              // 移動方向
     private float defaultMoveSpeed = 10.0f;                 // 移動速度(初期値)
@@ -22,26 +25,25 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] private float applySpeed = 0.2f;       // 回転の適用速度
     [SerializeField] private float jumpForce = 20.0f;       // ジャンプ力
     private bool isGround = false;                          // 接地判定
+    private float groundLimit = 0.7f;                       // 接地判定のしきい値
     [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
     [SerializeField] Rigidbody rb;
     private string targetTag = "Player";                    // タッチ時の検知対象のtag(実装時にはPlayerに変更する)
     public float maxDistance = 0;                           // 検知する最大距離
     [SerializeField] private bool hasRocket;                // ロケットを所持しているか
+    public bool isDead;                                     // 死亡判定
 
     private void Awake()
     {
-        // ロケットの状態を初期化
-        photonView.RPC("SetHasRocket", RpcTarget.All, false);
-
-        maxDistance = 2f;
-
-        // α版以外では削除
-        skillCT = 30.0f;
+        SetPlayerCondition();
+        skillCTUI = GameObject.Find("SkillCTUI");
+        skillTimerText = GameObject.Find("SkillTimerText").GetComponent<TextMeshProUGUI>();
     }
 
     void Start()
     {   
         refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
+        skillCTUI.SetActive(false);
     }
 
     void Update()
@@ -50,17 +52,36 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             GetVelocity();
             MovePlayer();
-            if(skillCT < 30 && finishSkill)
+            if(skillCT >= 0 && finishSkill)
             {
-                // α版のみ使用(マスター版では削除)
-                SkillCool();
-            }           
+                if(skillCT <= 0)
+                {
+                    skillCTUI.SetActive(false);
+                }
+                else
+                {
+                    // α版のみ使用(マスター版では削除)
+                    SkillCool();
+                }
+            }
 
             if (hasRocket)
             {
                 PlayerAction();
             }
         }
+    }
+
+    // プレイヤーの初期化
+    public void SetPlayerCondition()
+    {
+        // ロケットの状態を初期化
+        photonView.RPC("SetHasRocket", RpcTarget.All, false);
+
+        maxDistance = 2f;
+
+        // α版以外では削除
+        skillCT = 0;
     }
 
 
@@ -109,15 +130,24 @@ public class PlayerController : MonoBehaviourPunCallbacks
             transform.position += refCamera.hRotation * velocity;
         }
     }
-    
+
     // 接地判定
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            isGround = true;
+            foreach (ContactPoint contact in collision.contacts)
+            {
+                // 接触点の法線が上向き（地面）に近い場合のみ接地判定を行う
+                if (Vector3.Dot(contact.normal, Vector3.up) > groundLimit)
+                {
+                    isGround = true;
+                    break; // 接地を検出したらループを終了
+                }
+            }
         }
     }
+
 
 
     //--- プレイヤーの特殊アクション処理 ---//
@@ -134,7 +164,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log($"スキルCT：{skillCT}");
-            if(skillCT >= 30.0f)
+            if(skillCT <= 0f)
             {
                 Debug.Log("スキル１を使用した");
                 StartCoroutine(DashSkill());
@@ -253,14 +283,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
     // ダッシュスキル効果(修正版)
     IEnumerator DashSkill()
     {
-        skillCT = 0;
+        skillCT = 30.0f;
         finishSkill = false;
+        skillCTUI.SetActive(true);
+        skillTimerText.text = skillCT.ToString();
 
         // スキルを使用した状態
-        moveSpeed *= 2.0f;
+        moveSpeed *= 3.0f;
         photonView.RPC("ChangeColor", RpcTarget.All, colorMaterial[2].color.r, colorMaterial[2].color.g, colorMaterial[2].color.b, colorMaterial[2].color.a);
 
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(2.0f);
 
         // スキルを使用する前の状態
         moveSpeed = defaultMoveSpeed;
@@ -288,7 +320,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         time += Time.deltaTime;
         if(time > 1)
         {
-            skillCT = Mathf.Clamp(skillCT + 1, 0, 30.0f);
+            skillCT = Mathf.Clamp(skillCT - 1, 0, 30.0f);
+            skillTimerText.text = skillCT.ToString();
             time = 0;
         }
     }
