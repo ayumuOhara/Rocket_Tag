@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             velocity.x += 1;
 
         // 速度ベクトルの長さを1秒でmoveSpeedだけ進むように調整します
-        velocity = velocity.normalized * moveSpeed * Time.deltaTime;
+        velocity = velocity.normalized * moveSpeed * Time.fixedDeltaTime;
     }
 
     // 取得したベクトルの方向に移動&回転させる+ジャンプ処理
@@ -142,12 +142,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             // プレイヤーの位置(transform.position)の更新
             // カメラの水平回転(refCamera.hRotation)で回した移動方向(velocity)を足し込みます
-            Vector3 targetPos = rb.position + refCamera.hRotation * velocity;
-            rb.MovePosition(targetPos);
+            Vector3 targetPos = refCamera.hRotation * velocity;
+            rb.MovePosition(rb.position + targetPos);
         }
     }
 
-    // 接地判定
+    // 衝突判定
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
@@ -163,7 +163,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
         }
     }
-
 
 
     //--- プレイヤーの特殊アクション処理 ---//
