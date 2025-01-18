@@ -3,17 +3,23 @@ using UnityEngine;
 public class RandomMovementXZ : MonoBehaviour
 {
     // 移動範囲（X軸とZ軸）
-    public Vector2 moveAreaX = new Vector2(-10f, 10f);
-    public Vector2 moveAreaZ = new Vector2(-10f, 10f);
+    public Vector2 moveRangeX = new Vector2(-10f, 10f); // 基準位置からのX軸の範囲
+    public Vector2 moveRangeZ = new Vector2(-10f, 10f); // 基準位置からのZ軸の範囲
 
     // 移動速度
     public float moveSpeed = 3f;
+
+    // 基準位置
+    private Vector3 basePosition;
 
     // 次の目的地
     private Vector3 targetPosition;
 
     void Start()
     {
+        // 初期位置を基準位置として記録
+        basePosition = transform.position;
+
         // 最初の目的地を設定
         SetNewTargetPosition();
     }
@@ -33,10 +39,22 @@ public class RandomMovementXZ : MonoBehaviour
     // 新しいランダムな目的地を設定する
     void SetNewTargetPosition()
     {
-        float randomX = Random.Range(moveAreaX.x, moveAreaX.y);
-        float randomZ = Random.Range(moveAreaZ.x, moveAreaZ.y);
+        float randomX = Random.Range(moveRangeX.x, moveRangeX.y);
+        float randomZ = Random.Range(moveRangeZ.x, moveRangeZ.y);
 
-        // Y座標は変更せず、現在の高さを保持
-        targetPosition = new Vector3(randomX, transform.position.y, randomZ);
+        // 基準位置を中心に新しい目的地を設定
+        targetPosition = new Vector3(basePosition.x + randomX, transform.position.y, basePosition.z + randomZ);
+    }
+
+    // 移動範囲を可視化（エディタ用）
+    void OnDrawGizmos()
+    {
+        if (!Application.isPlaying) return;
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(
+            basePosition,
+            new Vector3(moveRangeX.y - moveRangeX.x, 0, moveRangeZ.y - moveRangeZ.x)
+        );
     }
 }

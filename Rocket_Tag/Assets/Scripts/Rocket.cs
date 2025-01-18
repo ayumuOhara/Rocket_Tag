@@ -1,6 +1,8 @@
+using Photon.Pun;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Bomb : MonoBehaviour
 {
@@ -103,6 +105,14 @@ public class Bomb : MonoBehaviour
             isExplode = true;
             rocketCount = 1000;
             ResetPossesing();
+        }
+
+        //--- 追加した部分(竹下) ---//      ※必要があればコメントアウト可
+        // ロケットを持っていたプレイヤーのisDeadを切り替える
+        PhotonView targetPhotonView = player.GetComponent<PhotonView>();
+        if (targetPhotonView != null)
+        {
+            targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
         }
     }
     void CountElaps()    //  経過秒数カウント

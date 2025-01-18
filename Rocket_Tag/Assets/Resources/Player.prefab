@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 5867222108199720115}
   - component: {fileID: 2859891653814633823}
   - component: {fileID: 4331078368843246184}
+  - component: {fileID: -2496626427525919262}
   - component: {fileID: 5498974071734673009}
   m_Layer: 0
   m_Name: Player
@@ -335,6 +336,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 4331078368843246184}
+  - {fileID: -2496626427525919262}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -354,6 +356,22 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &-2496626427525919262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8299087819917209949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &5498974071734673009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,15 +389,16 @@ MonoBehaviour:
   - {fileID: 2100000, guid: a8edfef2db8e56746951a3bd39a1beef, type: 2}
   - {fileID: 2100000, guid: cb592ad768b45de41be4039b10be8901, type: 2}
   - {fileID: 2100000, guid: 4d300f39525deba4281761a75be83250, type: 2}
+  - {fileID: 2100000, guid: 1c574ffc29483364abdf102a1c5a1ce2, type: 2}
   skillTimerText: {fileID: 0}
   skillCTUI: {fileID: 0}
   velocity: {x: 0, y: 0, z: 0}
-  moveSpeed: 10
+  moveSpeed: 100
   applySpeed: 0.2
   jumpForce: 20
   refCamera: {fileID: 0}
   rb: {fileID: 5867222108199720115}
   maxDistance: 5
   hasRocket: 0
-  isDead: 0
+  isDead: 1
   finishSkill: 1
