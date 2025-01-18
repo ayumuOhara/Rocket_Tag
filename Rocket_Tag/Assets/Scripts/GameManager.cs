@@ -134,8 +134,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         while (true)
         {
-            GameObject[] player = GameObject.FindGameObjectsWithTag("Player");
-            if (player.Length <= 1)
+            GameObject[] suvivor = GameObject.FindGameObjectsWithTag("Player");
+            var suvivorCnt = suvivor.Length;
+
+            foreach (var player in suvivor)
+            {                
+                PlayerController pc = player.GetComponent<PlayerController>();
+                if(pc.isDead)
+                {
+                    suvivorCnt--;
+                }
+            }
+
+            if (suvivorCnt <= 1)
             {
                 Debug.Log("¶‘¶l”‚ª‚Pl‚É‚È‚Á‚½‚Ì‚ÅƒQ[ƒ€‚ðI—¹‚µ‚Ü‚·");
                 ReadyUI[0].SetActive(true);

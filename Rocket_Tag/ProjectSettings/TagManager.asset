@@ -7,7 +7,6 @@ TagManager:
   - PlayerCamera
   - Decoy
   - Ground
-  - Spectator
   layers:
   - Default
   - TransparentFX
