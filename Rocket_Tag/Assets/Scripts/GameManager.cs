@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             foreach (var player in suvivor)
             {                
-                PlayerController pc = player.GetComponent<PlayerController>();
+                SetPlayerBool pc = player.GetComponent<SetPlayerBool>();
                 if(pc.isDead)
                 {
                     suvivorCnt--;
@@ -152,7 +152,6 @@ public class GameManager : MonoBehaviourPunCallbacks
                 ReadyUI[0].SetActive(true);
                 ReadyUI[1].SetActive(true);
                 playerReady.SetReady(false);
-                playerController.SetPlayerCondition();
                 yield break;
             }
             yield return null;
