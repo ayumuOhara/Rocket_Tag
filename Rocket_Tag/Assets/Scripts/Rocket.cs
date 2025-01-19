@@ -38,11 +38,7 @@ public class Bomb : MonoBehaviourPunCallbacks
     Rigidbody rocketRB;
     [SerializeField] GameObject player;
     [SerializeField] GameObject camera;
-<<<<<<< HEAD
-    [SerializeField] GameObject bomb;
-=======
     GameObject rocket;
->>>>>>> main
     Transform playerTransform;
     Transform cameraTransform;
 
@@ -52,16 +48,10 @@ public class Bomb : MonoBehaviourPunCallbacks
         //Time.timeScale = 0.5f;
         vibeTime = 4;
         rocketRB = this.GetComponent<Rigidbody>();
-<<<<<<< HEAD
         //player = GameObject.Find("Player");
         //camera = GameObject.Find("Main Camera");
         camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
         //bomb = GameObject.Find("Bomb");
-=======
-        player = GameObject.Find("Player");
-        camera = GameObject.Find("Main Camera");
-        rocket = GameObject.Find("Bomb");
->>>>>>> main
         playerTransform = player.transform;
         cameraTransform = camera.transform;
         explodeInpact = new Vector3(0.2f, cameraTransform.position.y, cameraTransform.position.z);
@@ -181,12 +171,7 @@ public class Bomb : MonoBehaviourPunCallbacks
     {
         floated.position += Vector3.up * floatForce * Time.deltaTime;
     }
-<<<<<<< HEAD
-
     Vector3 GetScreenCeterPos()
-=======
-    Vector3 GetScreenCeterPos()  
->>>>>>> main
     {
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 1000);
         Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
