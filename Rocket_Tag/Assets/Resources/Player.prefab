@@ -95,7 +95,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6752579603462179444}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5cd7fe17f1866f429243416a9e0b540, type: 3}
   m_Name: 
@@ -434,6 +434,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52734317592c9f344896f61adbd57ac6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  observeDistance: {fileID: 0}
+  changeObjColor: {fileID: 0}
 --- !u!114 &7078560154241749930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,7 +480,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillTimerText: {fileID: 0}
   skillCTUI: {fileID: 0}
-  finishSkill: 1
 --- !u!114 &4868377163844986340
 MonoBehaviour:
   m_ObjectHideFlags: 0

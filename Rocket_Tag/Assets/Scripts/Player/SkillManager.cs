@@ -8,11 +8,12 @@ public class SkillManager : MonoBehaviourPunCallbacks
     ChangeObjColor changeObjColor;
     PlayerMovement playerMovement;
 
-    private float skillCT; // スキルのクールタイム(α版のみ。マスター版ではCSVファイルを使用)
+    float skillCT = 30.0f; // スキルのクールタイム(α版のみ。マスター版ではCSVファイルを使用)
+    float skillTimer = 0; 
     [SerializeField] TextMeshProUGUI skillTimerText;
     [SerializeField] GameObject skillCTUI;
     float time = 0;
-    public bool finishSkill = true;
+    bool finishSkill = true;
 
     private void Start()
     {
@@ -22,16 +23,13 @@ public class SkillManager : MonoBehaviourPunCallbacks
         playerMovement = GetComponent<PlayerMovement>();
 
         skillCTUI.SetActive(false);
-        
-        // α版以外では削除
-        skillCT = 0;
     }
 
     private void Update()
     {
-        if (skillCT >= 0 && finishSkill)
+        if (skillTimer >= 0 && finishSkill)
         {
-            if (skillCT <= 0)
+            if (skillTimer <= 0)
             {
                 skillCTUI.SetActive(false);
             }
@@ -48,49 +46,40 @@ public class SkillManager : MonoBehaviourPunCallbacks
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log($"スキルCT：{skillCT}");
-            if (skillCT <= 0f)
+            Debug.Log($"スキルCT：{skillTimer}");
+            if (skillTimer <= 0)
             {
-                Debug.Log("スキル１を使用した");
+                Debug.Log("スキルを使用した");
                 StartCoroutine(DashSkill());
             }
             else
             {
-                Debug.Log("スキル１の使用条件を満たしていません");
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            if (skillCT >= 30.0f)
-            {
-                Debug.Log("スキル２を使用した");
-            }
-            else
-            {
-                Debug.Log("スキル２の使用条件を満たしていません");
+                Debug.Log("スキルの使用条件を満たしていません");
             }
         }
     }
 
+    float boostValue = 3.0f;
+    float dashTime = 2.0f;
+
     // ダッシュスキル効果(修正版)
     IEnumerator DashSkill()
     {
-        skillCT = 30.0f;
+        skillTimer = skillCT;
         finishSkill = false;
         skillCTUI.SetActive(true);
         skillTimerText.text = skillCT.ToString();
         float speed = playerMovement.GetMoveSpeed();
 
         // スキルを使用した状態
-        playerMovement.SetMoveSpeed(3.0f);
+        playerMovement.SetMoveSpeed(speed * boostValue);
         photonView.RPC("ChangeColor", RpcTarget.All,
                         changeObjColor.colorMaterial[2].color.r,
                         changeObjColor.colorMaterial[2].color.g,
                         changeObjColor.colorMaterial[2].color.b,
                         changeObjColor.colorMaterial[2].color.a);
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(dashTime);
 
         // スキルを使用する前の状態
         playerMovement.SetMoveSpeed(speed);
@@ -111,8 +100,8 @@ public class SkillManager : MonoBehaviourPunCallbacks
         time += Time.deltaTime;
         if (time > 1)
         {
-            skillCT = Mathf.Clamp(skillCT - 1, 0, 30.0f);
-            skillTimerText.text = skillCT.ToString();
+            skillTimer = Mathf.Clamp(skillTimer - 1, 0, skillCT);
+            skillTimerText.text = skillTimer.ToString();
             time = 0;
         }
     }
