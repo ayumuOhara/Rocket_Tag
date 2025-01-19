@@ -29,7 +29,7 @@ public class Bomb : MonoBehaviourPunCallbacks
     float[] decreeseValue = { 0.4f, 0.8f, 100f };
     float[] decreeseUpTime = {5f, 10f, 15f };
     bool isExplode = false;
-    bool isThrowing = false;
+    bool isReturning = false;
 
     Vector3 playerOffset = new Vector3(0, 5, 5);
     Vector3 rocketOffset = new Vector3(0, 5, 5);
@@ -38,7 +38,11 @@ public class Bomb : MonoBehaviourPunCallbacks
     Rigidbody rocketRB;
     [SerializeField] GameObject player;
     [SerializeField] GameObject camera;
+<<<<<<< HEAD
     [SerializeField] GameObject bomb;
+=======
+    GameObject rocket;
+>>>>>>> main
     Transform playerTransform;
     Transform cameraTransform;
 
@@ -48,10 +52,16 @@ public class Bomb : MonoBehaviourPunCallbacks
         //Time.timeScale = 0.5f;
         vibeTime = 4;
         rocketRB = this.GetComponent<Rigidbody>();
+<<<<<<< HEAD
         //player = GameObject.Find("Player");
         //camera = GameObject.Find("Main Camera");
         camera = GameObject.Find("PlayerCamera");     // ƒQ[ƒ€ƒvƒŒƒC‚ÅŽg‚¤
         //bomb = GameObject.Find("Bomb");
+=======
+        player = GameObject.Find("Player");
+        camera = GameObject.Find("Main Camera");
+        rocket = GameObject.Find("Bomb");
+>>>>>>> main
         playerTransform = player.transform;
         cameraTransform = camera.transform;
         explodeInpact = new Vector3(0.2f, cameraTransform.position.y, cameraTransform.position.z);
@@ -73,20 +83,18 @@ public class Bomb : MonoBehaviourPunCallbacks
         }
         if(isExplode)
         {
-            ApproachPos(bomb, player, playerOffset);
+            ApproachPos(rocket, player, playerOffset);
         }
         DecreeseLevelUp();
         if(Input.GetKeyDown(KeyCode.E))
         {
             ThrowRocket();
         }
-        if (Mathf.Abs(rocketRB.position.x - playerPosX) < 2 && isThrowing)
+        if (Mathf.Abs(rocketRB.position.x - playerPosX) < 2 && isReturning)
         {
-            rocketRB.transform.position = player.transform.position + rocketOffset;
-        }
-        else 
-        {
-            isThrowing = true;
+            // ‰^“®ƒGƒlƒ‹ƒM[’âŽ~
+            ApproachPos(player, rocket, rocketOffset);
+            isReturning = false;
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -173,8 +181,12 @@ public class Bomb : MonoBehaviourPunCallbacks
     {
         floated.position += Vector3.up * floatForce * Time.deltaTime;
     }
+<<<<<<< HEAD
 
     Vector3 GetScreenCeterPos()
+=======
+    Vector3 GetScreenCeterPos()  
+>>>>>>> main
     {
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 1000);
         Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
@@ -184,6 +196,7 @@ public class Bomb : MonoBehaviourPunCallbacks
 
     void ThrowRocket()
     {
+        isReturning = false;
         rocketRB.AddForce(GetScreenCeterPos() * throwForce, ForceMode.Impulse);
     }
 
@@ -199,7 +212,7 @@ public class Bomb : MonoBehaviourPunCallbacks
         {
             rocketRB.AddForce(GetLineDir() * returnForce, ForceMode.Impulse);
             Debug.Log(1);
-           
+            isReturning = true;
         }
     }
 
