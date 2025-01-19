@@ -58,8 +58,8 @@ public class CameraController : MonoBehaviour
 
             if (playerController.isDead == true)
             {
-                var minVerticalAngle = 0f;         // カメラ独立後の垂直回転の最小角度
-                var maxVerticalAngle = 80.0f;      // カメラ独立後の垂直回転の最大角度
+                var minVerticalAngle = -90.0f;         // カメラ独立後の垂直回転の最小角度
+                var maxVerticalAngle = 90.0f;      // カメラ独立後の垂直回転の最大角度
                 // 垂直回転の更新
                 verticalAngle -= Input.GetAxis("Mouse Y") * turnSpeed;
                 verticalAngle = Mathf.Clamp(verticalAngle, minVerticalAngle, maxVerticalAngle); // 制限を適用
