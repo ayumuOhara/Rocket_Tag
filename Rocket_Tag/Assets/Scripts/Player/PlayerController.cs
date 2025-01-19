@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI skillTimerText;
     [SerializeField] GameObject skillCTUI;
 
-    [SerializeField] private Vector3 velocity;              // 移動方向
+    [SerializeField] private Vector3 movingVelocity;              // 移動方向
     private float defaultMoveSpeed = 10.0f;                 // 移動速度(初期値)
     [SerializeField] private float moveSpeed = 10.0f;       // 移動速度
     [SerializeField] private float applySpeed = 0.2f;       // 回転の適用速度
@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
     [SerializeField] Rigidbody rb;
     private string targetTag = "Player";                    // タッチ時の検知対象のtag(実装時にはPlayerに変更する)
-    public float maxDistance = 5;                           // 検知する最大距離
+    public float maxDistance = 3.0f;                           // 検知する最大距離
     [SerializeField] private bool hasRocket;                // ロケットを所持しているか
     public bool isDead;                                     // 死亡判定
     bool isStun;                                            // スタン判定
@@ -50,9 +50,25 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if(photonView.IsMine)
+        if (photonView.IsMine)
         {
-            if(isDead == false)
+            if (isDead == false)
+            {
+                // ジャンプ処理
+                if (Input.GetKeyDown(KeyCode.Space) && isGround)
+                {
+                    isGround = false;
+                    rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                }
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (photonView.IsMine)
+        {
+            if (isDead == false)
             {
                 GetVelocity();
                 PlayerMovement();
@@ -73,8 +89,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 {
                     PlayerAction();
                 }
-            }            
-        }        
+            }
+        }
     }
 
     // プレイヤーの状態の初期化
@@ -83,10 +99,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
         // ロケットの状態を初期化
         photonView.RPC("SetHasRocket", RpcTarget.All, false);
 
-        isDead = false;
+        photonView.RPC("SetPlayerDead", RpcTarget.All, false);
         isStun = false;
 
-        maxDistance = 2f;
+        maxDistance = 3f;
 
         // α版以外では削除
         skillCT = 0;
@@ -94,9 +110,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     // 死亡処理
     [PunRPC]
-    void SetPlayerDead()
+    public void SetPlayerDead(bool newIsDead)
     {
-        isDead = true;
+        isDead = newIsDead;
     }
 
 
@@ -105,19 +121,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
     // 押下された移動キーに応じてベクトルを取得
     void GetVelocity()
     {
-        // WASD入力から、XZ平面(水平な地面)を移動する方向(velocity)を得ます
-        velocity = Vector3.zero;
-        if (Input.GetKey(KeyCode.W))
-            velocity.z += 1;
-        if (Input.GetKey(KeyCode.A))
-            velocity.x -= 1;
-        if (Input.GetKey(KeyCode.S))
-            velocity.z -= 1;
-        if (Input.GetKey(KeyCode.D))
-            velocity.x += 1;
+        movingVelocity = Vector3.zero;
+        // GetAxisRawを使って移動する方向を取得
+        float x = Input.GetAxisRaw("Horizontal");
+        float z = Input.GetAxisRaw("Vertical");
 
-        // 速度ベクトルの長さを1秒でmoveSpeedだけ進むように調整します
-        velocity = velocity.normalized * moveSpeed * Time.deltaTime;
+        Vector3 movingDirection = new Vector3(x, 0, z);
+        // 斜め移動が速くならないようにする
+        movingDirection.Normalize();
+                
+        movingVelocity = movingDirection * moveSpeed;
     }
 
     // 取得したベクトルの方向に移動&回転させる+ジャンプ処理
@@ -125,29 +138,33 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (isStun == false)
         {
-            // ジャンプ処理
-            if (Input.GetKeyDown(KeyCode.Space) && isGround)
-            {
-                isGround = false;
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            }
-
             // いずれかの方向に移動している場合
-            if (velocity.magnitude > 0)
+            if (movingVelocity.magnitude > 0)
             {
+                // カメラの前方向をXZ平面に投影
+                Vector3 cameraForward = refCamera.transform.forward;
+                cameraForward.y = 0;
+                cameraForward.Normalize();
+
+                // カメラの右方向を取得
+                Vector3 cameraRight = refCamera.transform.right;
+
+                // カメラ基準で移動方向を再計算
+                Vector3 adjustedVelocity = cameraForward * movingVelocity.z + cameraRight * movingVelocity.x;
+
                 // プレイヤーの回転(transform.rotation)の更新
-                // 無回転状態のプレイヤーのZ+方向(後頭部)を、
-                // カメラの水平回転(refCamera.hRotation)で回した移動の反対方向(-velocity)に回す回転に段々近づけます
-                transform.rotation = Quaternion.Slerp(transform.rotation,
-                                                      Quaternion.LookRotation(refCamera.hRotation * -velocity),
-                                                      applySpeed);
+                if (adjustedVelocity.magnitude > 0)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(adjustedVelocity);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, applySpeed);
+                }
 
                 // プレイヤーの位置の更新
-                // カメラの水平回転(refCamera.hRotation)で回した移動方向(velocity)を足し込みます
-                rb.MovePosition(rb.position + refCamera.hRotation * velocity);
+                rb.linearVelocity = new Vector3(adjustedVelocity.x, rb.linearVelocity.y, adjustedVelocity.z);
             }
         }
     }
+
 
     // 衝突判定
     private void OnCollisionEnter(Collision collision)
@@ -190,7 +207,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    void SetIsStun(bool newIsStun)
+    public void SetIsStun(bool newIsStun)
     {
         isStun = newIsStun;
         if (isStun)
@@ -274,7 +291,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public void SetHasRocket(bool newHasRocket)
     {
         hasRocket = newHasRocket;
-        //rocketObj.SetActive(hasRocket);
+        rocketObj.SetActive(hasRocket);
         Debug.Log($"{photonView.Owner.NickName} の hasRocket を {hasRocket} に設定しました");
     }
     // 他のプレイヤーとの距離を測る

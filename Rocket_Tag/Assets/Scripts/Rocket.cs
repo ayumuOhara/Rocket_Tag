@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class Bomb : MonoBehaviour
+public class Bomb : MonoBehaviourPunCallbacks
 {
     enum DecreeseLevel    //  爆弾カウント減少レベル
     {
@@ -38,24 +38,28 @@ public class Bomb : MonoBehaviour
     Rigidbody rocketRB;
     [SerializeField] GameObject player;
     [SerializeField] GameObject camera;
-    GameObject bomb;
+    [SerializeField] GameObject bomb;
     Transform playerTransform;
     Transform cameraTransform;
 
     Vector3 startpos;
     void Start()
     {
-        Time.timeScale = 0.5f;
+        //Time.timeScale = 0.5f;
         vibeTime = 4;
         rocketRB = this.GetComponent<Rigidbody>();
-        player = GameObject.Find("Player");
-        camera = GameObject.Find("Main Camera");
-        bomb = GameObject.Find("Bomb");
+        //player = GameObject.Find("Player");
+        //camera = GameObject.Find("Main Camera");
+        camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
+        //bomb = GameObject.Find("Bomb");
         playerTransform = player.transform;
         cameraTransform = camera.transform;
         explodeInpact = new Vector3(0.2f, cameraTransform.position.y, cameraTransform.position.z);
         startpos = this.transform.position;
+
+        UpdateRocketCount(rocketCount);
     }
+
     void Update()
     {
         CountElaps();
@@ -92,6 +96,14 @@ public class Bomb : MonoBehaviour
 
         
     }
+
+    // ロケットのカウントを全プレイヤーで同期
+    public void UpdateRocketCount(float newRocketCount)
+    {
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable { { "RocketCount", rocketCount } };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+    }
+
     void Explosion()    //  爆弾爆発
     {
         rocketRB.useGravity = false;
@@ -103,29 +115,40 @@ public class Bomb : MonoBehaviour
         {
             rocketRB.linearVelocity = new Vector3(0, riseSpeed, 0);
             isExplode = true;
-            rocketCount = 1000;
+            ResetRocketCount();
             ResetPossesing();
         }
 
-        //--- 追加した部分(竹下) ---//      ※必要があればコメントアウト可
-        // ロケットを持っていたプレイヤーのisDeadを切り替える
         PhotonView targetPhotonView = player.GetComponent<PhotonView>();
         if (targetPhotonView != null)
         {
             targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
         }
     }
+
+    // ロケットのカウントをリセット
+    public void ResetRocketCount()
+    {
+        rocketCount = 1000; // デフォルト値
+        UpdateRocketCount(rocketCount);
+    }
+
     void CountElaps()    //  経過秒数カウント
     {
         rocketCount -= Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime;
         possesingTime += Time.deltaTime;
+
+        UpdateRocketCount(rocketCount);
+
     }
+
     void CameraVibe()    //  ロケット爆発瞬間のカメラ振動
     {
         cameraTransform.transform.position = explodeInpact;
         explodeInpact.x *= -1;
         vibeTime -= Time.deltaTime;
     }
+
     void DecreeseLevelUp()    //  ロケットカウント加速
     {
         if (decreeseLevel != DecreeseLevel.fast && possesingTime > decreeseUpTime[(int)decreeseLevel])
@@ -134,19 +157,23 @@ public class Bomb : MonoBehaviour
             Debug.Log(decreeseLevel);
         }
     }
+
     public void ResetPossesing()    //  所持における数値の変動リセット
     {
         possesingTime = 0;
         decreeseLevel = 0;
     }
+
     void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)    //  オブジェクトの位置を近づける
     {
         Approcher.transform.position = axis.transform.position + offset;
     }
+
     void Floating(Transform floated, float floatForce)    //  オブジェクト浮遊
     {
         floated.position += Vector3.up * floatForce * Time.deltaTime;
     }
+
     Vector3 GetScreenCeterPos()
     {
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 1000);
@@ -154,10 +181,12 @@ public class Bomb : MonoBehaviour
         Vector3 direction = (worldCenter - transform.position).normalized;
         return direction;
     }
+
     void ThrowRocket()
     {
         rocketRB.AddForce(GetScreenCeterPos() * throwForce, ForceMode.Impulse);
     }
+
     private void OnCollisionEnter(Collision collision)
     {
         //bool isFirstCollision = true;
@@ -173,6 +202,7 @@ public class Bomb : MonoBehaviour
            
         }
     }
+
     Vector3 GetLineDir()
     {
         Vector3 dir = player.transform.position - this.transform.position;
@@ -182,6 +212,16 @@ public class Bomb : MonoBehaviour
     //{
     //    bombCount -= value * Time.deltaTime;
     //}
+
+    // 上書きされたカウントを反映（コールバック）
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable changedProps)
+{
+    if (changedProps.ContainsKey("RocketCount"))
+    {
+        rocketCount = (float) changedProps["RocketCount"];
+    Debug.Log("RocketCount updated: " + rocketCount);
+    }
+}
 }
 
 //修正必
