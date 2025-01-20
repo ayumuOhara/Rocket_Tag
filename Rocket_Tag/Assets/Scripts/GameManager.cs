@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -10,7 +11,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] InstantiatePlayer instantiatePlayer;
     [SerializeField] PlayerReady playerReady;
     [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
-    [SerializeField] GameObject[] ReadyUI;              // マッチ開始前のUI
+    [SerializeField] TextMeshProUGUI infoText;          // playerCntTextの説明文
+    [SerializeField] GameObject readyButton;            // 準備完了ボタン
     private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
     private bool isGameStarted = false;                 // ゲームが開始されたかどうかのフラグ
 
@@ -30,7 +32,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         while (true)
         {
             int readyCount = GetReadyPlayerCount();
-            playerCntText.text = $"{readyCount}/{instantiatePlayer.GetCurrentPlayerCount()}";
+            playerCntText.text = $"{readyCount} /   {instantiatePlayer.GetCurrentPlayerCount()}";
+            infoText.text      = $"準備完了 /  参加人数";
 
             // マスタークライアントのみゲーム開始処理を実行
             if (PhotonNetwork.IsMasterClient && CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
@@ -92,8 +95,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         Debug.Log("プレイヤーが揃ったのでゲームを開始します");
         isGameStarted = true; // ゲーム開始フラグを立てる
-        ReadyUI[0].SetActive(false);
-        ReadyUI[1].SetActive(false);
+        readyButton.SetActive(false);
 
         // マスタークライアントのみロケット付与処理を実行
         if (PhotonNetwork.IsMasterClient)
@@ -107,15 +109,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     // 参加しているプレイヤーから１人を選び、ロケットを付与
     void ChooseRocketPlayer()
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        List<GameObject> players = new List<GameObject>();
+        players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
 
-        if (players.Length == 0)
-        {
-            Debug.LogWarning("プレイヤーが見つかりません。");
-            return;
-        }
-
-        int rnd = Random.Range(0, players.Length);
+        int rnd = Random.Range(0, GetPlayerCount());
         GameObject selectedPlayer = players[rnd];
 
         PhotonView targetPhotonView = selectedPlayer.GetComponent<PhotonView>();
@@ -134,27 +131,36 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         while (true)
         {
-            GameObject[] suvivor = GameObject.FindGameObjectsWithTag("Player");
-            var suvivorCnt = suvivor.Length;
+            int playerCnt = GetPlayerCount();
+            playerCntText.text = $"{playerCnt} /   {instantiatePlayer.GetCurrentPlayerCount()}";
+            infoText.text      = $"生存人数 /  参加人数";
 
-            foreach (var player in suvivor)
-            {                
-                SetPlayerBool pc = player.GetComponent<SetPlayerBool>();
-                if(pc.isDead)
-                {
-                    suvivorCnt--;
-                }
-            }
-
-            if (suvivorCnt <= 1)
+            if (playerCnt <= 1)
             {
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
-                ReadyUI[0].SetActive(true);
-                ReadyUI[1].SetActive(true);
+                readyButton.SetActive(true);
                 playerReady.SetReady(false);
                 yield break;
             }
             yield return null;
         }
+    }
+
+    // 生存人数を返す
+    int GetPlayerCount()
+    {
+        List<GameObject> players = new List<GameObject>();
+        players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            SetPlayerBool spb = players[i].GetComponent<SetPlayerBool>();
+            if (spb.isDead)
+            {
+                players.RemoveAt(i);
+            }
+        }
+
+        return players.Count;
     }
 }

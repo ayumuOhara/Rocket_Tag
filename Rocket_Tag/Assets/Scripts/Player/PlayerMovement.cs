@@ -1,6 +1,7 @@
 using Photon.Pun;
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
@@ -13,7 +14,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private bool isGround = false;                          // 接地判定
     private float groundLimit = 0.7f;                       // 接地判定のしきい値
     [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
+
     [SerializeField] Rigidbody rb;
+    [SerializeField] CapsuleCollider _collider;
+    [SerializeField] PhysicsMaterial defaultFriction;       // 通常状態の摩擦
+    [SerializeField] PhysicsMaterial noneFriction;          // 方向キー入力中の摩擦
+
     float stunTime = 3.0f;                                  // スタン時間
 
     void Start()
@@ -53,6 +59,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // いずれかの方向に移動している場合
         if (movingVelocity.magnitude > 0)
         {
+            _collider.material = noneFriction;
+
             // カメラの前方向をXZ平面に投影
             Vector3 cameraForward = refCamera.transform.forward;
             cameraForward.y = 0;
@@ -73,6 +81,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
             // プレイヤーの位置の更新
             rb.linearVelocity = new Vector3(adjustedVelocity.x, rb.linearVelocity.y, adjustedVelocity.z);
+        }
+        else
+        {
+            _collider.material = defaultFriction;
         }
     }
 

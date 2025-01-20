@@ -17,8 +17,12 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        skillCTUI = GameObject.Find("SkillCTUI");
-        skillTimerText = GameObject.Find("SkillTimerText").GetComponent<TextMeshProUGUI>();
+        if (GameObject.Find("SkillCTUI") && GameObject.Find("SkillTimerText"))
+        {
+            skillCTUI = GameObject.Find("SkillCTUI");
+            skillTimerText = GameObject.Find("SkillTimerText").GetComponent<TextMeshProUGUI>();
+        }
+        
         changeObjColor = GetComponent<ChangeObjColor>();
         playerMovement = GetComponent<PlayerMovement>();
 
