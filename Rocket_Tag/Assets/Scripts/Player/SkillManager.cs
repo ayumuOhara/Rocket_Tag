@@ -26,7 +26,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
         changeObjColor = GetComponent<ChangeObjColor>();
         playerMovement = GetComponent<PlayerMovement>();
 
-        skillCTUI.SetActive(false);
+        if(skillCTUI != null) skillCTUI.SetActive(false);
     }
 
     private void Update()
@@ -35,7 +35,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
         {
             if (skillTimer <= 0)
             {
-                skillCTUI.SetActive(false);
+                if (skillCTUI != null) skillCTUI.SetActive(false);
             }
             else
             {
