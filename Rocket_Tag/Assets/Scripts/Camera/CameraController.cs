@@ -69,8 +69,7 @@ public class CameraController : MonoBehaviour
                 // 垂直回転の更新
                 verticalAngle -= Input.GetAxis("Mouse Y") * turnSpeed;
                 verticalAngle = Mathf.Clamp(verticalAngle, minVerticalAngle, maxVerticalAngle); // 制限を適用
-            }
-            
+            }            
 
             vRotation = Quaternion.Euler(verticalAngle, 0, 0);
         }
