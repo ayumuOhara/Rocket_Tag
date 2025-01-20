@@ -7888,8 +7888,8 @@ GameObject:
   - component: {fileID: 246522861}
   - component: {fileID: 246522860}
   - component: {fileID: 246522859}
-  - component: {fileID: 246522858}
-  - component: {fileID: 246522857}
+  - component: {fileID: 246522863}
+  - component: {fileID: 246522862}
   m_Layer: 5
   m_Name: ReadyButton
   m_TagString: Untagged
@@ -7917,31 +7917,6 @@ RectTransform:
   m_AnchoredPosition: {x: 770, y: 180}
   m_SizeDelta: {x: 282.1672, y: 89.7873}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &246522857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 246522855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e7cbf456c7733449ae823dc3d62f60b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &246522858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 246522855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d49bfce8a22cc32498457657bab97a6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerReady: {fileID: 246522857}
 --- !u!114 &246522859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7986,7 +7961,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 246522858}
+      - m_Target: {fileID: 246522862}
         m_TargetAssemblyTypeName: ReadyButton, Assembly-CSharp
         m_MethodName: OnReadyButtonClicked
         m_Mode: 1
@@ -8036,6 +8011,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 246522855}
   m_CullTransparentMesh: 1
+--- !u!114 &246522862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246522855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d49bfce8a22cc32498457657bab97a6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerReady: {fileID: 246522863}
+--- !u!114 &246522863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246522855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e7cbf456c7733449ae823dc3d62f60b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &257264718
 GameObject:
   m_ObjectHideFlags: 0
@@ -15419,7 +15419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d765c19c068f2394bbc7ddbe0029989a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refCamera: {fileID: 504838159}
+  refCamera: {fileID: 0}
   distance: 5
   verticalAngle: 20
   minVerticalAngle: 10
@@ -17822,7 +17822,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
   instantiatePlayer: {fileID: 2058844072}
-  playerReady: {fileID: 246522857}
+  playerReady: {fileID: 0}
   playerCntText: {fileID: 1098447601}
   ReadyUI:
   - {fileID: 246522855}
