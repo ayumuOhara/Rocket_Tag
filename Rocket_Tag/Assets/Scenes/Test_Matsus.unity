@@ -502,7 +502,7 @@ GameObject:
   - component: {fileID: 1662577727}
   - component: {fileID: 1662577728}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: PlayerCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -662,7 +662,7 @@ GameObject:
   - component: {fileID: 1807629760}
   - component: {fileID: 1807629764}
   - component: {fileID: 1807629765}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -754,7 +754,7 @@ Transform:
   m_GameObject: {fileID: 1807629759}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.94, y: 0.611, z: -0.25328055}
+  m_LocalPosition: {x: 0.51, y: 2.34, z: -0.29}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -814,7 +814,7 @@ GameObject:
   - component: {fileID: 1915035895}
   - component: {fileID: 1915035894}
   - component: {fileID: 1915035893}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}

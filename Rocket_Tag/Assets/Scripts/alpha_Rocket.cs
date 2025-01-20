@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class Bomb : MonoBehaviourPunCallbacks
+public class alpha_Rocket : MonoBehaviourPunCallbacks
 {
     enum DecreeseLevel    //  爆弾カウント減少レベル
     {
@@ -31,7 +31,7 @@ public class Bomb : MonoBehaviourPunCallbacks
     float secToExplode = 0;
     float playerPosX;
     float[] decreeseValue = { 0.4f, 1, 1.8f, 5f, 12f, 30f, 100f };
-    float[] decreeseUpTime = {5f, 10f, 15f, 20f, 25f, 30f, 35f};
+    float[] decreeseUpTime = { 5f, 10f, 15f, 20f, 25f, 30f, 35f };
     float throwedTime = 0;
     bool isExplode = false;
     bool isReturning = false;
@@ -50,20 +50,19 @@ public class Bomb : MonoBehaviourPunCallbacks
     Transform playerTransform;
     Transform cameraTransform;
 
-    bool ForTest = true;
+    bool ForTest = false;
     Vector3 startpos;
     void Start()
     {
-        if(ForTest)    //  TestScene用
-        {
-            player = GameObject.Find("Player");
-            camera = GameObject.Find("PlayerCamera");
-            rocket = GameObject.Find("Bomb");
-        }
+        //if (ForTest)    //  TestScene用
+        //{
+        //    player = GameObject.Find("Player");
+        //    camera = GameObject.Find("PlayerCamera");
+        rocket = GameObject.Find("Bomb");
+        //}
         vibeTime = 3;
         rocketRB = this.GetComponent<Rigidbody>();
         camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
-        //bomb = GameObject.Find("Bomb");
         playerTransform = player.transform;
         cameraTransform = camera.transform;
         explodeInpact = new Vector3(0.2f, cameraTransform.position.y, cameraTransform.position.z);
@@ -77,19 +76,18 @@ public class Bomb : MonoBehaviourPunCallbacks
     void Update()
     {
         CountElaps();
-        if(IsVibeTime())
+        if (IsVibeTime())
         { CameraVibe(explodeInpact, vibeTime); }
         if (rocketLimit > rocketCount)
         { Explosion(); }
-        if(isExplode)
+        if (isExplode)
         {
             ApproachPos(rocket, player, playerOffset);
         }
         DecreeseLevelUp();
-        if(Input.GetKeyDown(KeyCode.E) && isHoldRocket)
+        if (Input.GetKeyDown(KeyCode.E) && isHoldRocket)
         {
             rocketRB.useGravity = true;
-            ThrowRocket();
         }
         if (Mathf.Abs(rocketRB.position.x - playerPosX) < 2 && isReturning)
         {
@@ -106,21 +104,17 @@ public class Bomb : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyCode.R))
         {
             this.transform.position = startpos;
-            rocketRB.linearVelocity = new Vector3(0,0,0);
+            rocketRB.linearVelocity = new Vector3(0, 0, 0);
         }
-        if(isReturning)
+        if (isReturning)
         {
             rocketRB.AddForce(GetLineDir() * returnForce, ForceMode.Impulse);
         }
-        //if(Input.GetKey(KeyCode.LeftArrow))
-        //{
-        //    player.transform.position = new Vector3(playerPosX + 1, player.transform.position.y, player.transform.position.z);
-        //}
         if (isNeedHold)
         {
             ApproachPos(player, rocket, rocketOffset);
         }
-     }
+    }
     // ロケットのカウントを全プレイヤーで同期
     public void UpdateRocketCount(float newRocketCount)
     {
@@ -139,10 +133,10 @@ public class Bomb : MonoBehaviourPunCallbacks
         rocketCount -= Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime;
         possesingTime += Time.deltaTime;
         UpdateRocketCount(rocketCount);
-        if (isThrowed) 
+        if (isThrowed)
         {
             throwedTime += Time.deltaTime;
-            if(throwedTime > 1.5f)
+            if (throwedTime > 1.5f)
             {
                 ApproachPos(player, rocket, rocketOffset);
                 isHoldRocket = true;
@@ -211,7 +205,7 @@ public class Bomb : MonoBehaviourPunCallbacks
     void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)    //  オブジェクトの位置を近づける
     {
         Approcher.transform.position = axis.transform.position + offset;
-        
+
     }
 
     void Floating(Transform floated, float floatForce)    //  オブジェクト浮遊
@@ -246,7 +240,7 @@ public class Bomb : MonoBehaviourPunCallbacks
         {
             isReturning = true;
         }
-        if(collidedObjectTag == "Player")
+        if (collidedObjectTag == "Player")
         {
             //    プレイヤーに当たった処理
         }
@@ -257,15 +251,9 @@ public class Bomb : MonoBehaviourPunCallbacks
         Vector3 dir = player.transform.position - this.transform.position;
         return dir;
     }
-    //void BomCouuntDecreese(int value)    //  ロケットカウントを減らす;
-    //{
-    //    bombCount -= value * Time.deltaTime;
-    //}
-
-
     // 上書きされたカウントを反映（コールバック）
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable changedProps)
-{
+    {
         if (!ForTest)
         {
             if (changedProps.ContainsKey("RocketCount"))
