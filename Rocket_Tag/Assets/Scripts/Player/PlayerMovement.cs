@@ -118,6 +118,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     // ƒ^ƒbƒ`‚³‚ê‚½‚Æ‚«‚É’âŽ~
     public IEnumerator StunPlayer()
     {
+        _collider.material = defaultFriction;
+
         photonView.RPC("ChangeColor", RpcTarget.All,
                         changeObjColor.colorMaterial[3].color.r,
                         changeObjColor.colorMaterial[3].color.g,
