@@ -22,11 +22,9 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
     public float rocketCount = 1000;
     float vibeTime;
     float vibeStartTime = 0.5f;
-    float riseSpeed = 60;
+    float riseSpeed = 10;
     float floatingTime = 2;
     float floatSpeed = 1f;
-    float throwForce = 120f;
-    float returnForce = 10f;
     float possesingTime = 0;
     float secToExplode = 0;
     float playerPosX;
@@ -46,7 +44,7 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
     Rigidbody rocketRB;
     [SerializeField] GameObject player;
     [SerializeField] GameObject camera;
-    GameObject rocket;
+    [SerializeField] GameObject rocket;
     Transform playerTransform;
     Transform cameraTransform;
 
@@ -60,6 +58,7 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         //    camera = GameObject.Find("PlayerCamera");
         //    rocket = GameObject.Find("Bomb");
         //}
+        riseSpeed = 10;
         vibeTime = 3;
         rocketRB = this.GetComponent<Rigidbody>();
         camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
@@ -78,8 +77,10 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         CountElaps();
         if (IsVibeTime())
         { CameraVibe(explodeInpact, vibeTime); }
-        if (rocketLimit > rocketCount)
-        { Explosion(); }
+        if (rocketCount <= rocketLimit)
+        {
+            Explosion(); 
+        }
         if (isExplode)
         {
             ApproachPos(rocket, player, playerOffset);
@@ -106,13 +107,9 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
             this.transform.position = startpos;
             rocketRB.linearVelocity = new Vector3(0, 0, 0);
         }
-        if (isReturning)
-        {
-            rocketRB.AddForce(GetLineDir() * returnForce, ForceMode.Impulse);
-        }
         if (isNeedHold)
         {
-            ApproachPos(player, rocket, rocketOffset);
+            RocketFix(player, rocket, rocketOffset);
         }
     }
     // ロケットのカウントを全プレイヤーで同期
@@ -164,11 +161,15 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
                 ResetPossesing();
             }
 
+            // プレイヤーの死亡判定
             PhotonView targetPhotonView = player.GetComponent<PhotonView>();
             if (targetPhotonView != null)
             {
                 targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
             }
+
+            GameManager gameManager = player.GetComponent<GameManager>();
+            gameManager.ChooseRocketPlayer();
         }
     }
 
@@ -181,7 +182,7 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
 
     public void CameraVibe(Vector3 vibeInpact, float duration)    //  カメラ振動
     {
-        cameraTransform.transform.position = explodeInpact;
+        cameraTransform.transform.position += explodeInpact;
         explodeInpact.x *= -1;
         vibeTime -= Time.deltaTime;
     }
@@ -205,31 +206,18 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
     void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)    //  オブジェクトの位置を近づける
     {
         Approcher.transform.position = axis.transform.position + offset;
+    }
 
+    void RocketFix(GameObject axis, GameObject Approcher, Vector3 offset)    //  オブジェクトの位置を近づける
+    {
+        float distance = offset.magnitude;
+        // カメラの位置(transform.position)の更新
+        transform.position = playerTransform.position + new Vector3(0, 0.3f, 0) - transform.rotation * Vector3.forward * distance;
     }
 
     void Floating(Transform floated, float floatForce)    //  オブジェクト浮遊
     {
         floated.position += Vector3.up * floatForce * Time.deltaTime;
-    }
-    Vector3 GetScreenCenterPos()
-    {
-        Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 1000);
-        Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
-        Vector3 direction = (worldCenter - transform.position).normalized;
-        return direction;
-    }
-
-    void ThrowRocket()
-    {
-        isThrowed = true;
-        isNeedHold = false;
-        ApproachPos(player, rocket, thorowRocketOffset);
-        isReturning = false;
-        isHoldRocket = false;
-        rocketRB.AddForce(GetScreenCenterPos() * throwForce, ForceMode.Impulse);
-        //transform.position += GetScreenCenterPos() * throwForce * Time.deltaTime;
-        rocketRB.MovePosition(GetScreenCenterPos() * throwForce);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -240,10 +228,6 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         {
             isReturning = true;
         }
-        if (collidedObjectTag == "Player")
-        {
-            //    プレイヤーに当たった処理
-        }
     }
 
     Vector3 GetLineDir()
@@ -251,6 +235,7 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         Vector3 dir = player.transform.position - this.transform.position;
         return dir;
     }
+
     // 上書きされたカウントを反映（コールバック）
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable changedProps)
     {
@@ -259,10 +244,10 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
             if (changedProps.ContainsKey("RocketCount"))
             {
                 rocketCount = (float)changedProps["RocketCount"];
-                Debug.Log("RocketCount updated: " + rocketCount);
             }
         }
     }
+
     public bool IsVibeTime()
     {
         return ((secToExplode -= Time.deltaTime) < vibeStartTime || isExplode) && vibeTime > 0;

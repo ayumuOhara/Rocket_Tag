@@ -13,8 +13,6 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        Application.targetFrameRate = 60;
-
         // マスターサーバーに接続
         PhotonNetwork.ConnectUsingSettings();
     }

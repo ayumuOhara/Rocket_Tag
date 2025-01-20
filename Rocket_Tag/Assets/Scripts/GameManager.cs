@@ -107,12 +107,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     // 参加しているプレイヤーから１人を選び、ロケットを付与
-    void ChooseRocketPlayer()
+    public void ChooseRocketPlayer()
     {
         List<GameObject> players = new List<GameObject>();
-        players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
-
-        int rnd = Random.Range(0, GetPlayerCount());
+        players = GetPlayerCount();
+        int rnd = Random.Range(0, players.Count);
         GameObject selectedPlayer = players[rnd];
 
         PhotonView targetPhotonView = selectedPlayer.GetComponent<PhotonView>();
@@ -131,7 +130,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         while (true)
         {
-            int playerCnt = GetPlayerCount();
+            List<GameObject> players = GetPlayerCount();
+            int playerCnt = players.Count;
             playerCntText.text = $"{playerCnt} /   {instantiatePlayer.GetCurrentPlayerCount()}";
             infoText.text      = $"生存人数 /  参加人数";
 
@@ -146,8 +146,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // 生存人数を返す
-    int GetPlayerCount()
+    // 生存者リストを返す
+    List<GameObject> GetPlayerCount()
     {
         List<GameObject> players = new List<GameObject>();
         players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
@@ -161,6 +161,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
 
-        return players.Count;
+        return players;
     }
 }
