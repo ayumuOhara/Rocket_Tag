@@ -27,6 +27,8 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
     // ルーム作成時または参加時に呼ばれる
     public override void OnJoinedRoom()
     {
+        Application.targetFrameRate = 240;
+
         // カスタムプロパティでプレイヤー人数を初期化または更新
         UpdatePlayerCount(1);
 

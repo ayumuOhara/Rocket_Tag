@@ -140,6 +140,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
                 readyButton.SetActive(true);
                 playerReady.SetReady(false);
+                StartCoroutine(WaitPlayersReady());
                 yield break;
             }
             yield return null;

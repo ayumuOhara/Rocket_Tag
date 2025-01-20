@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [SerializeField] private float applySpeed = 0.2f;       // 回転の適用速度
     [SerializeField] private float jumpForce = 20.0f;       // ジャンプ力
     private bool isGround = false;                          // 接地判定
-    private float groundLimit = 0.7f;                       // 接地判定のしきい値
+    private float groundLimit = 1.0f;                       // 接地判定のしきい値
     [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
 
     [SerializeField] Rigidbody rb;
@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public void JumpAction()
     {
         // ジャンプ処理
-        if (Input.GetKeyDown(KeyCode.Space) && isGround)
+        if (Input.GetKey(KeyCode.Space) && isGround)
         {
             isGround = false;
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
