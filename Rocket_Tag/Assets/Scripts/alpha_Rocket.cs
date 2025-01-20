@@ -58,7 +58,7 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         //{
         //    player = GameObject.Find("Player");
         //    camera = GameObject.Find("PlayerCamera");
-        rocket = GameObject.Find("Bomb");
+        //    rocket = GameObject.Find("Bomb");
         //}
         vibeTime = 3;
         rocketRB = this.GetComponent<Rigidbody>();
