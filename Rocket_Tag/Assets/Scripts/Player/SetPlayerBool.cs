@@ -11,6 +11,11 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [SerializeField] public bool isDead;              // 死亡判定
     [SerializeField] public bool isStun;              // スタン判定
 
+    private void Start()
+    {
+        playerMovement = GetComponent<PlayerMovement>();
+    }
+
     // プレイヤーの状態の初期化
     public void SetPlayerCondition()
     {
