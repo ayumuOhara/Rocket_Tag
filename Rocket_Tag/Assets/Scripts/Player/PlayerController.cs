@@ -25,9 +25,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine && setPlayerBool.isDead == false)
         {
-            playerMovement.GetVelocity();
-            playerMovement.PlayerMove();
-            playerMovement.JumpAction();
+            if(setPlayerBool.isStun == false)
+            {
+                playerMovement.GetVelocity();
+                playerMovement.PlayerMove();
+                playerMovement.JumpAction();
+            }
 
             if(setPlayerBool.hasRocket)
             {
