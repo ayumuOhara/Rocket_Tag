@@ -8,12 +8,12 @@ public class SkillManager : MonoBehaviourPunCallbacks
     ChangeObjColor changeObjColor;
     PlayerMovement playerMovement;
 
-    float skillCT = 30.0f; // スキルのクールタイム(α版のみ。マスター版ではCSVファイルを使用)
+    float skillCT = 15.0f; // スキルのクールタイム(α版のみ。マスター版ではCSVファイルを使用)
     float skillTimer = 0; 
     [SerializeField] TextMeshProUGUI skillTimerText;
     [SerializeField] GameObject skillCTUI;
     float time = 0;
-    bool finishSkill = true;
+    public bool finishSkill = true;
 
     private void Start()
     {
@@ -27,6 +27,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
         playerMovement = GetComponent<PlayerMovement>();
 
         if(skillCTUI != null) skillCTUI.SetActive(false);
+        skillCT = 15.0f;
     }
 
     private void Update()
@@ -63,8 +64,8 @@ public class SkillManager : MonoBehaviourPunCallbacks
         }
     }
 
-    float boostValue = 3.0f;
-    float dashTime = 2.0f;
+    float boostValue = 2f;
+    float dashTime = 3.0f;
 
     // ダッシュスキル効果(修正版)
     IEnumerator DashSkill()

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
-    PlayerMovement playerMovement;
+    [SerializeField] PlayerMovement playerMovement;
     alpha_Rocket rocket;
 
     [SerializeField] GameObject rocketObj;            // ÉçÉPÉbÉg
@@ -14,7 +14,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        playerMovement = GetComponent<PlayerMovement>();
         rocket = rocketObj.GetComponent<alpha_Rocket>();
     }
 
@@ -51,7 +50,9 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         hasRocket = newHasRocket;
         rocketObj.SetActive(hasRocket);
-        
+
+        playerMovement.ChangeMoveSpeed(newHasRocket,12.0f);
+
         if(rocket != null)  rocket.ResetPossesing();
     }
 }

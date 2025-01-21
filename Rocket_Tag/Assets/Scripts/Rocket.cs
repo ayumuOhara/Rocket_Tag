@@ -116,7 +116,7 @@ public class Bomb : MonoBehaviourPunCallbacks
         //{
         //    player.transform.position = new Vector3(playerPosX + 1, player.transform.position.y, player.transform.position.z);
         //}
-        if (isNeedHold)
+        if (isNeedHold && isExplode)
         {
             ApproachPos(player, rocket, rocketOffset);
         }

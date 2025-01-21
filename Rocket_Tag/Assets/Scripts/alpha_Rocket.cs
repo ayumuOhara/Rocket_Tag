@@ -39,10 +39,14 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
     bool isThrowed = false;
     Vector3 playerOffset = new Vector3(0, 5, 5);
     Vector3 rocketOffset = new Vector3(1, 0, 0);
-    Vector3 thorowRocketOffset = new Vector3(0, 3f, 0);
+    Vector3 srocketOffset = new Vector3(1, 0, 0);
+
+    Vector3 thorowRocketOffset;
     Vector3 explodeInpact;
 
     Rigidbody rocketRB;
+    Rigidbody playerRB;
+
     [SerializeField] GameObject player;
     [SerializeField] GameObject camera;
     [SerializeField] GameObject rocket;
@@ -54,7 +58,7 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
     void Start()
     {
         riseSpeed = 1f;
-        rocketRB = this.GetComponent<Rigidbody>();
+    //    rocketRB = this.GetComponent<Rigidbody>();
         camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
         playerTransform = player.transform;
         cameraTransform = camera.transform;
@@ -62,14 +66,14 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         startpos = this.transform.position;
 
         UpdateRocketCount(rocketCount);
-        rocketRB.useGravity = false;
+       // rocketRB.useGravity = false;
         secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
+        playerRB = player.GetComponent<Rigidbody>();
     }
-
     void Update()
     {
         CountElaps();
-        if (rocketCount <= rocketLimit)
+        if (rocketCount <= rocketLimit || isExplode)
         {
             CameraController cc = camera.GetComponent<CameraController>();
             StartCoroutine(cc.Shake(2f, 0.2f));
@@ -77,33 +81,12 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         }
         if (isExplode)
         {
-            ApproachPos(rocket, player, playerOffset);
+        //    ApproachPos(rocket, player, playerOffset);
         }
         DecreeseLevelUp();
         if (Input.GetKeyDown(KeyCode.E) && isHoldRocket)
         {
             rocketRB.useGravity = true;
-        }
-        if (Mathf.Abs(rocketRB.position.x - playerPosX) < 2 && isReturning)
-        {
-            isNeedHold = true;
-            // 運動エネルギー停止
-            rocketRB.linearVelocity = Vector3.zero;
-            ApproachPos(player, rocket, rocketOffset);
-            isReturning = false;
-            isHoldRocket = true;
-            rocketRB.useGravity = false;
-            isThrowed = false;
-            throwedTime = 0;
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            this.transform.position = startpos;
-            rocketRB.linearVelocity = new Vector3(0, 0, 0);
-        }
-        if (isNeedHold)
-        {
-            RocketFix(player, rocket, rocketOffset);
         }
     }
     // ロケットのカウントを全プレイヤーで同期
@@ -140,16 +123,20 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Explosion()    //  爆弾爆発
     {
+        isExplode = true;
         isNeedHold = false;
+        playerRB.useGravity = false;
+
         {
             if ((floatingTime -= Time.deltaTime) > 0)
             {
-                Floating(transform, floatSpeed);
+                Floating(playerTransform, floatSpeed);
+
             }
             else
             {
-                Floating(transform, 1f);
-                isExplode = true;
+                Floating(playerTransform, 10f);
+                
                 ResetRocketCount();
                 ResetPossesing();
             }
@@ -161,8 +148,12 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
                 targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
             }
 
-            GameManager gameManager = player.GetComponent<GameManager>();
-            gameManager.ChooseRocketPlayer();
+            // マスタークライアントのみ処理を実行
+            if (PhotonNetwork.IsMasterClient)
+            {
+                GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+                gameManager.ChooseRocketPlayer();
+            }            
         }
     }
 
