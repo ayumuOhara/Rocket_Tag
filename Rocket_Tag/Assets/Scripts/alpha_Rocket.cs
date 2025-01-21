@@ -103,6 +103,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
                 if (targetPhotonView != null)
                 {
                     targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
+                    targetPhotonView.RPC("SetHasRocket", RpcTarget.All, false);
                 }
                 isDropOut = true;
             }
