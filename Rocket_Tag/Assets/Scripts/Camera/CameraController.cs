@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.Rendering;
 
 public class CameraController : MonoBehaviour
@@ -116,5 +117,19 @@ public class CameraController : MonoBehaviour
     {
         // カメラの位置(transform.position)の更新
         transform.position = playerTransform.position + new Vector3(0, 1.5f, 0) - transform.rotation * Vector3.forward * distance;
+    }
+
+    public IEnumerator Shake(float duration, float magnitude)
+    {
+        Vector3 originalPosition = transform.position;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            transform.position = originalPosition + Random.insideUnitSphere * magnitude;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = originalPosition;
     }
 }

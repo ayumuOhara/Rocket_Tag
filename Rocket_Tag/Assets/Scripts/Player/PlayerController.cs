@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         skillManager = GetComponent<SkillManager>();
         observeDistance = GetComponent<ObserveDistance>();
         changeObjColor = GetComponent<ChangeObjColor>();
+
+        setPlayerBool.SetPlayerCondition();
     }
 
     void FixedUpdate()

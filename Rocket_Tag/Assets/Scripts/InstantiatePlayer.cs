@@ -37,6 +37,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
 
         // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
         gameManager.playerController = player.GetComponent<PlayerController>();
+        gameManager.setPlayerBool    = player.GetComponent<SetPlayerBool>();
 
         playerCamera.SetActive(true);
         waitCamera.SetActive(false);

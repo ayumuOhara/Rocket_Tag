@@ -51,7 +51,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         hasRocket = newHasRocket;
         rocketObj.SetActive(hasRocket);
-
-        rocket.ResetPossesing();
+        
+        if(rocket != null)  rocket.ResetPossesing();
     }
 }
