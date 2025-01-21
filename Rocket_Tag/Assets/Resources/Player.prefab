@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rocketCount: 500
   resetCount: 500
+  riseSpeed: 1
   player: {fileID: 8299087819917209949}
   camera: {fileID: 0}
   rocket: {fileID: 6752579603462179444}
