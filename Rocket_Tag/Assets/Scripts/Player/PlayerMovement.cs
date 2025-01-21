@@ -52,11 +52,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // ŽÎ‚ßˆÚ“®‚ª‘¬‚­‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
         movingDirection.Normalize();
 
-        if (setPlayerBool.hasRocket)
-            moveSpeed = 12f;
-        else
-            moveSpeed = 10f;
-
         movingVelocity = movingDirection * moveSpeed;
     }
 
