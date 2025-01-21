@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a40c7760834dbf4e8cd0dd40e535dd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocketCount: 500
-  initialCount: 500
+  rocketCount: 100
+  initialCount: 100
   player: {fileID: 8299087819917209949}
   camera: {fileID: 0}
 --- !u!1 &6789087206015880887
