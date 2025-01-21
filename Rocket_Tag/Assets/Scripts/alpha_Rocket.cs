@@ -5,9 +5,9 @@ using UnityEngine;
 using System.Collections;
 using static UnityEngine.GraphicsBuffer;
 
-public class alpha_Rocket : MonoBehaviourPunCallbacks
+public class Alpha_Rocket : MonoBehaviourPunCallbacks
 {
-    enum DecreeseLevel    //  ”š’eƒJƒEƒ“ƒgŒ¸­ƒŒƒxƒ‹
+    enum DecreeseLevel    //  çˆ†å¼¾ã‚«ã‚¦ãƒ³ãƒˆæ¸›å°‘ãƒ¬ãƒ™ãƒ«
     {
         slowest,
         veryslow,
@@ -20,210 +20,128 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
     DecreeseLevel decreeseLevel = DecreeseLevel.slowest;
 
     float rocketLimit = 0;
-    //public float rocketCount = 1000;
     public float rocketCount = 500;
-    public float resetCount = 500;
-    [SerializeField] float riseSpeed = 1;
-    float floatingTime = 2;
-    float floatSpeed = 1f;
+    public float initialCount = 500;
+    float floatStartTime = 2;
+    float floatSpeed = 2f;
+    float explodeRiseSpeed = 18f;
     float possesingTime = 0;
     float secToExplode = 0;
-    float playerPosX;
+    float evacuateStarPos_Y = 40;
     float[] decreeseValue = { 0.4f, 1, 1.8f, 5f, 12f, 30f, 100f };
     float[] decreeseUpTime = { 5f, 10f, 15f, 20f, 25f, 30f, 35f };
-    float throwedTime = 0;
     bool isExplode = false;
-    bool isReturning = false;
-    bool isHoldRocket = true;
-    bool isNeedHold = true;
-    bool isThrowed = false;
-    Vector3 playerOffset = new Vector3(0, 5, 5);
-    Vector3 rocketOffset = new Vector3(1, 0, 0);
-    Vector3 srocketOffset = new Vector3(1, 0, 0);
-
-    Vector3 thorowRocketOffset;
-    Vector3 explodeInpact;
-
-    Rigidbody rocketRB;
-    Rigidbody playerRB;
+    bool isVeryHigh = false;
 
     [SerializeField] GameObject player;
     [SerializeField] GameObject camera;
-    [SerializeField] GameObject rocket;
+    Rigidbody playerRB;
+    Renderer playerRenderer;
+    Material playerMaterial;
+    CameraController cameraController;
     Transform playerTransform;
-    Transform cameraTransform;
-
-    bool ForTest = false;
-    Vector3 startpos;
     void Start()
     {
-        riseSpeed = 1f;
-    //    rocketRB = this.GetComponent<Rigidbody>();
-        camera = GameObject.Find("PlayerCamera");     // ƒQ[ƒ€ƒvƒŒƒC‚Åg‚¤
         playerTransform = player.transform;
-        cameraTransform = camera.transform;
-        explodeInpact = new Vector3(0.2f, cameraTransform.position.y, cameraTransform.position.z);
-        startpos = this.transform.position;
-
-        UpdateRocketCount(rocketCount);
-       // rocketRB.useGravity = false;
-        secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
+        camera = GameObject.Find("PlayerCamera");     // ã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ã‚¤ã§ä½¿ã†
         playerRB = player.GetComponent<Rigidbody>();
+        playerRenderer = player.GetComponent<Renderer>();
+        playerMaterial = playerRenderer.material;
+        cameraController = camera.GetComponent<CameraController>();
+        secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
+        UpdateRocketCount(rocketCount);
     }
     void Update()
     {
         CountElaps();
-        if (rocketCount <= rocketLimit || isExplode)
+        if (IsLimitOver() || isExplode) { Explosion(); }
+        if (isFloatingTime() && !IsVeryHigh())
         {
-            CameraController cc = camera.GetComponent<CameraController>();
-            StartCoroutine(cc.Shake(2f, 0.2f));
-            Explosion(); 
+            playerRB.useGravity = false;
+            StartCoroutine(cameraController.Shake(2f, 0.2f));
+            Floating(playerTransform, floatSpeed);
         }
-        if (isExplode)
-        {
-        //    ApproachPos(rocket, player, playerOffset);
-        }
-        DecreeseLevelUp();
-        if (Input.GetKeyDown(KeyCode.E) && isHoldRocket)
-        {
-            rocketRB.useGravity = true;
-        }
+        if (decreeseLevel != DecreeseLevel.fastest && possesingTime > decreeseUpTime[(int)decreeseLevel]) { DecreeseLevelUp(); }
     }
-    // ƒƒPƒbƒg‚ÌƒJƒEƒ“ƒg‚ğ‘SƒvƒŒƒCƒ„[‚Å“¯Šú
-    public void UpdateRocketCount(float newRocketCount)
-    {
-        if (!ForTest)
-        {
-            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable { { "RocketCount", rocketCount } };
-            PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-        }
-    }
-    float GetSecUntilZero(float limit, float minusValue, float runUnit)    //  ‚O‚É‚È‚é‚Ü‚Å‚ÌŠÔ‚ğŒvZ(minusValue‚ÍrunUnit‚Å‚ÌŒvZŒã‚ÌŒ¸­—Ê)
+    // ãƒ­ã‚±ãƒƒãƒˆã®ã‚«ã‚¦ãƒ³ãƒˆã‚’å…¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã§åŒæœŸ
+    float GetSecUntilZero(float limit, float minusValue, float runUnit)    //  ï¼ã«ãªã‚‹ã¾ã§ã®æ™‚é–“ã‚’è¨ˆç®—(minusValueã¯runUnitã§ã®è¨ˆç®—å¾Œã®æ¸›å°‘é‡)
     {
         return limit / (minusValue * (1 / runUnit));
     }
-    void CountElaps()    //  Œo‰ß•b”ƒJƒEƒ“ƒg
+    public void UpdateRocketCount(float newRocketCount)
+    {
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable { { "RocketCount", rocketCount } };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+    }
+    void CountElaps()    //  çµŒéç§’æ•°ã‚«ã‚¦ãƒ³ãƒˆ
     {
         rocketCount -= Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime;
         possesingTime += Time.deltaTime;
         UpdateRocketCount(rocketCount);
-        if (isThrowed)
-        {
-            throwedTime += Time.deltaTime;
-            if (throwedTime > 1.5f)
-            {
-                ApproachPos(player, rocket, rocketOffset);
-                isHoldRocket = true;
-                isNeedHold = true;
-                isReturning = false;
-                isThrowed = false;
-            }
-        }
     }
-
-    void Explosion()    //  ”š’e”š”­
+    bool IsLimitOver()
+    { return rocketLimit > rocketCount; }
+    void Explosion()    //  çˆ†å¼¾çˆ†ç™º
     {
-        isExplode = true;
-        isNeedHold = false;
-        playerRB.useGravity = false;
-
+        if (!IsVeryHigh())
         {
-            if ((floatingTime -= Time.deltaTime) > 0)
+            isExplode = true;
+            Floating(playerTransform, explodeRiseSpeed);
+            ResetRocketCount();
+            ResetPossesing();
+            // ãƒã‚¹ã‚¿ãƒ¼ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã®ã¿å‡¦ç†ã‚’å®Ÿè¡Œ
+            if (PhotonNetwork.IsMasterClient)
             {
-                Floating(playerTransform, floatSpeed);
-
+                GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+                gameManager.ChooseRocketPlayer();
             }
-            else
-            {
-                Floating(playerTransform, 10f);
-                
-                ResetRocketCount();
-                ResetPossesing();
-            }
-
-            // ƒvƒŒƒCƒ„[‚Ì€–S”»’è
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ­»äº¡åˆ¤å®š
             PhotonView targetPhotonView = player.GetComponent<PhotonView>();
             if (targetPhotonView != null)
             {
                 targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
             }
-
-            // ƒ}ƒXƒ^[ƒNƒ‰ƒCƒAƒ“ƒg‚Ì‚İˆ—‚ğÀs
-            if (PhotonNetwork.IsMasterClient)
-            {
-                GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-                gameManager.ChooseRocketPlayer();
-            }            
         }
     }
-
-    // ƒƒPƒbƒg‚ÌƒJƒEƒ“ƒg‚ğƒŠƒZƒbƒg
+    bool isFloatingTime()
+    { return floatStartTime > rocketCount; }
+    void Floating(Transform floated, float floatForce)    //  ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæµ®éŠ
+    { floated.position += Vector3.up * floatForce * Time.deltaTime; }
+    // ãƒ­ã‚±ãƒƒãƒˆã®ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒªã‚»ãƒƒãƒˆ
     void ResetRocketCount()
     {
-        rocketCount = resetCount; // ƒfƒtƒHƒ‹ƒg’l
+        rocketCount = initialCount; // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
         UpdateRocketCount(rocketCount);
     }
 
-    void DecreeseLevelUp()    //  ƒƒPƒbƒgƒJƒEƒ“ƒg‰Á‘¬
+    void DecreeseLevelUp()    //  ãƒ­ã‚±ãƒƒãƒˆã‚«ã‚¦ãƒ³ãƒˆåŠ é€Ÿ
     {
-        if (decreeseLevel != DecreeseLevel.fastest && possesingTime > decreeseUpTime[(int)decreeseLevel])
-        {
-            decreeseLevel += 1;
-            Debug.Log(decreeseLevel);
-            secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
-            Debug.Log(secToExplode);
-        }
+        decreeseLevel += 1;
+        Debug.Log(decreeseLevel);
+        secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
+        Debug.Log(secToExplode);
     }
-    public void ResetPossesing()    //  Š‚É‚¨‚¯‚é”’l‚Ì•Ï“®ƒŠƒZƒbƒg
+    bool IsVeryHigh()
+    {
+        return playerTransform.position.y > evacuateStarPos_Y;
+    }
+    public void ResetPossesing()    //  æ‰€æŒã«ãŠã‘ã‚‹æ•°å€¤ã®å¤‰å‹•ãƒªã‚»ãƒƒãƒˆ
     {
         possesingTime = 0;
         decreeseLevel = 0;
     }
-
-    void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)    //  ƒIƒuƒWƒFƒNƒg‚ÌˆÊ’u‚ğ‹ß‚Ã‚¯‚é
-    {
-        Approcher.transform.position = axis.transform.position + offset;
-    }
-
-    void RocketFix(GameObject axis, GameObject Approcher, Vector3 offset)    //  ƒIƒuƒWƒFƒNƒg‚ÌˆÊ’u‚ğ‹ß‚Ã‚¯‚é
-    {
-        float distance = offset.magnitude;
-        // ƒJƒƒ‰‚ÌˆÊ’u(transform.position)‚ÌXV
-        transform.position = playerTransform.position + new Vector3(0, 0.3f, 0) - transform.rotation * Vector3.forward * distance;
-    }
-
-    void Floating(Transform floated, float floatForce)    //  ƒIƒuƒWƒFƒNƒg•‚—V
-    {
-        floated.position += Vector3.up * floatForce * Time.deltaTime;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        string collidedObjectTag = collision.gameObject.tag;
-        Debug.Log(collidedObjectTag);
-        if (collidedObjectTag != "Player" && collidedObjectTag != "Ground")
-        {
-            isReturning = true;
-        }
-    }
-
     Vector3 GetLineDir()
-    {
-        Vector3 dir = player.transform.position - this.transform.position;
-        return dir;
-    }
-
-    // ã‘‚«‚³‚ê‚½ƒJƒEƒ“ƒg‚ğ”½‰fiƒR[ƒ‹ƒoƒbƒNj
+    { return player.transform.position - this.transform.position; }
+    // ä¸Šæ›¸ãã•ã‚ŒãŸã‚«ã‚¦ãƒ³ãƒˆã‚’åæ˜ ï¼ˆã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ï¼‰
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable changedProps)
     {
-        if (!ForTest)
+        if (changedProps.ContainsKey("RocketCount"))
         {
-            if (changedProps.ContainsKey("RocketCount"))
-            {
-                rocketCount = (float)changedProps["RocketCount"];
-            }
+            rocketCount = (float)changedProps["RocketCount"];
         }
     }
+    //void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)    //  ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½ç½®ã‚’è¿‘ã¥ã‘ã‚‹
+    //{
+    //    Approcher.transform.position = axis.transform.position + offset;
+    //}
 }
-
-//C³•K

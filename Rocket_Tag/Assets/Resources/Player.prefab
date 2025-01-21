@@ -100,11 +100,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rocketCount: 500
-  resetCount: 500
-  riseSpeed: 1
+  initialCount: 500
   player: {fileID: 8299087819917209949}
   camera: {fileID: 0}
-  rocket: {fileID: 6752579603462179444}
 --- !u!1 &6789087206015880887
 GameObject:
   m_ObjectHideFlags: 0
