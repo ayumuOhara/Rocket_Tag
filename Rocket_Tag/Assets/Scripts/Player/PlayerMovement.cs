@@ -5,6 +5,7 @@ using TMPro;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
+    SetPlayerBool setPlayerBool;
     ChangeObjColor changeObjColor;
 
     [SerializeField] private Vector3 movingVelocity;        // ˆÚ“®•ûŒü
@@ -24,6 +25,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        setPlayerBool = GetComponent<SetPlayerBool>();
         refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
         changeObjColor = GetComponent<ChangeObjColor>();
     }
@@ -49,6 +51,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Vector3 movingDirection = new Vector3(x, 0, z);
         // ŽÎ‚ßˆÚ“®‚ª‘¬‚­‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
         movingDirection.Normalize();
+
+        if (setPlayerBool.hasRocket)
+            moveSpeed = 1.2f;
+        else
+            moveSpeed = 1.0f;
 
         movingVelocity = movingDirection * moveSpeed;
     }
