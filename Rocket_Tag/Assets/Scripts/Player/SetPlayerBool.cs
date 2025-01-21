@@ -4,7 +4,7 @@ using UnityEngine;
 public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
     [SerializeField] PlayerMovement playerMovement;
-    alpha_Rocket rocket;
+    Alpha_Rocket rocket;
 
     [SerializeField] GameObject rocketObj;            // ロケット
 
@@ -14,7 +14,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        rocket = rocketObj.GetComponent<alpha_Rocket>();
+        rocket = rocketObj.GetComponent<Alpha_Rocket>();
     }
 
     // プレイヤーの状態の初期化
