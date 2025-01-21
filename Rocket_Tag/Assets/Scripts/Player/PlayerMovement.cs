@@ -5,16 +5,16 @@ using TMPro;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
-    SetPlayerBool setPlayerBool;
     ChangeObjColor changeObjColor;
 
-    [SerializeField] private Vector3 movingVelocity;        // 移動方向
-    [SerializeField] private float moveSpeed = 10.0f;       // 移動速度
-    [SerializeField] private float applySpeed = 0.2f;       // 回転の適用速度
-    [SerializeField] private float jumpForce = 20.0f;       // ジャンプ力
-    private bool isGround = false;                          // 接地判定
-    private float groundLimit = 0.7f;                       // 接地判定のしきい値
-    [SerializeField] private CameraController refCamera; 　 // カメラの水平回転を参照する用
+    [SerializeField] private Vector3 movingVelocity;             // 移動方向
+    [SerializeField] private float moveSpeed = 10.0f;            // 移動速度
+    [SerializeField] private float defaultMoveSpeed = 10.0f;     // 通常の移動速度
+    [SerializeField] private float applySpeed = 0.2f;            // 回転の適用速度
+    [SerializeField] private float jumpForce = 20.0f;            // ジャンプ力
+    private bool isGround = false;                               // 接地判定
+    private float groundLimit = 0.7f;                            // 接地判定のしきい値
+    [SerializeField] private CameraController refCamera;      　 // カメラの水平回転を参照する用
 
     [SerializeField] Rigidbody rb;
     [SerializeField] CapsuleCollider _collider;
@@ -25,7 +25,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        setPlayerBool = GetComponent<SetPlayerBool>();
         refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
         changeObjColor = GetComponent<ChangeObjColor>();
     }
@@ -33,6 +32,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public void SetMoveSpeed(float _moveSpeed)
     {
         moveSpeed = _moveSpeed;
+    }
+
+    // プレイヤーの速度切り替え
+    public void ChangeMoveSpeed(bool hasRocket,float newSpeed = 0)
+    {
+        if (hasRocket)
+            SetMoveSpeed(newSpeed);
+        else
+            SetMoveSpeed(defaultMoveSpeed);
     }
 
     public float GetMoveSpeed()
@@ -50,7 +58,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         Vector3 movingDirection = new Vector3(x, 0, z);
         // 斜め移動が速くならないようにする
-        movingDirection.Normalize();
+        movingDirection.Normalize();              
 
         movingVelocity = movingDirection * moveSpeed;
     }

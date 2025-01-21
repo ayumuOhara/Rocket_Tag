@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rocketCount: 500
   resetCount: 500
+  riseSpeed: 1
   player: {fileID: 8299087819917209949}
   camera: {fileID: 0}
   rocket: {fileID: 6752579603462179444}
@@ -476,6 +477,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movingVelocity: {x: 0, y: 0, z: 0}
   moveSpeed: 10
+  defaultMoveSpeed: 10
   applySpeed: 0.2
   jumpForce: 20
   refCamera: {fileID: 0}
@@ -509,6 +511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillTimerText: {fileID: 0}
   skillCTUI: {fileID: 0}
+  finishSkill: 1
 --- !u!114 &4868377163844986340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,6 +524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba0f04057f8cf64aa564dde30b40925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerMovement: {fileID: 7078560154241749930}
   rocketObj: {fileID: 6752579603462179444}
   hasRocket: 0
   isDead: 0
