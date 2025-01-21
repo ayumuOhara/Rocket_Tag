@@ -161,8 +161,12 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
                 targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
             }
 
-            GameManager gameManager = player.GetComponent<GameManager>();
-            gameManager.ChooseRocketPlayer();
+            // マスタークライアントのみ処理を実行
+            if (PhotonNetwork.IsMasterClient)
+            {
+                GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+                gameManager.ChooseRocketPlayer();
+            }            
         }
     }
 
