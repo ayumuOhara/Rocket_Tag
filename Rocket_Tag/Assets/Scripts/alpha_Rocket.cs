@@ -75,8 +75,8 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
     void Update()
     {
         CountElaps();
-        if (IsVibeTime())
-        { CameraVibe(explodeInpact, vibeTime); }
+        //if (IsVibeTime())
+        //{ CameraVibe(explodeInpact, vibeTime); }
         if (rocketCount <= rocketLimit)
         {
             Explosion(); 
@@ -144,7 +144,6 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         }
     }
 
-
     void Explosion()    //  爆弾爆発
     {
         isNeedHold = false;
@@ -180,12 +179,12 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         UpdateRocketCount(rocketCount);
     }
 
-    public void CameraVibe(Vector3 vibeInpact, float duration)    //  カメラ振動
-    {
-        cameraTransform.transform.position += explodeInpact;
-        explodeInpact.x *= -1;
-        vibeTime -= Time.deltaTime;
-    }
+    //public void CameraVibe(Vector3 vibeInpact, float duration)    //  カメラ振動
+    //{
+    //    cameraTransform.transform.position += explodeInpact;
+    //    explodeInpact.x *= -1;
+    //    vibeTime -= Time.deltaTime;
+    //}
 
     void DecreeseLevelUp()    //  ロケットカウント加速
     {
@@ -248,10 +247,10 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         }
     }
 
-    public bool IsVibeTime()
-    {
-        return ((secToExplode -= Time.deltaTime) < vibeStartTime || isExplode) && vibeTime > 0;
-    }
+    //public bool IsVibeTime()
+    //{
+    //    return ((secToExplode -= Time.deltaTime) < vibeStartTime || isExplode) && vibeTime > 0;
+    //}
 }
 
 //修正必
