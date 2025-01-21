@@ -88,27 +88,6 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         {
             rocketRB.useGravity = true;
         }
-        //if (Mathf.Abs(rocketRB.position.x - playerPosX) < 2 && isReturning)
-        //{
-        //    isNeedHold = true;
-        //    // 運動エネルギー停止
-        //    rocketRB.linearVelocity = Vector3.zero;
-        //    ApproachPos(player, rocket, rocketOffset);
-        //    isReturning = false;
-        //    isHoldRocket = true;
-        //    rocketRB.useGravity = false;
-        //    isThrowed = false;
-        //    throwedTime = 0;
-        //}
-        //if (Input.GetKeyDown(KeyCode.R))
-        //{
-        //    this.transform.position = startpos;
-        //    rocketRB.linearVelocity = new Vector3(0, 0, 0);
-        //}
-        if (isNeedHold && !isExplode)
-        {
-           // RocketFix(player, rocket, rocketOffset);
-        }
     }
     // ロケットのカウントを全プレイヤーで同期
     public void UpdateRocketCount(float newRocketCount)
@@ -151,16 +130,12 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
         {
             if ((floatingTime -= Time.deltaTime) > 0)
             {
-                // playerTransform.position = rocket.transform.position + srocketOffset;
                 Floating(playerTransform, floatSpeed);
-             //   Floating(playerTransform, floatSpeed);
 
             }
             else
             {
-               // playerTransform.position = rocket.transform.position + srocketOffset;
                 Floating(playerTransform, 10f);
-               // Floating(playerTransform, 10f);
                 
                 ResetRocketCount();
                 ResetPossesing();
