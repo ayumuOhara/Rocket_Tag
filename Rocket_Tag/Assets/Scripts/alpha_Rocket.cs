@@ -34,6 +34,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     bool isVeryHigh = false;
     bool isDropOut = false;
 
+    GameManager gameManager;
+
     [SerializeField] GameObject player;
     [SerializeField] GameObject camera;
     Rigidbody playerRB;
@@ -43,6 +45,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     Transform playerTransform;
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        Debug.Log(gameManager);
         playerTransform = player.transform;
         camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
         playerRB = player.GetComponent<Rigidbody>();
@@ -92,10 +96,9 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             ResetPossesing();
             if (!isDropOut)
             {
-                // マスタークライアントのみ処理を実行
+                // マスタークライアントのみロケット付与処理を実行
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
                     gameManager.ChooseRocketPlayer();
                 }
                 // プレイヤーの死亡判定
@@ -123,9 +126,9 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     void DecreeseLevelUp()    //  ロケットカウント加速
     {
         decreeseLevel += 1;
-        Debug.Log(decreeseLevel);
+        //Debug.Log(decreeseLevel);
         secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
-        Debug.Log(secToExplode);
+        //Debug.Log(secToExplode);
     }
     bool IsVeryHigh()
     {
