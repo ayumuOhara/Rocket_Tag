@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 using static UnityEngine.GraphicsBuffer;
 
 public class alpha_Rocket : MonoBehaviourPunCallbacks
@@ -19,10 +20,10 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
     DecreeseLevel decreeseLevel = DecreeseLevel.slowest;
 
     float rocketLimit = 0;
-    public float rocketCount = 1000;
-    float vibeTime;
-    float vibeStartTime = 0.5f;
-    float riseSpeed = 10;
+    //public float rocketCount = 1000;
+    public float rocketCount = 500;
+    public float resetCount = 500;
+    [SerializeField] float riseSpeed = 1;
     float floatingTime = 2;
     float floatSpeed = 1f;
     float possesingTime = 0;
@@ -52,14 +53,7 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
     Vector3 startpos;
     void Start()
     {
-        //if (ForTest)    //  TestScene用
-        //{
-        //    player = GameObject.Find("Player");
-        //    camera = GameObject.Find("PlayerCamera");
-        //    rocket = GameObject.Find("Bomb");
-        //}
-        riseSpeed = 10;
-        vibeTime = 3;
+        riseSpeed = 1f;
         rocketRB = this.GetComponent<Rigidbody>();
         camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
         playerTransform = player.transform;
@@ -75,10 +69,10 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
     void Update()
     {
         CountElaps();
-        //if (IsVibeTime())
-        //{ CameraVibe(explodeInpact, vibeTime); }
         if (rocketCount <= rocketLimit)
         {
+            CameraController cc = camera.GetComponent<CameraController>();
+            StartCoroutine(cc.Shake(2f, 0.2f));
             Explosion(); 
         }
         if (isExplode)
@@ -154,7 +148,7 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
             }
             else
             {
-                rocketRB.linearVelocity = new Vector3(0, riseSpeed, 0);
+                Floating(transform, 1f);
                 isExplode = true;
                 ResetRocketCount();
                 ResetPossesing();
@@ -173,18 +167,11 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
     }
 
     // ロケットのカウントをリセット
-    public void ResetRocketCount()
+    void ResetRocketCount()
     {
-        rocketCount = 1000; // デフォルト値
+        rocketCount = resetCount; // デフォルト値
         UpdateRocketCount(rocketCount);
     }
-
-    //public void CameraVibe(Vector3 vibeInpact, float duration)    //  カメラ振動
-    //{
-    //    cameraTransform.transform.position += explodeInpact;
-    //    explodeInpact.x *= -1;
-    //    vibeTime -= Time.deltaTime;
-    //}
 
     void DecreeseLevelUp()    //  ロケットカウント加速
     {
@@ -246,11 +233,6 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
             }
         }
     }
-
-    //public bool IsVibeTime()
-    //{
-    //    return ((secToExplode -= Time.deltaTime) < vibeStartTime || isExplode) && vibeTime > 0;
-    //}
 }
 
 //修正必

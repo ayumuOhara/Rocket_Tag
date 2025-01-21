@@ -84,7 +84,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
-            _collider.material = defaultFriction;
+            _collider.material = defaultFriction; 
         }
     }
 

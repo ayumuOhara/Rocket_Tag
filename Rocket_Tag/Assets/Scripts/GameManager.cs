@@ -7,7 +7,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] public PlayerController playerController;
+    public PlayerController playerController;
+    public SetPlayerBool setPlayerBool;
     [SerializeField] InstantiatePlayer instantiatePlayer;
     [SerializeField] PlayerReady playerReady;
     [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
@@ -140,6 +141,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
                 readyButton.SetActive(true);
                 playerReady.SetReady(false);
+                setPlayerBool.SetPlayerCondition();
                 StartCoroutine(WaitPlayersReady());
                 yield break;
             }
