@@ -139,13 +139,6 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
                 
                 ResetRocketCount();
                 ResetPossesing();
-
-                // マスタークライアントのみ処理を実行
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-                    gameManager.ChooseRocketPlayer();
-                }
             }
 
             // プレイヤーの死亡判定
@@ -153,6 +146,13 @@ public class alpha_Rocket : MonoBehaviourPunCallbacks
             if (targetPhotonView != null)
             {
                 targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
+            }
+
+            // マスタークライアントのみ処理を実行
+            if (PhotonNetwork.IsMasterClient)
+            {
+                GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+                gameManager.ChooseRocketPlayer();
             }            
         }
     }
