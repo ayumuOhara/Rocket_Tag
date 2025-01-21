@@ -20,8 +20,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     DecreeseLevel decreeseLevel = DecreeseLevel.slowest;
 
     float rocketLimit = 0;
-    public float rocketCount = 500;
-    public float initialCount = 500;
+    public float rocketCount = 100;
+    public float initialCount = 100;
     float floatStartTime = 2;
     float floatSpeed = 2f;
     float explodeRiseSpeed = 18f;
@@ -32,6 +32,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     float[] decreeseUpTime = { 5f, 10f, 15f, 20f, 25f, 30f, 35f };
     bool isExplode = false;
     bool isVeryHigh = false;
+    bool isDropOut = false;
 
     [SerializeField] GameObject player;
     [SerializeField] GameObject camera;
@@ -54,7 +55,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     void Update()
     {
         CountElaps();
-        if (IsLimitOver() || isExplode) { Explosion(); }
+        if (IsLimitOver() || isExplode) 
+        { Explosion(); }
         if (isFloatingTime() && !IsVeryHigh())
         {
             playerRB.useGravity = false;
@@ -85,21 +87,24 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         if (!IsVeryHigh())
         {
-            isExplode = true;
             Floating(playerTransform, explodeRiseSpeed);
             ResetRocketCount();
             ResetPossesing();
-            // マスタークライアントのみ処理を実行
-            if (PhotonNetwork.IsMasterClient)
+            if (!isDropOut)
             {
-                GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-                gameManager.ChooseRocketPlayer();
-            }
-            // プレイヤーの死亡判定
-            PhotonView targetPhotonView = player.GetComponent<PhotonView>();
-            if (targetPhotonView != null)
-            {
-                targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
+                // マスタークライアントのみ処理を実行
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+                    gameManager.ChooseRocketPlayer();
+                }
+                // プレイヤーの死亡判定
+                PhotonView targetPhotonView = player.GetComponent<PhotonView>();
+                if (targetPhotonView != null)
+                {
+                    targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
+                }
+                isDropOut = false;
             }
         }
     }
