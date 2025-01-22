@@ -115,6 +115,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
                 // マスタークライアントのみロケット付与処理を実行
                 if (PhotonNetwork.IsMasterClient)
                 {
+                    Debug.Log("コルーチン開始");
                     StartCoroutine(gameManager.ChooseRocketPlayer());
                 }
                 // プレイヤーの死亡判定
@@ -122,7 +123,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
                 if (targetPhotonView != null)
                 {
                     targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
-                    targetPhotonView.RPC("SetHasRocket", RpcTarget.All, false);
                 }
                 isDropOut = true;
             }
