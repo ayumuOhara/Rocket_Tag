@@ -160,8 +160,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     { evacuateStarPos_Y = startPos.y + farFromStartPos; }
 
     //void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)    //  オブジェクトの位置を近づける
-    //{
-    //    Approcher.transform.position = axis.transform.position + offset;
-    //}
+    //{ Approcher.transform.position = axis.transform.position + offset; }
 }
 //  floatingとexpolderiseの処理が同時に行われているか検証
