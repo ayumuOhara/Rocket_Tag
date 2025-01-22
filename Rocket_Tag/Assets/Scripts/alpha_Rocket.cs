@@ -60,7 +60,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         if (IsLimitOver())
         {
             StartCoroutine(Explosion());
-            DropOut();
             ResetRocketCount();
             ResetPossesing();
         }
@@ -108,6 +107,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     { return rocketLimit > rocketCount; }
     IEnumerator Explosion()    //  ロケット爆発
     {
+        DropOut();
+
         while (!IsVeryHigh())
         {
             Floating(playerTransform, explodeRiseSpeed);
