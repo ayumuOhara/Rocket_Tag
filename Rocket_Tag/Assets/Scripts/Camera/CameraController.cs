@@ -136,9 +136,10 @@ public class CameraController : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-        transform.position = originalPosition;
-
+        Debug.Log("U“®I—¹");
         isShaking = false;
+        transform.position = originalPosition;
+        Debug.Log($"isShakingF{isShaking}");
         yield break;
     }
 }
