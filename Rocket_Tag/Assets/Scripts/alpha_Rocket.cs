@@ -54,7 +54,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         if (isFloatingTime() && !IsVeryHigh())
         {
             SetGravity(playerRB, false);
-         //   if(!isExplode)
             Floating(playerTransform, floatSpeed);
         }
         if (IsLimitOver())
