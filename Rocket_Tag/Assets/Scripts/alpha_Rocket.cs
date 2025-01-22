@@ -34,7 +34,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     float[] decreeseValue = { 0.4f, 1, 1.8f, 5, 12, 30, 100 };
     float[] decreeseUpTime = { 5, 10, 15, 20, 25, 30, 35 };
     bool isExplode = false;
-    bool isDropOut = false;
 
     Vector3 startPos;
 
@@ -58,8 +57,13 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
          //   if(!isExplode)
             Floating(playerTransform, floatSpeed);
         }
-        if (IsLimitOver() || isExplode)
-        { Explosion(); }
+        if (IsLimitOver())
+        {
+            StartCoroutine(Explosion());
+            DropOut();
+            ResetRocketCount();
+            ResetPossesing();
+        }
         if (decreeseLevel != DecreeseLevel.fastest && possesingTime > decreeseUpTime[(int)decreeseLevel])
         { DecreeseLevelUp(); }
     }
@@ -76,10 +80,10 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         cameraController = camera.GetComponent<CameraController>();
         UpdateRocketCount(rocketCount);
     }
-    // ロケットのカウントを全プレイヤーで同期
     float GetSecUntilZero(float limit, float minusValue, float runUnit)    //  ０になるまでの時間を計算(minusValueはrunUnitでの計算後の減少量)
     { return limit / (minusValue * (1 / runUnit)); }
-    public void UpdateRocketCount(float newRocketCount)
+    
+    public void UpdateRocketCount(float newRocketCount)     // ロケットのカウントを全プレイヤーで同期
     {
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable { { "RocketCount", rocketCount } };
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
@@ -102,32 +106,32 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     { floated.position += Vector3.up * floatForce * Time.deltaTime; }
     bool IsLimitOver()　　　　//  カウントがリミットを下回ったか判定
     { return rocketLimit > rocketCount; }
-    void Explosion()    //  ロケット爆発
+    IEnumerator Explosion()    //  ロケット爆発
     {
-       // isExplode = true;
-        if (!IsVeryHigh())
+        while (!IsVeryHigh())
         {
             Floating(playerTransform, explodeRiseSpeed);
-            ResetRocketCount();
-            ResetPossesing();
-            if (!isDropOut)
-            {
-                // マスタークライアントのみロケット付与処理を実行
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    Debug.Log("コルーチン開始");
-                    StartCoroutine(gameManager.ChooseRocketPlayer());
-                }
-                // プレイヤーの死亡判定
-                PhotonView targetPhotonView = player.GetComponent<PhotonView>();
-                if (targetPhotonView != null)
-                {
-                    targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
-                }
-                isDropOut = true;
-            }
+            yield return null;
+        }
+        yield break;
+    }
+
+    void DropOut()      // 脱落処理
+    {
+        // マスタークライアントのみロケット付与処理を実行
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("コルーチン開始");
+            StartCoroutine(gameManager.ChooseRocketPlayer());
+        }
+        // プレイヤーの死亡判定
+        PhotonView targetPhotonView = player.GetComponent<PhotonView>();
+        if (targetPhotonView != null)
+        {
+            targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
         }
     }
+
     void DecreeseLevelUp()    //  ロケットカウント加速
     {
         decreeseLevel += 1;
