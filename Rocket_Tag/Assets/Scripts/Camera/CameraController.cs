@@ -18,6 +18,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float turnSpeed = 5.0f;              // ‰ñ“]‘¬“x
     [SerializeField] private Vector3 velocity;                    // ˆÚ“®•ûŒü
     private float moveSpeed = 30.0f;                              // ˆÚ“®‘¬“x
+    bool isShaking = false;                                       // ƒJƒƒ‰‚ªU“®‚µ‚Ä‚¢‚é‚©
 
     void Start()
     {
@@ -37,16 +38,19 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        RotationCamera();
-        if (setPlayerBool.isDead == true)
+        if (isShaking == false)
         {
-            GetVelocity();
-            CameraMovement();
-        }
-        else
-        {
-            TrackingTarget();
-        }
+            RotationCamera();
+            if (setPlayerBool.isDead == true)
+            {
+                GetVelocity();
+                CameraMovement();
+            }
+            else
+            {
+                TrackingTarget();
+            }
+        }       
     }
 
     // ƒJƒƒ‰‚Ì‰ñ“]‚Ì§Œä
@@ -121,6 +125,8 @@ public class CameraController : MonoBehaviour
 
     public IEnumerator Shake(float duration, float magnitude)
     {
+        isShaking = true;
+
         Vector3 originalPosition = transform.position;
         float elapsed = 0f;
 
@@ -131,5 +137,6 @@ public class CameraController : MonoBehaviour
             yield return null;
         }
         transform.position = originalPosition;
+        isShaking = false;
     }
 }
