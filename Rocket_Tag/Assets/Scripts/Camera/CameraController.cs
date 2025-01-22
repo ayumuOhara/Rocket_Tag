@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float turnSpeed = 5.0f;              // 回転速度
     [SerializeField] private Vector3 velocity;                    // 移動方向
     private float moveSpeed = 30.0f;                              // 移動速度
-    bool isShaking = false;                                       // カメラが振動しているか
+    public bool isShaking = false;                                       // カメラが振動しているか
 
     void Start()
     {
@@ -136,7 +136,10 @@ public class CameraController : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-        transform.position = originalPosition;
+        Debug.Log("振動終了");
         isShaking = false;
+        transform.position = originalPosition;
+        Debug.Log($"isShaking：{isShaking}");
+        yield break;
     }
 }
