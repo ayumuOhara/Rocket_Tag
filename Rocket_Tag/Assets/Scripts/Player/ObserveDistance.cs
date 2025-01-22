@@ -4,11 +4,11 @@ using UnityEngine;
 public class ObserveDistance : MonoBehaviour
 {
     private string targetTag = "Player";                    // タッチ時の検知対象のtag(実装時にはPlayerに変更する)
-    public float maxDistance = 3.0f;                        // 検知する最大距離
+    public float maxDistance = 5.0f;                        // 検知する最大距離
 
     private void Start()
     {
-        maxDistance = 3f;
+        maxDistance = 5.0f;
     }
 
     // 他のプレイヤーとの距離を測る

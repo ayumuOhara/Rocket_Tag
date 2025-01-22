@@ -101,15 +101,19 @@ public class GameManager : MonoBehaviourPunCallbacks
         // マスタークライアントのみロケット付与処理を実行
         if (PhotonNetwork.IsMasterClient)
         {
-            ChooseRocketPlayer();
+            StartCoroutine(ChooseRocketPlayer());
         }
 
         StartCoroutine(CheckSuvivorCnt());
     }
 
     // 参加しているプレイヤーから１人を選び、ロケットを付与
-    public void ChooseRocketPlayer()
+    public IEnumerator ChooseRocketPlayer()
     {
+        yield return new WaitForSeconds(3.0f);
+
+        Debug.Log("プレイヤーを抽選します");
+
         List<GameObject> players = new List<GameObject>();
         players = GetPlayerCount();
         int rnd = Random.Range(0, players.Count);
@@ -119,10 +123,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (targetPhotonView != null)
         {
             targetPhotonView.RPC("SetHasRocket", RpcTarget.All, true);
+            yield break;
         }
         else
         {
             Debug.LogWarning("PhotonView が見つかりません。");
+            yield break;
         }
     }
 

@@ -2,9 +2,10 @@ using Photon.Pun;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 using static UnityEngine.GraphicsBuffer;
 
-public class Bomb : MonoBehaviourPunCallbacks
+public class Rocket : MonoBehaviourPunCallbacks
 {
     enum DecreeseLevel    //  爆弾カウント減少レベル
     {
@@ -19,108 +20,111 @@ public class Bomb : MonoBehaviourPunCallbacks
     DecreeseLevel decreeseLevel = DecreeseLevel.slowest;
 
     float rocketLimit = 0;
-    public float rocketCount = 1000;
-    float vibeTime;
-    float vibeStartTime = 0.5f;
-    float riseSpeed = 60;
-    float floatingTime = 2;
-    float floatSpeed = 1f;
-    float throwForce = 120f;
-    float returnForce = 10f;
+    public float rocketCount = 100;
+    public float initialCount = 100;
+    float vibingPower = 0.2f;
+    float vibingDuration = 0.2f;
+    float[] vibeStartTime = { 2, 3.2f, 6, 12, 18, 24, 35 };
+    float floatStartTime = 2;
+    float floatSpeed = 2;
     float possesingTime = 0;
+    float explodeRiseSpeed = 18;
+    float[] decreeseValue = { 0.4f, 1, 1.8f, 5, 12, 30, 100 };
+    float[] decreeseUpTime = { 5, 10, 15, 20, 25, 30, 35 };
     float secToExplode = 0;
-    float playerPosX;
-    float[] decreeseValue = { 0.4f, 1, 1.8f, 5f, 12f, 30f, 100f };
-    float[] decreeseUpTime = {5f, 10f, 15f, 20f, 25f, 30f, 35f};
+    float evacuateStarPos_Y = 40;
+    float throwSpeed = 1;
+    float returnForce = 10;
     float throwedTime = 0;
+    float retrieveTime = 1.5f;
     bool isExplode = false;
+    bool isThrowed = false;
     bool isReturning = false;
     bool isHoldRocket = true;
-    bool isNeedHold = true;
-    bool isThrowed = false;
-    Vector3 playerOffset = new Vector3(0, 5, 5);
-    Vector3 rocketOffset = new Vector3(1, 0, 0);
-    Vector3 thorowRocketOffset = new Vector3(0, 3f, 0);
-    Vector3 explodeInpact;
+    bool isDropOut = false;
 
-    Rigidbody rocketRB;
+    Vector3 rocketOffset;
+    Vector3 startPos;
+    Vector3 thorowRocketOffset = new Vector3(0, 3f, 0);
+
     [SerializeField] GameObject player;
     [SerializeField] GameObject camera;
     GameObject rocket;
     Transform playerTransform;
-    Transform cameraTransform;
+    Rigidbody playerRB;
+    GameManager gameManager;
+    CameraController cameraController;
 
     bool ForTest = true;
     Vector3 startpos;
     void Start()
-    {
-        if(ForTest)    //  TestScene用
-        {
-            player = GameObject.Find("Player");
-            camera = GameObject.Find("PlayerCamera");
-            rocket = GameObject.Find("Bomb");
-        }
-        vibeTime = 3;
-        rocketRB = this.GetComponent<Rigidbody>();
-        camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
-        //bomb = GameObject.Find("Bomb");
-        playerTransform = player.transform;
-        cameraTransform = camera.transform;
-        explodeInpact = new Vector3(0.2f, cameraTransform.position.y, cameraTransform.position.z);
-        startpos = this.transform.position;
-
-        UpdateRocketCount(rocketCount);
-        rocketRB.useGravity = false;
-        secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
-    }
-
+    { Initialize(); }
     void Update()
     {
         CountElaps();
-        if(IsVibeTime())
-        { CameraVibe(explodeInpact, vibeTime); }
-        if (rocketLimit > rocketCount)
+        if (!ForTest)
+        {
+            if (IsVibeTime())
+            { StartCoroutine(cameraController.Shake(vibingDuration, vibingPower)); }
+        }
+        if (isFloatingTime() && !IsVeryHigh())
+        {
+            SetGravity(playerRB, false);
+            //   if(!isExplode)
+            Floating(playerTransform, floatSpeed);
+        }
+        if (IsLimitOver())
         { Explosion(); }
-        if(isExplode)
-        {
-            ApproachPos(rocket, player, playerOffset);
-        }
-        DecreeseLevelUp();
+        if (IsDecreeseUpTime())
+        { DecreeseLevelUp(); }
         if(Input.GetKeyDown(KeyCode.E) && isHoldRocket)
+        {　ThrowRocket();　}
+        if(isThrowed)
+        {  }
+        if(IsNeedRetrieve())
         {
-            rocketRB.useGravity = true;
-            ThrowRocket();
+
         }
-        if (Mathf.Abs(rocketRB.position.x - playerPosX) < 2 && isReturning)
-        {
-            isNeedHold = true;
-            // 運動エネルギー停止
-            rocketRB.linearVelocity = Vector3.zero;
-            ApproachPos(player, rocket, rocketOffset);
-            isReturning = false;
-            isHoldRocket = true;
-            rocketRB.useGravity = false;
-            isThrowed = false;
-            throwedTime = 0;
-        }
+        //if (Mathf.Abs(transform.position.x - playerTransform.position.x) < 2 && isReturning)
+        //{
+        //    // 運動エネルギー停止
+        //    ApproachPos(player, rocket, rocketOffset);
+        //    isReturning = false;
+        //    isHoldRocket = true;
+        //    isThrowed = false;
+        //    throwedTime = 0;
+        //}
         if (Input.GetKeyDown(KeyCode.R))
         {
             this.transform.position = startpos;
-            rocketRB.linearVelocity = new Vector3(0,0,0);
         }
         if(isReturning)
         {
-            rocketRB.AddForce(GetLineDir() * returnForce, ForceMode.Impulse);
         }
         //if(Input.GetKey(KeyCode.LeftArrow))
         //{
         //    player.transform.position = new Vector3(playerPosX + 1, player.transform.position.y, player.transform.position.z);
         //}
-        if (isNeedHold && isExplode)
+    }
+    void Initialize()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        if (ForTest)    //  TestScene用
         {
-            ApproachPos(player, rocket, rocketOffset);
+            player = GameObject.Find("Player");
         }
-     }
+        Debug.Log(gameManager);
+        playerTransform = player.transform;
+        startPos = transform.position;
+        SetEvacuatePos(40);
+        secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
+        camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
+        rocket = GameObject.Find("Rocket");
+        startpos = rocket.transform.position;
+        playerRB = player.GetComponent<Rigidbody>();
+        cameraController = camera.GetComponent<CameraController>();
+        UpdateRocketCount(rocketCount);
+    }
     // ロケットのカウントを全プレイヤーで同期
     public void UpdateRocketCount(float newRocketCount)
     {
@@ -140,42 +144,36 @@ public class Bomb : MonoBehaviourPunCallbacks
         possesingTime += Time.deltaTime;
         UpdateRocketCount(rocketCount);
         if (isThrowed) 
-        {
-            throwedTime += Time.deltaTime;
-            if(throwedTime > 1.5f)
-            {
-                ApproachPos(player, rocket, rocketOffset);
-                isHoldRocket = true;
-                isNeedHold = true;
-                isReturning = false;
-                isThrowed = false;
-            }
-        }
+        { throwedTime += Time.deltaTime; }
     }
 
 
     void Explosion()    //  爆弾爆発
     {
-        isNeedHold = false;
+        // isExplode = true;
+        if (!IsVeryHigh())
         {
-            if ((floatingTime -= Time.deltaTime) > 0)
+            Floating(playerTransform, explodeRiseSpeed);
+            ResetRocketCount();
+            ResetPossesing();
+            if (!isDropOut)
             {
-                Floating(transform, floatSpeed);
-            }
-            else
-            {
-                rocketRB.linearVelocity = new Vector3(0, riseSpeed, 0);
-                isExplode = true;
-                ResetRocketCount();
-                ResetPossesing();
-            }
-
-            PhotonView targetPhotonView = player.GetComponent<PhotonView>();
-            if (targetPhotonView != null)
-            {
-                targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
+                // マスタークライアントのみロケット付与処理を実行
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    gameManager.ChooseRocketPlayer();
+                }
+                // プレイヤーの死亡判定
+                PhotonView targetPhotonView = player.GetComponent<PhotonView>();
+                if (targetPhotonView != null)
+                {
+                    targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
+                    targetPhotonView.RPC("SetHasRocket", RpcTarget.All, false);
+                }
+                isDropOut = true;
             }
         }
+
     }
 
     // ロケットのカウントをリセット
@@ -184,23 +182,12 @@ public class Bomb : MonoBehaviourPunCallbacks
         rocketCount = 1000; // デフォルト値
         UpdateRocketCount(rocketCount);
     }
-
-    public void CameraVibe(Vector3 vibeInpact, float duration)    //  カメラ振動
-    {
-        cameraTransform.transform.position = explodeInpact;
-        explodeInpact.x *= -1;
-        vibeTime -= Time.deltaTime;
-    }
-
     void DecreeseLevelUp()    //  ロケットカウント加速
     {
-        if (decreeseLevel != DecreeseLevel.fastest && possesingTime > decreeseUpTime[(int)decreeseLevel])
-        {
-            decreeseLevel += 1;
-            Debug.Log(decreeseLevel);
-            secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
-            Debug.Log(secToExplode);
-        }
+        decreeseLevel += 1;
+        //Debug.Log(decreeseLevel);
+        secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
+        //Debug.Log(secToExplode);
     }
     public void ResetPossesing()    //  所持における数値の変動リセット
     {
@@ -209,10 +196,7 @@ public class Bomb : MonoBehaviourPunCallbacks
     }
 
     void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)    //  オブジェクトの位置を近づける
-    {
-        Approcher.transform.position = axis.transform.position + offset;
-        
-    }
+    { Approcher.transform.position = axis.transform.position + offset; }
 
     void Floating(Transform floated, float floatForce)    //  オブジェクト浮遊
     {
@@ -222,20 +206,18 @@ public class Bomb : MonoBehaviourPunCallbacks
     {
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 1000);
         Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
-        Vector3 direction = (worldCenter - transform.position).normalized;
-        return direction;
+        //Vector3 direction = (worldCenter - transform.position).normalized;
+        return Camera.main.ScreenToWorldPoint(screenCenter);
     }
-
     void ThrowRocket()
     {
         isThrowed = true;
-        isNeedHold = false;
-        ApproachPos(player, rocket, thorowRocketOffset);
         isReturning = false;
         isHoldRocket = false;
-        rocketRB.AddForce(GetScreenCenterPos() * throwForce, ForceMode.Impulse);
-        //transform.position += GetScreenCenterPos() * throwForce * Time.deltaTime;
-        rocketRB.MovePosition(GetScreenCenterPos() * throwForce);
+        transform.position = Vector3.MoveTowards(transform.position, GetLineDir(GetScreenCenterPos(), rocket.transform.position), throwSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, GetLineDir(GetScreenCenterPos(), rocket.transform.position), throwSpeed * Time.deltaTime);
+       
+        // transform.position = Vector3.MoveTowards(transform.position,GetScreenCenterPos(), throwSpeed * Time.deltaTime);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -252,10 +234,9 @@ public class Bomb : MonoBehaviourPunCallbacks
         }
     }
 
-    Vector3 GetLineDir()
+    Vector3 GetLineDir(Vector3 target, Vector3 current)
     {
-        Vector3 dir = player.transform.position - this.transform.position;
-        return dir;
+        return target - current;
     }
     //void BomCouuntDecreese(int value)    //  ロケットカウントを減らす;
     //{
@@ -275,10 +256,29 @@ public class Bomb : MonoBehaviourPunCallbacks
             }
         }
     }
-    public bool IsVibeTime()
+    bool IsVibeTime()    //  カメラ振動時間か判定
+    { return vibeStartTime[(int)decreeseLevel] > rocketCount; }
+    bool isFloatingTime()    //  浮く時間か判定
+    { return floatStartTime > rocketCount; }
+    void SetEvacuatePos(float farFromStartPos)    //  開始位置から一定の距離にあるY座標を代入
+    { evacuateStarPos_Y = startPos.y + farFromStartPos; }
+    bool IsNeedRetrieve()
+    { return throwedTime > retrieveTime; }
+    public void RetriveByStraightLine()
     {
-        return ((secToExplode -= Time.deltaTime) < vibeStartTime || isExplode) && vibeTime > 0;
+        ApproachPos(player, rocket, rocketOffset);
+        isHoldRocket = true;
+        isReturning = false;
+        isThrowed = false;
     }
+    bool IsDecreeseUpTime()
+    { return decreeseLevel != DecreeseLevel.fastest && possesingTime > decreeseUpTime[(int)decreeseLevel]; }
+    bool IsLimitOver()　　　　//  カウントがリミットを下回ったか判定
+    { return rocketLimit > rocketCount; }
+    bool IsVeryHigh()    //  凄い高いか判定
+    { return playerTransform.position.y > evacuateStarPos_Y; }
+    void SetGravity(Rigidbody rB, bool value)    //  RBのuseGravityをセット
+    { rB.useGravity = value; }
 }
 
 //修正必
