@@ -33,7 +33,7 @@ public class Rocket : MonoBehaviourPunCallbacks
     float[] decreeseUpTime = { 5, 10, 15, 20, 25, 30, 35 };
     float secToExplode = 0;
     float evacuateStarPos_Y = 40;
-    float throwForce = 120;
+    float throwSpeed = 1;
     float returnForce = 10;
     float throwedTime = 0;
     float retrieveTime = 1.5f;
@@ -62,8 +62,11 @@ public class Rocket : MonoBehaviourPunCallbacks
     void Update()
     {
         CountElaps();
-        if (IsVibeTime())
-        { StartCoroutine(cameraController.Shake(vibingDuration, vibingPower)); }
+        if (!ForTest)
+        {
+            if (IsVibeTime())
+            { StartCoroutine(cameraController.Shake(vibingDuration, vibingPower)); }
+        }
         if (isFloatingTime() && !IsVeryHigh())
         {
             SetGravity(playerRB, false);
@@ -76,19 +79,21 @@ public class Rocket : MonoBehaviourPunCallbacks
         { DecreeseLevelUp(); }
         if(Input.GetKeyDown(KeyCode.E) && isHoldRocket)
         {　ThrowRocket();　}
+        if(isThrowed)
+        {  }
         if(IsNeedRetrieve())
         {
 
         }
-        if (Mathf.Abs(transform.position.x - playerTransform.position.x) < 2 && isReturning)
-        {
-            // 運動エネルギー停止
-            ApproachPos(player, rocket, rocketOffset);
-            isReturning = false;
-            isHoldRocket = true;
-            isThrowed = false;
-            throwedTime = 0;
-        }
+        //if (Mathf.Abs(transform.position.x - playerTransform.position.x) < 2 && isReturning)
+        //{
+        //    // 運動エネルギー停止
+        //    ApproachPos(player, rocket, rocketOffset);
+        //    isReturning = false;
+        //    isHoldRocket = true;
+        //    isThrowed = false;
+        //    throwedTime = 0;
+        //}
         if (Input.GetKeyDown(KeyCode.R))
         {
             this.transform.position = startpos;
@@ -100,7 +105,7 @@ public class Rocket : MonoBehaviourPunCallbacks
         //{
         //    player.transform.position = new Vector3(playerPosX + 1, player.transform.position.y, player.transform.position.z);
         //}
-     }
+    }
     void Initialize()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -191,10 +196,7 @@ public class Rocket : MonoBehaviourPunCallbacks
     }
 
     void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)    //  オブジェクトの位置を近づける
-    {
-        Approcher.transform.position = axis.transform.position + offset;
-        
-    }
+    { Approcher.transform.position = axis.transform.position + offset; }
 
     void Floating(Transform floated, float floatForce)    //  オブジェクト浮遊
     {
@@ -204,17 +206,18 @@ public class Rocket : MonoBehaviourPunCallbacks
     {
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 1000);
         Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
-        Vector3 direction = (worldCenter - transform.position).normalized;
-        return direction;
+        //Vector3 direction = (worldCenter - transform.position).normalized;
+        return Camera.main.ScreenToWorldPoint(screenCenter);
     }
-
     void ThrowRocket()
     {
         isThrowed = true;
         isReturning = false;
         isHoldRocket = false;
-        ApproachPos(player, rocket, thorowRocketOffset);
-        //transform.position += GetScreenCenterPos() * throwForce * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, GetLineDir(GetScreenCenterPos(), rocket.transform.position), throwSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, GetLineDir(GetScreenCenterPos(), rocket.transform.position), throwSpeed * Time.deltaTime);
+       
+        // transform.position = Vector3.MoveTowards(transform.position,GetScreenCenterPos(), throwSpeed * Time.deltaTime);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -231,10 +234,9 @@ public class Rocket : MonoBehaviourPunCallbacks
         }
     }
 
-    Vector3 GetLineDir()
+    Vector3 GetLineDir(Vector3 target, Vector3 current)
     {
-        Vector3 dir = player.transform.position - this.transform.position;
-        return dir;
+        return target - current;
     }
     //void BomCouuntDecreese(int value)    //  ロケットカウントを減らす;
     //{
