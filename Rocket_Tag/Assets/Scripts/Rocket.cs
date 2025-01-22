@@ -2,9 +2,10 @@ using Photon.Pun;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 using static UnityEngine.GraphicsBuffer;
 
-public class Bomb : MonoBehaviourPunCallbacks
+public class Rocket : MonoBehaviourPunCallbacks
 {
     enum DecreeseLevel    //  爆弾カウント減少レベル
     {
