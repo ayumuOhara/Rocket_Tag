@@ -66,7 +66,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         if (decreeseLevel != DecreeseLevel.fastest && possesingTime > decreeseUpTime[(int)decreeseLevel])
         { DecreeseLevelUp(); }
     }
-    void Initialize()
+    void Initialize()       // 初期化
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         Debug.Log(gameManager);
