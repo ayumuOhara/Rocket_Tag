@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float turnSpeed = 5.0f;              // ‰ñ“]‘¬“x
     [SerializeField] private Vector3 velocity;                    // ˆÚ“®•ûŒü
     private float moveSpeed = 30.0f;                              // ˆÚ“®‘¬“x
-    bool isShaking = false;                                       // ƒJƒƒ‰‚ªU“®‚µ‚Ä‚¢‚é‚©
+    public bool isShaking = false;                                       // ƒJƒƒ‰‚ªU“®‚µ‚Ä‚¢‚é‚©
 
     void Start()
     {
@@ -137,6 +137,8 @@ public class CameraController : MonoBehaviour
             yield return null;
         }
         transform.position = originalPosition;
+
         isShaking = false;
+        yield break;
     }
 }
