@@ -30,12 +30,14 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     float evacuateStarPos_Y = 40;
     float[] decreeseValue = { 0.4f, 1, 1.8f, 5f, 12f, 30f, 100f };
     float[] decreeseUpTime = { 5f, 10f, 15f, 20f, 25f, 30f, 35f };
+    float[] vibeStartTime = { 2f, 3.2f, 6f, 12f, 18f, 24f,  35f};
     bool isExplode = false;
     bool isVeryHigh = false;
     bool isDropOut = false;
 
-    GameManager gameManager;
+    Vector3 startPos;
 
+    GameManager gameManager;
     [SerializeField] GameObject player;
     [SerializeField] GameObject camera;
     Rigidbody playerRB;
@@ -43,37 +45,27 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     Material playerMaterial;
     CameraController cameraController;
     Transform playerTransform;
+
     void Start()
-    {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        Debug.Log(gameManager);
-        playerTransform = player.transform;
-        camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
-        playerRB = player.GetComponent<Rigidbody>();
-        playerRenderer = player.GetComponent<Renderer>();
-        playerMaterial = playerRenderer.material;
-        cameraController = camera.GetComponent<CameraController>();
-        secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
-        UpdateRocketCount(rocketCount);
-    }
+    { Initialize(); }
     void Update()
     {
         CountElaps();
-        if (IsLimitOver() || isExplode) 
-        { Explosion(); }
+        if(IsVibeTime())
+        { StartCoroutine(cameraController.Shake(2f, 0.2f)); }
         if (isFloatingTime() && !IsVeryHigh())
         {
-            playerRB.useGravity = false;
-            StartCoroutine(cameraController.Shake(2f, 0.2f));
+            SetGravity(playerRB, false);
             Floating(playerTransform, floatSpeed);
         }
-        if (decreeseLevel != DecreeseLevel.fastest && possesingTime > decreeseUpTime[(int)decreeseLevel]) { DecreeseLevelUp(); }
+        if (IsLimitOver() || isExplode)
+        { Explosion(); }
+        if (decreeseLevel != DecreeseLevel.fastest && possesingTime > decreeseUpTime[(int)decreeseLevel])
+        { DecreeseLevelUp(); }
     }
     // ロケットのカウントを全プレイヤーで同期
     float GetSecUntilZero(float limit, float minusValue, float runUnit)    //  ０になるまでの時間を計算(minusValueはrunUnitでの計算後の減少量)
-    {
-        return limit / (minusValue * (1 / runUnit));
-    }
+    { return limit / (minusValue * (1 / runUnit)); }
     public void UpdateRocketCount(float newRocketCount)
     {
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable { { "RocketCount", rocketCount } };
@@ -131,9 +123,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         //Debug.Log(secToExplode);
     }
     bool IsVeryHigh()
-    {
-        return playerTransform.position.y > evacuateStarPos_Y;
-    }
+    { return playerTransform.position.y > evacuateStarPos_Y; }
     public void ResetPossesing()    //  所持における数値の変動リセット
     {
         possesingTime = 0;
@@ -148,6 +138,25 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         {
             rocketCount = (float)changedProps["RocketCount"];
         }
+    }
+    bool IsVibeTime()    //  カメラ振動時間か判定
+    { return vibeStartTime[(int)decreeseLevel] > rocketCount; }
+    void SetGravity(Rigidbody rB, bool value)    //  RBのuseGravityをセット
+    { rB.useGravity = value; }
+    void SetEvacuatePos()
+    { evacuateStarPos_Y = startPos.y + 40f; }
+    void Initialize()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        Debug.Log(gameManager);
+        playerTransform = player.transform;
+        startPos = playerTransform.position;
+        SetEvacuatePos();
+        secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
+        camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
+        playerRB = player.GetComponent<Rigidbody>();
+        cameraController = camera.GetComponent<CameraController>();
+        UpdateRocketCount(rocketCount);
     }
     //void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)    //  オブジェクトの位置を近づける
     //{
