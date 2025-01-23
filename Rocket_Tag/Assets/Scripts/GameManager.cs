@@ -16,18 +16,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject readyButton;            // 準備完了ボタン
     private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
     private bool isGameStarted = false;                 // ゲームが開始されたかどうかのフラグ
+    private Player currentRocketHolder;                 // 現在のロケット保持者
 
     void Start()
     {
         StartCoroutine(WaitPlayersReady());
     }
 
-    void Update()
-    {
-
-    }
-
-    // プレイヤーの準備完了を待つ
     IEnumerator WaitPlayersReady()
     {
         while (true)
@@ -35,10 +30,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             int readyCount = GetReadyPlayerCount();
             photonView.RPC("PlayerCntText", RpcTarget.All, readyCount, "準備完了");
 
-            // マスタークライアントのみゲーム開始処理を実行
             if (PhotonNetwork.IsMasterClient && CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
             {
-                photonView.RPC(nameof(StartGame), RpcTarget.All); // 全員にゲーム開始を通知
+                photonView.RPC(nameof(StartGame), RpcTarget.All);
                 yield break;
             }
 
@@ -46,18 +40,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // プレイヤーが指定の人数以上参加しているか
     public bool CheckJoinedPlayer()
     {
         var currentCnt = instantiatePlayer.GetCurrentPlayerCount();
         return currentCnt >= JOIN_CNT_MIN;
     }
 
-    // 参加しているプレイヤー全員がReadyしたか
     bool CheckAllPlayersReady()
     {
         Player[] players = PhotonNetwork.PlayerList;
-
         foreach (var player in players)
         {
             if (!player.CustomProperties.ContainsKey("IsReady") || !(bool)player.CustomProperties["IsReady"])
@@ -66,11 +57,9 @@ public class GameManager : MonoBehaviourPunCallbacks
                 return false;
             }
         }
-
         return true;
     }
 
-    // Readyが完了したプレイヤーの数を取得
     int GetReadyPlayerCount()
     {
         Player[] players = PhotonNetwork.PlayerList;
@@ -83,62 +72,65 @@ public class GameManager : MonoBehaviourPunCallbacks
                 readyCount++;
             }
         }
-
         return readyCount;
     }
 
-    // ゲームスタート（全クライアントで呼び出される）
     [PunRPC]
     void StartGame()
     {
-        if (isGameStarted) return; // すでにゲームが開始されていれば何もしない
+        if (isGameStarted) return;
 
         Debug.Log("プレイヤーが揃ったのでゲームを開始します");
-        isGameStarted = true; // ゲーム開始フラグを立てる
+        isGameStarted = true;
         readyButton.SetActive(false);
 
-        // マスタークライアントのみロケット付与処理を実行
         if (PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(ChooseRocketPlayer());
         }
 
-        StartCoroutine(CheckSuvivorCnt());
+        StartCoroutine(CheckSurvivorCount());
     }
 
-    // 参加しているプレイヤーから１人を選び、ロケットを付与
     public IEnumerator ChooseRocketPlayer()
     {
-        Debug.Log("プレイヤーを抽選します");
+        Debug.Log("ロケット保持者を抽選します");
 
-        List<GameObject> players = new List<GameObject>();
-        players = GetPlayerList();
+        List<GameObject> players = GetPlayerList();
+        players.RemoveAll(player =>
+            player.GetComponent<PhotonView>().Owner == currentRocketHolder); // 既存保持者を除外
+
+        if (players.Count == 0)
+        {
+            Debug.LogWarning("候補者がいません");
+            yield break;
+        }
+
         int rnd = Random.Range(0, players.Count);
         GameObject selectedPlayer = players[rnd];
-
         PhotonView targetPhotonView = selectedPlayer.GetComponent<PhotonView>();
+
         if (targetPhotonView != null)
         {
+            currentRocketHolder = targetPhotonView.Owner;
             targetPhotonView.RPC("SetHasRocket", RpcTarget.All, true);
-            yield break;
         }
         else
         {
-            Debug.LogWarning("PhotonView が見つかりません。");
-            yield break;
+            Debug.LogWarning("PhotonView が見つかりません");
         }
+        yield break;
     }
 
-    // 残り人数を確認し、残り１人になったら終了
-    IEnumerator CheckSuvivorCnt()
+    IEnumerator CheckSurvivorCount()
     {
         while (true)
         {
             List<GameObject> players = GetPlayerList();
-            int playerCnt = players.Count;
-            photonView.RPC("PlayerCntText", RpcTarget.All, playerCnt, "生存人数");
+            int playerCount = players.Count;
+            photonView.RPC("PlayerCntText", RpcTarget.All, playerCount, "生存人数");
 
-            if (playerCnt <= 1)
+            if (playerCount <= 1)
             {
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
                 readyButton.SetActive(true);
@@ -154,11 +146,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void PlayerCntText(int playerCnt, string text)
     {
-        playerCntText.text = $"{playerCnt} /   {instantiatePlayer.GetCurrentPlayerCount()}";
-        infoText.text = $"{text} /  参加人数";
+        playerCntText.text = $"{playerCnt} / {instantiatePlayer.GetCurrentPlayerCount()}";
+        infoText.text = $"{text} / 参加人数";
     }
 
-    // 生存者リストを返す
     List<GameObject> GetPlayerList()
     {
         List<GameObject> players = new List<GameObject>();
@@ -167,10 +158,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         players.RemoveAll(player =>
         {
             SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
-            return spb != null && spb.isDead; // nullチェック
+            return spb != null && spb.isDead;
         });
 
         return players;
     }
 }
-
