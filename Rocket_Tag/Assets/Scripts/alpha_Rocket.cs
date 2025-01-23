@@ -87,12 +87,12 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Floating(float speed)
     {
-        transform.position += Vector3.up * speed * Time.deltaTime;
+        player.transform.position += Vector3.up * speed * Time.deltaTime;
     }
 
     bool IsVeryHigh()
     {
-        return transform.position.y > evacuateStarPos_Y;
+        return player.transform.position.y > evacuateStarPos_Y;
     }
 
     void DropOut()
