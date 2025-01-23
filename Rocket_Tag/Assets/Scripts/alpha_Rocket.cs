@@ -118,7 +118,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         PhotonView photonView = player.GetComponent<PhotonView>();
         photonView.RPC("SetPlayerDead", RpcTarget.All, true);
         Debug.Log("死亡");
-        Destroy(player);
+        photonView.RPC("SetHasRocket", RpcTarget.All, false);
     }
 
     void ResetRocketCount()
