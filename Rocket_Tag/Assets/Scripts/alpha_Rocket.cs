@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Alpha_Rocket : MonoBehaviourPunCallbacks
 {
+    // @何が起きてる？
     enum DecreaseLevel
     {
         slowest, veryslow, slow, normal, fast, veryfast, fastest
