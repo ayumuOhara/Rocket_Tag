@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    void PlayerCntText(int playerCnt,string text)
+    void PlayerCntText(int playerCnt, string text)
     {
         playerCntText.text = $"{playerCnt} /   {instantiatePlayer.GetCurrentPlayerCount()}";
         infoText.text = $"{text} /  参加人数";
@@ -166,24 +166,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         List<GameObject> players = new List<GameObject>();
         players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
 
-        //for (int i = 0; i < players.Count; i++)
-        //{
-        //    SetPlayerBool spb = players[i].GetComponent<SetPlayerBool>();
-        //    if (spb.isDead)
-        //    {
-        //        players.RemoveAt(i);
-        //    }
-        //}
-
-        foreach (GameObject player in players)
+        players.RemoveAll(player =>
         {
             SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
-            if(spb.isDead)
-            {
-                players.Remove(player);
-            }
-        }
+            return spb != null && spb.isDead; // nullチェック
+        });
 
         return players;
     }
 }
+
