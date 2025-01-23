@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class SkillSelectionManager : MonoBehaviour
 {
-    public Text skillDescriptionText;
+    public TMP_Text skillDescriptionText;
 
     public void ShowSkillDescription(string description)
     {
