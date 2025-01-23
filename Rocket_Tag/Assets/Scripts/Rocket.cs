@@ -86,7 +86,11 @@ public class Rocket : MonoBehaviourPunCallbacks
         if(isThrowed)
         { ThrowRocket(); }
         else
-        { hitedColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * GetCapsuleColliderLongY(capsuleCollider,true), rocket.transform.position + Vector3.up * GetCapsuleColliderLongY(capsuleCollider, true)) } // カプセルこりっだーの半径抽出
+        { 
+            hitedColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down
+                                                    * GetCapsuleColliderLongY(capsuleCollider, true), rocket.transform.position
+                                                    + Vector3.up * GetCapsuleColliderLongY(capsuleCollider, true));
+        } // カプセルこりっだーの半径抽出
         if(IsNeedRetrieve())
         {
             
