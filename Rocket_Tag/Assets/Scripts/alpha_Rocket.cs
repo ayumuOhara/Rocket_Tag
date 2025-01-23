@@ -79,7 +79,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         Debug.Log(gameManager);
         playerTransform = player.transform;
         startPos = playerTransform.position;
-        SetEvacuatePos(40);
+        SetEvacuatePos(200);
         secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
         _camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
         playerRB = player.GetComponent<Rigidbody>();
@@ -139,13 +139,14 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         Debug.Log("コルーチン開始");
 
-        DropOut();
-
         while (!IsVeryHigh())
         {
             Floating(playerTransform, explodeRiseSpeed);
             yield return null;
         }
+
+        DropOut();
+
         yield break;
     }
 
