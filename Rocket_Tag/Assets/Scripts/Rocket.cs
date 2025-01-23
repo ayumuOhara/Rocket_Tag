@@ -214,6 +214,7 @@ public class Rocket : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             // マスタークライアントのみロケット付与処理を実行
             if (PhotonNetwork.IsMasterClient)
             {
@@ -226,6 +227,9 @@ public class Rocket : MonoBehaviourPunCallbacks
             {
                 targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
             }
+=======
+            StartCoroutine(gameManager.ChooseRocketPlayer());
+>>>>>>> Stashed changes
 =======
             StartCoroutine(gameManager.ChooseRocketPlayer());
 >>>>>>> Stashed changes
