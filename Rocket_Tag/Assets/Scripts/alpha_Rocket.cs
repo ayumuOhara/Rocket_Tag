@@ -46,6 +46,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     void Update()
     {
         CountDown();
+
         if (IsLimitOver())
         {
             ResetRocketCount();
@@ -125,9 +126,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         rocketCount = initialCount;
     }
 
-    /// <summary>
-    /// 一定時間ごとに減少速度を上げる
-    /// </summary>
+    // 一定時間ごとに減少速度を上げる
     void CheckForLevelUp()
     {
         if (decreaseLevel < DecreaseLevel.fastest && posessingTime > decreaseUpTime[(int)decreaseLevel])
@@ -136,18 +135,14 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         }
     }
 
-    /// <summary>
-    /// 減少速度を次のレベルにアップ
-    /// </summary>
+    // 減少速度を次のレベルにアップ
     void LevelUp()
     {
         decreaseLevel++;
         Debug.Log($"タイマーの減少速度がアップしました: {decreaseLevel}");
     }
 
-    /// <summary>
-    /// 加速度をリセットし、関連カウントを初期化
-    /// </summary>
+    // 加速度をリセットし、関連カウントを初期化
     void ResetAcceleration()
     {
         Debug.Log("加速度をリセットします");
