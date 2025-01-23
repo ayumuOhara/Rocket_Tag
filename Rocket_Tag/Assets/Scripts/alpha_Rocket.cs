@@ -16,6 +16,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     }
 
     DecreaseLevel decreaseLevel = DecreaseLevel.slowest;
+
     float rocketLimit = 0;
     public float rocketCount = 100;
     public float initialCount = 100;
@@ -111,7 +112,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     { 
         return transform.position.y > evacuateStarPos_Y;
     }
-
     void DropOut()
     {
         PhotonView photonView = player.GetComponent<PhotonView>();
