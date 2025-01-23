@@ -114,14 +114,14 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void DropOut()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            gameManager.ChooseRocketPlayer();
-        }
-
         PhotonView photonView = player.GetComponent<PhotonView>();
         photonView.RPC("SetPlayerDead", RpcTarget.All, true);
         Debug.Log("死亡");
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            gameManager.ChooseRocketPlayer();
+        }        
     }
 
     void ResetRocketCount()
