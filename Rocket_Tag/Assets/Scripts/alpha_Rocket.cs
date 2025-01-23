@@ -87,6 +87,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Floating(float speed)
     {
+        Rigidbody _rb = player.GetComponent<Rigidbody>();
+        _rb.useGravity = false;
         player.transform.position += Vector3.up * speed * Time.deltaTime;
     }
 
