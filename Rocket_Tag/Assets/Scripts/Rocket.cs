@@ -204,7 +204,7 @@ public class Rocket : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient)
             {
                 Debug.Log("コルーチン開始");
-                StartCoroutine(gameManager.ChooseRocketPlayer());
+                //StartCoroutine(gameManager.ChooseRocketPlayer());
             }
             // プレイヤーの死亡判定
             PhotonView targetPhotonView = player.GetComponent<PhotonView>();

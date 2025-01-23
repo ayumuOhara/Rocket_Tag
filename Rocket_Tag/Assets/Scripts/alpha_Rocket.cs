@@ -32,6 +32,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     float[] decreaseUpTime = { 5, 10, 15, 20, 25, 30, 35 };
     bool isExploded = false;
 
+    [SerializeField] SetPlayerBool setPlayerBool;
     [SerializeField] GameObject player;
     Rigidbody playerRb;
     GameManager gameManager;
@@ -45,15 +46,18 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        CountDown();
-
-        if (IsLimitOver())
+        if (setPlayerBool.isDead == false)
         {
-            ResetRocketCount();
-            StartCoroutine(Explosion());
-        }
+            CountDown();
 
-        CheckForLevelUp();
+            if (IsLimitOver())
+            {
+                ResetRocketCount();
+                StartCoroutine(Explosion());
+            }
+
+            CheckForLevelUp();
+        }
     }
 
     void Initialize()
@@ -112,13 +116,12 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            StartCoroutine(gameManager.ChooseRocketPlayer());
+            gameManager.ChooseRocketPlayer();
         }
 
         PhotonView photonView = player.GetComponent<PhotonView>();
         photonView.RPC("SetPlayerDead", RpcTarget.All, true);
         Debug.Log("死亡");
-        photonView.RPC("SetHasRocket", RpcTarget.All, false);
     }
 
     void ResetRocketCount()
