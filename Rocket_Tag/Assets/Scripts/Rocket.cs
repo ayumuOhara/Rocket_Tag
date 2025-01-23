@@ -47,7 +47,7 @@ public class Rocket : MonoBehaviourPunCallbacks
     Vector3 thorowRocketOffset = new Vector3(0, 3f, 0);
 
     [SerializeField] GameObject player;
-    [SerializeField] GameObject camera;
+    [SerializeField] GameObject _camera;
     GameObject rocket;
     Transform playerTransform;
     CapsuleCollider capsuleCollider; 
@@ -87,9 +87,9 @@ public class Rocket : MonoBehaviourPunCallbacks
         { ThrowRocket(); }
         else
         { 
-            hitedColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down
-                                                    * GetCapsuleColliderLongY(capsuleCollider, true), rocket.transform.position
-                                                    + Vector3.up * GetCapsuleColliderLongY(capsuleCollider, true));
+            //hitedColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down
+            //                                        * GetCapsuleColliderLongY(capsuleCollider, true), rocket.transform.position
+            //                                        + Vector3.up * GetCapsuleColliderLongY(capsuleCollider, true));
         } // カプセルこりっだーの半径抽出
         if(IsNeedRetrieve())
         {
@@ -128,11 +128,11 @@ public class Rocket : MonoBehaviourPunCallbacks
         STARTPOS = transform.position;
         evacuatePos_Y = GetPos_YFromStart(40);
         secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
-        camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
+        _camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
         rocket = GameObject.Find("Rocket");
         STARTPOS = rocket.transform.position;
         playerRB = player.GetComponent<Rigidbody>();
-        cameraController = camera.GetComponent<CameraController>();
+        cameraController = _camera.GetComponent<CameraController>();
         UpdateRocketCount(rocketCount);
     }
     // ロケットのカウントを全プレイヤーで同期
