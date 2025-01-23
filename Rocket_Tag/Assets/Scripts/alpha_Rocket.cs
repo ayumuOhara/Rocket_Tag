@@ -33,11 +33,13 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     bool isExploded = false;
 
     [SerializeField] GameObject player;
+    Rigidbody playerRb;
     GameManager gameManager;
 
     void Start()
     {
         gameManager = FindFirstObjectByType<GameManager>();
+        playerRb = player.GetComponent<Rigidbody>();
         Initialize();
     }
 
@@ -82,6 +84,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     IEnumerator Explosion()
     {
+        ResetAcceleration();
+
         Debug.Log("ロケット爆発");
         while (!IsVeryHigh())
         {
@@ -94,11 +98,12 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Floating(float speed)
     {
-        transform.position += Vector3.up * speed * Time.deltaTime;
+        playerRb.useGravity = false;
+        player.transform.position += Vector3.up * speed * Time.deltaTime;
     }
 
     bool IsVeryHigh()
-    {
+    { 
         return transform.position.y > evacuateStarPos_Y;
     }
 
@@ -111,6 +116,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
         PhotonView photonView = player.GetComponent<PhotonView>();
         photonView.RPC("SetPlayerDead", RpcTarget.All, true);
+
+        
     }
 
     void ResetRocketCount()
@@ -136,5 +143,16 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         decreaseLevel++;
         Debug.Log($"タイマーの減少速度がアップしました: {decreaseLevel}");
+    }
+
+    /// <summary>
+    /// 加速度をリセットし、関連カウントを初期化
+    /// </summary>
+    void ResetAcceleration()
+    {
+        Debug.Log("加速度をリセットします");
+        decreaseLevel = DecreaseLevel.slowest; // 初期状態に戻す
+        posessingTime = 0;                     // 経過時間をリセット
+        ResetRocketCount();                    // ロケットカウントもリセット
     }
 }
