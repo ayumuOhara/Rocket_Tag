@@ -12,7 +12,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         normal,
         fast,
         veryfast,
-        fastest
+        fastest,
     }
 
     DecreaseLevel decreaseLevel = DecreaseLevel.slowest;
@@ -23,7 +23,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     float vibingDuration = 2;
     float[] vibeStartTime = { 2, 3.2f, 6, 12, 18, 24, 35 };
     float floatStartTime = 2;
-    float floatSpeed = 10;
+    float floatSpeed = 20;
     float explodeRiseSpeed = 18;
     float posessingTime = 0;
     float secToExplode = 0;
@@ -121,7 +121,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             gameManager.ChooseRocketPlayer();
-        }        
+        }
     }
 
     void ResetRocketCount()
