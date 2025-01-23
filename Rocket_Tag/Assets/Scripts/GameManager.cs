@@ -33,8 +33,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         while (true)
         {
             int readyCount = GetReadyPlayerCount();
-            playerCntText.text = $"{readyCount} /   {instantiatePlayer.GetCurrentPlayerCount()}";
-            infoText.text      = $"準備完了 /  参加人数";
+            photonView.RPC("PlayerCntText", RpcTarget.All, readyCount, "準備完了");
 
             // マスタークライアントのみゲーム開始処理を実行
             if (PhotonNetwork.IsMasterClient && CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
@@ -139,8 +138,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             List<GameObject> players = GetPlayerCount();
             int playerCnt = players.Count;
-            playerCntText.text = $"{playerCnt} /   {instantiatePlayer.GetCurrentPlayerCount()}";
-            infoText.text      = $"生存人数 /  参加人数";
+            photonView.RPC("PlayerCntText", RpcTarget.All, playerCnt, "生存人数");
 
             if (playerCnt <= 1)
             {
@@ -153,6 +151,13 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
             yield return null;
         }
+    }
+
+    [PunRPC]
+    void PlayerCntText(int playerCnt,string text)
+    {
+        playerCntText.text = $"{playerCnt} /   {instantiatePlayer.GetCurrentPlayerCount()}";
+        infoText.text = $"{text} /  参加人数";
     }
 
     // 生存者リストを返す

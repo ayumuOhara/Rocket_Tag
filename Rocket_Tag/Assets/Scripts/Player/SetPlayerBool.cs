@@ -53,6 +53,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         playerMovement.ChangeMoveSpeed(newHasRocket,12.0f);
 
-        if(rocket != null)  rocket.ResetPossesing();
+        if (rocket != null) rocket.photonView.RPC("ResetPossesing", RpcTarget.All);
     }
 }
