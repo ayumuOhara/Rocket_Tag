@@ -109,8 +109,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     // 参加しているプレイヤーから１人を選び、ロケットを付与
     public IEnumerator ChooseRocketPlayer()
     {
-        yield return new WaitForSeconds(3.0f);
-
         Debug.Log("プレイヤーを抽選します");
 
         List<GameObject> players = new List<GameObject>();
