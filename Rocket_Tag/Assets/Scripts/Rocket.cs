@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using static UnityEngine.GraphicsBuffer;
 
 public class Rocket : MonoBehaviourPunCallbacks
@@ -50,8 +51,8 @@ public class Rocket : MonoBehaviourPunCallbacks
     [SerializeField] GameObject _camera;
     GameObject rocket;
     Transform playerTransform;
-    CapsuleCollider capsuleCollider; 
-    Collider[] hitedColliders;
+    CapsuleCollider capsuleCollider;
+    Collider[] hitedCollider;
     Rigidbody playerRB;
     GameManager gameManager;
     CameraController cameraController;
@@ -66,7 +67,9 @@ public class Rocket : MonoBehaviourPunCallbacks
         if (!ForTest)
         {
             if (IsVibeTime())
-            { StartCoroutine(cameraController.Shake(vibingDuration, vibingPower)); }
+            {
+                StartCoroutine(cameraController.Shake(vibingDuration, vibingPower));
+            }
         }
         if (isFloatingTime() && !IsStopePos())
         {
@@ -80,17 +83,25 @@ public class Rocket : MonoBehaviourPunCallbacks
             ResetPossesing();
         }
         if (IsDecreeseUpTime())
-        { DecreeseLevelUp(); }
+        {
+            DecreeseLevelUp(); 
+        }
         if(Input.GetKeyDown(KeyCode.E) && isHoldRocket)
-        { isThrowed = true; }
+        {
+            isThrowed = true;
+        }
         if(isThrowed)
-        { ThrowRocket(); }
+        {
+            ThrowRocket();
+        }
         else
-        { 
-            //hitedColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down
-            //                                        * GetCapsuleColliderLongY(capsuleCollider, true), rocket.transform.position
-            //                                        + Vector3.up * GetCapsuleColliderLongY(capsuleCollider, true));
-        } // カプセルこりっだーの半径抽出
+        {
+            hitedCollider = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * capsuleCollider.height * 0.5f,
+                                                   rocket.transform.position　+ Vector3.up * capsuleCollider.height * 0.5f,
+                                                   capsuleCollider.radius);
+            Debug.Log(hitedCollider[0].gameObject.name);
+            //foreanh()
+        }
         if(IsNeedRetrieve())
         {
             
@@ -116,7 +127,7 @@ public class Rocket : MonoBehaviourPunCallbacks
         //    player.transform.position = new Vector3(playerPosX + 1, player.transform.position.y, player.transform.position.z);
         //}
     }
-    void Initialize()
+    void Initialize()    //  初期化
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         if (ForTest)    //  TestScene用
@@ -131,6 +142,8 @@ public class Rocket : MonoBehaviourPunCallbacks
         _camera = GameObject.Find("PlayerCamera");     // ゲームプレイで使う
         rocket = GameObject.Find("Rocket");
         STARTPOS = rocket.transform.position;
+        capsuleCollider = rocket.transform.GetComponent<CapsuleCollider>();
+        hitedCollider = new Collider[100];
         playerRB = player.GetComponent<Rigidbody>();
         cameraController = _camera.GetComponent<CameraController>();
         UpdateRocketCount(rocketCount);
@@ -196,9 +209,9 @@ public class Rocket : MonoBehaviourPunCallbacks
         }
         yield break;
     }
-    void DropOut()      // 脱落処理
+    void DropOut()
     {
-        if (!ForTest)
+        if (PhotonNetwork.IsMasterClient)
         {
             // マスタークライアントのみロケット付与処理を実行
             if (PhotonNetwork.IsMasterClient)
@@ -212,13 +225,17 @@ public class Rocket : MonoBehaviourPunCallbacks
             {
                 targetPhotonView.RPC("SetPlayerDead", RpcTarget.All, true);
             }
+            gameManager.ChooseRocketPlayer();
         }
+
+        PhotonView photonView = player.GetComponent<PhotonView>();
+        photonView.RPC("SetPlayerDead", RpcTarget.All, true);
     }
 
     // ロケットのカウントをリセット
     public void ResetRocketCount()
     {
-        rocketCount = 1000; // デフォルト値
+        rocketCount = initialCount; // デフォルト値
         UpdateRocketCount(rocketCount);
     }
     void DecreeseLevelUp()    //  ロケットカウント加速
@@ -235,7 +252,9 @@ public class Rocket : MonoBehaviourPunCallbacks
     }
 
     void ApproachPos(GameObject axis, GameObject Approcher, Vector3 offset)    //  オブジェクトの位置を近づける
-    { Approcher.transform.position = axis.transform.position + offset; }
+    {
+        Approcher.transform.position = axis.transform.position + offset;
+    }
 
     void Floating(Transform floated, float floatForce)    //  オブジェクト浮遊
     {
@@ -293,13 +312,21 @@ public class Rocket : MonoBehaviourPunCallbacks
         }
     }
     bool IsVibeTime()    //  カメラ振動時間か判定
-    { return vibeStartTime[(int)decreeseLevel] > rocketCount; }
+    { 
+        return vibeStartTime[(int)decreeseLevel] > rocketCount;
+    }
     bool isFloatingTime()    //  浮く時間か判定
-    { return floatStartTime > rocketCount; }
+    {
+        return floatStartTime > rocketCount; 
+    }
     float GetPos_YFromStart(float farFromStartPos)    //  開始位置から一定の距離にあるY座標を代入
-    { return playerTransform.position.y + farFromStartPos; }
+    {
+        return playerTransform.position.y + farFromStartPos;
+    }
     bool IsNeedRetrieve()
-    { return throwedTime > retrieveTime; }
+    {
+        return throwedTime > retrieveTime; 
+    }
     public void RetriveByStraightLine()
     {
         ApproachPos(player, rocket, rocketOffset);
@@ -308,19 +335,31 @@ public class Rocket : MonoBehaviourPunCallbacks
         isThrowed = false;
     }
     bool IsDecreeseUpTime()
-    { return decreeseLevel != DecreeseLevel.fastest && possesingTime > decreeseUpTime[(int)decreeseLevel]; }
+    {
+        return decreeseLevel != DecreeseLevel.fastest && possesingTime > decreeseUpTime[(int)decreeseLevel]; 
+    }
     bool IsLimitOver()　　　　//  カウントがリミットを下回ったか判定
-    { return rocketLimit > rocketCount; }
+    {
+        return rocketLimit > rocketCount;
+    }
     bool IsStopePos()    //  動作停止位置か判定
-    { return playerTransform.position.y > evacuatePos_Y; }
+    {
+        return playerTransform.position.y > evacuatePos_Y; 
+    }
     void SetGravity(Rigidbody rB, bool value)    //  RBのuseGravityをセット
-    { rB.useGravity = value; }
+    {
+        rB.useGravity = value; 
+    }
     float GetCapsuleColliderLongY(CapsuleCollider collider, bool devideFromCenter)
     {
         if (devideFromCenter)
-        { return collider.height / 2;}
+        {
+            return collider.height / 2;
+        }
         else 
-        { return collider.height; }
+        {
+            return collider.height;
+        }
     }
 }
 
