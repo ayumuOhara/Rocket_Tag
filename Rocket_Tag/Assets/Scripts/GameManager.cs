@@ -86,13 +86,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            StartCoroutine(ChooseRocketPlayer());
+            ChooseRocketPlayer();
         }
 
         StartCoroutine(CheckSurvivorCount());
     }
 
-    public IEnumerator ChooseRocketPlayer()
+    public void ChooseRocketPlayer()
     {
         Debug.Log("ロケット保持者を抽選します");
 
@@ -103,7 +103,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (players.Count == 0)
         {
             Debug.LogWarning("候補者がいません");
-            yield break;
         }
 
         int rnd = Random.Range(0, players.Count);
@@ -119,7 +118,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             Debug.LogWarning("PhotonView が見つかりません");
         }
-        yield break;
     }
 
     IEnumerator CheckSurvivorCount()

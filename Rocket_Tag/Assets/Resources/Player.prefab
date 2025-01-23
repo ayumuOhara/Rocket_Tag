@@ -102,8 +102,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rocketCount: 100
   initialCount: 100
+  setPlayerBool: {fileID: 4868377163844986340}
   player: {fileID: 8299087819917209949}
-  _camera: {fileID: 0}
 --- !u!114 &9000160570338378395
 MonoBehaviour:
   m_ObjectHideFlags: 0
