@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("プレイヤーを抽選します");
 
         List<GameObject> players = new List<GameObject>();
-        players = GetPlayerCount();
+        players = GetPlayerList();
         int rnd = Random.Range(0, players.Count);
         GameObject selectedPlayer = players[rnd];
 
@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         while (true)
         {
-            List<GameObject> players = GetPlayerCount();
+            List<GameObject> players = GetPlayerList();
             int playerCnt = players.Count;
             photonView.RPC("PlayerCntText", RpcTarget.All, playerCnt, "生存人数");
 
@@ -154,27 +154,25 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    void PlayerCntText(int playerCnt,string text)
+    void PlayerCntText(int playerCnt, string text)
     {
         playerCntText.text = $"{playerCnt} /   {instantiatePlayer.GetCurrentPlayerCount()}";
         infoText.text = $"{text} /  参加人数";
     }
 
     // 生存者リストを返す
-    List<GameObject> GetPlayerCount()
+    List<GameObject> GetPlayerList()
     {
         List<GameObject> players = new List<GameObject>();
         players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
 
-        for (int i = 0; i < players.Count; i++)
+        players.RemoveAll(player =>
         {
-            SetPlayerBool spb = players[i].GetComponent<SetPlayerBool>();
-            if (spb.isDead)
-            {
-                players.RemoveAt(i);
-            }
-        }
+            SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
+            return spb != null && spb.isDead; // nullチェック
+        });
 
         return players;
     }
 }
+

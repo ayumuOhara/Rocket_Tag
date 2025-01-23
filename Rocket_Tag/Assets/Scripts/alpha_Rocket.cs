@@ -63,9 +63,9 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         }
         if (IsLimitOver())
         {
-            StartCoroutine(Explosion());
             ResetRocketCount();
             photonView.RPC("ResetPossesing", RpcTarget.All);
+            StartCoroutine(Explosion());
         }
         if (decreeseLevel != DecreeseLevel.fastest && possesingTime > decreeseUpTime[(int)decreeseLevel])
         { 
@@ -137,6 +137,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     IEnumerator Explosion()    //  ロケット爆発
     {
+        Debug.Log("コルーチン開始");
+
         DropOut();
 
         while (!IsVeryHigh())
@@ -174,6 +176,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     // ロケットのカウントをリセット
     void ResetRocketCount()
     {
+        Debug.Log("カウントをリセット");
         rocketCount = initialCount; // デフォルト値
         UpdateRocketCount(rocketCount);
     }
