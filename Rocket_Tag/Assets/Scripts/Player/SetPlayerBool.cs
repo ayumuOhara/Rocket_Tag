@@ -32,6 +32,10 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     public void SetPlayerDead(bool newIsDead)
     {
         isDead = newIsDead;
+        if (isDead)
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 
     [PunRPC]
