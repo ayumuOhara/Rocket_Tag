@@ -104,6 +104,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             StartCoroutine(gameManager.ChooseRocketPlayer());
         }
 
+        PhotonView photonView = player.GetComponent<PhotonView>();
         photonView.RPC("SetPlayerDead", RpcTarget.All, true);
     }
 
