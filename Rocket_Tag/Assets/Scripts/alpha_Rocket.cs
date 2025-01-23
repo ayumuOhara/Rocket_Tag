@@ -145,6 +145,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             yield return null;
         }
 
+        yield return new WaitForSeconds(10.0f);
         DropOut();
 
         yield break;
@@ -171,7 +172,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         decreeseLevel += 1;
         //Debug.Log(decreeseLevel);
         secToExplode = GetSecUntilZero(rocketCount, (Time.deltaTime + decreeseValue[(int)decreeseLevel] * Time.deltaTime), Time.deltaTime);
-        //Debug.Log(secToExplode);
+        Debug.Log(secToExplode);
     }
 
     // ロケットのカウントをリセット
