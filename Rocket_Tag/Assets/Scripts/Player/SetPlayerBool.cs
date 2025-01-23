@@ -32,6 +32,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     public void SetPlayerDead(bool newIsDead)
     {
         isDead = newIsDead;
+        Destroy(this.gameObject);
     }
 
     [PunRPC]
