@@ -34,7 +34,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         isDead = newIsDead;
         if (isDead)
         {
-            Destroy(this.gameObject);
+            this.gameObject.SetActive(false);
         }
     }
 
