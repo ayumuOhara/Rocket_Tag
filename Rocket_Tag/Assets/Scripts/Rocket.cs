@@ -34,7 +34,6 @@ public class Rocket : MonoBehaviourPunCallbacks
     float[] decreeseUpTime = { 5, 10, 15, 20, 25, 30, 35 };
     float secToExplode = 0;
     float evacuatePos_Y = 40;
-    float returnForce = 10;
     bool isExplode = false;
     bool isThrowed = false;
     bool isReturning = false;
@@ -81,13 +80,6 @@ public class Rocket : MonoBehaviourPunCallbacks
         {
             DecreeseLevelUp();
         }
-        if (Input.GetKeyDown(KeyCode.E) && isHoldRocket)
-        {
-            isThrowed = true;
-        }
-        else
-        {
-        }
         //if (Mathf.Abs(transform.position.x - playerTransform.position.x) < 2 && isReturning)
         //{
         //    // ‰^“®ƒGƒlƒ‹ƒM[’âŽ~
@@ -101,13 +93,6 @@ public class Rocket : MonoBehaviourPunCallbacks
         {
             this.transform.position = STARTPOS;
         }
-        if (isReturning)
-        {
-        }
-        //if(Input.GetKey(KeyCode.LeftArrow))
-        //{
-        //    player.transform.position = new Vector3(playerPosX + 1, player.transform.position.y, player.transform.position.z);
-        //}
     }
     void Initialize()    //  ‰Šú‰»
     {
