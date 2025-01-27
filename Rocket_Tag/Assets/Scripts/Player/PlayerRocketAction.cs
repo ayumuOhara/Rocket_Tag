@@ -20,23 +20,20 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
             Debug.Log("ロケットを投擲した");
         }
 
-        if (Input.GetMouseButtonDown(1))
+        GameObject target = observeDistance.GetTargetDistance();
+        if (target != null)
         {
-            GameObject target = observeDistance.GetTargetDistance();
-            if (target != null)
+            SetPlayerBool otherPlayer = target.GetComponent<SetPlayerBool>();
+
+            // 自分の hasRocket を切り替え
+            photonView.RPC("SetHasRocket", RpcTarget.All, !setPlayerBool.hasRocket);
+
+            // ターゲットの hasRocket を切り替え
+            PhotonView targetPhotonView = target.GetComponent<PhotonView>();
+            if (targetPhotonView != null)
             {
-                SetPlayerBool otherPlayer = target.GetComponent<SetPlayerBool>();
-
-                // 自分の hasRocket を切り替え
-                photonView.RPC("SetHasRocket", RpcTarget.All, !setPlayerBool.hasRocket);
-
-                // ターゲットの hasRocket を切り替え
-                PhotonView targetPhotonView = target.GetComponent<PhotonView>();
-                if (targetPhotonView != null)
-                {
-                    targetPhotonView.RPC("SetHasRocket", RpcTarget.All, !otherPlayer.hasRocket);
-                    targetPhotonView.RPC("SetIsStun", RpcTarget.All, true);
-                }
+                targetPhotonView.RPC("SetHasRocket", RpcTarget.All, !otherPlayer.hasRocket);
+                targetPhotonView.RPC("SetIsStun", RpcTarget.All, true);
             }
         }
     }

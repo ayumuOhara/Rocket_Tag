@@ -660,7 +660,7 @@ GameObject:
   - component: {fileID: 1807629762}
   - component: {fileID: 1807629761}
   - component: {fileID: 1807629760}
-  - component: {fileID: 1807629764}
+  - component: {fileID: 1807629765}
   m_Layer: 6
   m_Name: Rocket
   m_TagString: Untagged
@@ -752,14 +752,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1807629759}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.41, y: 1.69, z: -0.46}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.55, y: 0.83, z: 0.18799773}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1915035896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1807629764
+--- !u!114 &1807629765
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -768,13 +768,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1807629759}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5cd7fe17f1866f429243416a9e0b540, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b2525f0ac151cf41a7e6625af549b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocketCount: 1000
-  initialCount: 100
-  player: {fileID: 0}
-  camera: {fileID: 0}
 --- !u!1 &1915035892
 GameObject:
   m_ObjectHideFlags: 0
@@ -881,7 +877,8 @@ Transform:
   m_LocalPosition: {x: 0.47, y: 0.81, z: -0.25328055}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1807629763}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1915035897
@@ -909,7 +906,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -918,7 +915,6 @@ SceneRoots:
   - {fileID: 1662577726}
   - {fileID: 1545680910}
   - {fileID: 240249678}
-  - {fileID: 1807629763}
   - {fileID: 1915035896}
   - {fileID: 1205941269}
   - {fileID: 1560362837}
