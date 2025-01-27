@@ -9,11 +9,11 @@ using UnityEngine.UIElements;
 
 public class ThrowRocket : MonoBehaviour
 {
-    string hitName = null;
-    float throwSpeed = 3f;
-    float throwedTime = 10f;
-    float retrieveTime = 1.5f;
-    float returnForce = 10;
+    string hitName;
+    public float throwSpeed;
+    float throwedTime;
+    float retrieveTime;
+    float returnForce;
     bool isThrowed;
     bool isReturn;
     bool isHoldRocket;
@@ -22,12 +22,10 @@ public class ThrowRocket : MonoBehaviour
 
     GameObject player;
     GameObject rocket;
-    List<Collider> hitCollider;
     CapsuleCollider capsuleCollider;
     Rocket rocketCS;
-
     void Start()
-    {
+    { 
         Initialize();
     }
     void Update()
@@ -66,19 +64,24 @@ public class ThrowRocket : MonoBehaviour
         //    isThrowed = false;
         //    throwedTime = 0;
         //}
-        Debug.Log(name);
+        Debug.Log(hitName);
     }
     void Initialize()    //  初期化
     {
+        hitName = null;
+        throwSpeed = 3f;
+        throwedTime = 10f;
+        retrieveTime = 1.5f;
+        returnForce = 10f;
         isThrowed = false;
         isReturn = false;
         isHoldRocket = true;
-        
-        startPos = rocket.transform.position;
-        Debug.Log(startPos);
+      
         rocket = GameObject.Find("Rocket");
         player = GameObject.Find("Player");
-        hitCollider = new List<Collider>();
+
+        startPos = rocket.transform.position;
+        
         capsuleCollider = rocket.GetComponent<CapsuleCollider>();
         rocketCS = GetComponent<Rocket>();
     }
@@ -102,7 +105,7 @@ public class ThrowRocket : MonoBehaviour
     {
         return throwedTime > retrieveTime;
     }
-    public void RetriveByStraightLine()    
+    public void RetriveByStraightLine()
     {
         isReturn = true;
         // GetLineDir(rocket.transform.position, player.transform.position);
@@ -119,9 +122,9 @@ public class ThrowRocket : MonoBehaviour
         }
         return null;  // ヒットしなかった場合は null 
     }
-    void StraightMoveToPos(Transform moved, Vector3 current, Vector3 target, float moveSpeed)    //  座標に向かって直線移動
+    public void StraightMoveToPos(Transform moved, Vector3 current, Vector3 target, float moveSpeed)    //  座標に向かって直線移動
     {
-         moved.position = Vector3.MoveTowards(current, target, moveSpeed * Time.deltaTime);
+        moved.position = Vector3.MoveTowards(current, target, moveSpeed * Time.deltaTime);
     }
     void SetParent(GameObject child, Transform parent)    //  親オブジェクトをセットする
     {
@@ -149,36 +152,109 @@ public class ThrowRocket : MonoBehaviour
     //}
     IEnumerator GetFristHit()
     {
+        bool isHitOther = false;
+
         Collider[] tempHitColliders;
+        
         do
         {
-            tempHitColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * capsuleCollider.height * 0.5f,
-                                              rocket.transform.position + Vector3.up * capsuleCollider.height * 0.5f,
-                                              capsuleCollider.radius);
+            tempHitColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * capsuleCollider.height * 1.1f,
+                                              rocket.transform.position + Vector3.up * capsuleCollider.height * 1.1f,
+                                              capsuleCollider.radius * 1.1f);
+            if (tempHitColliders.Length == 0) isHitOther = false;
+            else isHitOther = true;
+            if (isHitOther == true && tempHitColliders[0] != null && tempHitColliders[0].tag != rocket.tag) isHitOther = true ;
+            else isHitOther = false;
             yield return null;
-        } while (tempHitColliders.Length > 1 && tempHitColliders[0] != null);
-        Debug.Log(tempHitColliders[0].tag);
+        } while (!isHitOther);
+        Debug.Log(55555);
         hitName = tempHitColliders[0].tag;
+        //}
+        //async Task<string> GetFirstHit()    //  最初に当たったオブジェクトのタグを返す
+        //{
+        //    Collider[] tempHitColliders;
+        //    do
+        //    {
+        //        tempHitColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * capsuleCollider.height * 0.5f,
+        //                                          rocket.transform.position + Vector3.up * capsuleCollider.height * 0.5f,
+        //                                          capsuleCollider.radius);
+        //    } while (tempHitColliders.Length > 1 && tempHitColliders[0] != null);
+        //    Debug.Log(hitName);
+        //    return tempHitColliders[0].tag;
+        //}
+        void ReturnFlagChange()
+        {
+        }
+        // bool IsNear(GameObject axis, GameObject judged, float distance_x, float distance_y)    //  
+        // {
+        //     Vector3 posDifference = axis.transform.position - judged.transform.position;
+        ////     return Mathf.Abs(posDifference.x) < distance && posDifference.y < distance;
+        // }
     }
-    //async Task<string> GetFirstHit()    //  最初に当たったオブジェクトのタグを返す
-    //{
-    //    Collider[] tempHitColliders;
-    //    do
-    //    {
-    //        tempHitColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * capsuleCollider.height * 0.5f,
-    //                                          rocket.transform.position + Vector3.up * capsuleCollider.height * 0.5f,
-    //                                          capsuleCollider.radius);
-    //    } while (tempHitColliders.Length > 1 && tempHitColliders[0] != null);
-    //    Debug.Log(hitName);
-    //    return tempHitColliders[0].tag;
-    //}
-    void ReturnFlagChange()
-    {
-        
-    }
-   // bool IsNear(GameObject axis, GameObject judged, float distance_x, float distance_y)    //  
-   // {
-   //     Vector3 posDifference = axis.transform.position - judged.transform.position;
-   ////     return Mathf.Abs(posDifference.x) < distance && posDifference.y < distance;
-   // }
 }
+//public class ThorwRocket_ : MonoBehaviour
+//{
+//    RocketState rocketState;
+
+//    string hitName;
+//    float throwSpeed;
+//    float throwedTime;
+//    float retrieveTime;
+//    float returnForce;
+//    bool isThrowed;
+//    bool isReturn;
+//    bool isHoldRocket;
+
+//    Vector3 startPos;
+
+//    GameObject player;
+//    GameObject rocket;
+//    CapsuleCollider capsuleCollider;
+//    Rocket rocketCS;
+//    void Start()
+//    {
+//        rocketState = new HoldState();
+//    }
+//    void Update()
+//    {
+//        rocketState.Handle(this);
+//    }
+//    public void StraightMoveToPos(Transform moved, Vector3 current, Vector3 target, float moveSpeed)    //  座標に向かって直線移動
+//    {
+//        moved.position = Vector3.MoveTowards(current, target, moveSpeed * Time.deltaTime);
+//    }
+//    public Vector3 RocketPosition
+//    {
+//        get { return rocketPosition; } // 値を返す（読み取り）
+//        set { rocketPosition = value; } // 値を設定する（書き込み）
+//    }
+//}
+//public interface RocketState
+//{
+//    void Handle(ThorwRocket_ rocket);
+//}
+//public class HoldState : RocketState
+//{
+//    void Handle(ThorwRocket_ rocket)
+//    {
+//        if (Input.GetKeyDown(KeyCode.F))
+//        {
+//            //   rocket.StraightMoveToPos()
+//            rocket.
+//        }
+//    }
+//}
+//public class ThrowState : RocketState
+//{
+//    void Handle(ThorwRocket_ rocket)
+//    {
+
+//    }
+//}
+//public class Returntate : RocketState
+//{
+//    void Handle(ThorwRocket_ rocket)
+//    {
+
+//    }
+//}
