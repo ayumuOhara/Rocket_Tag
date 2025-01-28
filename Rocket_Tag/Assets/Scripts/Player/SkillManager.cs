@@ -1,67 +1,154 @@
 using Photon.Pun;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] SkillDataBase skillDataBase;
-    SkillData skillData;
-    int skillIdx;
+    [SerializeField] public SkillData skillData;
+    public int skillIdx;
+    [SerializeField] int countLimit;
 
     ChangeObjColor changeObjColor;
     PlayerMovement playerMovement;
+    Alpha_Rocket rocket;
+    GameManager gameManager;
+
+    [SerializeField] GameObject rocketObj;
 
     public bool finishSkill = true;
 
-    void SetSkill()
+    // スキルを設定
+    void SetSkill(SkillData newSkillData)
     {
-        skillData = skillDataBase.skillDatas[skillIdx];
+        skillData = newSkillData;
+        countLimit = skillData.countLimit;
+    }
+
+    // 所持スキルを削除
+    public void RemoveSkill()
+    {
+        skillData = null;
     }
 
     private void Start()
     {
         changeObjColor = GetComponent<ChangeObjColor>();
         playerMovement = GetComponent<PlayerMovement>();
+        rocket = rocketObj.GetComponent<Alpha_Rocket>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
         skillIdx = 0;
-        SetSkill();
+        SetSkill(skillDataBase.skillDatas[skillIdx]);
     }
 
+    // 設定されているスキル使用
     public void UseSkill()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (skillData.countLimit > 0)
+            if (countLimit > 0 && finishSkill == true)
             {
-                StartCoroutine(DashSkill());
+                Debug.Log($"【{skillData.skillName}】を使用");
+                countLimit--;
+
+                switch (skillData.skillCode)
+                {
+                    case 101 : StartCoroutine(Dash());          break;
+                    case 102 : StartCoroutine(TimeStop());      break;
+                    case 103 : RocketWarp();                    break;
+                    case 105 : StartCoroutine(InvisibleBody()); break;
+                }
+
+                if(countLimit <= 0)
+                {
+                    RemoveSkill();
+                }
             }
         }
     }
-
-    float boostValue = 2f;
-    float dashTime = 3.0f;
-
-    IEnumerator DashSkill()
+    
+    float boostValue = 1.5f;     // ダッシュの加速度
+    float dashLimit = 3.0f;      // ダッシュの効果時間
+    // ダッシュスキル
+    IEnumerator Dash()
     {
         finishSkill = false;
-        skillData.countLimit--;
 
         float speed = playerMovement.GetMoveSpeed();
         playerMovement.SetMoveSpeed(speed * boostValue);
-        photonView.RPC("ChangeColor", RpcTarget.All,
-            changeObjColor.colorMaterial[2].color.r,
-            changeObjColor.colorMaterial[2].color.g,
-            changeObjColor.colorMaterial[2].color.b,
-            changeObjColor.colorMaterial[2].color.a);
+        changeObjColor.SetColor(1);
 
-        yield return new WaitForSeconds(dashTime);
+        yield return new WaitForSeconds(dashLimit);
 
         playerMovement.SetMoveSpeed(speed);
-        photonView.RPC("ChangeColor", RpcTarget.All,
-            changeObjColor.colorMaterial[0].color.r,
-            changeObjColor.colorMaterial[0].color.g,
-            changeObjColor.colorMaterial[0].color.b,
-            changeObjColor.colorMaterial[0].color.a);
+        changeObjColor.SetColor(0);
 
         finishSkill = true;
+
+        yield break;
+    }
+
+    float stopLimit = 5.0f;     // タイマー停止の効果時間
+    // ロケットのタイマー停止
+    IEnumerator TimeStop()
+    {
+        finishSkill = false;
+
+        rocket.isTimeStop = true;
+        yield return new WaitForSeconds(stopLimit);
+        rocket.isTimeStop = false;
+
+        finishSkill = true;
+
+        yield break;
+    }
+
+    // ロケットを転移
+    void RocketWarp()
+    {
+        SetPlayerBool mySpb = GetComponent<SetPlayerBool>();
+        mySpb.SetHasRocket(false);
+
+        List<GameObject> players = gameManager.GetPlayerList();
+        int rnd = Random.Range(0, players.Count);
+
+        SetPlayerBool targetSpb = players[rnd].GetComponent<SetPlayerBool>();
+        targetSpb.SetHasRocket(true);
+    }
+
+    float heatUpCnt = 30.0f;    // カウントの進行数
+    // 渡したときにロケットのカウントを進行
+    public void HeatUpCnt()
+    {
+        rocket.rocketCount -= heatUpCnt;
+        if(rocket.rocketCount <= 0)
+        {
+            rocket.rocketCount = 3.0f;
+        }
+    }
+
+    float invisibleLimit = 10.0f;
+    // プレイヤーを不可視にする
+    IEnumerator InvisibleBody()
+    {
+        ChangeObjColor rocketCoc = rocketObj.GetComponent<ChangeObjColor>();
+        finishSkill = false;
+
+        // 透明化
+        changeObjColor.SetColor(3);
+        rocketCoc.SetColor(1);
+
+        yield return new WaitForSeconds(invisibleLimit);
+
+        // デフォルトに戻す
+        changeObjColor.SetColor(0);
+        rocketCoc.SetColor(0);
+
+        finishSkill = true;
+
+        yield break;
     }
 }

@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     // プレイヤーの速度切り替え
     public void ChangeMoveSpeed(bool hasRocket,float newSpeed = 0)
     {
-        if (hasRocket)
+        if (hasRocket == true)
             SetMoveSpeed(newSpeed);
         else
             SetMoveSpeed(defaultMoveSpeed);
@@ -130,20 +130,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         _collider.material = defaultFriction;
 
-        photonView.RPC("ChangeColor", RpcTarget.All,
-                        changeObjColor.colorMaterial[3].color.r,
-                        changeObjColor.colorMaterial[3].color.g,
-                        changeObjColor.colorMaterial[3].color.b,
-                        changeObjColor.colorMaterial[3].color.a);
+        changeObjColor.SetColor(2);
 
         yield return new WaitForSeconds(stunTime);
         photonView.RPC("SetIsStun", RpcTarget.All, false);
 
-        photonView.RPC("ChangeColor", RpcTarget.All,
-                        changeObjColor.colorMaterial[0].color.r,
-                        changeObjColor.colorMaterial[0].color.g,
-                        changeObjColor.colorMaterial[0].color.b,
-                        changeObjColor.colorMaterial[0].color.a);
+        changeObjColor.SetColor(0);
 
         yield break;
     }

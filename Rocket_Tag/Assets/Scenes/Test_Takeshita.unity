@@ -4240,7 +4240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d765c19c068f2394bbc7ddbe0029989a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refCamera: {fileID: 504838159}
+  refCamera: {fileID: 0}
   distance: 5
   verticalAngle: 20
   minVerticalAngle: 10
@@ -4249,6 +4249,7 @@ MonoBehaviour:
   hRotation: {x: 0, y: 0, z: 0, w: 0}
   turnSpeed: 5
   velocity: {x: 0, y: 0, z: 0}
+  isShaking: 0
 --- !u!114 &504838160
 MonoBehaviour:
   m_ObjectHideFlags: 0

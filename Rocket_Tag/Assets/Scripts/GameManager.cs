@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         infoText.text = $"{text} / éQâ¡êlêî";
     }
 
-    List<GameObject> GetPlayerList()
+    public List<GameObject> GetPlayerList()
     {
         List<GameObject> players = new List<GameObject>();
         players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
