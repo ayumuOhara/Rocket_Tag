@@ -32,6 +32,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     float[] decreaseValue = { 0.4f, 1, 1.8f, 5, 12, 30, 100 };
     float[] decreaseUpTime = { 5, 10, 15, 20, 25, 30, 35 };
     bool isExploded = false;
+    public bool isTimeStop = false;
 
     [SerializeField] SetPlayerBool setPlayerBool;
     [SerializeField] GameObject player;
@@ -49,7 +50,10 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         if (setPlayerBool.isDead == false)
         {
-            CountDown();
+            if(isTimeStop == false)
+            {
+                CountDown();
+            }
 
             if (IsLimitOver())
             {
