@@ -19,6 +19,8 @@ public class ThrowRocket : MonoBehaviour
     bool isHoldRocket;
 
     Vector3 startPos;
+    Vector3 playerPos;
+    Vector3 throwOffset;
 
     GameObject player;
     GameObject rocket;
@@ -32,51 +34,46 @@ public class ThrowRocket : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F) && isHoldRocket)
         {
             ThrowFlagChange();
-            SetParent(rocket, null);
+            //if (!rocketCS.isExplode)
+            //{
+            //    SetParent(rocket, null);
+            //}
             StartCoroutine(GetFristHit());
+            ApproachPos(rocket, rocket, throwOffset);
         }
         if (isThrowed && !isReturn)
         {
             StraightMoveToPos(rocket.transform, rocket.transform.position, GetLineDir(rocket.transform.position, GetScreenCenterPos()), throwSpeed);
             throwedTime += Time.deltaTime;
         }
-        //if (throwedTime > retrieveTime)
-        //{
-        //    isReturn = true;
-        //}
+        if (throwedTime > retrieveTime)
+        {
+            isReturn = true;
+            throwedTime = 0;
+        }
         if (isReturn && hitName == "Player")
         {
             Debug.Log("playerに当たった");
         }
         if (isReturn && !isHoldRocket && hitName != "Player")
         {
-            StraightMoveToPos(rocket.transform, rocket.transform.position, GetLineDir(rocket.transform.position, player.transform.position), retrieveForce);
-            Debug.Log(7777);
+            Debug.Log(5);
+            StraightMoveToPos(rocket.transform, rocket.transform.position, player.transform.position, retrieveForce);
         }
         if (isReturn && IsNear(player, rocket, new Vector3(2, 2, 2)))
         {
             isHoldRocket = true;
-            SetParent(rocket, player.transform);
+        //    SetParent(rocket, player.transform);
             ApproachPos(player, rocket, startPos);
         }
-
-        //if (isReturn && )
-        //{
-        //    ApproachPos(player, rocket, startPos);
-        //    isReturn = false;
-        //    isHoldRocket = true;
-        //    isThrowed = false;
-        //    throwedTime = 0;
-        //}
-        Debug.Log(hitName);
     }
     void Initialize()    //  初期化
     {
         hitName = null;
-        throwSpeed = 9f;
+        throwSpeed = 40f;
         throwedTime = 10f;
-        retrieveTime = 1.5f;
-        retrieveForce = 20f;
+        retrieveTime = 2f;
+        retrieveForce = 70f;
         isThrowed = false;
         isReturn = false;
         isHoldRocket = true;
@@ -84,7 +81,9 @@ public class ThrowRocket : MonoBehaviour
         rocket = GameObject.Find("Rocket");
         player = GameObject.Find("Player");
 
-        startPos = rocket.transform.position;
+        startPos = rocket.transform.localPosition;
+        playerPos = player.transform.position;
+        throwOffset = new Vector3 (0, 2, 0);
 
         rocketCS = GetComponent<Rocket>();
     }
@@ -104,26 +103,9 @@ public class ThrowRocket : MonoBehaviour
         Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
         return Camera.main.ScreenToWorldPoint(screenCenter);
     }
-    bool IsNeedRetrieve()    // 　ロケット回収必要か判定
-    {
-        return throwedTime > retrieveTime;
-    }
-    public void RetriveByStraightLine()
-    {
-        isReturn = true;
-        // GetLineDir(rocket.transform.position, player.transform.position);
-    }
     void ApproachPos(GameObject axis, GameObject approcher, Vector3 offset)    //  axisを中心にApprocherのPosをoffset分加えて変更する
     {
         approcher.transform.position = axis.transform.position + offset;
-    }
-    string WhatIsHit(List<Collider> hits)
-    {
-        if (hits.Count > 0)
-        {
-            return hits[0].tag;  // 最初にヒットしたオブジェクトのタグを返す
-        }
-        return null;  // ヒットしなかった場合は null 
     }
     public void StraightMoveToPos(Transform moved, Vector3 current, Vector3 target, float moveSpeed)    //  座標に向かって直線移動
     {
@@ -133,27 +115,7 @@ public class ThrowRocket : MonoBehaviour
     {
         child.transform.parent = parent;
     }
-    void RetrunRocket()
-    {
-        SetParent(rocket, player.transform);
-        isReturn = true;
-        isThrowed = false;
-        StraightMoveToPos(rocket.transform, rocket.transform.position, rocket.transform.parent.position, retrieveForce);
-    }
-    //void SetHitCapsuletCollider(List<Collider> hitCollider)    //  カプセルコライダーに当たったコライダーを格納する
-    //{
-    //    hitCollider.Clear();
-    //    Collider[] tempHitColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * capsuleCollider.height * 0.5f,
-    //                                                          rocket.transform.position + Vector3.up * capsuleCollider.height * 0.5f,
-    //                                                          capsuleCollider.radius);
-    //    hitCollider.AddRange(tempHitColliders);
-    //    return
-    //        }
-    //string SetHitCapsuletCollider(List<Collider> hitCollider)    //  カプセルコライダーに当たったコライダーを格納する
-    //{
-    //    return tempHitColliders[0].tag;
-    //}
-    IEnumerator GetFristHit()
+    IEnumerator GetFristHit()    //  最初に合ったオブジェクトのtagを変数に入れる
     {
         Collider[] tempHits;
 
@@ -171,23 +133,6 @@ public class ThrowRocket : MonoBehaviour
             yield return null;
         } while (!isReturn);
     }
-    //}
-    //async Task<string> GetFirstHit()    //  最初に当たったオブジェクトのタグを返す
-    //{
-    //    Collider[] tempHitColliders;
-    //    do
-    //    {
-    //        tempHitColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * capsuleCollider.height * 0.5f,
-    //                                          rocket.transform.position + Vector3.up * capsuleCollider.height * 0.5f,
-    //                                          capsuleCollider.radius);
-    //    } while (tempHitColliders.Length > 1 && tempHitColliders[0] != null);
-    //    Debug.Log(hitName);
-    //    return tempHitColliders[0].tag;
-    //}
-    //void ReturnFlagChange()
-    //{
-    //}
-    //  bool IsNear(GameObject axis, GameObject judged, float distance_x, float distance_y, float distance_z)    //  axisをもとにjudgedが近いかを判定  
     bool IsNear(GameObject axis, GameObject judged, Vector3 judgeDistance)    //  axisをもとにjudgedが近いかを判定  
     {
         Vector3 posDif = axis.transform.position - judged.transform.position;
