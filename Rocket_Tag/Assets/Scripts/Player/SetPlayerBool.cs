@@ -52,11 +52,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         hasRocket = newHasRocket;
         rocketObj.SetActive(hasRocket);
-
-        if(hasRocket)
-        {
-            timeManager.ResetAcceleration();
-        }
+        timeManager.ResetAcceleration();
 
         playerMovement.ChangeMoveSpeed(newHasRocket,12.0f);
     }

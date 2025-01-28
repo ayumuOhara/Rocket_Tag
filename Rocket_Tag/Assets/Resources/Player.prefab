@@ -123,10 +123,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a40c7760834dbf4e8cd0dd40e535dd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocketCount: 100
-  initialCount: 100
-  isTimeStop: 0
-  setPlayerBool: {fileID: 4868377163844986340}
   player: {fileID: 8299087819917209949}
 --- !u!114 &821515610318538454
 MonoBehaviour:
@@ -408,7 +404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820cc424280cfe84bb7d0a22d8205e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillDataBase: {fileID: 11400000, guid: b530981f8beb738478b61b57f1ca99c2, type: 2}
+  skillDataBase: {fileID: 0}
   skillData:
     skillCode: 0
     skillName: 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Alpha_Rocket : MonoBehaviourPunCallbacks
 {
-    float floatSpeed = 2;
+    float floatSpeed = 5.0f;
     float evacuateStarPos_Y = 40;
 
     GameManager gameManager;

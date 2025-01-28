@@ -1,4 +1,5 @@
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
@@ -20,6 +21,8 @@ public class TimeManager : MonoBehaviour
     float[] decreaseUpTime = { 10, 20, 30 };
     public bool isTimeStart = false;
     public bool isTimeStop = false;
+
+    [SerializeField] TextMeshProUGUI rocketCountText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -78,7 +81,7 @@ public class TimeManager : MonoBehaviour
 
     void CountDown()
     {
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
             // マスタークライアントのみタイマーを更新
             rocketCount -= Time.deltaTime + decreaseValue[(int)decreaseLevel] * Time.deltaTime;
@@ -91,6 +94,7 @@ public class TimeManager : MonoBehaviour
         }
 
         posessingTime += Time.deltaTime;
+        rocketCountText.text = $"{rocketCount.ToString("F1")} sec";
     }
 
     public bool IsLimitOver()

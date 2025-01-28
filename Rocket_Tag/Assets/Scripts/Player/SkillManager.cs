@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     GameManager gameManager;
 
     [SerializeField] GameObject rocketObj;
+    TextMeshProUGUI countLimitText;
 
     public bool finishSkill = true;
 
@@ -25,12 +27,15 @@ public class SkillManager : MonoBehaviourPunCallbacks
     {
         skillData = newSkillData;
         countLimit = skillData.countLimit;
+        WriteCountLimit();
     }
 
     // 所持スキルを削除
     public void RemoveSkill()
     {
         skillData = null;
+        countLimit = 0;
+        WriteCountLimit();
     }
 
     private void Start()
@@ -39,9 +44,15 @@ public class SkillManager : MonoBehaviourPunCallbacks
         playerMovement = GetComponent<PlayerMovement>();
         timeManager = rocketObj.GetComponent<TimeManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        countLimitText = GameObject.Find("CountLimitText").GetComponent<TextMeshProUGUI>();
 
         skillIdx = 0;
         SetSkill(skillDataBase.skillDatas[skillIdx]);
+    }
+
+    void WriteCountLimit()
+    {
+        countLimitText.text = $"{countLimit}";
     }
 
     // 設定されているスキル使用
@@ -53,6 +64,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log($"【{skillData.skillName}】を使用");
                 countLimit--;
+                WriteCountLimit();
 
                 switch (skillData.skillCode)
                 {
