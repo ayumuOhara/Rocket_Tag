@@ -394,7 +394,7 @@ GameObject:
   - component: {fileID: 1560362834}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: Finish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -482,7 +482,7 @@ Transform:
   m_GameObject: {fileID: 1560362833}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.61, y: 5.51, z: 27.81}
+  m_LocalPosition: {x: -16.4, y: 5.51, z: 27.81}
   m_LocalScale: {x: 34.598354, y: 32.821033, z: 34.598354}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -660,10 +660,9 @@ GameObject:
   - component: {fileID: 1807629762}
   - component: {fileID: 1807629761}
   - component: {fileID: 1807629765}
-  - component: {fileID: 1807629766}
   m_Layer: 6
   m_Name: Rocket
-  m_TagString: Finish
+  m_TagString: Decoy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -730,7 +729,7 @@ Transform:
   m_GameObject: {fileID: 1807629759}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.55, y: 2.44, z: 0.18799773}
+  m_LocalPosition: {x: -2.55, y: 7.6, z: 0.18799773}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -749,29 +748,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   throwSpeed: 3
---- !u!136 &1807629766
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1807629759}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1915035892
 GameObject:
   m_ObjectHideFlags: 0
