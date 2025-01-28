@@ -32,10 +32,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 playerMovement.GetVelocity();
                 playerMovement.PlayerMove();
                 playerMovement.JumpAction();
+                skillManager.UseSkill();
 
                 if (setPlayerBool.hasRocket)
                 {
-                    skillManager.UseSkill();
                     playerRocketAction.RocketAction();
                 }
             }

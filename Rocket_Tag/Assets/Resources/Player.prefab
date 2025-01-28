@@ -478,8 +478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820cc424280cfe84bb7d0a22d8205e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillTimerText: {fileID: 0}
-  skillCTUI: {fileID: 0}
+  skillDataBase: {fileID: 11400000, guid: b530981f8beb738478b61b57f1ca99c2, type: 2}
   finishSkill: 1
 --- !u!114 &4868377163844986340
 MonoBehaviour:
