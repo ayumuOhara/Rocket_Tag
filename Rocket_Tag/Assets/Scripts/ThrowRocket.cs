@@ -1,3 +1,4 @@
+using Photon.Pun;
 using Photon.Realtime;
 using System;
 using System.Collections;
@@ -22,9 +23,13 @@ public class ThrowRocket : MonoBehaviour
     Vector3 playerPos;
     Vector3 throwOffset;
     Vector3 judgeDistance;
+    Vector3 cameraCenter;
 
-    GameObject player;
-    GameObject rocket;
+    [SerializeField] GameObject player;
+    GameObject targetPlayer;
+    [SerializeField] GameObject rocket;
+    [SerializeField] Transform rocketPos;
+    Camera playerCamera;
     Rocket rocketCS;
     void Start()
     {
@@ -34,17 +39,15 @@ public class ThrowRocket : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F) && isHoldRocket)
         {
-            ThrowFlagChange();
-            //if (!rocketCS.isExplode)
-            //{
-            //    SetParent(rocket, null);
-            //}
-            StartCoroutine(GetFristHit());
+            cameraCenter = GetScreenCenterPos();
             ApproachPos(rocket, rocket, throwOffset);
+            ThrowFlagChange();
+            SetParent(rocket, null);
+            StartCoroutine(GetFristHit());            
         }
         if (isThrowed && !isReturn)
         {
-            StraightMoveToPos(rocket.transform, rocket.transform.position, GetLineDir(rocket.transform.position, GetScreenCenterPos()), throwSpeed);
+            StraightMoveToPos(rocket.transform, rocket.transform.position, GetLineDir(rocket.transform.position, cameraCenter), throwSpeed);
             throwedTime += Time.deltaTime;
         }
         if (throwedTime > retrieveTime)
@@ -54,18 +57,25 @@ public class ThrowRocket : MonoBehaviour
         }
         if (isReturn && hitName == "Player")
         {
-            Debug.Log("playerに当たった");
+            SetPlayerBool mySpb = player.GetComponent<SetPlayerBool>();
+            PhotonView playerView = player.GetComponent<PhotonView>();
+            playerView.RPC("SetHasRocket", RpcTarget.All, !mySpb.hasRocket);
+
+            SetPlayerBool targetSpb = targetPlayer.GetComponent<SetPlayerBool>();
+            PhotonView targetView = targetPlayer.GetComponent<PhotonView>();
+            targetView.RPC("SetHasPlayer", RpcTarget.All, !targetSpb.hasRocket);
         }
         if (isReturn && !isHoldRocket && hitName != "Player")
         {
             Debug.Log(5);
             StraightMoveToPos(rocket.transform, rocket.transform.position, player.transform.position, retrieveForce);
         }
-        if (isReturn && IsNear(player, rocket, judgeDistance))
+        if (isReturn && !isHoldRocket && IsNear(player, rocket, judgeDistance))
         {
             isHoldRocket = true;
-        //    SetParent(rocket, player.transform);
-            ApproachPos(player, rocket, startPos);
+            Debug.Log(55);
+            SetParent(rocket, player.transform);
+            rocket.transform.position = rocketPos.transform.position;
         }
     }
     void Initialize()    //  初期化
@@ -78,13 +88,14 @@ public class ThrowRocket : MonoBehaviour
         isThrowed = false;
         isReturn = false;
         isHoldRocket = true;
+        playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
 
-        rocket = GameObject.Find("Rocket");
-        player = GameObject.Find("Player");
+        //rocket = GameObject.Find("Rocket");
+        //player = GameObject.Find("Player");
 
         startPos = rocket.transform.localPosition;
         playerPos = player.transform.position;
-        throwOffset = new Vector3 (0, 2, 0);
+        throwOffset = new Vector3 (0, 5, 0);
         judgeDistance = new Vector3(2, 2, 2);
 
         rocketCS = GetComponent<Rocket>();
@@ -102,8 +113,8 @@ public class ThrowRocket : MonoBehaviour
     Vector3 GetScreenCenterPos()    //  カメラのワールドでの中心座標を求める
     {
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 1000);
-        Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
-        return Camera.main.ScreenToWorldPoint(screenCenter);
+        Vector3 worldCenter = playerCamera.ScreenToWorldPoint(screenCenter);
+        return playerCamera.ScreenToWorldPoint(screenCenter);
     }
     void ApproachPos(GameObject axis, GameObject approcher, Vector3 offset)    //  axisを中心にApprocherのPosをoffset分加えて変更する
     {
@@ -128,8 +139,10 @@ public class ThrowRocket : MonoBehaviour
             {
                 if (tempHits[0].tag != rocket.tag)
                 {
+                    isThrowed = false;
                     isReturn = true;
                     hitName = tempHits[0].tag;
+                    targetPlayer = tempHits[0].gameObject;
                 }
             }
             yield return null;
