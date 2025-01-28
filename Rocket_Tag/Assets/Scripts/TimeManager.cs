@@ -18,12 +18,14 @@ public class TimeManager : MonoBehaviour
     float secToExplode  = 0;
     float[] decreaseValue  = { 1.0f, 5.0f, 10.0f };
     float[] decreaseUpTime = { 10, 20, 30 };
+    public bool isTimeStart = false;
     public bool isTimeStop = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        isTimeStop = false;
+        isTimeStart = false;
+        isTimeStop  = false;
         ResetRocketCount();
         Initialize();
     }
@@ -31,8 +33,11 @@ public class TimeManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CountDown();
-        CheckForLevelUp();
+        if(isTimeStart == true && isTimeStop == false)
+        {
+            CountDown();
+            CheckForLevelUp();
+        }        
     }
 
     void Initialize()

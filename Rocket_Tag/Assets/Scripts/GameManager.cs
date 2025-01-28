@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public PlayerController playerController;
     public SetPlayerBool setPlayerBool;
+    [SerializeField] TimeManager timeManager;
     [SerializeField] InstantiatePlayer instantiatePlayer;
     [SerializeField] PlayerReady playerReady;
     [SerializeField] TextMeshProUGUI playerCntText;     // ReadyäÆóπÇµÇƒÇ¢ÇÈÉvÉåÉCÉÑÅ[êî
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient && CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
             {
                 photonView.RPC(nameof(StartGame), RpcTarget.All);
+                timeManager.isTimeStart = true;
                 yield break;
             }
 
@@ -134,6 +136,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 readyButton.SetActive(true);
                 playerReady.SetReady(false);
                 setPlayerBool.SetPlayerCondition();
+                timeManager.isTimeStart = false;
                 StartCoroutine(WaitPlayersReady());
                 yield break;
             }
