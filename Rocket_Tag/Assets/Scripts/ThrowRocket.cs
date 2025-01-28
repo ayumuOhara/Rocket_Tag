@@ -21,14 +21,15 @@ public class ThrowRocket : MonoBehaviour
 
     Vector3 startPos;
     Vector3 playerPos;
-    Vector3 throwOffset;
-    Vector3 judgeDistance;
     Vector3 cameraCenter;
+    Vector3 judgeDistance;
+    Vector3 throwOffset;
+    Vector3 offsetZero;
 
     [SerializeField] GameObject player;
-    GameObject targetPlayer;
     [SerializeField] GameObject rocket;
-    [SerializeField] Transform rocketPos;
+    [SerializeField] GameObject rocketPos;
+    GameObject targetPlayer;
     Camera playerCamera;
     Rocket rocketCS;
     void Start()
@@ -39,15 +40,15 @@ public class ThrowRocket : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F) && isHoldRocket)
         {
-            cameraCenter = GetScreenCenterPos();
-            ApproachPos(rocket, rocket, throwOffset);
             ThrowFlagChange();
             SetParent(rocket, null);
-            StartCoroutine(GetFristHit());            
+            cameraCenter = GetLineDir(rocket.transform.position, GetScreenCenterPos());
+            StartCoroutine(GetFristHit());           
+            ApproachPos(rocket, rocket, throwOffset);
         }
         if (isThrowed && !isReturn)
         {
-            StraightMoveToPos(rocket.transform, rocket.transform.position, GetLineDir(rocket.transform.position, cameraCenter), throwSpeed);
+            StraightMoveToPos(rocket.transform, rocket.transform.position, cameraCenter, throwSpeed);
             throwedTime += Time.deltaTime;
         }
         if (throwedTime > retrieveTime)
@@ -67,15 +68,17 @@ public class ThrowRocket : MonoBehaviour
         }
         if (isReturn && !isHoldRocket && hitName != "Player")
         {
-            Debug.Log(5);
             StraightMoveToPos(rocket.transform, rocket.transform.position, player.transform.position, retrieveForce);
         }
         if (isReturn && !isHoldRocket && IsNear(player, rocket, judgeDistance))
         {
+            isReturn = false;
             isHoldRocket = true;
-            Debug.Log(55);
             SetParent(rocket, player.transform);
+            //ApproachPos(player, rocket, startPos);
+            //rocket.transform.rotation = player.transform.rotation;
             rocket.transform.position = rocketPos.transform.position;
+            //ApproachPos(rocketPos, rocket, offsetZero);
         }
     }
     void Initialize()    //  初期化
@@ -95,8 +98,9 @@ public class ThrowRocket : MonoBehaviour
 
         startPos = rocket.transform.localPosition;
         playerPos = player.transform.position;
-        throwOffset = new Vector3 (0, 5, 0);
         judgeDistance = new Vector3(2, 2, 2);
+        throwOffset = new Vector3 (0, 5, 0);
+        offsetZero = new Vector3(0, 5, 0);
 
         rocketCS = GetComponent<Rocket>();
     }
@@ -128,7 +132,7 @@ public class ThrowRocket : MonoBehaviour
     {
         child.transform.parent = parent;
     }
-    IEnumerator GetFristHit()    //  最初に合ったオブジェクトのtagを変数に入れる
+    IEnumerator GetFristHit()    //  最初に合ったオブジェクトを保存する
     {
         Collider[] tempHits;
 
@@ -141,8 +145,8 @@ public class ThrowRocket : MonoBehaviour
                 {
                     isThrowed = false;
                     isReturn = true;
-                    hitName = tempHits[0].tag;
                     targetPlayer = tempHits[0].gameObject;
+                    hitName = tempHits[0].tag;
                 }
             }
             yield return null;
