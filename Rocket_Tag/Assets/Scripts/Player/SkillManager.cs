@@ -13,7 +13,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
     ChangeObjColor changeObjColor;
     PlayerMovement playerMovement;
-    Alpha_Rocket rocket;
+    TimeManager timeManager;
     GameManager gameManager;
 
     [SerializeField] GameObject rocketObj;
@@ -37,7 +37,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     {
         changeObjColor = GetComponent<ChangeObjColor>();
         playerMovement = GetComponent<PlayerMovement>();
-        rocket = rocketObj.GetComponent<Alpha_Rocket>();
+        timeManager = rocketObj.GetComponent<TimeManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         skillIdx = 0;
@@ -97,9 +97,9 @@ public class SkillManager : MonoBehaviourPunCallbacks
     {
         finishSkill = false;
 
-        rocket.isTimeStop = true;
+        timeManager.isTimeStop = true;
         yield return new WaitForSeconds(stopLimit);
-        rocket.isTimeStop = false;
+        timeManager.isTimeStop = false;
 
         finishSkill = true;
 
@@ -123,10 +123,11 @@ public class SkillManager : MonoBehaviourPunCallbacks
     // 渡したときにロケットのカウントを進行
     public void HeatUpCnt()
     {
-        rocket.rocketCount -= heatUpCnt;
-        if(rocket.rocketCount <= 0)
+        countLimit--;
+        timeManager.rocketCount -= heatUpCnt;
+        if(timeManager.rocketCount <= 0)
         {
-            rocket.rocketCount = 3.0f;
+            timeManager.rocketCount = 3.0f;
         }
     }
 
