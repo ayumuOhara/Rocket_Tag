@@ -51,9 +51,15 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         if (setPlayerBool.isDead == false)
         {
-            if (isTimeStop == false)
+            if (isTimeStop == false && IsRocketHolder())
             {
                 CountDown();
+                SyncRocketCount(rocketCount); // ロケット保持者がタイマーを同期
+            }
+
+            if (!IsRocketHolder())
+            {
+                rocketCount = GetSyncedRocketCount(); // 他プレイヤーは同期された値を取得
             }
 
             if (IsLimitOver())
@@ -68,9 +74,9 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Initialize()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (IsRocketHolder())
         {
-            SyncRocketCount(initialCount); // マスタークライアントが初期値を設定
+            SyncRocketCount(initialCount); // ロケット保持者が初期値を設定
         }
         else
         {
@@ -93,16 +99,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void CountDown()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            rocketCount -= Time.deltaTime + decreaseValue[(int)decreaseLevel] * Time.deltaTime;
-            SyncRocketCount(rocketCount); // マスタークライアントがタイマーを更新
-        }
-        else
-        {
-            rocketCount = GetSyncedRocketCount(); // 他プレイヤーは同期値を取得
-        }
-
+        rocketCount -= Time.deltaTime + decreaseValue[(int)decreaseLevel] * Time.deltaTime;
         posessingTime += Time.deltaTime;
     }
 
@@ -176,9 +173,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         ResetRocketCount();                    // ロケットカウントもリセット
     }
 
-    /// <summary>
-    /// ロケットカウントを全プレイヤーで同期
-    /// </summary>
+    // ロケットカウントを全プレイヤーで同期
     void SyncRocketCount(float count)
     {
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
@@ -188,9 +183,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }
 
-    /// <summary>
-    /// 同期されたロケットカウントを取得
-    /// </summary>
+
+    // 同期されたロケットカウントを取得
     float GetSyncedRocketCount()
     {
         if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RocketCount", out object value))
@@ -198,5 +192,15 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             return (float)value;
         }
         return initialCount; // デフォルト値を返す
+    }
+
+    // 現在のプレイヤーがロケット保持者か判定
+    bool IsRocketHolder()
+    {
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("IsRocketHolder", out object isHolder))
+        {
+            return (bool)isHolder;
+        }
+        return false;
     }
 }
