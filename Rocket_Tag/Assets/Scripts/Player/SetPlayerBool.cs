@@ -4,6 +4,7 @@ using UnityEngine;
 public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
     [SerializeField] PlayerMovement playerMovement;
+    TimeManager timeManager;
     Alpha_Rocket rocket;
 
     [SerializeField] GameObject rocketObj;            // ロケット
@@ -15,6 +16,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     private void Start()
     {
         rocket = rocketObj.GetComponent<Alpha_Rocket>();
+        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
     }
 
     // プレイヤーの状態の初期化
@@ -51,8 +53,11 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         hasRocket = newHasRocket;
         rocketObj.SetActive(hasRocket);
 
-        playerMovement.ChangeMoveSpeed(newHasRocket,12.0f);
+        if(hasRocket)
+        {
+            timeManager.ResetAcceleration();
+        }
 
-        //if (rocket != null) rocket.photonView.RPC("ResetPossesing", RpcTarget.All);
+        playerMovement.ChangeMoveSpeed(newHasRocket,12.0f);
     }
 }

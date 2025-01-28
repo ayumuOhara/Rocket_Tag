@@ -415,6 +415,7 @@ MonoBehaviour:
     countLimit: 0
     skillEffect: 
   skillIdx: 0
+  countLimit: 0
   rocketObj: {fileID: 6752579603462179444}
   finishSkill: 1
 --- !u!114 &4868377163844986340
