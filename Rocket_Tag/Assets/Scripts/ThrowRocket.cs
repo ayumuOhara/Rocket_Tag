@@ -13,14 +13,10 @@ public class ThrowRocket : MonoBehaviour
     public float throwSpeed;
     float throwedTime;
     float retrieveTime;
-    float retriveForce;
+    float returnForce;
     bool isThrowed;
     bool isReturn;
     bool isHoldRocket;
-
-    public float speed = 5f;  // 移動速度（角速度）
-    public float radius = 5f; // 軌道の半径
-    public Vector3 center = Vector3.zero; // 軌道の中心位置
 
     Vector3 startPos;
 
@@ -34,15 +30,6 @@ public class ThrowRocket : MonoBehaviour
     }
     void Update()
     {
-                // 時間経過に応じて角度を計算
-        float angle = Time.time * speed;
-
-        // x と z 軸に対して円軌道を計算
-        float y = Mathf.Cos(angle) * radius;
-        float z = Mathf.Sin(angle) * radius;
-
-        // 新しい位置を計算
-        transform.position = new Vector3(transform.position.x, y, z) + center;
         if (Input.GetKeyDown(KeyCode.F) && isHoldRocket)
         {
             ThrowFlagChange();
@@ -51,29 +38,24 @@ public class ThrowRocket : MonoBehaviour
         }
         if (isThrowed && !isReturn)
         {
-            StraightMoveToPos(rocket.transform, rocket.transform.position, GetLineDir(rocket.transform.position, GetScreenCenterPos()), throwSpeed);
-            throwedTime += Time.deltaTime;
+            StraightMoveToPos(rocket.transform, rocket.transform.position, GetLineDir(GetScreenCenterPos(), rocket.transform.position), throwSpeed);
         }
-        //if (throwedTime > retrieveTime)
-        //{
-        //    isReturn = true;
-        //}
-        if (isReturn && hitName == "Player")
+        if (isThrowed && hitName == "Player")
         {
             Debug.Log("playerに当たった");
         }
-        if (isReturn && !isHoldRocket && hitName != "Player")
+        else if (isThrowed && hitName != "Player")
         {
-            StraightMoveToPos(rocket.transform, rocket.transform.position, GetLineDir(rocket.transform.position, player.transform.position), retriveForce);
-            Debug.Log(7777);
+            isReturn = true;
         }
-        if(isReturn && IsNear(player, rocket,new Vector3(2,2,2)))
+        if (isReturn)
         {
-            isHoldRocket = true;
-            SetParent(rocket, player.transform);
-            ApproachPos(player, rocket, startPos);
+            StraightMoveToPos(rocket.transform, rocket.transform.position, GetLineDir(player.transform.position, rocket.transform.position), throwSpeed);
         }
-
+        if (isThrowed)
+        {
+            throwedTime += Time.deltaTime;
+        }
         //if (isReturn && )
         //{
         //    ApproachPos(player, rocket, startPos);
@@ -87,10 +69,10 @@ public class ThrowRocket : MonoBehaviour
     void Initialize()    //  初期化
     {
         hitName = null;
-        throwSpeed = 9f;
+        throwSpeed = 3f;
         throwedTime = 10f;
         retrieveTime = 1.5f;
-        retriveForce = 20f;
+        returnForce = 10f;
         isThrowed = false;
         isReturn = false;
         isHoldRocket = true;
@@ -100,6 +82,7 @@ public class ThrowRocket : MonoBehaviour
 
         startPos = rocket.transform.position;
         
+        capsuleCollider = rocket.GetComponent<CapsuleCollider>();
         rocketCS = GetComponent<Rocket>();
     }
     void ThrowFlagChange()    //  投げによる判定変更
@@ -108,7 +91,7 @@ public class ThrowRocket : MonoBehaviour
         isReturn = false;
         isHoldRocket = false;
     }
-    public Vector3 GetLineDir(Vector3 current, Vector3 target)    //  ターゲットに対してのベクトルを取得する
+    public Vector3 GetLineDir(Vector3 target, Vector3 current)    //  ターゲットに対してのベクトルを取得する
     {
         return target - current;
     }
@@ -122,10 +105,10 @@ public class ThrowRocket : MonoBehaviour
     {
         return throwedTime > retrieveTime;
     }
-    public void RetriveFlagChange()
+    public void RetriveByStraightLine()
     {
         isReturn = true;
-        isThrowed = false;
+        // GetLineDir(rocket.transform.position, player.transform.position);
     }
     void ApproachPos(GameObject axis, GameObject approcher, Vector3 offset)    //  axisを中心にApprocherのPosをoffset分加えて変更する
     {
@@ -152,7 +135,7 @@ public class ThrowRocket : MonoBehaviour
         SetParent(rocket, player.transform);
         isReturn = true;
         isThrowed = false;
-        StraightMoveToPos(rocket.transform, rocket.transform.position, rocket.transform.parent.position, retriveForce);
+        StraightMoveToPos(rocket.transform, rocket.transform.position, rocket.transform.parent.position, returnForce);
     }
     //void SetHitCapsuletCollider(List<Collider> hitCollider)    //  カプセルコライダーに当たったコライダーを格納する
     //{
@@ -169,50 +152,44 @@ public class ThrowRocket : MonoBehaviour
     //}
     IEnumerator GetFristHit()
     {
-        Collider[] tempHits;
+        bool isHitOther = false;
 
+        Collider[] tempHitColliders;
+        
         do
         {
-            tempHits = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * 2.5f,rocket.transform.position + Vector3.up * 2.5f ,2.5f * 1.1f);
-            if (tempHits.Length > 0)
-            {
-                if(tempHits[0].tag != rocket.tag)
-                {
-                    isReturn = true;
-                    hitName = tempHits[0].tag;
-                }
-            }
+            tempHitColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * capsuleCollider.height * 1.1f,
+                                              rocket.transform.position + Vector3.up * capsuleCollider.height * 1.1f,
+                                              capsuleCollider.radius * 1.1f);
+            if (tempHitColliders.Length == 0) isHitOther = false;
+            else isHitOther = true;
+            if (isHitOther == true && tempHitColliders[0] != null && tempHitColliders[0].tag != rocket.tag) isHitOther = true ;
+            else isHitOther = false;
             yield return null;
-        } while (!isReturn);
-    }
-    //}
-    //async Task<string> GetFirstHit()    //  最初に当たったオブジェクトのタグを返す
-    //{
-    //    Collider[] tempHitColliders;
-    //    do
-    //    {
-    //        tempHitColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * capsuleCollider.height * 0.5f,
-    //                                          rocket.transform.position + Vector3.up * capsuleCollider.height * 0.5f,
-    //                                          capsuleCollider.radius);
-    //    } while (tempHitColliders.Length > 1 && tempHitColliders[0] != null);
-    //    Debug.Log(hitName);
-    //    return tempHitColliders[0].tag;
-    //}
-    //void ReturnFlagChange()
-    //{
-    //}
-  //  bool IsNear(GameObject axis, GameObject judged, float distance_x, float distance_y, float distance_z)    //  axisをもとにjudgedが近いかを判定  
-    bool IsNear(GameObject axis, GameObject judged, Vector3 judgeDistance)    //  axisをもとにjudgedが近いかを判定  
-    {
-        Vector3 posDif = axis.transform.position - judged.transform.position;
-        if (posDif.x < judgeDistance.x && posDif.y < judgeDistance.y && posDif.z < judgeDistance.z)
+        } while (!isHitOther);
+        Debug.Log(55555);
+        hitName = tempHitColliders[0].tag;
+        //}
+        //async Task<string> GetFirstHit()    //  最初に当たったオブジェクトのタグを返す
+        //{
+        //    Collider[] tempHitColliders;
+        //    do
+        //    {
+        //        tempHitColliders = Physics.OverlapCapsule(rocket.transform.position - Vector3.down * capsuleCollider.height * 0.5f,
+        //                                          rocket.transform.position + Vector3.up * capsuleCollider.height * 0.5f,
+        //                                          capsuleCollider.radius);
+        //    } while (tempHitColliders.Length > 1 && tempHitColliders[0] != null);
+        //    Debug.Log(hitName);
+        //    return tempHitColliders[0].tag;
+        //}
+        void ReturnFlagChange()
         {
-            return true;
         }
-        else
-        {
-            return false;
-        }
+        // bool IsNear(GameObject axis, GameObject judged, float distance_x, float distance_y)    //  
+        // {
+        //     Vector3 posDifference = axis.transform.position - judged.transform.position;
+        ////     return Mathf.Abs(posDifference.x) < distance && posDifference.y < distance;
+        // }
     }
 }
 //public class ThorwRocket_ : MonoBehaviour
@@ -280,3 +257,4 @@ public class ThrowRocket : MonoBehaviour
 //    {
 
 //    }
+//}
