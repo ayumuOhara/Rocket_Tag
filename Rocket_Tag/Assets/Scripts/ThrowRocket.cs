@@ -21,6 +21,7 @@ public class ThrowRocket : MonoBehaviour
     Vector3 startPos;
     Vector3 playerPos;
     Vector3 throwOffset;
+    Vector3 judgeDistance;
 
     GameObject player;
     GameObject rocket;
@@ -60,7 +61,7 @@ public class ThrowRocket : MonoBehaviour
             Debug.Log(5);
             StraightMoveToPos(rocket.transform, rocket.transform.position, player.transform.position, retrieveForce);
         }
-        if (isReturn && IsNear(player, rocket, new Vector3(2, 2, 2)))
+        if (isReturn && IsNear(player, rocket, judgeDistance))
         {
             isHoldRocket = true;
         //    SetParent(rocket, player.transform);
@@ -84,6 +85,7 @@ public class ThrowRocket : MonoBehaviour
         startPos = rocket.transform.localPosition;
         playerPos = player.transform.position;
         throwOffset = new Vector3 (0, 2, 0);
+        judgeDistance = new Vector3(2, 2, 2);
 
         rocketCS = GetComponent<Rocket>();
     }
