@@ -51,13 +51,13 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         if (setPlayerBool.isDead == false)
         {
-            if (isTimeStop == false && IsRocketHolder())
+            if (isTimeStop == false && PhotonNetwork.IsMasterClient)
             {
                 CountDown();
-                SyncRocketCount(rocketCount); // ロケット保持者がタイマーを同期
+                SyncRocketCount(rocketCount); // マスタークライアントがタイマーを同期
             }
 
-            if (!IsRocketHolder())
+            if (!PhotonNetwork.IsMasterClient)
             {
                 rocketCount = GetSyncedRocketCount(); // 他プレイヤーは同期された値を取得
             }
@@ -74,9 +74,9 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Initialize()
     {
-        if (IsRocketHolder())
+        if (PhotonNetwork.IsMasterClient)
         {
-            SyncRocketCount(initialCount); // ロケット保持者が初期値を設定
+            SyncRocketCount(initialCount); // マスタークライアントが初期値を設定
         }
         else
         {
@@ -183,7 +183,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }
 
-
     // 同期されたロケットカウントを取得
     float GetSyncedRocketCount()
     {
@@ -192,15 +191,5 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             return (float)value;
         }
         return initialCount; // デフォルト値を返す
-    }
-
-    // 現在のプレイヤーがロケット保持者か判定
-    bool IsRocketHolder()
-    {
-        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("IsRocketHolder", out object isHolder))
-        {
-            return (bool)isHolder;
-        }
-        return false;
     }
 }
