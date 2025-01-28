@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
 
@@ -50,7 +51,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         if (setPlayerBool.isDead == false)
         {
-            if(isTimeStop == false)
+            if (isTimeStop == false)
             {
                 CountDown();
             }
@@ -67,6 +68,15 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Initialize()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            SyncRocketCount(initialCount); // マスタークライアントが初期値を設定
+        }
+        else
+        {
+            rocketCount = GetSyncedRocketCount(); // 他プレイヤーは同期値を取得
+        }
+
         secToExplode = GetSecUntilZero(rocketCount, decreaseValue[(int)decreaseLevel], Time.deltaTime);
     }
 
@@ -83,7 +93,16 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void CountDown()
     {
-        rocketCount -= Time.deltaTime + decreaseValue[(int)decreaseLevel] * Time.deltaTime;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            rocketCount -= Time.deltaTime + decreaseValue[(int)decreaseLevel] * Time.deltaTime;
+            SyncRocketCount(rocketCount); // マスタークライアントがタイマーを更新
+        }
+        else
+        {
+            rocketCount = GetSyncedRocketCount(); // 他プレイヤーは同期値を取得
+        }
+
         posessingTime += Time.deltaTime;
     }
 
@@ -113,9 +132,10 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     }
 
     bool IsVeryHigh()
-    { 
+    {
         return transform.position.y > evacuateStarPos_Y;
     }
+
     void DropOut()
     {
         PhotonView photonView = player.GetComponent<PhotonView>();
@@ -131,9 +151,9 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     void ResetRocketCount()
     {
         rocketCount = initialCount;
+        SyncRocketCount(initialCount); // ロケットカウントの同期
     }
 
-    // 一定時間ごとに減少速度を上げる
     void CheckForLevelUp()
     {
         if (decreaseLevel < DecreaseLevel.fastest && posessingTime > decreaseUpTime[(int)decreaseLevel])
@@ -142,19 +162,41 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         }
     }
 
-    // 減少速度を次のレベルにアップ
     void LevelUp()
     {
         decreaseLevel++;
         Debug.Log($"タイマーの減少速度がアップしました: {decreaseLevel}");
     }
 
-    // 加速度をリセットし、関連カウントを初期化
     void ResetAcceleration()
     {
         Debug.Log("加速度をリセットします");
         decreaseLevel = DecreaseLevel.slowest; // 初期状態に戻す
         posessingTime = 0;                     // 経過時間をリセット
         ResetRocketCount();                    // ロケットカウントもリセット
+    }
+
+    /// <summary>
+    /// ロケットカウントを全プレイヤーで同期
+    /// </summary>
+    void SyncRocketCount(float count)
+    {
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+        {
+            { "RocketCount", count }
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+    }
+
+    /// <summary>
+    /// 同期されたロケットカウントを取得
+    /// </summary>
+    float GetSyncedRocketCount()
+    {
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RocketCount", out object value))
+        {
+            return (float)value;
+        }
+        return initialCount; // デフォルト値を返す
     }
 }
