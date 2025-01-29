@@ -42,7 +42,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     {
         changeObjColor = GetComponent<ChangeObjColor>();
         playerMovement = GetComponent<PlayerMovement>();
-        timeManager = rocketObj.GetComponent<TimeManager>();
+        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         countLimitText = GameObject.Find("CountLimitText").GetComponent<TextMeshProUGUI>();
 
