@@ -31,7 +31,6 @@ public class ThrowRocket : MonoBehaviour
     [SerializeField] GameObject rocketPos;
     GameObject targetPlayer;
     Camera playerCamera;
-    Rocket rocketCS;
     void Start()
     {
         Initialize();
@@ -101,8 +100,6 @@ public class ThrowRocket : MonoBehaviour
         judgeDistance = new Vector3(2, 2, 2);
         throwOffset = new Vector3 (0, 5, 0);
         offsetZero = new Vector3(0, 5, 0);
-
-        rocketCS = GetComponent<Rocket>();
     }
     void ThrowFlagChange()    //  ìäÇ∞Ç…ÇÊÇÈîªíËïœçX
     {
