@@ -26,16 +26,15 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
         GameObject target = observeDistance.GetTargetDistance();
         if (target != null)
         {
-            SetPlayerBool otherPlayer = target.GetComponent<SetPlayerBool>();
-
             // 自分の hasRocket を切り替え
             photonView.RPC("SetHasRocket", RpcTarget.All, !setPlayerBool.hasRocket);
 
             // ターゲットの hasRocket を切り替え
             PhotonView targetPhotonView = target.GetComponent<PhotonView>();
+            SetPlayerBool otherPlayer = target.GetComponent<SetPlayerBool>();
             if (targetPhotonView != null)
             {
-                if(skillManager.skillData.skillCode == 104)
+                if(skillManager.skillData.skillCode == 103)
                 {
                     skillManager.HeatUpCnt();
                 }                

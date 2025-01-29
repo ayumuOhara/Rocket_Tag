@@ -24,7 +24,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         if(timeManager.IsLimitOver())
         {
             timeManager.ResetRocketCount();
-            timeManager.ResetAcceleration();
             StartCoroutine(Explosion());            
         }
     }
@@ -54,6 +53,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void DropOut()
     {
+        timeManager.ResetRocketCount();
+
         if (PhotonNetwork.IsMasterClient)
         {
             gameManager.ChooseRocketPlayer();
