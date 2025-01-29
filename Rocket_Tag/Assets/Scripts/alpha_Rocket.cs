@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Alpha_Rocket : MonoBehaviourPunCallbacks
 {
-    float floatSpeed = 5.0f;
+    float floatSpeed = 5f;
+    float explodeRiseSpeed = 10f;
     float evacuateStarPos_Y = 40;
 
     GameManager gameManager;
@@ -21,6 +22,11 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Update()
     {
+        if(timeManager.IsFloatTime() && !timeManager.IsLimitOver())
+        {
+            playerRb.useGravity = false;
+            Floating(player, floatSpeed);
+        }
         if(timeManager.IsLimitOver())
         {
             timeManager.ResetRocketCount();
@@ -33,17 +39,15 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         Debug.Log("ロケット爆発");
         while (!IsVeryHigh())
         {
-            Floating(floatSpeed);
+            Floating(player, explodeRiseSpeed);
             yield return null;
         }
-
         DropOut();
     }
 
-    void Floating(float speed)
+    void Floating(GameObject floated, float floatSpeed)
     {
-        playerRb.useGravity = false;
-        player.transform.position += Vector3.up * speed * Time.deltaTime;
+        floated.transform.position += Vector3.up * floatSpeed * Time.deltaTime;
     }
 
     bool IsVeryHigh()

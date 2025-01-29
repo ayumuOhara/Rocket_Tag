@@ -19,6 +19,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
     float secToExplode  = 0;
     float[] decreaseValue  = { 1.0f, 5.0f, 10.0f };
     float[] decreaseUpTime = { 10, 20, 30 };
+    float floatStartTime = 2.2f;
     public bool isTimeStart = false;
     bool isTimeStop = false;
 
@@ -99,6 +100,10 @@ public class TimeManager : MonoBehaviourPunCallbacks
         rocketCountText.text = $"{rocketCount.ToString("F1")} sec";
     }
 
+    public bool IsFloatTime()    //  è„è∏äJénéûä‘Ç©îªíf
+    {
+        return floatStartTime < rocketCount;
+    }
     public bool IsLimitOver()
     {
         return rocketLimit > rocketCount;
