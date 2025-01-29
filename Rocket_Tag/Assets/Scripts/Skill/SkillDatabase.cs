@@ -1,15 +1,15 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
-public class SkillDatabase : MonoBehaviour
+[System.Serializable]
+public class SkillData
 {
-    public List<Skill> skills;
+    public int skillCode;       // スキル番号
+    public string skillName;    // スキル名
+    public int countLimit;      // スキル使用可能回数
+    public string skillEffect;  // スキル効果説明文
+}
 
-    public void DisplaySkill(int index, Text descriptionText, Image iconImage)
-    {
-        descriptionText.text = skills[index].description;
-        iconImage.sprite = skills[index].icon;
-    }
+public class SkillDataBase : ScriptableObject
+{
+    public SkillData[] skillDatas;
 }
