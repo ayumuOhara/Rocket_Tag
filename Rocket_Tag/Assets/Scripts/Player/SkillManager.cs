@@ -46,13 +46,13 @@ public class SkillManager : MonoBehaviourPunCallbacks
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         countLimitText = GameObject.Find("CountLimitText").GetComponent<TextMeshProUGUI>();
 
-        skillIdx = 0;
+        skillIdx = 4;
         SetSkill(skillDataBase.skillDatas[skillIdx]);
     }
 
     void WriteCountLimit()
     {
-        countLimitText.text = $"{countLimit}";
+        countLimitText.text = $"残り{countLimit}回";
     }
 
     // 設定されているスキル使用
@@ -68,10 +68,10 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
                 switch (skillData.skillCode)
                 {
-                    case 101 : StartCoroutine(Dash());          break;
-                    case 102 : StartCoroutine(TimeStop());      break;
-                    case 103 : RocketWarp();                    break;
-                    case 105 : StartCoroutine(InvisibleBody()); break;
+                    case 100 : StartCoroutine(Dash());          break;
+                    case 101 : StartCoroutine(TimeStop());      break;
+                    case 102 : RocketWarp();                    break;
+                    case 104 : StartCoroutine(InvisibleBody()); break;
                 }
 
                 if(countLimit <= 0)
@@ -109,9 +109,9 @@ public class SkillManager : MonoBehaviourPunCallbacks
     {
         finishSkill = false;
 
-        timeManager.isTimeStop = true;
+        timeManager.timerView.RPC("IsTimeStop", RpcTarget.All, true);
         yield return new WaitForSeconds(stopLimit);
-        timeManager.isTimeStop = false;
+        timeManager.timerView.RPC("IsTimeStop", RpcTarget.All, false);
 
         finishSkill = true;
 
@@ -136,10 +136,10 @@ public class SkillManager : MonoBehaviourPunCallbacks
     public void HeatUpCnt()
     {
         countLimit--;
-        timeManager.rocketCount -= heatUpCnt;
+        timeManager.SyncRocketCount(timeManager.rocketCount -= heatUpCnt);
         if(timeManager.rocketCount <= 0)
         {
-            timeManager.rocketCount = 3.0f;
+            timeManager.SyncRocketCount(3.0f);
         }
     }
 

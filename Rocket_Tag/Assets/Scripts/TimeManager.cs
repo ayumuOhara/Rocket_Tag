@@ -2,7 +2,7 @@ using Photon.Pun;
 using TMPro;
 using UnityEngine;
 
-public class TimeManager : MonoBehaviour
+public class TimeManager : MonoBehaviourPunCallbacks
 {
     enum DecreaseLevel
     {
@@ -20,8 +20,9 @@ public class TimeManager : MonoBehaviour
     float[] decreaseValue  = { 1.0f, 5.0f, 10.0f };
     float[] decreaseUpTime = { 10, 20, 30 };
     public bool isTimeStart = false;
-    public bool isTimeStop = false;
+    bool isTimeStop = false;
 
+    public PhotonView timerView;
     [SerializeField] TextMeshProUGUI rocketCountText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -29,6 +30,7 @@ public class TimeManager : MonoBehaviour
     {
         isTimeStart = false;
         isTimeStop  = false;
+        timerView = GetComponent<PhotonView>();
         ResetRocketCount();
         Initialize();
     }
@@ -49,7 +51,7 @@ public class TimeManager : MonoBehaviour
     }
 
     // ロケットカウントを全プレイヤーで同期
-    void SyncRocketCount(float count)
+    public void SyncRocketCount(float count)
     {
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
         {
@@ -100,6 +102,12 @@ public class TimeManager : MonoBehaviour
     public bool IsLimitOver()
     {
         return rocketLimit > rocketCount;
+    }
+
+    [PunRPC]
+    public void IsTimeStop(bool newIsTimeStop)
+    {
+        isTimeStop = newIsTimeStop;
     }
 
     public void ResetRocketCount()
