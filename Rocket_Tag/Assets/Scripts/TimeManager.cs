@@ -17,7 +17,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
     public float initialCount = 100;
     float posessingTime = 0;
     float secToExplode  = 0;
-    float[] decreaseValue  = { 1.0f, 5.0f, 10.0f };
+    float[] decreaseValue  = { 1.0f, 3.0f, 6.0f };
     float[] decreaseUpTime = { 10, 20, 30 };
     float floatStartTime = 2.2f;
     public bool isTimeStart = false;
@@ -30,11 +30,12 @@ public class TimeManager : MonoBehaviourPunCallbacks
     void Start()
     {
         isTimeStart = false;
-        isTimeStop  = false;
+        isTimeStop = false;
         timerView = GetComponent<PhotonView>();
-        ResetRocketCount();
+
         Initialize();
     }
+
 
     // Update is called once per frame
     void Update()
@@ -54,6 +55,12 @@ public class TimeManager : MonoBehaviourPunCallbacks
     // ロケットカウントを全プレイヤーで同期
     public void SyncRocketCount(float count)
     {
+        if (!PhotonNetwork.InRoom) // ルームに入っているか確認
+        {
+            Debug.LogWarning("ルームに入る前に SyncRocketCount() が呼ばれました。処理をスキップします。");
+            return;
+        }
+
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
         {
             { "RocketCount", count }
