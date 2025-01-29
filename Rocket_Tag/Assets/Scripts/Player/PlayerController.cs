@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         setPlayerBool.SetPlayerCondition();
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (photonView.IsMine && setPlayerBool.isDead == false)
         {

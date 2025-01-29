@@ -6,6 +6,8 @@ using Photon.Realtime;
 
 public class InstantiatePlayer : MonoBehaviourPunCallbacks
 {
+    [SerializeField] Debuger debuger;
+
     [SerializeField] GameObject playerCamera;
     [SerializeField] GameObject waitCamera;
     [SerializeField] GameManager gameManager;
@@ -34,6 +36,8 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
 
         // プレイヤーをリスポーン地点に生成
         GameObject player = PhotonNetwork.Instantiate("Player", respawnPoint.position, Quaternion.identity);
+
+        debuger.SetComponents(player);
 
         // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
         gameManager.playerController = player.GetComponent<PlayerController>();

@@ -17,12 +17,14 @@ public class CSVReader : AssetPostprocessor
                 SkillDataBase sd = AssetDatabase.LoadAssetAtPath<SkillDataBase>(assetfile);
                 if (sd == null)
                 {
-                    sd = new SkillDataBase();
+                    sd = ScriptableObject.CreateInstance<SkillDataBase>(); // インスタンスを作成
                     AssetDatabase.CreateAsset(sd, assetfile);
                 }
                 sd.skillDatas = CSVSerializer.Deserialize<SkillData>(textasset.text);
                 EditorUtility.SetDirty(sd);
                 AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh(); // アセットデータベースを更新
+
             }
         }
     }
