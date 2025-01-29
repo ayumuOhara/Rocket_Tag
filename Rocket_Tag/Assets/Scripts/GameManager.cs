@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void StartGame()
     {
+        timeManager.ResetRocketCount();
         if (isGameStarted) return;
 
         Debug.Log("プレイヤーが揃ったのでゲームを開始します");
