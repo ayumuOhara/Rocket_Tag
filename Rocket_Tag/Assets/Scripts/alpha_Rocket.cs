@@ -30,7 +30,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         if(timeManager.IsLimitOver())
         {
             timeManager.ResetRocketCount();
-            StartCoroutine(Explosion());            
+            StartCoroutine(Explosion());
         }
     }
 
