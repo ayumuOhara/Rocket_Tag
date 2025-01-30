@@ -102,15 +102,16 @@ public class TimeManager : MonoBehaviourPunCallbacks
             // マスタークライアント以外が更新されたタイマーを取得
             rocketCount = GetSyncRocketCount();
         }
-
+        
         posessingTime += Time.deltaTime;
         rocketCountText.text = $"{rocketCount.ToString("F1")} sec";
     }
 
     public bool IsFloatTime()    //  上昇開始時間か判断
     {
-        return floatStartTime < rocketCount;
+        return floatStartTime > rocketCount;
     }
+
     public bool IsLimitOver()
     {
         return rocketCount <= rocketLimit;
