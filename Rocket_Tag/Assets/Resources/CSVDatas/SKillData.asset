@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
   m_Name: SKillData
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillDataBase
   skillDatas:
   - skillCode: 100
     skillName: "\u30C0\u30C3\u30B7\u30E5"
