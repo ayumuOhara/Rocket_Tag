@@ -108,7 +108,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
 
     public bool IsLimitOver()
     {
-        return rocketLimit > rocketCount;
+        return rocketCount <= rocketLimit;
     }
 
     [PunRPC]
@@ -143,6 +143,9 @@ public class TimeManager : MonoBehaviourPunCallbacks
     public void ResetAcceleration()
     {
         Debug.Log("加速度をリセットします");
-        decreaseLevel = DecreaseLevel.FIRST; // 初期状態に戻す
+        posessingTime = 0;
+        Debug.Log($"所持経過時間：{posessingTime}");
+        decreaseLevel = DecreaseLevel.FIRST;
+        Debug.Log($"加速度レベル：{decreaseLevel}");
     }
 }

@@ -17064,6 +17064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillDataBase: {fileID: 11400000, guid: b530981f8beb738478b61b57f1ca99c2, type: 2}
+  Debug_skillIdx: 0
 --- !u!4 &1937437022
 Transform:
   m_ObjectHideFlags: 0

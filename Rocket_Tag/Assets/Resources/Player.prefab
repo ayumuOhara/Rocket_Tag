@@ -500,6 +500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerMovement: {fileID: 7078560154241749930}
+  timeManager: {fileID: 0}
   rocketObj: {fileID: 6752579603462179444}
   hasRocket: 0
   isDead: 0
