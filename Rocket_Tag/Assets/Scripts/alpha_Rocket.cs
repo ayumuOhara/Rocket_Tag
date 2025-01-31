@@ -7,6 +7,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     float floatSpeed = 5f;
     float explodeRiseSpeed = 10f;
     float evacuateStarPos_Y = 40;
+    int rocketStage = 0;
 
     Vector3 effectOffset = new Vector3(0, -1, 0);
 
@@ -29,13 +30,13 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        //if (timeManager.isSecondStageTime())
+        //if (rocketStage > 2 && timeManager.isSecondStageTime())
         //{
-        //    effect = rocketEffectPrefab[1];
+        //    effect = rocketEffectPrefab[(rocketstage += 1)];
         //}
-        //if (timeManager.isSecondStageTime())
+        //if (rocketStage > 3 && timeManager.isSecondStageTime())
         //{
-        //    effect = rocketEffectPrefab[2];
+        //    effect = rocketEffectPrefab[(rocketstage += 1)];
         //}
         if (timeManager.IsFloatTime() && !timeManager.IsLimitOver())
         {
