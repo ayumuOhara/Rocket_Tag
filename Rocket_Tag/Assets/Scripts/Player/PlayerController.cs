@@ -29,9 +29,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             if(setPlayerBool.isStun == false)
             {
-                playerMovement.GetVelocity();
-                playerMovement.PlayerMove();
-                playerMovement.JumpAction();
                 skillManager.UseSkill();
 
                 if (setPlayerBool.hasRocket)
@@ -41,6 +38,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
 
             
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (photonView.IsMine && setPlayerBool.isDead == false)
+        {
+            if (setPlayerBool.isStun == false)
+            {
+                playerMovement.GetVelocity();
+                playerMovement.PlayerMove();
+                playerMovement.JumpAction();
+            }
         }
     }
 }

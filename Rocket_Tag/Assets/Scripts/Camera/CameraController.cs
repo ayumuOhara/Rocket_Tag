@@ -34,10 +34,15 @@ public class CameraController : MonoBehaviour
 
         // 位置の初期化
         transform.position = playerTransform.position - transform.rotation * Vector3.forward * distance;
+
+        // マウスカーソルを画面内の範囲のみ動かせるようにする
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     void Update()
     {
+        CursorVisible();
+
         if (isShaking == false)
         {
             RotationCamera();
@@ -53,11 +58,24 @@ public class CameraController : MonoBehaviour
         }       
     }
 
+    void CursorVisible()
+    {
+        if (Input.GetKey(KeyCode.LeftAlt))
+        {
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.visible = false;
+        }
+
+    }
+
     // カメラの回転の制御
     void RotationCamera()
     {
         // 水平回転の更新
-        if (Input.GetMouseButton(0))
+        if (!Input.GetKey(KeyCode.LeftAlt))
         {
             hRotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * turnSpeed, 0);
 
