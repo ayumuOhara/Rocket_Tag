@@ -42,7 +42,7 @@
 //            ThrowFlagChange();
 //            SetParent(rocket, null);
 //            cameraCenter = GetLineDir(rocket.transform.position, GetScreenCenterPos());
-//            StartCoroutine(GetFristHit());           
+//            StartCoroutine(GetFristHit());
 //            ApproachPos(rocket, rocket, throwOffset);
 //        }
 //        if (isThrowed && !isReturn)
@@ -98,7 +98,7 @@
 //        startPos = rocket.transform.localPosition;
 //        playerPos = player.transform.position;
 //        judgeDistance = new Vector3(2, 2, 2);
-//        throwOffset = new Vector3 (0, 5, 0);
+//        throwOffset = new Vector3(0, 5, 0);
 //        offsetZero = new Vector3(0, 5, 0);
 //    }
 //    void ThrowFlagChange()    //  ìäÇ∞Ç…ÇÊÇÈîªíËïœçX

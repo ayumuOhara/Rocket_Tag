@@ -10,9 +10,11 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     int rocketStage = 0;
 
     Vector3 effectOffset = new Vector3(0, -1, 0);
+    Vector3 smokeDiffusion = new Vector3(3, 0, 3);
 
     public GameObject[] rocketEffectPrefab;
     GameObject effect;
+    Transform smoke;
     GameManager gameManager;
     TimeManager timeManager;
     [SerializeField] GameObject player;
@@ -20,12 +22,14 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        //smoke = Resources.Load<GameObject>("FireSmoke");
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         playerRb = player.GetComponent<Rigidbody>();
      
         effect = Instantiate(rocketEffectPrefab[0],this.transform);
         effect.transform.localPosition = effectOffset;
+        smoke = rocketEffectPrefab[2].transform.Find("Smoke");
     }
 
     void Update()
@@ -37,6 +41,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         //if (rocketStage > 3 && timeManager.isSecondStageTime())
         //{
         //    effect = rocketEffectPrefab[(rocketstage += 1)];
+        smoke.transform.localScale = Vector3.Scale(smoke.transform.localScale, smokeDiffusion);
         //}
         if (timeManager.IsFloatTime() && !timeManager.IsLimitOver())
         {
