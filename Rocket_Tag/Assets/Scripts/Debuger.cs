@@ -3,6 +3,8 @@ using UnityEngine;
 public class Debuger : MonoBehaviour
 {
     GameObject PlayerObj;
+    [SerializeField] GameObject skillObject;      // スキルアイテム
+    [SerializeField] Transform skillSpawner;      // スキルアイテム生成場所
 
     PlayerMovement playerMovement;                // プレイヤーの移動処理クラス
     PlayerRocketAction playerRocketAction;        // プレイヤーのロケットアクションクラス
@@ -43,10 +45,28 @@ public class Debuger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q))
+        if(Input.GetKey(KeyCode.LeftControl))
         {
-            Debug_skillIdx = Debug_skillIdx++ >= 4 ? 0 : Debug_skillIdx++;
-            skillManager.SetSkill(skillDataBase.skillDatas[Debug_skillIdx]);
-        }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                SwitchSkill();
+            }
+            if (Input.GetKeyDown(KeyCode.LeftAlt))
+            {
+                SpawnSkillObj();
+            }
+        }        
+    }
+
+    void SwitchSkill()
+    {
+        Debug_skillIdx = Debug_skillIdx++ >= 4 ? 0 : Debug_skillIdx++;
+        skillManager.SetSkill(skillDataBase.skillDatas[Debug_skillIdx]);
+    }
+
+    void SpawnSkillObj()
+    {
+        GameObject item = Instantiate(skillObject);
+        item.transform.position = skillSpawner.transform.position;
     }
 }
