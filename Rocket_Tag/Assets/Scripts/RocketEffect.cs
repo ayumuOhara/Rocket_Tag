@@ -8,7 +8,7 @@ public class RocketEffect : MonoBehaviour
         Frame
     }
 
-    int rocketStage { get; set; }
+    int rocketStage;
     float smokeDelTime;
 
     GameObject frameEffect;
@@ -30,7 +30,7 @@ public class RocketEffect : MonoBehaviour
     }
     void Initialize()    //  初期化    ////////----以下関数区----/////////
     {
-        rocketStage = -1;
+        rocketStage = 0;
         smokeDelTime = 4;
 
         frameEffectPrefab[0] = Resources.Load<GameObject>("FirstRocketFrame");
@@ -68,9 +68,9 @@ public class RocketEffect : MonoBehaviour
     }
     internal void GenerateFrameEffect()    //  ロケットの炎エフェクト生成
     {
-        GenerateEffect((int)EffectNo.Frame, frameEffectPrefab[++rocketStage], this.transform, frameEffectOffset);
+        GenerateEffect((int)EffectNo.Frame, frameEffectPrefab[rocketStage++], this.transform, frameEffectOffset);
     }
-    internal void SmokeDiffusion()    //  煙幕拡散
+    internal void SmokeDiffusion()    //  煙幕拡散、煙幕をデストロイしたたらNullStateに移動
     {
         if ((smokeDelTime -= Time.deltaTime) > 0)
         {
@@ -81,6 +81,10 @@ public class RocketEffect : MonoBehaviour
             Destroy(smoke);
             ChangeState(new NullStage());
         }
+    }
+    internal int GetRocketStage()
+    {
+        return rocketStage;
     }
 }
 internal interface IState        ////////----以下state区----////////
@@ -97,10 +101,10 @@ internal class FirstStage : IState    //  ロケット1段階目
     }
     public void Update(RocketEffect rocketEffeet)
     {
-        //if(rocketEffeet.timeMgr.IsStageUpTime())
-        //{
-        //rocketEffeet.ChangeState(new SecondStage());
-        //}
+        if (rocketEffeet.timeMgr.IsStageUpTime())
+        {
+            rocketEffeet.ChangeState(new SecondStage());
+        }
     }
     public void Exit(RocketEffect rocketEffeet)
     {
@@ -115,10 +119,10 @@ internal class SecondStage : IState    //  ロケット2段階目
     }
     public void Update(RocketEffect rocketEffeet)
     {
-        //if(rocketEffeet.timeMgr.IsStageUpTime())
-        //{
-        //rocketEffeet.ChangeState(new ThridStage());
-        //}
+        if (rocketEffeet.timeMgr.IsStageUpTime())
+        {
+            rocketEffeet.ChangeState(new ThirdStage());
+        }
     }
     public void Exit(RocketEffect rocketEffeet)
     {
@@ -133,10 +137,10 @@ internal class ThirdStage : IState    //  ロケット3段階目
     }
     public void Update(RocketEffect rocketEffeet)
     {
-        //if(rocketEffeet.timeMgr.IsStageUpTime())
-        //{
-        //rocketEffeet.ChangeState(new LastStage());
-        //}
+        if (rocketEffeet.timeMgr.IsStageUpTime())
+        {
+            rocketEffeet.ChangeState(new LastStage());
+        }
     }
     public void Exit(RocketEffect rocketEffeet)
     {
