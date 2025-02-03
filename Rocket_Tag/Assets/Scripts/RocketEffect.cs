@@ -19,7 +19,7 @@ public class RocketEffect : MonoBehaviour
     Vector3 frameEffectOffset;
     Vector3 smokeDiffusion;
 
-    IState currentState;
+    EffectState currentState;
     void Start()
     {
         Initialize();
@@ -46,7 +46,7 @@ public class RocketEffect : MonoBehaviour
 
         ChangeState(new FirstStage());
     }
-    internal void ChangeState(IState newState)    //  状態変更
+    internal void ChangeState(EffectState newState)    //  状態遷移
     {
         if(currentState != null)
         {
@@ -89,13 +89,13 @@ public class RocketEffect : MonoBehaviour
         return rocketStage;
     }
 }
-internal interface IState        ////////----以下state区----////////
+internal interface EffectState        ////////----以下state区----////////
 {
     void Enter(RocketEffect arg);
     void Update(RocketEffect arg);
     void Exit(RocketEffect arg);
 }
-internal class FirstStage : IState    //  ロケット1段階目
+internal class FirstStage : EffectState   //  ロケット1段階目
 {
     public void Enter(RocketEffect rocketEffeet)
     {
@@ -113,7 +113,7 @@ internal class FirstStage : IState    //  ロケット1段階目
 
     }
 }
-internal class SecondStage : IState    //  ロケット2段階目
+internal class SecondStage : EffectState    //  ロケット2段階目
 {
     public void Enter(RocketEffect rocketEffeet)
     {
@@ -131,7 +131,7 @@ internal class SecondStage : IState    //  ロケット2段階目
 
     }
 }
-internal class ThirdStage : IState    //  ロケット3段階目
+internal class ThirdStage : EffectState    //  ロケット3段階目
 {
     public void Enter(RocketEffect rocketEffeet)
     {
@@ -149,7 +149,7 @@ internal class ThirdStage : IState    //  ロケット3段階目
 
     }
 }
-internal class LastStage : IState    //  ロケット最終段階
+internal class LastStage : EffectState    //  ロケット最終段階
 {
     public void Enter(RocketEffect rocketEffeet)
     {
@@ -164,7 +164,7 @@ internal class LastStage : IState    //  ロケット最終段階
 
     }
 }
-internal class NullStage : IState    //  何もしないState
+internal class NullStage : EffectState    //  何もしないState
 {
     public void Enter(RocketEffect rocketEffeet)
     {
