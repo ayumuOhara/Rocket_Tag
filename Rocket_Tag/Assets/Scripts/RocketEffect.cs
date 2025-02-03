@@ -53,10 +53,6 @@ public class RocketEffect : MonoBehaviour
         currentState = newState;
         currentState.Enter(this);
     }
-    internal void StageUp()    //  ロケット段階１段階上昇
-    {
-        rocketStage++;
-    }
     void GenerateEffect(int effectNo ,GameObject effect, Transform parent, Vector3 offset)    //  エフェクト生成
     {
         switch (effectNo)
@@ -108,7 +104,7 @@ internal class FirstStage : IState    //  ロケット1段階目
     }
     public void Exit(RocketEffect rocketEffeet)
     {
-        rocketEffeet.StageUp();
+
     }
 }
 internal class SecondStage : IState    //  ロケット2段階目
@@ -126,7 +122,7 @@ internal class SecondStage : IState    //  ロケット2段階目
     }
     public void Exit(RocketEffect rocketEffeet)
     {
-        rocketEffeet.StageUp();
+
     }
 }
 internal class ThirdStage : IState    //  ロケット3段階目
@@ -144,7 +140,7 @@ internal class ThirdStage : IState    //  ロケット3段階目
     }
     public void Exit(RocketEffect rocketEffeet)
     {
-        rocketEffeet.StageUp();
+
     }
 }
 internal class LastStage : IState    //  ロケット最終段階
@@ -159,17 +155,21 @@ internal class LastStage : IState    //  ロケット最終段階
     }
     public void Exit(RocketEffect rocketEffeet)
     {
+
     }
 }
 internal class NullStage : IState    //  何もしないState
 {
     public void Enter(RocketEffect rocketEffeet)
     {
+
     }
     public void Update(RocketEffect rocketEffeet)
     {
+
     }
     public void Exit(RocketEffect rocketEffeet)
     {
+
     }
 }
