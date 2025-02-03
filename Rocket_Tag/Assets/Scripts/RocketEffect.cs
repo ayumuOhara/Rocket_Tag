@@ -33,6 +33,8 @@ public class RocketEffect : MonoBehaviour
         rocketStage = 0;
         smokeDelTime = 4;
 
+        frameEffectPrefab = new GameObject[4];
+
         frameEffectPrefab[0] = Resources.Load<GameObject>("FirstRocketFrame");
         frameEffectPrefab[1] = Resources.Load<GameObject>("SecondRocketFrame");
         frameEffectPrefab[2] = Resources.Load<GameObject>("ThirdRocketFrame");
