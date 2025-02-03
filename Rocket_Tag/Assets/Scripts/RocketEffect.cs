@@ -82,7 +82,7 @@ public class RocketEffect : MonoBehaviour
             ChangeState(new NullStage());
         }
     }
-    internal int GetRocketStage()
+    internal int GetRocketStage()    //  rocketStage‚ðŽæ“¾
     {
         return rocketStage;
     }
