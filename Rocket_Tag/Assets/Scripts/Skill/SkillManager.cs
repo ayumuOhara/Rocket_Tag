@@ -58,7 +58,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     // 設定されているスキル使用
     public void UseSkill()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKey(KeyCode.E))
         {
             if (countLimit > 0 && finishSkill == true)
             {
