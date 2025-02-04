@@ -7,13 +7,9 @@ using ExitGames.Client.Photon;
 public class InputPlayerName : MonoBehaviour
 {
     [SerializeField] TMP_InputField inputName;
-    OverHeadMsg overHeadMsg;
+    [SerializeField] OverHeadMsgCreater msgCreater;
 
-    public void SetOverHeadMsg(OverHeadMsg _overHeadMsg)
-    {
-        overHeadMsg = _overHeadMsg;
-    }
-
+    // プレイヤーネームをサーバーに設定
     public void InputName()
     {
         string playerName = inputName.text;
@@ -34,7 +30,7 @@ public class InputPlayerName : MonoBehaviour
 
         Debug.Log($"プレイヤー名を設定: {playerName}");
 
-        overHeadMsg.ShowMsg(playerName);
+        msgCreater.MsgCreate();
 
         // 入力UIを非表示にする
         this.gameObject.SetActive(false);
