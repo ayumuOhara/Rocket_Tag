@@ -4,27 +4,34 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class RotateObject : MonoBehaviourPun, IPunObservable
 {
-
     private string targetTag = "Player";
-    public float maxDistance = 5.0f;
-    // 回転速度 (1秒あたりの回転角度)
-    public float rotationSpeed = 100f;
+    [SerializeField] private float maxDistance = 5.0f;  // 検知する最大距離（Inspector で設定可）
 
-    // 同期用の現在の回転
-    private Quaternion networkRotation;
+    [Header("回転設定")]  // Inspector で分かりやすくするためのヘッダー
+    [SerializeField] private float rotationSpeed = 100f;   // 初期回転速度
+    [SerializeField] private float switchInterval = 3f;    // 方向を切り替える間隔（秒）
+
+    private float timer = 0f;           // 経過時間を追跡するためのタイマー
+    private Quaternion networkRotation; // ネットワーク同期用
 
     void Start()
     {
-        // 初期の回転を設定
         networkRotation = transform.rotation;
-        maxDistance = 5.0f;
     }
 
     void Update()
     {
         if (photonView.IsMine)
         {
-            // 自分が所有者の場合、回転を制御
+            // 一定時間ごとに回転方向を反転
+            timer += Time.deltaTime;
+            if (timer >= switchInterval)
+            {
+                rotationSpeed = -rotationSpeed; // 回転方向を反転
+                timer = 0f;                     // タイマーをリセット
+            }
+
+            // オブジェクトを回転させる
             transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
         }
         else
@@ -34,7 +41,7 @@ public class RotateObject : MonoBehaviourPun, IPunObservable
         }
     }
 
-    // 回転データを同期するためのシリアライズ処理
+    // 回転データを同期
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -49,6 +56,7 @@ public class RotateObject : MonoBehaviourPun, IPunObservable
         }
     }
 
+    // 近くのターゲットを取得
     public GameObject GetTargetDistance()
     {
         GameObject[] targets = GameObject.FindGameObjectsWithTag(targetTag);
