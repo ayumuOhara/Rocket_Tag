@@ -12,7 +12,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     Vector3 effectOffset = new Vector3(0, -1, 0);
     Vector3 smokeDiffusion = new Vector3(3, 0, 3);
 
-    public GameObject[] rocketEffectPrefab;
     GameObject effect;
     Transform smoke;
     GameManager gameManager;
@@ -27,9 +26,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         playerRb = player.GetComponent<Rigidbody>();
      
-        effect = Instantiate(rocketEffectPrefab[0],this.transform);
         effect.transform.localPosition = effectOffset;
-        smoke = rocketEffectPrefab[2].transform.Find("Smoke");
     }
 
     void Update()

@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 9000160570338378395}
   - component: {fileID: 8916559374171787551}
   - component: {fileID: 821515610318538454}
-  - component: {fileID: 2142039928361981143}
   - component: {fileID: 8377668183067651350}
   m_Layer: 0
   m_Name: Rocket
@@ -125,6 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a40c7760834dbf4e8cd0dd40e535dd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rocketEffectPrefab: []
   player: {fileID: 8299087819917209949}
 --- !u!114 &821515610318538454
 MonoBehaviour:
@@ -141,22 +141,6 @@ MonoBehaviour:
   colorMaterial:
   - {fileID: 2100000, guid: 48c07bac491f0c54381e1739ea4ee41e, type: 2}
   - {fileID: 2100000, guid: 80a2c1eba3f5a864e9fec051742a4a87, type: 2}
---- !u!114 &2142039928361981143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6752579603462179444}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b2525f0ac151cf41a7e6625af549b74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  throwSpeed: 0
-  player: {fileID: 8299087819917209949}
-  rocket: {fileID: 6752579603462179444}
-  rocketPos: {fileID: 31029191395091004}
 --- !u!136 &8377668183067651350
 CapsuleCollider:
   m_ObjectHideFlags: 0

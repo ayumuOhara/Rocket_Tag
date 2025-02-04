@@ -19,20 +19,21 @@ public class TimeManager : MonoBehaviourPunCallbacks
     float secToExplode  = 0;
     float[] decreaseValue  = { 1.0f, 3.0f, 6.0f };
     float[] decreaseUpTime = { 10, 20, 30 };
+    float[] stageUpTime = { 70, 30, 5 };
     float floatStartTime = 2.2f;
     public bool isTimeStart = false;
     bool isTimeStop = false;
 
     public PhotonView timerView;
     [SerializeField] TextMeshProUGUI rocketCountText;
-
+    RocketEffect rocketEffect;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         isTimeStart = false;
         isTimeStop = false;
         timerView = GetComponent<PhotonView>();
-
+        rocketEffect = GameObject.Find("Bomb").GetComponent<RocketEffect>();
         Initialize();
     }
 
@@ -143,6 +144,10 @@ public class TimeManager : MonoBehaviourPunCallbacks
     {
         decreaseLevel++;
         Debug.Log($"タイマーの減少速度がアップしました: {decreaseLevel}");
+    }
+    internal bool IsStageUpTime()    //  ロケット炎エフェクト変化時間か判定
+    {
+        return stageUpTime[rocketEffect.GetRocketStage()] > rocketCount;
     }
 
     // 加速度をリセットし、関連カウントを初期化
