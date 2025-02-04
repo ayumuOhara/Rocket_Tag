@@ -1,10 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
 
 public class OverHeadMsg : MonoBehaviour
 {
     public Transform targetTran;
+
+    private void Start()
+    {
+        ShowMsg();
+    }
 
     void Update()
     {
@@ -13,9 +19,9 @@ public class OverHeadMsg : MonoBehaviour
              targetTran.position + Vector3.up);
     }
 
-    public void ShowMsg(string msg)
+    public void ShowMsg()
     {
         TextMeshProUGUI playerName = GetComponent<TextMeshProUGUI>();
-        playerName.text = msg;
+        playerName.text = PhotonNetwork.NickName;
     }
 }

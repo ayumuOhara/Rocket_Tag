@@ -2080,6 +2080,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputName: {fileID: 458637990}
+  msgCreater: {fileID: 2024570839}
 --- !u!114 &458637990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3016,6 +3017,10 @@ PrefabInstance:
     - target: {fileID: 5741591184186878543, guid: bcdb601ee0e1144478b160e8530cefa2, type: 3}
       propertyPath: m_Name
       value: Props_6 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5741591184186878543, guid: bcdb601ee0e1144478b160e8530cefa2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4377,6 +4382,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Props_6 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5741591184186878543, guid: bcdb601ee0e1144478b160e8530cefa2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5484,6 +5493,10 @@ PrefabInstance:
     - target: {fileID: 5741591184186878543, guid: bcdb601ee0e1144478b160e8530cefa2, type: 3}
       propertyPath: m_Name
       value: Props_6 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5741591184186878543, guid: bcdb601ee0e1144478b160e8530cefa2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8486,6 +8499,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Props_6 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5741591184186878543, guid: bcdb601ee0e1144478b160e8530cefa2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10098,6 +10115,7 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 2058844071}
   - {fileID: 504838163}
+  - {fileID: 2024570843}
   - {fileID: 1434393770}
   - {fileID: 1377329586}
   - {fileID: 570120167}
@@ -10107,4 +10125,3 @@ SceneRoots:
   - {fileID: 1722992760}
   - {fileID: 473721439}
   - {fileID: 239628379}
-  - {fileID: 2024570843}

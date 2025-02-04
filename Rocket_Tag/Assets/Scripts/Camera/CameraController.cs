@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float turnSpeed = 5.0f;              // ‰ñ“]‘¬“x
     [SerializeField] private Vector3 velocity;                    // ˆÚ“®•ûŒü
     private float moveSpeed = 30.0f;                              // ˆÚ“®‘¬“x
-    public bool isShaking = false;                                       // ƒJƒƒ‰‚ªU“®‚µ‚Ä‚¢‚é‚©
+    public bool isShaking = false;                                // ƒJƒƒ‰‚ªU“®‚µ‚Ä‚¢‚é‚©
 
     void Start()
     {
@@ -60,7 +60,7 @@ public class CameraController : MonoBehaviour
 
     void CursorVisible()
     {
-        if (Input.GetKey(KeyCode.LeftAlt))
+        if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
         {
             Cursor.visible = true;
         }
