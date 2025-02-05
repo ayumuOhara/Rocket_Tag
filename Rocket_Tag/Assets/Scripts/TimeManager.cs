@@ -12,14 +12,17 @@ public class TimeManager : MonoBehaviourPunCallbacks
     }
 
     DecreaseLevel decreaseLevel = DecreaseLevel.FIRST;
-    float rocketLimit = 0;
-    public float rocketCount  = 100;
-    public float initialCount = 100;
+    float timeLimit = 0;
+    public float rocketTime = 100;
+    float initialTime = 100;
+
     float posessingTime = 0;
     float secToExplode  = 0;
+
     float[] decreaseValue  = { 1.0f, 3.0f, 6.0f };
     float[] decreaseUpTime = { 10, 20, 30 };
     float[] stageUpTime = { 70, 30, 5 };
+
     float floatStartTime = 2.2f;
     public bool isTimeStart = false;
     bool isTimeStop = false;
@@ -27,6 +30,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
     public PhotonView timerView;
     [SerializeField] TextMeshProUGUI rocketCountText;
     RocketEffect rocketEffect;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -50,7 +54,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
 
     void Initialize()
     {
-        secToExplode = GetSecUntilZero(rocketCount, decreaseValue[(int)decreaseLevel], Time.deltaTime);
+        secToExplode = GetSecUntilZero(rocketTime, decreaseValue[(int)decreaseLevel], Time.deltaTime);
     }
 
     // ロケットカウントを全プレイヤーで同期
@@ -76,7 +80,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
         {
             return (float)value;
         }
-        return initialCount; // デフォルト値を返す
+        return initialTime; // デフォルト値を返す
     }
 
     float GetSecUntilZero(float limit, float minusValuePerSecond, float timeStep)
@@ -95,27 +99,28 @@ public class TimeManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             // マスタークライアントのみタイマーを更新
-            rocketCount -= Time.deltaTime + decreaseValue[(int)decreaseLevel] * Time.deltaTime;
-            SyncRocketCount(rocketCount);
+            rocketTime -= Time.deltaTime + decreaseValue[(int)decreaseLevel] * Time.deltaTime;
+
+            SyncRocketCount(rocketTime);
         }
         else
         {
             // マスタークライアント以外が更新されたタイマーを取得
-            rocketCount = GetSyncRocketCount();
+            rocketTime = GetSyncRocketCount();
         }
         
         posessingTime += Time.deltaTime;
-        rocketCountText.text = $"{rocketCount.ToString("F1")} sec";
+        rocketCountText.text = $"{rocketTime.ToString("F1")} sec";
     }
 
     public bool IsFloatTime()    //  上昇開始時間か判断
     {
-        return floatStartTime > rocketCount;
+        return floatStartTime > rocketTime;
     }
 
     public bool IsLimitOver()
     {
-        return rocketCount <= rocketLimit;
+        return rocketTime <= timeLimit;
     }
 
     [PunRPC]
@@ -126,8 +131,8 @@ public class TimeManager : MonoBehaviourPunCallbacks
 
     public void ResetRocketCount()
     {
-        rocketCount = initialCount;
-        SyncRocketCount(rocketCount);
+        rocketTime = initialTime;
+        SyncRocketCount(rocketTime);
     }
 
     // 一定時間ごとに減少速度を上げる
@@ -147,7 +152,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
     }
     internal bool IsStageUpTime()    //  ロケット炎エフェクト変化時間か判定
     {
-        return stageUpTime[rocketEffect.GetRocketStage()] > rocketCount;
+        return stageUpTime[rocketEffect.GetRocketStage()] > rocketTime;
     }
 
     // 加速度をリセットし、関連カウントを初期化

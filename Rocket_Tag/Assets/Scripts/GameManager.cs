@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public PlayerController playerController;
     public SetPlayerBool setPlayerBool;
+    [SerializeField] EventManager eventManager;
     [SerializeField] TimeManager timeManager;
     [SerializeField] InstantiatePlayer instantiatePlayer;
     [SerializeField] PlayerReady playerReady;
@@ -92,6 +93,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             ChooseRocketPlayer();
         }
 
+        StartCoroutine(eventManager.TriggerRandomEvent());
         StartCoroutine(CheckSurvivorCount());
     }
 

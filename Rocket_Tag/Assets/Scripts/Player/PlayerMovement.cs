@@ -34,6 +34,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         moveSpeed = _moveSpeed;
     }
 
+    public float GetMoveSpeed()
+    {
+        return moveSpeed;
+    }
+
     // プレイヤーの速度切り替え
     public void ChangeMoveSpeed(bool hasRocket,float newSpeed = 0)
     {
@@ -41,12 +46,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             SetMoveSpeed(newSpeed);
         else
             SetMoveSpeed(defaultMoveSpeed);
-    }
-
-    public float GetMoveSpeed()
-    {
-        return moveSpeed;
-    }
+    }    
 
     // 押下された移動キーに応じてベクトルを取得
     public void GetVelocity()

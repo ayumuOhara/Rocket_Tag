@@ -267,7 +267,7 @@
 ////    // ロケットのカウントをリセット
 ////    public void ResetRocketCount()
 ////    {
-////        rocketCount = initialCount; // デフォルト値
+////        rocketCount = initialTime; // デフォルト値
 ////        UpdateRocketCount(rocketCount);
 ////    }
 ////    void DecreeseLevelUp()    //  ロケットカウント加速
