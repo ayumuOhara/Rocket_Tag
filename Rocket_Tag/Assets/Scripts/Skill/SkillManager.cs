@@ -138,8 +138,8 @@ public class SkillManager : MonoBehaviourPunCallbacks
     public IEnumerator HeatUpCnt()
     {
         countLimit--;
-        timeManager.SyncRocketCount(timeManager.rocketCount -= heatUpCnt);
-        if(timeManager.rocketCount <= 0)
+        timeManager.SyncRocketCount(timeManager.rocketTime -= heatUpCnt);
+        if(timeManager.rocketTime <= 0)
         {
             timeManager.SyncRocketCount(3.0f);
             yield break;
