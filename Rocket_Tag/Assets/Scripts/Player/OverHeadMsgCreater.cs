@@ -10,11 +10,10 @@ public class OverHeadMsgCreater : MonoBehaviour
 
     OverHeadMsg overHeadMsg;
 
-    void Start()
+    public void MsgCreate()
     {
         overHeadMsg = Instantiate(overHeadMsgPrefab, canvasRect);
         overHeadMsg.targetTran = transform;
-        inputPlayerName.SetOverHeadMsg(overHeadMsg);
     }
 
     void OnEnable()

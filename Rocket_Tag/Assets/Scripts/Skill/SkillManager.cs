@@ -58,7 +58,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     // 設定されているスキル使用
     public void UseSkill()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKey(KeyCode.E))
         {
             if (countLimit > 0 && finishSkill == true)
             {
@@ -119,7 +119,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     }
 
     // ロケットを転移
-    void RocketWarp()
+    IEnumerator RocketWarp()
     {
         SetPlayerBool mySpb = GetComponent<SetPlayerBool>();
         mySpb.SetHasRocket(false);
@@ -129,18 +129,23 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
         SetPlayerBool targetSpb = players[rnd].GetComponent<SetPlayerBool>();
         targetSpb.SetHasRocket(true);
+
+        yield break;
     }
 
     float heatUpCnt = 30.0f;    // カウントの進行数
     // 渡したときにロケットのカウントを進行
-    public void HeatUpCnt()
+    public IEnumerator HeatUpCnt()
     {
         countLimit--;
         timeManager.SyncRocketCount(timeManager.rocketCount -= heatUpCnt);
         if(timeManager.rocketCount <= 0)
         {
             timeManager.SyncRocketCount(3.0f);
+            yield break;
         }
+
+        yield break;
     }
 
     float invisibleLimit = 10.0f;
