@@ -22,7 +22,6 @@ public class EventData : ScriptableObject
         BLIND,
         BOMB_AREA,
         CHANGE_POS,
-        JANNKENN,
         RANDOM_SPEED,
         RANDOM_SKILL,
     }
