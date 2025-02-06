@@ -35,7 +35,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient && CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
             {
                 photonView.RPC(nameof(StartGame), RpcTarget.All);
-                timeManager.isTimeStart = true;
                 yield break;
             }
 
@@ -86,6 +85,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         Debug.Log("プレイヤーが揃ったのでゲームを開始します");
         isGameStarted = true;
+        timeManager.isTimeStart = true;
         readyButton.SetActive(false);
 
         if (PhotonNetwork.IsMasterClient)
