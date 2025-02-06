@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 40c4677e88f2c9d408b0aa802d9300d7
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 218332
+  packageName: Picolabo
+  packageVersion: 1.0.0
+  assetPath: Assets/Picola/Picolabo/CHANGELOG.md
+  uploadId: 493587

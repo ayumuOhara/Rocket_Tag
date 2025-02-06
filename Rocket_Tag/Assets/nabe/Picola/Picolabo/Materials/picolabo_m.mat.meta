@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 17a7dfd332035d144a53d7509db816df
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 218332
+  packageName: Picolabo
+  packageVersion: 1.0.0
+  assetPath: Assets/Picola/Picolabo/Materials/picolabo_m.mat
+  uploadId: 493587

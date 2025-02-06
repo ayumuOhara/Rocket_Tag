@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1023440f398d6ee4bad9eac1d5859afc
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 218332
+  packageName: Picolabo
+  packageVersion: 1.0.0
+  assetPath: Assets/Picola/Picolabo/Samples/Timelines/Demo.playable
+  uploadId: 493587
