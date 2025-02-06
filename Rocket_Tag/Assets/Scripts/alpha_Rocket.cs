@@ -40,11 +40,11 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         //    effect = rocketEffectPrefab[(rocketstage += 1)];
         smoke.transform.localScale = Vector3.Scale(smoke.transform.localScale, smokeDiffusion);
         //}
-        if (timeManager.IsFloatTime() && !timeManager.IsLimitOver())
-        {
-            playerRb.useGravity = false;
-            Floating(player, floatSpeed);
-        }
+        //if (timeManager.IsFloatTime() && !timeManager.IsLimitOver())
+        //{
+        //    playerRb.useGravity = false;
+        //    Floating(player, floatSpeed);
+        //}
         if(timeManager.IsLimitOver())
         {
             timeManager.ResetRocketCount();
