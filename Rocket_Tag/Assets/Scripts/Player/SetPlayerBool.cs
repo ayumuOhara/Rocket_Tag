@@ -53,6 +53,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         Debug.Log($"TimeManagerÅF{timeManager}");
         timeManager.ResetAcceleration();
 
-        playerMovement.ChangeMoveSpeed(newHasRocket,12.0f);
+        //playerMovement.ChangeMoveSpeed(newHasRocket,12.0f);
     }
 }

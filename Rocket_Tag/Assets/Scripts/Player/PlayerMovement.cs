@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         Vector3 movingDirection = new Vector3(x, 0, z);
         // ŽÎ‚ßˆÚ“®‚ª‘¬‚­‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
-        movingDirection.Normalize();              
+        movingDirection.Normalize();
 
         movingVelocity = movingDirection * moveSpeed;
     }
