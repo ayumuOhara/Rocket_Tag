@@ -10,12 +10,22 @@ public class EventManager : MonoBehaviourPunCallbacks
     [SerializeField] private EventData eventData;  // EventDataの参照
     [SerializeField] GameObject blindEffect;       // 目つぶしイベント用UI
 
+    private void Update()
+    {
+        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
+        {
+            StartCoroutine(TriggerRandomEvent());
+        }
+    }
+
     // ランダムにイベントを選択するメソッド
     public IEnumerator TriggerRandomEvent()
     {
+        Debug.Log("イベント抽選開始");
+
         while(true)
         {
-            yield return new WaitForSeconds(30.0f);
+            yield return new WaitForSeconds(20.0f);
 
             int totalPercent = 0;
 
@@ -52,26 +62,27 @@ public class EventManager : MonoBehaviourPunCallbacks
         switch (EVENT_TYPE)
         {
             case EventData.EventType.BLIND:
+                Debug.Log("目隠しイベント開始");
                 StartCoroutine(BlindEvent());
                 break;
 
             case EventData.EventType.BOMB_AREA:
+                Debug.Log("エリアイベント開始");
                 StartCoroutine(BombAreaEvent());
                 break;
 
             case EventData.EventType.CHANGE_POS:
+                Debug.Log("位置入れ替えイベント開始");
                 photonView.RPC("ChangePos", RpcTarget.All);
                 break;
 
-            case EventData.EventType.JANNKENN:
-                StartCoroutine(JannKennEvent());
-                break;
-
             case EventData.EventType.RANDOM_SPEED:
+                Debug.Log("速度変化イベント開始");
                 StartCoroutine(RandomSpeedEvent());
                 break;
 
             case EventData.EventType.RANDOM_SKILL:
+                Debug.Log("スキル変化イベント開始");
                 StartCoroutine(RandomSkillEvent());
                 break;
 
@@ -81,22 +92,21 @@ public class EventManager : MonoBehaviourPunCallbacks
         }
     }
 
-    int blindTime = 5;
-    bool isBlind = false;
+    int blindTime = 10;
     // 目つぶしイベント
     IEnumerator BlindEvent()
     {
-        photonView.RPC("BlindEffect", RpcTarget.All);
+        photonView.RPC("BlindEffect", RpcTarget.All, true);
         yield return new WaitForSeconds(blindTime);
-        photonView.RPC("BlindEffect", RpcTarget.All);
+        photonView.RPC("BlindEffect", RpcTarget.All, false);
 
         yield break;
     }
 
     [PunRPC]
-    void BlindEffect()
+    void BlindEffect(bool isBlind)
     {
-        blindEffect.SetActive(!isBlind);
+        blindEffect.SetActive(isBlind);
     }
 
     // エリアイベント
@@ -131,13 +141,6 @@ public class EventManager : MonoBehaviourPunCallbacks
             playerList[i].transform.position = playerPos[i];
         }
     }
-
-    // じゃんけんイベント
-    IEnumerator JannKennEvent()
-    {
-        yield break;
-    }
-
 
     // 移動速度変化イベント
     IEnumerator RandomSpeedEvent()
