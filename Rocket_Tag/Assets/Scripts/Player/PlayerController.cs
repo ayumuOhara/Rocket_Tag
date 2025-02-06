@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     SkillManager skillManager;                    // スキルを管理するクラス
     public ObserveDistance observeDistance;       // 対象との距離を測るクラス
     public ChangeObjColor changeObjColor;         // オブジェクトの色変更をするクラス
+    InputPlayerName inputPlayerName;              // 名前を入力を管理するクラス
 
     void Start()
     {
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         skillManager = GetComponent<SkillManager>();
         observeDistance = GetComponent<ObserveDistance>();
         changeObjColor = GetComponent<ChangeObjColor>();
+        inputPlayerName = GameObject.Find("InputPlayerName").GetComponent<InputPlayerName>();
 
         setPlayerBool.SetPlayerCondition();
     }
@@ -45,7 +47,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine && setPlayerBool.isDead == false)
         {
-            if (setPlayerBool.isStun == false)
+            if ( setPlayerBool.isStun == false && 
+                 inputPlayerName.isEnd == true    )
             {
                 playerMovement.GetVelocity();
                 playerMovement.PlayerMove();

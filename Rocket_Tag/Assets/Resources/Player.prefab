@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 8299087819917209949}
+  playerRb: {fileID: 5867222108199720115}
 --- !u!114 &821515610318538454
 MonoBehaviour:
   m_ObjectHideFlags: 0
