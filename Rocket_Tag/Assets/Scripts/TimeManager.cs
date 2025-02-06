@@ -45,7 +45,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        if(isTimeStart == true && isTimeStop == false)
+        if(isTimeStart == true)
         {
             CountDown();
             CheckForLevelUp();
