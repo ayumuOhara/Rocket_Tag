@@ -12,6 +12,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
     [SerializeField] GameObject waitCamera;
     [SerializeField] GameManager gameManager;
     [SerializeField] Transform respawnPoint;
+    [SerializeField] GameObject inputPlayerName;
 
     void Start()
     {
@@ -42,6 +43,8 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
         // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
         gameManager.playerController = player.GetComponent<PlayerController>();
         gameManager.setPlayerBool    = player.GetComponent<SetPlayerBool>();
+
+        inputPlayerName.SetActive(true);
 
         playerCamera.SetActive(true);
         waitCamera.SetActive(false);

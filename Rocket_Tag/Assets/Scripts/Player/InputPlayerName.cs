@@ -8,6 +8,7 @@ public class InputPlayerName : MonoBehaviour
 {
     [SerializeField] TMP_InputField inputName;
     [SerializeField] OverHeadMsgCreater msgCreater;
+    public bool isEnd = false;
 
     // プレイヤーネームをサーバーに設定
     public void InputName()
@@ -29,6 +30,8 @@ public class InputPlayerName : MonoBehaviour
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
 
         Debug.Log($"プレイヤー名を設定: {playerName}");
+
+        isEnd = true;
 
         msgCreater.MsgCreate();
 

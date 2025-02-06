@@ -5,7 +5,7 @@ using UnityEngine;
 public class Alpha_Rocket : MonoBehaviourPunCallbacks
 {
     float floatSpeed = 5f;
-    float explodeRiseSpeed = 30f;
+    float explodeRiseSpeed = 20f;
     float evacuateStarPos_Y = 40;
     int rocketStage = 0;
 
@@ -17,7 +17,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     GameManager gameManager;
     TimeManager timeManager;
     [SerializeField] GameObject player;
-    Rigidbody playerRb;
+    [SerializeField] Rigidbody playerRb;
 
     void Start()
     {
@@ -26,7 +26,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         playerRb = player.GetComponent<Rigidbody>();
      
-        effect.transform.localPosition = effectOffset;
+        //effect.transform.localPosition = effectOffset;
     }
 
     void Update()
@@ -38,13 +38,12 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         //if (rocketStage > 3 && timeManager.isSecondStageTime())
         //{
         //    effect = rocketEffectPrefab[(rocketstage += 1)];
-        smoke.transform.localScale = Vector3.Scale(smoke.transform.localScale, smokeDiffusion);
+        //smoke.transform.localScale = Vector3.Scale(smoke.transform.localScale, smokeDiffusion);
         //}
-        if (timeManager.IsFloatTime() && !timeManager.IsLimitOver())
-        {
-            playerRb.useGravity = false;
-            Floating(player, floatSpeed);
-        }
+        //if (timeManager.IsFloatTime() && !timeManager.IsLimitOver())
+        //{
+        //    Floating(player, floatSpeed);
+        //}
         if (timeManager.IsLimitOver())
         {
             StartCoroutine(Explosion());
