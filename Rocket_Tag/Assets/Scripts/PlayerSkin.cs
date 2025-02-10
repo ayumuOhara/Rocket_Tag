@@ -8,9 +8,12 @@ using static UnityEngine.InputManagerEntry;
 
 public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
 {
-    internal enum PlayerSkinProcess    //  プレイヤースキン処理一覧
+    enum PlayerSkinNo    //  プレイヤースキン処理一覧
     {
-        LockerMode
+        DEFAUKT_SKIN,
+        SKIN_NO2,
+        SKIN_NO3,
+        SKIN_NO4,
     }
 
     Button skill;
@@ -34,41 +37,37 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         {
             isCosutume = true;
         });
+        skill.onClick.AddListener(() =>
+        {
+            isCosutume = false;
+        });
         if (isCosutume)
         {
             SetSkinNoByButton();
         }
-        cosutume.onClick.AddListener(() =>
-        {
-            isCosutume = false;
-        });
-    }
-//    void Initialize()     //  ロッカーシーンの初期化
-//    {
-//        skill = GameObject.Find()
-//        cosutume = GameObject.Find("CostumeTabButton").GetComponent<Button>();
-//        skin0 = GameObject.Find("ccc").GetComponent<Button>();
-//        skin1 = GameObject.Find("ddd").GetComponent<Button>();
-//        skin2 = GameObject.Find("aaa").GetComponent<Button>();
-//        skin3 = GameObject.Find("eee").GetComponent<Button>();
-//        skinNo = 0;
 
-//    }
-//    void IsPushCosutumeButton()
-//    {
-        
-//    }
-//    void SetSkinNoByButton()    //  ボタン押下に応じて、スキン番号変更関数を呼ぶ
-//    {
-//        skin0.onClick.AddListener(() => OnButtonClick(skin0));
-//        skin1.onClick.AddListener(() => OnButtonClick(skin1));
-//        skin2.onClick.AddListener(() => OnButtonClick(skin2));
-//        skin3.onClick.AddListener(() => OnButtonClick(skin3));
-//    }
-//    void ChangeSkinNo(int clickSkinNo)    //  スキン番号変更
-//    {
-//        skinNo = clickSkinNo;
-//        PlayerPrefs.SetInt("PlayerSkinNo",skinNo);
-//        PlayerPrefs.Save();
-//    }
-//}
+    }
+    void Initialize()     //  初期化
+    {
+        skill = GameObject.Find("SkillTabButton").GetComponent<Button>();
+        cosutume = GameObject.Find("CostumeTabButton").GetComponent<Button>();
+        skin0 = GameObject.Find("ccc").GetComponent<Button>();
+        skin1 = GameObject.Find("ddd").GetComponent<Button>();
+        skin2 = GameObject.Find("aaa").GetComponent<Button>();
+        skin3 = GameObject.Find("eee").GetComponent<Button>();
+        skinNo = 0;
+    }
+    void SetSkinNoByButton()    //  ボタン押下に応じて、スキン番号変更関数を呼ぶ
+    {
+        skin0.onClick.AddListener(() => ChangeSkinNo((int)PlayerSkinNo.DEFAUKT_SKIN));
+        skin1.onClick.AddListener(() => ChangeSkinNo((int)PlayerSkinNo.SKIN_NO2));
+        skin2.onClick.AddListener(() => ChangeSkinNo((int)PlayerSkinNo.SKIN_NO3));
+        skin3.onClick.AddListener(() => ChangeSkinNo((int)PlayerSkinNo.SKIN_NO4));
+    }
+    void ChangeSkinNo(int clickSkinNo)    //  スキン番号変更
+    {
+        skinNo = clickSkinNo;
+        PlayerPrefs.SetInt("PlayerSkinNo", skinNo);
+        PlayerPrefs.Save();
+    }
+}
