@@ -91,12 +91,13 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     {
         moved.position = Vector3.MoveTowards(moved.transform.position, target, moveSpeed * Time.deltaTime);
     }
-    internal void HookWrapper(HookProcess HookProcess)   //  フックの挙動に応じた処理のラッパー関数
+    internal void HookWrapper(HookProcess hookProcess)   //  フックの挙動に応じた処理のラッパー関数
     {
-        switch (HookProcess)
+        switch (hookProcess)
         {
             case HookProcess.THROW_HOOK:
                 {
+                    GenerateObj(ref hookEntity, hookPrefab, hookGeneratePos);
                     ThrowHook();
                     break;
                 }
@@ -115,7 +116,6 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     }
     async void ThrowHook()    //  フック投擲
     {
-        GenerateObj(ref hookEntity, hookPrefab, hookGeneratePos);
 
         Transform flontChain = hookEntity.transform;
         Collider[] tempCollider = new Collider[1];
