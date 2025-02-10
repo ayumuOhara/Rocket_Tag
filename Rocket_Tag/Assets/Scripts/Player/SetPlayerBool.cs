@@ -53,7 +53,5 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         rocketObj.SetActive(hasRocket);
         Debug.Log($"TimeManagerÅF{timeManager}");
         timeManager.ResetAcceleration();
-
-        //playerMovement.ChangeMoveSpeed(newHasRocket,12.0f);
     }
 }
