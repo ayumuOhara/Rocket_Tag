@@ -7,8 +7,9 @@ using System.Collections;
 public class EventManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameManager gameManager;
-    [SerializeField] private EventData eventData;  // EventDataの参照
-    [SerializeField] GameObject blindEffect;       // 目つぶしイベント用UI
+    [SerializeField] private EventData eventData;          // EventDataの参照
+    [SerializeField] private SkillDataBase skillDataBase;  // SkillDataの参照
+    [SerializeField] GameObject blindEffect;               // 目つぶしイベント用UI
 
     private void Update()
     {
@@ -92,12 +93,12 @@ public class EventManager : MonoBehaviourPunCallbacks
         }
     }
 
-    int blindTime = 10;
     // 目つぶしイベント
     IEnumerator BlindEvent()
     {
+        float eventTime = 10.0f;
         photonView.RPC("BlindEffect", RpcTarget.All, true);
-        yield return new WaitForSeconds(blindTime);
+        yield return new WaitForSeconds(eventTime);
         photonView.RPC("BlindEffect", RpcTarget.All, false);
 
         yield break;
@@ -141,16 +142,58 @@ public class EventManager : MonoBehaviourPunCallbacks
             playerList[i].transform.position = playerPos[i];
         }
     }
-
+        
     // 移動速度変化イベント
     IEnumerator RandomSpeedEvent()
     {
+        float eventTime = 15.0f;
+        List<GameObject> playerList = gameManager.GetPlayerList();
+        ChangeSpeed(playerList);
+        yield return new WaitForSeconds(eventTime);
+        ResetSpeed(playerList);
+
         yield break;
+    }
+
+    // ランダムに移動速度を変化
+    void ChangeSpeed(List<GameObject> playerList)
+    {
+        int minSpeed = 10;
+        int maxSpeed = 30;
+
+        foreach (GameObject player in playerList)
+        {
+            PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+            int rndSpeed = Random.Range(minSpeed, maxSpeed);
+            playerMovement.SetMoveSpeed(rndSpeed);
+        }
+    }
+
+    // 移動速度を元に戻す
+    void ResetSpeed(List<GameObject> playerList)
+    {
+        foreach (GameObject player in playerList)
+        {
+            PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+            playerMovement.SetMoveSpeed(playerMovement.GetDefaultMoveSpeed());
+        }
     }
 
     // スキルランダム配布イベント
     IEnumerator RandomSkillEvent()
     {
+        List<GameObject> playerList = gameManager.GetPlayerList();
+
+        foreach (GameObject player in playerList)
+        {
+            SkillManager skillManager = player.gameObject.GetComponent<SkillManager>();
+            int rnd = Random.Range(0, skillDataBase.skillDatas.Length);
+
+            SkillData giveSkill = skillDataBase.skillDatas[rnd];
+            skillManager.SetSkill(giveSkill);
+        }
+
+        playerList.Clear();
         yield break;
     }
 }

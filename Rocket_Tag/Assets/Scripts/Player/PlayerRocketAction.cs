@@ -34,10 +34,6 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
             SetPlayerBool otherPlayer = target.GetComponent<SetPlayerBool>();
             if (targetPhotonView != null)
             {
-                if(skillManager.skillData.skillCode == 103)
-                {
-                    skillManager.HeatUpCnt();
-                }                
                 targetPhotonView.RPC("SetHasRocket", RpcTarget.All, !otherPlayer.hasRocket);
                 targetPhotonView.RPC("SetIsStun", RpcTarget.All, true);
             }

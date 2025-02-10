@@ -4309,6 +4309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 570120166}
   eventData: {fileID: 11400000, guid: 9df4d57e7f9eabf40b37ca7278b11efd, type: 2}
+  skillDataBase: {fileID: 11400000, guid: b530981f8beb738478b61b57f1ca99c2, type: 2}
   blindEffect: {fileID: 1038547312}
 --- !u!4 &1552267684
 Transform:
