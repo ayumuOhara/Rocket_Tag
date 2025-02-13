@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: SkillDataBase
   m_EditorClassIdentifier: 
   SkillData:
-  - SkillId: 104
-    skillName: 3
+  - SkillId: 101
+    skillName: 0
   - SkillId: 102
     skillName: 1
   - SkillId: 103
-    skillName: 1
+    skillName: 2
   - SkillId: 104
     skillName: 3
-  - SkillId: 102
-    skillName: 1
+  - SkillId: 105
+    skillName: 4
