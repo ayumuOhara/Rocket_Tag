@@ -4980,9 +4980,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1650598ffb051814296782397b230b02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillObject: {fileID: 6723966042852507502, guid: 7c74b81c86a563249bb57ae5d925adcb, type: 3}
-  skillSpawner: {fileID: 0}
-  skillDataBase: {fileID: 11400000, guid: b530981f8beb738478b61b57f1ca99c2, type: 2}
+  skillDataBase: {fileID: 11400000, guid: ed8d1036479547b4fab7294aaf68ed13, type: 2}
   Debug_skillIdx: 0
 --- !u!4 &1937437022
 Transform:
