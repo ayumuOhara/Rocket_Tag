@@ -1528,6 +1528,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
   setPlayerBool: {fileID: 0}
+  resultScreen: {fileID: 0}
   eventManager: {fileID: 1552267683}
   timeManager: {fileID: 2025218669}
   instantiatePlayer: {fileID: 2058844072}
