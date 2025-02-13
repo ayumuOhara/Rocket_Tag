@@ -8,5 +8,6 @@ public class TitleScreenManager : MonoBehaviour
     public void LoadLobbyScene()
     {
         SceneManager.LoadScene("Lobby"); // ロビー画面のシーン名
+        AudioManager.Instance.PlaySE(AudioManager.SEType.Bottun_Click); // ボタンクリックのSE
     }
 }
