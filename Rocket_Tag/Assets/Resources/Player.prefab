@@ -461,15 +461,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820cc424280cfe84bb7d0a22d8205e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillDataBase: {fileID: 11400000, guid: b530981f8beb738478b61b57f1ca99c2, type: 2}
+  skillDataBase: {fileID: 11400000, guid: ed8d1036479547b4fab7294aaf68ed13, type: 2}
   skillData:
-    skillCode: 0
-    skillName: 
-    countLimit: 0
-    skillEffect: 
+    SkillId: 0
+    skillName: 0
   skillIdx: 0
-  countLimit: 0
+  observeDistance: {fileID: 8751567879985976218}
+  player: {fileID: 8299087819917209949}
   rocketObj: {fileID: 6752579603462179444}
+  stickyZone: {fileID: 5389891788530700, guid: 97e922af119d9f947936b1147ad629ef, type: 3}
   finishSkill: 1
 --- !u!114 &4868377163844986340
 MonoBehaviour:

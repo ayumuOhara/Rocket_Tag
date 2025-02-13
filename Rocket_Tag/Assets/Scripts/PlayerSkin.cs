@@ -26,7 +26,7 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
 
     void Start()
     {
-        Initialize();
+        //Initialize();
     }
     void Update()
     {
@@ -36,13 +36,14 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         });
         if (isCosutume)
         {
-            SetSkinNoByButton();
+            //SetSkinNoByButton();
         }
         cosutume.onClick.AddListener(() =>
         {
             isCosutume = false;
         });
     }
+}
 //    void Initialize()     //  ロッカーシーンの初期化
 //    {
 //        skill = GameObject.Find()

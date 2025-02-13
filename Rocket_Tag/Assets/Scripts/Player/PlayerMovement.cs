@@ -6,6 +6,7 @@ using TMPro;
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
     ChangeObjColor changeObjColor;
+    SkillManager skillManager;
 
     [SerializeField] private Vector3 movingVelocity;             // 移動方向
     [SerializeField] private float moveSpeed = 20.0f;            // 移動速度
@@ -22,11 +23,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [SerializeField] PhysicsMaterial noneFriction;          // 方向キー入力中の摩擦
 
     float stunTime = 3.0f;                                  // スタン時間
+    bool isDash = false;                                    // ダッシュ中か
 
     void Start()
     {
         refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
         changeObjColor = GetComponent<ChangeObjColor>();
+        skillManager   = GetComponent<SkillManager>();
     }
 
     public void SetMoveSpeed(float _moveSpeed)
@@ -118,6 +121,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
                     break; // 接地を検出したらループを終了
                 }
             }
+        }
+
+        if(isDash && collision.gameObject.CompareTag("Player"))
+        {
+            skillManager.KnockBackTarget(collision.gameObject);
         }
     }
 
