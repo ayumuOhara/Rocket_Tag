@@ -11,6 +11,7 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     {
         THROW_HOOK,
         ATTRACT_PLAYER,
+        RETRIEVE_HOOK,
     }
 
     GameObject hookPrefab;
@@ -19,11 +20,13 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     GameObject chainEntity;
     GameObject player;
     GameObject hitObj;
+    GameObject[] chains;
     Camera playerCamera;
     PlayerMovement playerMovement;
-    
+
     Vector3 hookGeneratePos;
     Vector3 hookUnlockPos;
+    Vector3 chainDeleateDis;
 
     float throwSpeed;
     float attractSpeed;
@@ -31,6 +34,8 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     float attractingPlayerMoveSpd;
     float hookOffset_Z;
     float hitStopTime;
+
+    int chainsNo;
 
     internal GameObject HitObj
     {
@@ -41,6 +46,7 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     void Start()
     {
         Initialize();
+        Time.timeScale = 0.5f;
     }
     void Update()
     {
@@ -49,11 +55,13 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     void Initialize()    //  初期化
     {
         hookPrefab = Resources.Load<GameObject>("Hook");
+        chainPrefab = Resources.Load<GameObject>("HookChain");
         player = this.gameObject;    //  仕様によって調整必
         playerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
         hitObj = null;
 
         hookUnlockPos = new Vector3(2.5f, 2.5f, 2.5f);
+        chainDeleateDis = new Vector3(2f, 2f, 2f);
 
         throwSpeed = 30f;
         attractSpeed = 2f;
@@ -83,9 +91,9 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     {
         moved.position = Vector3.MoveTowards(moved.transform.position, target, moveSpeed * Time.deltaTime);
     }
-    internal void HookWrapper(HookProcess HookProcess)   //  フックの挙動に応じた処理のラッパー関数
+    internal void HookWrapper(HookProcess hookProcess)   //  フックの挙動に応じた処理のラッパー関数
     {
-        switch (HookProcess)
+        switch (hookProcess)
         {
             case HookProcess.THROW_HOOK:
                 {
@@ -98,31 +106,53 @@ public class Hook : MonoBehaviour    //  フックスクリプト
                     AttractPlayer();
                     break;
                 }
+            case HookProcess.RETRIEVE_HOOK:
+                {
+                    RetrieveHook();
+                        break;
+                }
             default: break;
         }
     }
-    async void ThrowHook()    //  最初に当たったオブジェクトのタグを代入する
+    async void ThrowHook()    //  フック投擲
     {
+
+        Transform flontChain = hookEntity.transform;
         Collider[] tempCollider = new Collider[1];
 
+        Vector3 chainGenerateDis = new Vector3(1.4f,1.4f,0.8f);
         Vector3 tempScreenCenter = GetVecForScreenCenter(player.transform.position);
-
+        
         float throwAcceleration = 7f;
-        float retrieveTime = 10f;
+        float retrieveTime = 1f;
         float topPoint = 1.5f;
         float belowPoint = 1.5f;
         float radius = 1.5f;
+        float chainHorizonSize = 0.03f;
 
-        while ((tempCollider = GenerateHitDetection(hookEntity.transform, belowPoint, topPoint, radius)) == null || tempCollider.Length  == 0 && (retrieveTime -= Time.deltaTime) > 0)
+        int accelerarionLenPlus = 3;
+        chainsNo = 0;
+        chains = new GameObject[(int)((retrieveTime * throwSpeed * throwAcceleration * accelerarionLenPlus) / (chainHorizonSize))];    //  努力修正
+        Debug.Log(chains.Length);
+
+        hookEntity.transform.LookAt(tempScreenCenter);
+        chains[0] = hookEntity;
+
+        for (chainsNo = 0; (tempCollider = GenerateHitDetection(hookEntity.transform, belowPoint, topPoint, radius)) == null || tempCollider.Length == 0 && (retrieveTime -= Time.deltaTime) > 0; )
         {
-            if (tempCollider.Length > 0 && tempCollider != null && tempCollider[0].tag == "Player")
-                Debug.Log(tempCollider[0].tag);
             StraightMoveToPos(hookEntity.transform, tempScreenCenter, (throwSpeed + (throwAcceleration *= 1.1f)) * Time.deltaTime);
+            while(!IsInRange(GetPosDif(chains[chainsNo].transform.position, player.transform.position), chainGenerateDis))
+            {
+                GenerateObj(ref chainEntity, chainPrefab, chains[chainsNo].transform.position - chains[chainsNo].transform.forward * chainGenerateDis.z);
+                chainEntity.transform.parent = hookEntity.transform;
+                changeRotation(chainEntity, hookEntity.transform.position);
+                chains[++chainsNo] = chainEntity;
+            }
             await Task.Yield();
         }
         if (retrieveTime < 0)
         {
-            hitObj = null;
+            hitObj = hookEntity;
         }
         else
         {
@@ -134,32 +164,38 @@ public class Hook : MonoBehaviour    //  フックスクリプト
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 100);
         return playerCamera.ScreenToWorldPoint(screenCenter) - perspective;
     }
-    Collider[] GenerateHitDetection(Transform AppendObj, float belowPoint, float topPoint, float radius)
+    Collider[] GenerateHitDetection(Transform AppendObj, float belowPoint, float topPoint, float radius)    //  当たり判定生成  
     {
         return Physics.OverlapCapsule(AppendObj.transform.position - Vector3.down * belowPoint, AppendObj.transform.position + Vector3.up * topPoint, radius);
     }
     async void AttractPlayer ()    //  引き寄せ  
     {
-      //  playerMovement = hitObj.GetComponent<PlayerMovement>();
+        //  playerMovement = hitObj.GetComponent<PlayerMovement>();
 
-      //  float tempPlayerSpeed = playerMovement.GetMoveSpeed();
+        //  float tempPlayerSpeed = playerMovement.GetMoveSpeed();
 
-      //  playerMovement.SetMoveSpeed(0.15f);
+        //  playerMovement.SetMoveSpeed(0.15f);
 
-        while((hitStopTime -= Time.deltaTime) > 0)
+        Debug.Log("ヒットストップなう");
+        while ((hitStopTime -= Time.deltaTime) > 0)
         {
-            Debug.Log("ヒットストップなう");
-            await Task.Yield();
-        }
-        while(!IsNear(GetPosDif(player.transform.position, hookEntity.transform.position), hookUnlockPos))
-        {
-            SetPos(hookEntity.transform.position, hitObj.transform, Vector3.zero);
-            attractSpeed *= attractAcceleration;
-            StraightMoveToPos(hookEntity.transform, player.transform.position, attractSpeed);
             await Task.Yield();
         }
         //    playerMovement.SetMoveSpeed(tempPlayerSpeed);
+        while (!IsInRange(GetPosDif(player.transform.position, hookEntity.transform.position), hookUnlockPos))
+        {
+            while (IsInRange(GetPosDif(chains[chainsNo].transform.position, player.transform.position), chainDeleateDis))
+            {
+                Debug.Log("こわシング");
+                DestroyObj(chains[chainsNo--]);
+            }
+            SetPos(hookEntity.transform.position, hitObj.transform, Vector3.zero);
+            StraightMoveToPos(hookEntity.transform, player.transform.position, attractSpeed);
+            attractSpeed *= attractAcceleration;
+            await Task.Yield();
+        }
         Destroy(hookEntity);
+        ChangeState(new NoAct());
     }
     Vector3 GetPosDif(Vector3 point1, Vector3 point2)    //  座標間の距離を取得
     {
@@ -178,14 +214,37 @@ public class Hook : MonoBehaviour    //  フックスクリプト
         }
         return posDif;
     }
-    bool IsNear(Vector3 posDif, Vector3 judgePos)    //  オブジェクトが判定距離内かどうか
+    bool IsInRange(Vector3 pos, Vector3 judgePos)    //  オブジェクトが判定距離内かどうか
     {
-        return posDif.x < judgePos.x && posDif.y < judgePos.y && posDif.z < judgePos.z;
-        Debug.Log(posDif);
+        return pos.x < judgePos.x && pos.y < judgePos.y && pos.z < judgePos.z;
+        Debug.Log(pos);
     }
     void SetPos(Vector3 point, Transform moved, Vector3 offset)    //  オブジェクトを指定座標に瞬間移動させる
     {
         moved.position = point + offset;
+    }
+    void changeRotation(GameObject obj, Vector3 pos)    //  指定した座標に向かせる
+    {
+        obj.transform.LookAt(pos);
+    }
+    void DestroyObj(GameObject obj)    //  オブジェクト破壊
+    {
+        Destroy(obj);
+    }
+    void RetrieveHook()    //  フック回収
+    {
+        while (!IsInRange(GetPosDif(player.transform.position, hookEntity.transform.position), hookUnlockPos))
+        {
+            while (IsInRange(GetPosDif(chains[chainsNo].transform.position, player.transform.position), chainDeleateDis))
+            {
+                Debug.Log("こわシング");
+                DestroyObj(chains[chainsNo--]);
+            }
+            //StraightMoveToPos(hookEntity.transform, player.transform.position, attractSpeed);
+            StraightMoveToPos(hookEntity.transform, player.transform.position, 0.1f);
+        }
+        Destroy(hookEntity);
+        ChangeState(new NoAct());
     }
 }
 internal interface HookState    //  フック状態インターフェース
@@ -227,12 +286,14 @@ internal class HookThrow : HookState    //  フック投擲状態
             {
                 case "Player":
                     {
-                        Debug.Log("plyaerrrr");
+                        Debug.Log("playerstate");
                         hook.ChangeState(new HitPlayer());
                         break;
                     }
                 default:
                     {
+                        Debug.Log("NohitState");
+
                         hook.ChangeState(new NotHitPlayer());
                         break;
                     }
@@ -253,7 +314,7 @@ internal class HitPlayer : HookState    //  フックがプレイヤーに当たってる状態
     }
     public void Update(Hook hook)
     {
-        hook.ChangeState(new NoAct());
+
     }
     public void Exit(Hook hook)
     {
@@ -268,14 +329,10 @@ internal class NotHitPlayer : HookState    //  フック投擲状態
     }
     public void Update(Hook hook)
     {
-
+        hook.HookWrapper(Hook.HookProcess.RETRIEVE_HOOK);
     }
     public void Exit(Hook hook)
     {
 
     }
 }
-
-
-
-

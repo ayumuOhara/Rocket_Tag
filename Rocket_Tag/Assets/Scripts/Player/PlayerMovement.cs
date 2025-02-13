@@ -8,8 +8,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     ChangeObjColor changeObjColor;
 
     [SerializeField] private Vector3 movingVelocity;             // 移動方向
-    [SerializeField] private float moveSpeed = 10.0f;            // 移動速度
-    [SerializeField] private float defaultMoveSpeed = 10.0f;     // 通常の移動速度
+    [SerializeField] private float moveSpeed = 20.0f;            // 移動速度
+    [SerializeField] private float defaultMoveSpeed = 20.0f;     // 通常の移動速度
     [SerializeField] private float applySpeed = 0.2f;            // 回転の適用速度
     [SerializeField] private float jumpForce = 20.0f;            // ジャンプ力
     private bool isGround = false;                               // 接地判定
@@ -39,14 +39,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         return moveSpeed;
     }
 
-    // プレイヤーの速度切り替え
-    public void ChangeMoveSpeed(bool hasRocket,float newSpeed = 0)
+    public float GetDefaultMoveSpeed()
     {
-        if (hasRocket == true)
-            SetMoveSpeed(newSpeed);
-        else
-            SetMoveSpeed(defaultMoveSpeed);
-    }    
+        return defaultMoveSpeed;
+    }
 
     // 押下された移動キーに応じてベクトルを取得
     public void GetVelocity()
