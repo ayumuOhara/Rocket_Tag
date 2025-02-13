@@ -7,10 +7,11 @@ using UnityEngine.UI;
 public class PhotonMaster : MonoBehaviourPunCallbacks
 {
     public Text statusText;
-    private const int MaxPlayerPerRoom = 8;
+    private const int MAX_PLAYER_PER_ROOM = 4;
 
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
         PhotonNetwork.AutomaticallySyncScene = true;
     }
     // Start is called before the first frame update
@@ -50,14 +51,14 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         Debug.Log("ルームを作成します。");
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = MaxPlayerPerRoom });
+        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = MAX_PLAYER_PER_ROOM });
     }
 
     public override void OnJoinedRoom()
     {
         Debug.Log("ルームに参加しました");
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-        if (playerCount != MaxPlayerPerRoom)
+        if (playerCount != MAX_PLAYER_PER_ROOM)
         {
             statusText.text = "対戦相手を待っています。";
         }
@@ -71,7 +72,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount == MaxPlayerPerRoom)
+            if (PhotonNetwork.CurrentRoom.PlayerCount == MAX_PLAYER_PER_ROOM)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
                 statusText.text = "対戦相手が揃いました。バトルシーンに移動します。";
