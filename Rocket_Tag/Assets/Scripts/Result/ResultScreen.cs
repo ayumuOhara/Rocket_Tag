@@ -1,16 +1,17 @@
 using Photon.Pun;
 using UnityEngine;
-
+using TMPro;
+using UnityEngine.SceneManagement;
 public class ResultScreen : MonoBehaviour
 {
-    public UnityEngine.UI.Text rankText;
+    [SerializeField] TextMeshProUGUI rankText;
 
-    void Update()
-    {
-        ShowMyRank();
-    }
+    //void Update()
+    //{
+    //    ShowMyResult();
+    //}
 
-    public void ShowMyRank()
+    public void ShowMyResult()
     {
         int myRank = 1;
 
@@ -20,6 +21,13 @@ public class ResultScreen : MonoBehaviour
             myRank = (int)PhotonNetwork.LocalPlayer.CustomProperties["PlayerRank"];
         }
 
-        rankText.text = "Your Rank: " + myRank.ToString();
+        rankText.text = myRank.ToString() + "à !";
+        this.gameObject.SetActive(true);
+    }
+
+    // ÉçÉrÅ[âÊñ Ç÷ÇÃëJà⁄
+    public void LoadLobbyScene()
+    {
+        SceneManager.LoadScene("Lobby");
     }
 }
