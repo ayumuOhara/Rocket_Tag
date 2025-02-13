@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float minVerticalAngle = 20.0f;      // ‚’¼‰ñ“]‚ÌÅ¬Šp“x
     [SerializeField] private float maxVerticalAngle = 50.0f;      // ‚’¼‰ñ“]‚ÌÅ‘åŠp“x
     [SerializeField] private Quaternion vRotation;                // ƒJƒƒ‰‚Ì‚’¼‰ñ“](Œ©‰º‚ë‚µ‰ñ“])
-    [SerializeField] public Quaternion hRotation;                 // ƒJƒƒ‰‚Ì…•½‰ñ“]
+    [SerializeField] public  Quaternion hRotation;                // ƒJƒƒ‰‚Ì…•½‰ñ“]
     [SerializeField] private float turnSpeed = 5.0f;              // ‰ñ“]‘¬“x
     [SerializeField] private Vector3 velocity;                    // ˆÚ“®•ûŒü
     private float moveSpeed = 30.0f;                              // ˆÚ“®‘¬“x
