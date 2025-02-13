@@ -1,5 +1,6 @@
-using Photon.Pun;
+ï»¿using Photon.Pun;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerRocketAction : MonoBehaviourPunCallbacks
 {
@@ -7,35 +8,65 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
     ObserveDistance observeDistance;
     SkillManager skillManager;
 
+    [Header("ã‚µã‚¦ãƒ³ãƒ‰è¨­å®š")]
+    [SerializeField] private AudioClip SetSound; // ã‚¢ã‚»ãƒƒãƒˆã‹ã‚‰è¨­å®šã™ã‚‹éŸ³
+    private AudioSource audioSource;
+
     private void Start()
     {
         setPlayerBool = GetComponent<SetPlayerBool>();
         observeDistance = GetComponent<ObserveDistance>();
         skillManager = GetComponent<SkillManager>();
+
+        // AudioSource ã‚’å–å¾—ï¼ˆInspector ã«è¨­å®šãŒãªã‘ã‚Œã°è¿½åŠ ï¼‰
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
-    // ƒ^ƒbƒ`/“Š±ƒAƒNƒVƒ‡ƒ“
+    // ã‚¿ãƒƒãƒ/æŠ•æ“²ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
     public void RocketAction()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Debug.Log("ƒƒPƒbƒg‚ğ“Š±‚µ‚½");
+            Debug.Log("ãƒ­ã‚±ãƒƒãƒˆã‚’æŠ•æ“²ã—ãŸ");
         }
 
-        // ‹ß‚­‚ÌƒvƒŒƒCƒ„[‚ÉƒƒPƒbƒg‚ğ“n‚·
+        // è¿‘ãã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ãƒ­ã‚±ãƒƒãƒˆã‚’æ¸¡ã™
         GameObject target = observeDistance.GetTargetDistance();
         if (target != null)
         {
-            // ©•ª‚Ì hasRocket ‚ğØ‚è‘Ö‚¦
+            // è‡ªåˆ†ã® hasRocket ã‚’åˆ‡ã‚Šæ›¿ãˆ
             photonView.RPC("SetHasRocket", RpcTarget.All, !setPlayerBool.hasRocket);
 
-            // ƒ^[ƒQƒbƒg‚Ì hasRocket ‚ğØ‚è‘Ö‚¦
+            // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã® hasRocket ã‚’åˆ‡ã‚Šæ›¿ãˆ
             PhotonView targetPhotonView = target.GetComponent<PhotonView>();
             SetPlayerBool otherPlayer = target.GetComponent<SetPlayerBool>();
             if (targetPhotonView != null)
             {
                 targetPhotonView.RPC("SetHasRocket", RpcTarget.All, !otherPlayer.hasRocket);
                 targetPhotonView.RPC("SetIsStun", RpcTarget.All, true);
+            }
+        }
+    }
+
+    [PunRPC]
+    public void SetHasRocket(bool value)
+    {
+        if (setPlayerBool.hasRocket != value) // å¤‰æ›´ãŒã‚ã‚‹ã¨ãã®ã¿å‡¦ç†
+        {
+            setPlayerBool.hasRocket = value;
+
+            // ğŸµ hasRocket ãŒ true ã«ãªã£ãŸã‚‰éŸ³ã‚’é³´ã‚‰ã™
+            if (value && audioSource != null && SetSound != null)
+            {
+                if (!audioSource.isPlaying) // é€£ç¶šå†ç”Ÿé˜²æ­¢
+                {
+                    audioSource.clip = SetSound;
+                    audioSource.Play();
+                }
             }
         }
     }
