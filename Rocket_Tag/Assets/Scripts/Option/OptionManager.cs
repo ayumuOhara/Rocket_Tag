@@ -10,6 +10,7 @@ public class OptionManager : MonoBehaviour
     public void ShowOptionPanel()
     {
         optionPanel.SetActive(true);
+        AudioManager.Instance.PlaySE(AudioManager.SEType.Bottun_Click); // ボタンクリックのSE
     }
 
     //オプション画面を非表示
