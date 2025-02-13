@@ -5,14 +5,14 @@ public class ResultScreen : MonoBehaviour
 {
     public UnityEngine.UI.Text rankText;
 
-    void Start()
+    void Update()
     {
         ShowMyRank();
     }
 
-    void ShowMyRank()
+    public void ShowMyRank()
     {
-        int myRank = 0;
+        int myRank = 1;
 
         //自分の順位をカスタムプロパティから取得
         if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("PlayerRank"))

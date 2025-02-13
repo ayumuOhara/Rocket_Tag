@@ -4,12 +4,13 @@ using ExitGames.Client.Photon;
 
 public class PlayerRankManager : MonoBehaviour
 {
+    [SerializeField] InstantiatePlayer instantiatePlayer;
     public int playerRank;
 
-    void Start()
+    public void SetPlayerRank()
     {
         //プレイヤーの順位を設定
-        playerRank = Random.Range(0, 10);//仮
+        playerRank = instantiatePlayer.GetCurrentPlayerCount();
 
         //順位をカスタムプロパティに保存
         Hashtable playerProperties = new Hashtable();
