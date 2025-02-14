@@ -1753,7 +1753,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   observeDistance: {fileID: 474657300711981693}
-  changeObjColor: {fileID: 0}
 --- !u!114 &2759492702019797386
 MonoBehaviour:
   m_ObjectHideFlags: 0
