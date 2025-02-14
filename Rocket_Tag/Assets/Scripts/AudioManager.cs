@@ -37,6 +37,7 @@ public class AudioManager : MonoBehaviour
         Skill_use,      // スキル使用時の音
         Bumper,         // ジャンプ台の音
         Landing,        // 着地したときの音
+        Smash_Punch,    //スマッシュパンチの音
     }
 
     // SEを再生するメソッド
@@ -62,6 +63,9 @@ public class AudioManager : MonoBehaviour
                 break;
             case SEType.Landing:
                 PlaySEFromList(5); // 着地したときの音（インデックス5）
+                break;
+            case SEType.Smash_Punch:
+                PlaySEFromList(6); // スマッシュパンチの音（インデックス6）
                 break;
             default:
                 Debug.LogWarning("指定されたSEが見つかりません");
