@@ -15,8 +15,12 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        Application.targetFrameRate = 60;
+        if(PhotonNetwork.IsMasterClient)
+        {
+            UpdatePlayerCount();
+        }
 
+        Application.targetFrameRate = 60;
         // プレイヤーをリスポーン地点に生成
         GameObject player = PhotonNetwork.Instantiate("Player", respawnPoint.position, Quaternion.identity);
 
@@ -29,25 +33,17 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
         inputPlayerName.SetActive(true);
         playerCamera.SetActive(true);
         waitCamera.SetActive(false);
-
-        Debug.Log("プレイヤーがルームに参加しました。");
-    }
-
-    // プレイヤーがルームに参加したとき
-    public override void OnJoinedRoom()
-    {
-        UpdatePlayerCount(1); // ここでプレイヤー数を更新
     }
 
     // プレイヤーがルームから退出したとき
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        UpdatePlayerCount(-1);
+        UpdatePlayerCount();
         Debug.Log($"プレイヤーが退出しました: {otherPlayer.NickName}");
     }
 
     // プレイヤー人数を更新するメソッド
-    private void UpdatePlayerCount(int delta)
+    private void UpdatePlayerCount()
     {
         if (PhotonNetwork.CurrentRoom != null)
         {

@@ -14,7 +14,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
     [SerializeField] ObserveDistance observeDistance;
 
-    ChangeObjColor changeObjColor;
     PlayerMovement playerMovement;
     TimeManager timeManager;
     GameManager gameManager;
@@ -39,7 +38,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        changeObjColor = GetComponent<ChangeObjColor>();
         playerMovement = GetComponent<PlayerMovement>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -139,12 +137,10 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
         float speed = playerMovement.GetMoveSpeed();
         playerMovement.SetMoveSpeed(speed * boostValue);
-        changeObjColor.SetColor(1);
 
         yield return new WaitForSeconds(dashLimit);
 
         playerMovement.SetMoveSpeed(speed);
-        changeObjColor.SetColor(0);
 
         finishSkill = true;
 

@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
     SetPlayerBool setPlayerBool;                  // bool値を管理するクラス
     SkillManager skillManager;                    // スキルを管理するクラス
     public ObserveDistance observeDistance;       // 対象との距離を測るクラス
-    public ChangeObjColor changeObjColor;         // オブジェクトの色変更をするクラス
     InputPlayerName inputPlayerName;              // 名前を入力を管理するクラス
 
     void Start()
@@ -19,7 +18,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         setPlayerBool = GetComponent<SetPlayerBool>();
         skillManager = GetComponent<SkillManager>();
         observeDistance = GetComponent<ObserveDistance>();
-        changeObjColor = GetComponent<ChangeObjColor>();
         inputPlayerName = GameObject.Find("InputPlayerName").GetComponent<InputPlayerName>();
 
         setPlayerBool.SetPlayerCondition();

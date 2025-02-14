@@ -5,7 +5,6 @@ using TMPro;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
-    ChangeObjColor changeObjColor;
     SkillManager skillManager;
 
     [SerializeField] private Vector3 movingVelocity;             // ˆÚ“®•ûŒü
@@ -30,7 +29,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     void Start()
     {
         refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
-        changeObjColor = GetComponent<ChangeObjColor>();
         skillManager   = GetComponent<SkillManager>();
         animator = GetComponent<Animator>();
     }
@@ -139,12 +137,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         _collider.material = defaultFriction;
 
-        changeObjColor.SetColor(2);
-
         yield return new WaitForSeconds(stunTime);
         photonView.RPC("SetIsStun", RpcTarget.All, false);
-
-        changeObjColor.SetColor(0);
 
         yield break;
     }
