@@ -23,7 +23,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        StartCoroutine(WaitPlayersReady());
+        if(PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(WaitPlayersReady());
+        }
     }
 
     IEnumerator WaitPlayersReady()
@@ -33,7 +36,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             int readyCount = GetReadyPlayerCount();
             photonView.RPC("PlayerCntText", RpcTarget.All, readyCount, "èÄîıäÆóπ");
 
-            if (PhotonNetwork.IsMasterClient && CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
+            if (CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
             {
                 photonView.RPC(nameof(StartGame), RpcTarget.All);
                 yield break;
@@ -132,7 +135,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             List<GameObject> players = GetPlayerList();
             int playerCount = players.Count;
-            photonView.RPC("PlayerCntText", RpcTarget.All, playerCount, "ê∂ë∂êlêî");
+            if(PhotonNetwork.IsMasterClient)
+            {
+                photonView.RPC("PlayerCntText", RpcTarget.All, playerCount, "ê∂ë∂êlêî");
+            }
 
             if (playerCount <= 1)
             {
