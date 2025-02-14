@@ -1507,6 +1507,7 @@ GameObject:
   - component: {fileID: 570120167}
   - component: {fileID: 570120166}
   - component: {fileID: 570120168}
+  - component: {fileID: 570120169}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1573,6 +1574,20 @@ MonoBehaviour:
   sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &570120169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570120165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0ae76d2bdbbb454f8c13f815d6f05b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  instantiatePlayer: {fileID: 2058844072}
+  playerRank: 0
 --- !u!1 &592363841
 GameObject:
   m_ObjectHideFlags: 0
@@ -1809,7 +1824,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounceForce: 60
-  audioSource: {fileID: 0}
   playerTag: Player
 --- !u!64 &805518658
 MeshCollider:
@@ -2494,7 +2508,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounceForce: 60
-  audioSource: {fileID: 0}
   playerTag: Player
 --- !u!64 &932753712
 MeshCollider:
@@ -3825,7 +3838,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounceForce: 60
-  audioSource: {fileID: 0}
   playerTag: Player
 --- !u!64 &1384152703
 MeshCollider:
@@ -4373,7 +4385,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounceForce: 60
-  audioSource: {fileID: 0}
   playerTag: Player
 --- !u!64 &1577906866
 MeshCollider:
