@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public PlayerController playerController;
     public SetPlayerBool setPlayerBool;
-    public ResultScreen resultScreen;
     [SerializeField] EventManager eventManager;
     [SerializeField] TimeManager timeManager;
     [SerializeField] InstantiatePlayer instantiatePlayer;
@@ -148,7 +147,6 @@ public class GameManager : MonoBehaviourPunCallbacks
                 setPlayerBool.SetPlayerCondition();
                 timeManager.isTimeStart = false;
                 StartCoroutine(WaitPlayersReady());
-                resultScreen.ShowMyResult();
                 yield break;
             }
             yield return null;
