@@ -4,21 +4,24 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class SkillManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] SkillDataBase skillDataBase;
     [SerializeField] public SkillData skillData;
     public int skillIdx;
-    [SerializeField] int countLimit;
+
+    [SerializeField] ObserveDistance observeDistance;
 
     ChangeObjColor changeObjColor;
     PlayerMovement playerMovement;
     TimeManager timeManager;
     GameManager gameManager;
 
+    [SerializeField] GameObject player;
     [SerializeField] GameObject rocketObj;
-    TextMeshProUGUI countLimitText;
+    [SerializeField] GameObject stickyZone;
 
     public bool finishSkill = true;
 
@@ -26,16 +29,12 @@ public class SkillManager : MonoBehaviourPunCallbacks
     public void SetSkill(SkillData newSkillData)
     {
         skillData = newSkillData;
-        countLimit = skillData.countLimit;
-        WriteCountLimit();
     }
 
     // 所持スキルを削除
     public void RemoveSkill()
     {
         skillData = null;
-        countLimit = 0;
-        WriteCountLimit();
     }
 
     private void Start()
@@ -44,49 +43,98 @@ public class SkillManager : MonoBehaviourPunCallbacks
         playerMovement = GetComponent<PlayerMovement>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        countLimitText = GameObject.Find("CountLimitText").GetComponent<TextMeshProUGUI>();
 
         skillIdx = 0;
-        SetSkill(skillDataBase.skillDatas[skillIdx]);
-    }
-
-    void WriteCountLimit()
-    {
-        countLimitText.text = $"残り{countLimit}回";
+        SetSkill(skillDataBase.SkillData[skillIdx]);
     }
 
     // 設定されているスキル使用
     public void UseSkill()
     {
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            if (countLimit > 0 && finishSkill == true)
+            if (finishSkill == true)
             {
                 Debug.Log($"【{skillData.skillName}】を使用");
-                countLimit--;
-                WriteCountLimit();
 
-                switch (skillData.skillCode)
+                switch (skillData.SkillId)
                 {
-                    case 100 : StartCoroutine(Dash());          break;
-                    case 101 : StartCoroutine(TimeStop());      break;
-                    case 102 : RocketWarp();                    break;
-                    case 104 : StartCoroutine(InvisibleBody()); break;
+                    case 101: break;
+                    case 102: photonView.RPC("PutStickyZone", RpcTarget.All); break;
+                    case 103: DangerousGift();                                break;
+                    case 104: SmashPunch();                                   break;
+                    case 105: StartCoroutine(Dash());                         break;
                 }
 
-                if(countLimit <= 0)
-                {
-                    RemoveSkill();
-                }
+                SendSkillData();
             }
         }
     }
+
+    // ねばねばゾーン設置
+    [PunRPC]
+    void PutStickyZone()
+    {
+        GameObject zone = Instantiate(stickyZone);
+        Vector3 playerPos = player.transform.position;
+        playerPos += Vector3.down;
+        zone.transform.position = playerPos;
+    }
+
+    // プレイヤーにロケットを配布
+    void DangerousGift()
+    {
+        int playerCnt = gameManager.GetPlayerList().Count;
+
+        int minCnt = 1;
+        int maxCnt = playerCnt > 3 ? 3 : playerCnt;
+        int rocketCnt = Random.Range(minCnt, maxCnt);
+
+        for(int i = 0; i < rocketCnt; i++)
+        {
+            gameManager.ChooseRocketPlayer();
+        }
+    }
+
+    // スマッシュパンチ
+    void SmashPunch()
+    {
+        GameObject target = observeDistance.GetTargetDistance();
+
+        if (target == null) return; // ターゲットがいない場合は処理しない
+
+        // プレイヤーをターゲットの方向へ向ける
+        transform.LookAt(target.transform.position);
+        KnockBackTarget(target);
+    }
+
+    // 対象を吹っ飛ばす
+    public void KnockBackTarget(GameObject target)
+    {
+        PhotonView targetView = target.GetComponent<PhotonView>();
+        targetView.RPC("SetIsStun", RpcTarget.All, true);
+
+        // ターゲットの Rigidbody を取得
+        Rigidbody targetRb = target.GetComponent<Rigidbody>();
+        if (targetRb != null)
+        {
+            // 吹っ飛ばす方向を計算（プレイヤー → ターゲット の方向）
+            Vector3 knockbackDirection = (target.transform.position - transform.position).normalized;
+
+            // 吹っ飛ばす力（適宜調整）
+            float knockbackForce = 30f;
+
+            // ターゲットに力を加える
+            targetRb.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
+        }        
+    }
     
-    float boostValue = 1.5f;     // ダッシュの加速度
-    float dashLimit = 3.0f;      // ダッシュの効果時間
     // ダッシュスキル
     IEnumerator Dash()
     {
+        float boostValue = 1.5f;     // ダッシュの加速度
+        float dashLimit = 3.0f;      // ダッシュの効果時間
+
         finishSkill = false;
 
         float speed = playerMovement.GetMoveSpeed();
@@ -103,70 +151,11 @@ public class SkillManager : MonoBehaviourPunCallbacks
         yield break;
     }
 
-    float stopLimit = 5.0f;     // タイマー停止の効果時間
-    // ロケットのタイマー停止
-    IEnumerator TimeStop()
+    // スキルをプレイヤーに与える
+    void SendSkillData()
     {
-        finishSkill = false;
-
-        timeManager.timerView.RPC("IsTimeStop", RpcTarget.All, true);
-        yield return new WaitForSeconds(stopLimit);
-        timeManager.timerView.RPC("IsTimeStop", RpcTarget.All, false);
-
-        finishSkill = true;
-
-        yield break;
-    }
-
-    // ロケットを転移
-    IEnumerator RocketWarp()
-    {
-        SetPlayerBool mySpb = GetComponent<SetPlayerBool>();
-        mySpb.SetHasRocket(false);
-
-        List<GameObject> players = gameManager.GetPlayerList();
-        int rnd = Random.Range(0, players.Count);
-
-        SetPlayerBool targetSpb = players[rnd].GetComponent<SetPlayerBool>();
-        targetSpb.SetHasRocket(true);
-
-        yield break;
-    }
-
-    float heatUpCnt = 30.0f;    // カウントの進行数
-    // 渡したときにロケットのカウントを進行
-    public IEnumerator HeatUpCnt()
-    {
-        countLimit--;
-        timeManager.SyncRocketCount(timeManager.rocketTime -= heatUpCnt);
-        if(timeManager.rocketTime <= 0)
-        {
-            timeManager.SyncRocketCount(3.0f);
-            yield break;
-        }
-
-        yield break;
-    }
-
-    float invisibleLimit = 10.0f;
-    // プレイヤーを不可視にする
-    IEnumerator InvisibleBody()
-    {
-        ChangeObjColor rocketCoc = rocketObj.GetComponent<ChangeObjColor>();
-        finishSkill = false;
-
-        // 透明化
-        changeObjColor.SetColor(3);
-        rocketCoc.SetColor(1);
-
-        yield return new WaitForSeconds(invisibleLimit);
-
-        // デフォルトに戻す
-        changeObjColor.SetColor(0);
-        rocketCoc.SetColor(0);
-
-        finishSkill = true;
-
-        yield break;
+        int rnd = Random.Range(0, skillDataBase.SkillData.Count);
+        SkillData giveSkill = skillDataBase.SkillData[rnd];
+        SetSkill(giveSkill);
     }
 }

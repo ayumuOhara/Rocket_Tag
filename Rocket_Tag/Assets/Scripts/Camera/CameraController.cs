@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private float distance = 5.0f;               // ’‹‘ÎÛƒvƒŒƒCƒ„[‚©‚çƒJƒƒ‰‚ğ—£‚·‹——£
     [SerializeField] private float verticalAngle = 20.0f;         // ‚’¼‰ñ“]Šp“x
-    [SerializeField] private float minVerticalAngle = 10.0f;      // ‚’¼‰ñ“]‚ÌÅ¬Šp“x
+    [SerializeField] private float minVerticalAngle = 20.0f;      // ‚’¼‰ñ“]‚ÌÅ¬Šp“x
     [SerializeField] private float maxVerticalAngle = 50.0f;      // ‚’¼‰ñ“]‚ÌÅ‘åŠp“x
     [SerializeField] private Quaternion vRotation;                // ƒJƒƒ‰‚Ì‚’¼‰ñ“](Œ©‰º‚ë‚µ‰ñ“])
     [SerializeField] public Quaternion hRotation;                 // ƒJƒƒ‰‚Ì…•½‰ñ“]
@@ -92,7 +92,7 @@ public class CameraController : MonoBehaviour
                 // ‚’¼‰ñ“]‚ÌXV
                 verticalAngle -= Input.GetAxis("Mouse Y") * turnSpeed;
                 verticalAngle = Mathf.Clamp(verticalAngle, minVerticalAngle, maxVerticalAngle); // §ŒÀ‚ğ“K—p
-            }            
+            }
 
             vRotation = Quaternion.Euler(verticalAngle, 0, 0);
         }

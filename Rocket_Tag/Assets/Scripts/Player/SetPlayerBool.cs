@@ -5,6 +5,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
     [SerializeField] PlayerMovement playerMovement;
     public TimeManager timeManager;
+    public PlayerRankManager playerRankManager;
 
     [SerializeField] GameObject rocketObj;            // ロケット
 
@@ -14,7 +15,8 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+        timeManager       = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+        playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
     }
 
     // プレイヤーの状態の初期化
@@ -33,6 +35,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         isDead = newIsDead;
         this.gameObject.SetActive(false);
+        playerRankManager.SetPlayerRank();
     }
 
     [PunRPC]
