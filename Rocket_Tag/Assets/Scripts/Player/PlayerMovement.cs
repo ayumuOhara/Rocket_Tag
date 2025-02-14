@@ -5,7 +5,6 @@ using TMPro;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
-    ChangeObjColor changeObjColor;
     SkillManager skillManager;
 
     [SerializeField] private Vector3 movingVelocity;             // 移動方向
@@ -25,11 +24,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     float stunTime = 3.0f;                                  // スタン時間
     bool isDash = false;                                    // ダッシュ中か
 
+    Animator animator;
+
     void Start()
     {
         refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
-        changeObjColor = GetComponent<ChangeObjColor>();
         skillManager   = GetComponent<SkillManager>();
+        animator = GetComponent<Animator>();
     }
 
     public void SetMoveSpeed(float _moveSpeed)
@@ -68,6 +69,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // いずれかの方向に移動している場合
         if (movingVelocity.magnitude > 0)
         {
+            animator.SetBool("Running", true);
             _collider.material = noneFriction;
 
             // カメラの前方向をXZ平面に投影
@@ -93,6 +95,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
+            animator.SetBool("Running", false);
             _collider.material = defaultFriction; 
         }
     }
@@ -134,12 +137,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         _collider.material = defaultFriction;
 
-        changeObjColor.SetColor(2);
-
         yield return new WaitForSeconds(stunTime);
         photonView.RPC("SetIsStun", RpcTarget.All, false);
-
-        changeObjColor.SetColor(0);
 
         yield break;
     }

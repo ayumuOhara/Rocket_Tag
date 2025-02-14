@@ -5,7 +5,9 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
     [SerializeField] PlayerMovement playerMovement;
     public TimeManager timeManager;
+    public ResultScreen resultScreen;
     public PlayerRankManager playerRankManager;
+    
 
     [SerializeField] GameObject rocketObj;            // ÉçÉPÉbÉg
 
@@ -16,6 +18,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     private void Start()
     {
         timeManager       = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+        resultScreen      = GameObject.Find("Result"     ).GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
     }
 
@@ -36,6 +39,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         isDead = newIsDead;
         this.gameObject.SetActive(false);
         playerRankManager.SetPlayerRank();
+        resultScreen.ShowMyResult();
     }
 
     [PunRPC]
