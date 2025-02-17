@@ -1625,7 +1625,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7002693949648290942}
-  - component: {fileID: 4021360283282677252}
   - component: {fileID: 5648620419117286419}
   - component: {fileID: 5191879591132501865}
   - component: {fileID: 1207182245521648239}
@@ -1638,6 +1637,9 @@ GameObject:
   - component: {fileID: 2753298400814805652}
   - component: {fileID: 978622442078488288}
   - component: {fileID: 4077219752392889557}
+  - component: {fileID: 8878140799993682093}
+  - component: {fileID: -6979482437822852258}
+  - component: {fileID: 1641661711016070242}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1663,35 +1665,6 @@ Transform:
   - {fileID: 9100295658540194396}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &4021360283282677252
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7666606126202363588}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
-  m_Controller: {fileID: 9100000, guid: 57c26a82a712e914882188649c839350, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'Hip'\n\tTransform 'RightShoulder'\n\tTransform
-    'RightLeg'\n\tTransform 'RightForeArm'\n\tTransform 'LeftLeg'\n\tTransform 'LeftHand'\n\tTransform
-    'LeftUpLeg'\n\tTransform 'Hip'\n\tTransform 'LeftArm'\n\tTransform 'Spine'\n\tand
-    more ...\n\tFrom animation clip 'Take 001'\n\tFrom animation clip 'Take 001'\n\tFrom
-    animation clip 'Take 001'\n\tFrom animation clip 'Take 001'\n\tFrom animation
-    clip 'Take 001'"
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &5648620419117286419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1914,6 +1887,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   instantiatePlayer: {fileID: 0}
   playerRank: 0
+--- !u!114 &8878140799993682093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7666606126202363588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64618873737ed8b4daa7fe50440d43bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-6979482437822852258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7666606126202363588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb4c21bc364e8244c8d6d5a28c74df6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraController: {fileID: 0}
+--- !u!95 &1641661711016070242
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7666606126202363588}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
+  m_Controller: {fileID: 9100000, guid: 461024421a92d1246aaa5f447282e61f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7968644170803277865
 GameObject:
   m_ObjectHideFlags: 0

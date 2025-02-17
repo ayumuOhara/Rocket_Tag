@@ -1378,6 +1378,7 @@ MonoBehaviour:
   turnSpeed: 5
   velocity: {x: 0, y: 0, z: 0}
   isShaking: 0
+  isAiming: 0
 --- !u!114 &504838160
 MonoBehaviour:
   m_ObjectHideFlags: 0

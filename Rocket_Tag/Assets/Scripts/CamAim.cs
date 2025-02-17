@@ -52,7 +52,7 @@ internal class BackDefualtPos : CamState    //  ADS状態
 {
     public void Enter(CamAim camAim)
     {
-
+        camAim.cameraController.isAiming = false;
     }
     public void Update(CamAim camAim)
     {
@@ -68,6 +68,8 @@ internal class BackDefualtPos : CamState    //  ADS状態
 }        ////  State区終了  ////
 internal class CamAim : MonoBehaviour
 {
+    public CameraController cameraController;
+
     internal enum CamProcess    //  カメラの挙動一覧                                     ////  以下宣言区  ////
     {
         AIMING,
@@ -106,6 +108,7 @@ internal class CamAim : MonoBehaviour
     {
         player = this.gameObject;
         playerCam = GameObject.Find("PlayerCamera").GetComponent<Camera>();
+        cameraController = playerCam.GetComponent<CameraController>();
         playerTF = player.transform;
         playerHeadTF = GameObject.Find("Head").GetComponent<Transform>();
         playerCamTF = playerCam.transform;
@@ -128,7 +131,8 @@ internal class CamAim : MonoBehaviour
         {
             case CamProcess.AIMING:
                 {
-                    playerCamTF.position = Vector3.Lerp(playerCamTF.position, playerTF.position - playerCamOffset, camMoveSpd_Aim * Time.deltaTime);
+                    cameraController.isAiming = true;
+                    //playerCamTF.position = Vector3.Lerp(playerCamTF.position, playerTF.position - playerCamOffset, camMoveSpd_Aim * Time.deltaTime);
                     LookPos(playerTF, GetVecForScreenCenter(playerTF.position), camMoveSpd_Aim, 8);    //  操作キャラの体をカメラ中心奥に向かせる
                     LookPos(playerHeadTF, GetVecForScreenCenter(playerHeadTF.position), wholeBodyMoveSpd_Aim, 1);    //  //  操作キャラの頭をカメラ中心奥に向かせる
                     break;
