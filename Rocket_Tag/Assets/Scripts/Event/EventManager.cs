@@ -187,10 +187,10 @@ public class EventManager : MonoBehaviourPunCallbacks
         foreach (GameObject player in playerList)
         {
             SkillManager skillManager = player.gameObject.GetComponent<SkillManager>();
-            int rnd = Random.Range(0, skillDataBase.skillDatas.Length);
+            //int rnd = Random.Range(0, skillDataBase.skillDatas.Length);
 
-            SkillData giveSkill = skillDataBase.skillDatas[rnd];
-            skillManager.SetSkill(giveSkill);
+            //SkillData giveSkill = skillDataBase.skillDatas[rnd];
+            //skillManager.SetSkill(giveSkill);
         }
 
         playerList.Clear();

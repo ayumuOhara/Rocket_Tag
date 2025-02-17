@@ -1,35 +1,34 @@
-using Photon.Pun;
+ï»¿using Photon.Pun;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerRocketAction : MonoBehaviourPunCallbacks
 {
     SetPlayerBool setPlayerBool;
     ObserveDistance observeDistance;
-    SkillManager skillManager;
 
     private void Start()
     {
         setPlayerBool = GetComponent<SetPlayerBool>();
         observeDistance = GetComponent<ObserveDistance>();
-        skillManager = GetComponent<SkillManager>();
     }
 
-    // ƒ^ƒbƒ`/“Š±ƒAƒNƒVƒ‡ƒ“
+    // ã‚¿ãƒƒãƒ/æŠ•æ“²ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
     public void RocketAction()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Debug.Log("ƒƒPƒbƒg‚ğ“Š±‚µ‚½");
+            Debug.Log("ãƒ­ã‚±ãƒƒãƒˆã‚’æŠ•æ“²ã—ãŸ");
         }
 
-        // ‹ß‚­‚ÌƒvƒŒƒCƒ„[‚ÉƒƒPƒbƒg‚ğ“n‚·
+        // è¿‘ãã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ãƒ­ã‚±ãƒƒãƒˆã‚’æ¸¡ã™
         GameObject target = observeDistance.GetTargetDistance();
         if (target != null)
         {
-            // ©•ª‚Ì hasRocket ‚ğØ‚è‘Ö‚¦
+            // è‡ªåˆ†ã® hasRocket ã‚’åˆ‡ã‚Šæ›¿ãˆ
             photonView.RPC("SetHasRocket", RpcTarget.All, !setPlayerBool.hasRocket);
 
-            // ƒ^[ƒQƒbƒg‚Ì hasRocket ‚ğØ‚è‘Ö‚¦
+            // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã® hasRocket ã‚’åˆ‡ã‚Šæ›¿ãˆ
             PhotonView targetPhotonView = target.GetComponent<PhotonView>();
             SetPlayerBool otherPlayer = target.GetComponent<SetPlayerBool>();
             if (targetPhotonView != null)
