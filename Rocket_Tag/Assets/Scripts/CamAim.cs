@@ -33,14 +33,14 @@ internal class Aiming : CamState    //  ADS状態
 {
     public void Enter(CamAim camAim)
     {
-
+        camAim._CamController.isAiming = true;
     }
     public void Update(CamAim camAim)
     {
         camAim.CamWrapper(CamAim.CamProcess.AIMING);    //  ADS中の処理を呼ぶ
         if(Input.GetMouseButtonUp(1))
         {
-            camAim.ChangeState(new BackDefualtPos());
+            camAim.ChangeState(new NotAiming());
         }
     }
     public void Exit(CamAim camAim)
@@ -52,7 +52,7 @@ internal class BackDefualtPos : CamState    //  ADS状態
 {
     public void Enter(CamAim camAim)
     {
-        camAim.cameraController.isAiming = false;
+         
     }
     public void Update(CamAim camAim)
     {
@@ -68,7 +68,7 @@ internal class BackDefualtPos : CamState    //  ADS状態
 }        ////  State区終了  ////
 internal class CamAim : MonoBehaviour
 {
-    public CameraController cameraController;
+
 
     internal enum CamProcess    //  カメラの挙動一覧                                     ////  以下宣言区  ////
     {
@@ -83,7 +83,8 @@ internal class CamAim : MonoBehaviour
     Transform playerHeadTF;
     Transform playerTF;
     Transform playerCamTF;
-   
+    CameraController camController;
+
     Quaternion playerStandRot;
     Vector3 playerCamOffset = new Vector3(-1.02f, -1.74f, 2.75f);
     Vector3 camAddSpdSlowedDis_Small = new Vector3(0.8f, 0.5f, 0.3f);
@@ -95,6 +96,9 @@ internal class CamAim : MonoBehaviour
     float headMoveSpd_Aim = 4.5f;
     float wholeBodyMoveSpd_Aim = 4.5f;
     bool isAim = false;                                                                  ////  宣言区終了  ////
+   
+    internal CameraController _CamController
+    { get { return camController; }  set { camController = value; } }     //ここまで--------------------------
     void Start()                                                                         ////  以下処理区  ////
     {
         Initialize();    //  初期化
@@ -108,11 +112,12 @@ internal class CamAim : MonoBehaviour
     {
         player = this.gameObject;
         playerCam = GameObject.Find("PlayerCamera").GetComponent<Camera>();
-        cameraController = playerCam.GetComponent<CameraController>();
         playerTF = player.transform;
         playerHeadTF = GameObject.Find("Head").GetComponent<Transform>();
         playerCamTF = playerCam.transform;
         currentAngle = playerTF.eulerAngles;
+        camController = playerCam.GetComponent<CameraController>();
+
         ChangeState(new NotAiming());
         playerStandRot = playerTF.rotation;
     }
@@ -131,7 +136,6 @@ internal class CamAim : MonoBehaviour
         {
             case CamProcess.AIMING:
                 {
-                    cameraController.isAiming = true;
                     //playerCamTF.position = Vector3.Lerp(playerCamTF.position, playerTF.position - playerCamOffset, camMoveSpd_Aim * Time.deltaTime);
                     LookPos(playerTF, GetVecForScreenCenter(playerTF.position), camMoveSpd_Aim, 8);    //  操作キャラの体をカメラ中心奥に向かせる
                     LookPos(playerHeadTF, GetVecForScreenCenter(playerHeadTF.position), wholeBodyMoveSpd_Aim, 1);    //  //  操作キャラの頭をカメラ中心奥に向かせる
