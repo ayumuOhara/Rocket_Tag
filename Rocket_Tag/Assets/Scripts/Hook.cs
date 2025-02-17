@@ -7,7 +7,8 @@ using UnityEngine.InputSystem.DualShock;
 using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine.Rendering;
-                                                                                          ////  フックの生成、挙動の作成をするスクリプト  ////
+using System.Linq.Expressions;
+////  フックの生成、挙動の作成をするスクリプト  ////
 internal interface HookState    //  フック状態インターフェース                            ////  以下State区  ////
 {
     void Enter(Hook arg);
@@ -132,7 +133,7 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     float attractAcceleration;
     int chainsNo;
 
-    internal Transform HitObj
+    internal Transform _HitObj
     { get { return hitObj; } }
 
     HookState currentState;                                                               ////  宣言区終了  ////
@@ -216,12 +217,10 @@ public class Hook : MonoBehaviour    //  フックスクリプト
         chains.Add(hookEntity);
         hookEntityTF = hookEntity.transform;
         hookEntityTF.LookAt(tempScreenCenter);
-        Debug.Log("投擲キング");    //DEBUG----------------------
-        while(chains[chainsNo] != null && ((tempCollider = GenerateHitDetection(hookEntityTF, belowPoint, topPoint, radius)) == null || tempCollider.Length == 0) && (retrieveTime -= Time.deltaTime) > 0)
+        Debug.Log("投擲キング");    //     投擲
+        while(chains[0] != null && ((tempCollider = GenerateHitDetection(hookEntityTF, belowPoint, topPoint, radius)) == null || tempCollider.Length == 0) && (retrieveTime -= Time.deltaTime) > 0)
         {
             StraightMoveToPos(hookEntityTF, tempScreenCenter, (throwSpd + (throwAcceleration *= 1.1f)), 1);
-            //Debug.Log(chainsNo);    DEBUG----------------------
-            //Debug.Log("listの長さ" + chains.Count);    DEBUG---------------------
             while (chains[0] != null && !IsInRange(chains[chainsNo].transform.position, playerTF.position - chainNotGenerateDis_Small, playerTF.position + chainNotGenerateDis_Big))
             {
                 GenerateObj(ref chainEntity, chainPrefab, chains[chainsNo].transform.position - chains[chainsNo].transform.forward * chainLongSide);
@@ -229,22 +228,37 @@ public class Hook : MonoBehaviour    //  フックスクリプト
                 chainEntity.transform.parent = hookEntityTF;
                 chains.Add(chainEntity);
                 chainsNo++;
-                await Task.Yield();    //TEST-----------------------
+                await Task.Yield();
             }
             await Task.Yield();
         }
         if (retrieveTime < 0)
         {
-            Debug.Log("nothit");
             hitObj = hookEntityTF;    //  何にも当たらなかった場合フックが当たったことにする
             ChangeState(new NotHitPlayer());
         }
         else
         {
-            Debug.Log("hitPlayer");
             hitObj = tempCollider[0].transform;
+        }
+        if(hitObj.gameObject.tag == "Player")
+        {
             ChangeState(new HitPlayer());
         }
+        else
+        {
+            ChangeState(new NotHitPlayer());
+        }
+        //if (tempCollider[0].tag == "Player")
+        //{
+        //    hitObj = tempCollider[0].transform;
+        //    ChangeState(new HitPlayer());
+        //}
+        //else
+        //{
+        //    hitObj = hookEntityTF;
+        //    ChangeState(new NotHitPlayer());
+        //}
         Debug.Log("throw終わり");
     }
     async void AttractPlayer ()    //  プレイヤー引き寄せ  
@@ -310,7 +324,6 @@ public class Hook : MonoBehaviour    //  フックスクリプト
             }
             StraightMoveToPos(chains[0].transform, playerTF.position, attractSpd *= attractAcceleration, 1);
             await Task.Yield();
-            Debug.Log(chains[0].name);
         }
         Destroy(chains[0]);
         //ThrowEndDel();
