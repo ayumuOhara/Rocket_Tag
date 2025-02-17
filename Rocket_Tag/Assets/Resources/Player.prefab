@@ -1637,6 +1637,7 @@ GameObject:
   - component: {fileID: 474657300711981693}
   - component: {fileID: 2753298400814805652}
   - component: {fileID: 978622442078488288}
+  - component: {fileID: 4077219752392889557}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1679,7 +1680,14 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Hip'\n\tTransform 'RightShoulder'\n\tTransform
+    'RightLeg'\n\tTransform 'RightForeArm'\n\tTransform 'LeftLeg'\n\tTransform 'LeftHand'\n\tTransform
+    'LeftUpLeg'\n\tTransform 'Hip'\n\tTransform 'LeftArm'\n\tTransform 'Spine'\n\tand
+    more ...\n\tFrom animation clip 'Take 001'\n\tFrom animation clip 'Take 001'\n\tFrom
+    animation clip 'Take 001'\n\tFrom animation clip 'Take 001'\n\tFrom animation
+    clip 'Take 001'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -1823,6 +1831,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerMovement: {fileID: 2759492702019797386}
   timeManager: {fileID: 0}
+  resultScreen: {fileID: 0}
   playerRankManager: {fileID: 0}
   rocketObj: {fileID: 4281978814399217487}
   hasRocket: 0
@@ -1891,6 +1900,20 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &4077219752392889557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7666606126202363588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0ae76d2bdbbb454f8c13f815d6f05b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  instantiatePlayer: {fileID: 0}
+  playerRank: 0
 --- !u!1 &7968644170803277865
 GameObject:
   m_ObjectHideFlags: 0
