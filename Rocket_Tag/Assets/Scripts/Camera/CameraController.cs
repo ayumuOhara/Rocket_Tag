@@ -19,6 +19,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Vector3 velocity;                    // 移動方向
     private float moveSpeed = 30.0f;                              // 移動速度
     public bool isShaking = false;                                // カメラが振動しているか
+    public bool isAiming = false;                                 // エイム中か
 
     void Start()
     {
@@ -137,8 +138,16 @@ public class CameraController : MonoBehaviour
     // 指定したオブジェクトを追跡する処理
     void TrackingTarget()
     {
-        // カメラの位置(transform.position)の更新
-        transform.position = playerTransform.position + new Vector3(0, 1.5f, 0) - transform.rotation * Vector3.forward * distance;
+        if(!isAiming)
+        {
+            // カメラの位置(transform.position)の更新
+            transform.position = playerTransform.position + new Vector3(0, 1.0f, 0) - transform.rotation * Vector3.forward * distance;
+        }
+        else
+        {
+            transform.position = playerTransform.position + new Vector3(-1.02f, 1.74f, 2.75f) - transform.rotation * Vector3.forward * distance;
+        }
+        
     }
 
     public IEnumerator Shake(float duration, float magnitude)
