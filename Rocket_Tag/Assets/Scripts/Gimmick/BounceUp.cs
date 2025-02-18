@@ -20,7 +20,7 @@ public class BounceUp : MonoBehaviour
                 // 上方向に力を加える
                 Vector3 bounceDirection = Vector3.up;
                 playerRigidbody.AddForce(bounceDirection * bounceForce, ForceMode.Impulse);
-                AudioManager.Instance.PlaySE(AudioManager.SEType.Bumper); // ジャンプ台のSE
+                //AudioManager.Instance.PlaySE(AudioManager.SE.Bumper); // ジャンプ台のSE
             }
         }
     }
