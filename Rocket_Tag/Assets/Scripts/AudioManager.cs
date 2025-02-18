@@ -41,6 +41,8 @@ public class AudioManager : MonoBehaviour
         Collision_Dash_1,   // ぶつかりダッシュ使用時の音
         Collision_Dash_2,   // ぶつかりダッシュ衝突時の音
         Sticky_Zone,        // ねばねばゾーン展開時の音
+        Pull_Hook_1,        // 引き寄せフック投擲時の音
+        Pull_Hook_2,        // 引き寄せフック引き寄せる時の音
     }
 
     // SEを再生するメソッド
@@ -78,6 +80,12 @@ public class AudioManager : MonoBehaviour
                 break;
             case SEType.Sticky_Zone:
                 PlaySEFromList(9); // ねばねばゾーン展開時の音（インデックス9）
+                break;
+            case SEType.Pull_Hook_1:
+                PlaySEFromList(10);// 引き寄せフック投擲時の音（インデックス10）
+                break;
+            case SEType.Pull_Hook_2:
+                PlaySEFromList(11);// 引き寄せフック引き寄せる時の音（インデックス11）
                 break;
             default:
                 Debug.LogWarning("指定されたSEが見つかりません");
