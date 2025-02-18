@@ -154,7 +154,7 @@ public class Hook : MonoBehaviour    //  フックスクリプト
         playerRightHand = GameObject.Find("RightHand").GetComponent<Transform>();
         playerCamTF = GameObject.Find("PlayerCamera").GetComponent<Transform>();
         playerCam = playerCamTF.GetComponent<Camera>();
-        //playerMovement = 結合時使用
+        playerMovement = playerTF.GetComponent<PlayerMovement>();//    結合の際使用
 
         chainsNo = 0;
 
@@ -200,7 +200,8 @@ public class Hook : MonoBehaviour    //  フックスクリプト
 
         Vector3 chainNotGenerateDis_Small = new Vector3(1.5f, 2f, 100f);
         Vector3 chainNotGenerateDis_Big = new Vector3(1.5f, 2f, 0f);
-        Vector3 tempScreenCenter = GetVecForScreenCenter(playerTF.position);
+        //Vector3 tempScreenCenter = GetVecForScreenCenter(playerTF.position);
+        Vector3 tempScreenCenter = GetVecForScreenCenter(Vector3.zero);
         Vector3 hookGeneratePos = playerRightHand.position + playerCamTF.forward * 1.35f;
 
         Debug.Log(tempScreenCenter);
@@ -257,17 +258,17 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     }
     async void AttractPlayer ()    //  プレイヤー引き寄せ  
     {
-        //  playerMovement = hitObj.GetComponent<PlayerMovement>();    結合時使用-------------------
+        playerMovement = hitObj.GetComponent<PlayerMovement>();// 結合時使用------------------ -
 
-        hookUnlockDis_Small = new Vector3(1.2f, 2f, 0.7f);
+      hookUnlockDis_Small = new Vector3(1.2f, 2f, 0.7f);
         hookUnlockDis_Big = new Vector3(0.5f, 2f, 2.4f);
         chainUnlockDis_Small = new Vector3(3f, 1.7f, 1f);
         chainUnlockDis_Big = new Vector3(5f, 1.7f, 4f);
         
-        //  float attractingPlayerMoveSpd;    結合時使用--------------------
+        float attractingPlayerMoveSpd;    //  結合時使用--------------------
         float hitStopTime = 0.9f;
-        //  float tempPlayerSpeed = playerMovement.GetMoveSpeed();    結合時使用------------------------
-        //  playerMovement.SetMoveSpeed(0.15f);    結合時使用----------------------
+        float tempPlayerSpeed = playerMovement.GetMoveSpeed();    // 結合時使用------------------------
+          playerMovement.SetMoveSpeed(0.15f); // 結合時使用----------------------
 
         attractSpd = 1.5f;
         attractAcceleration = 1.25f;
