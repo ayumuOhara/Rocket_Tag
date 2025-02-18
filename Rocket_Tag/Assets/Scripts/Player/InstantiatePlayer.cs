@@ -13,9 +13,46 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
     [SerializeField] Transform respawnPoint;
     [SerializeField] GameObject inputPlayerName;
 
+#if true
     void Start()
     {
-        if(PhotonNetwork.IsMasterClient)
+        // マスターサーバーに接続
+        PhotonNetwork.ConnectUsingSettings();
+    }
+
+    // マスターサーバーに接続成功した時に呼ばれる
+    public override void OnConnectedToMaster()
+    {
+        // ルームの作成または参加
+        PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions(), TypedLobby.Default);
+    }
+
+    // ルーム作成時または参加時に呼ばれる
+    public override void OnJoinedRoom()
+    {
+        // カスタムプロパティでプレイヤー人数を初期化または更新
+        UpdatePlayerCount();
+        Application.targetFrameRate = 60;
+
+        // プレイヤーをリスポーン地点に生成
+        GameObject player = PhotonNetwork.Instantiate("Player", respawnPoint.position, Quaternion.identity);
+
+        debuger.SetComponents(player);
+
+        // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
+        gameManager.playerController = player.GetComponent<PlayerController>();
+        gameManager.setPlayerBool = player.GetComponent<SetPlayerBool>();
+
+        inputPlayerName.SetActive(true);
+        playerCamera.SetActive(true);
+        waitCamera.SetActive(false);
+    }
+#endif
+
+#if false
+    void Start()
+    {
+        if (PhotonNetwork.IsMasterClient)
         {
             UpdatePlayerCount();
         }
@@ -34,6 +71,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
         playerCamera.SetActive(true);
         waitCamera.SetActive(false);
     }
+#endif
 
     // プレイヤーがルームから退出したとき
     public override void OnPlayerLeftRoom(Player otherPlayer)

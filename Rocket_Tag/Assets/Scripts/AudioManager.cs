@@ -31,13 +31,16 @@ public class AudioManager : MonoBehaviour
     // SEの種類をEnumで定義
     public enum SEType
     {
-        Bottun_Click,   // ボタンをクリックしたときの音
-        Dash,           // 走った時の音
-        Rocket_Set,     // ロケットを押し付けたときの音
-        Skill_use,      // スキル使用時の音
-        Bumper,         // ジャンプ台の音
-        Landing,        // 着地したときの音
-        Smash_Punch,    //スマッシュパンチの音
+        Bottun_Click,       // ボタンをクリックしたときの音
+        Dash,               // 走った時の音
+        Rocket_Set,         // ロケットを押し付けたときの音
+        Skill_use,          // スキル使用時の音
+        Bumper,             // ジャンプ台の音
+        Landing,            // 着地したときの音
+        Smash_Punch,        // スマッシュパンチの音
+        Collision_Dash_1,   // ぶつかりダッシュ使用時の音
+        Collision_Dash_2,   // ぶつかりダッシュ衝突時の音
+        Sticky_Zone,        // ねばねばゾーン展開時の音
     }
 
     // SEを再生するメソッド
@@ -66,6 +69,15 @@ public class AudioManager : MonoBehaviour
                 break;
             case SEType.Smash_Punch:
                 PlaySEFromList(6); // スマッシュパンチの音（インデックス6）
+                break;
+            case SEType.Collision_Dash_1:
+                PlaySEFromList(7); // ぶつかりダッシュ使用時の音（インデックス7）
+                break;
+            case SEType.Collision_Dash_2:
+                PlaySEFromList(8); // ぶつかりダッシュ衝突時の音（インデックス8）
+                break;
+            case SEType.Sticky_Zone:
+                PlaySEFromList(9); // ねばねばゾーン展開時の音（インデックス9）
                 break;
             default:
                 Debug.LogWarning("指定されたSEが見つかりません");
