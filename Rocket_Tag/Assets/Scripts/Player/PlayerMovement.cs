@@ -104,7 +104,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     void RunAnimation()
     {
-        if(movingVelocity.magnitude > 0 && PhotonNetwork.IsMasterClient)
+        if(movingVelocity.magnitude > 0 && photonView.IsMine)
         {
             if (setPlayerBool.hasRocket)
             {
