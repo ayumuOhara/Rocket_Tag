@@ -1739,13 +1739,13 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: RunTagger
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: RunRunner
   m_SynchronizeLayers:
-  - SynchronizeType: 0
+  - SynchronizeType: 2
     LayerIndex: 0
 --- !u!114 &7726809394241156031
 MonoBehaviour:
@@ -1937,7 +1937,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb4c21bc364e8244c8d6d5a28c74df6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraController: {fileID: 0}
 --- !u!95 &1641661711016070242
 Animator:
   serializedVersion: 7

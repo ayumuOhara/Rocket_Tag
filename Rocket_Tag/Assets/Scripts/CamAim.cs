@@ -15,7 +15,7 @@ internal class NotAiming : CamState    //  ADSじゃない状態
 {
     public void Enter(CamAim camAim)
     {
-
+        camAim._CamController.isAiming = false;
     }
     public void Update(CamAim camAim)
     {
@@ -82,7 +82,7 @@ internal class CamAim : MonoBehaviour
     Camera playerCam;
     Transform playerHeadTF;
     Transform playerTF;
-    Transform playerCamTF;
+    //Transform playerCamTF;    TEST------------------------
     CameraController camController;
 
     Quaternion playerStandRot;
@@ -98,7 +98,7 @@ internal class CamAim : MonoBehaviour
     bool isAim = false;                                                                  ////  宣言区終了  ////
    
     internal CameraController _CamController
-    { get { return camController; }  set { camController = value; } }     //ここまで--------------------------
+    { get { return camController; } set { camController = value; } } 
     void Start()                                                                         ////  以下処理区  ////
     {
         Initialize();    //  初期化
@@ -114,7 +114,7 @@ internal class CamAim : MonoBehaviour
         playerCam = GameObject.Find("PlayerCamera").GetComponent<Camera>();
         playerTF = player.transform;
         playerHeadTF = GameObject.Find("Head").GetComponent<Transform>();
-        playerCamTF = playerCam.transform;
+        //playerCamTF = playerCam.transform;    TEST--------------------------
         currentAngle = playerTF.eulerAngles;
         camController = playerCam.GetComponent<CameraController>();
 
@@ -143,10 +143,6 @@ internal class CamAim : MonoBehaviour
                 }
             default: break;
         }
-    }
-    async void BackDefaultPos()
-    {
-
     }
     void LookPos(Transform obj, Vector3 pos, float moveSpd, float correctionX)    //  指定したポジションを向くように回転させる
     {
