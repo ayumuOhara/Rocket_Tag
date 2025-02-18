@@ -19,7 +19,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float turnSpeed = 5.0f;              // 回転速度
     [SerializeField] private Vector3 velocity;                    // 移動方向
     private float moveSpeed = 30.0f;                              // 移動速度
-    private float aimDis = 4.0f;                                  //  ADS中のカメラ距離
+    private float aimDis = 3.2f;                                  //  ADS中のカメラ距離
     private float tmpDis = 5.0f;                                  //  デフォルトのカメラ位置
     private float minAimVerticalAngle = -20f;                     //  ADS中のカメラ距離
     private float tmpMinverticalAngle = 20f;                      //  デフォルトのカメラの最低角度
@@ -149,7 +149,7 @@ public class CameraController : MonoBehaviour
             distance = tmpDis;
             minVerticalAngle = tmpMinverticalAngle;
             // カメラの位置(transform.position)の更新
-            transform.position = Vector3.Lerp(transform.position, playerTransform.position + new Vector3(0, 1.0f, 0) - transform.rotation * Vector3.forward * distance, 20 * Time.deltaTime);
+            transform.position = playerTransform.position + new Vector3(0, 1.0f, 0) - transform.rotation * Vector3.forward * distance;
         }
         else
         {
