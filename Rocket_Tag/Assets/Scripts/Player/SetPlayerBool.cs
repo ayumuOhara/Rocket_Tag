@@ -11,9 +11,9 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
     [SerializeField] GameObject rocketObj;            // ロケット
 
-    [SerializeField] public bool hasRocket;           // ロケットを所持しているか
-    [SerializeField] public bool isDead;              // 死亡判定
-    [SerializeField] public bool isStun;              // スタン判定
+    [SerializeField] public bool hasRocket; // ロケットを所持しているか
+    [SerializeField] public bool isDead;    // 死亡判定
+    [SerializeField] public bool isStun;    // スタン判定
 
     private void Start()
     {
