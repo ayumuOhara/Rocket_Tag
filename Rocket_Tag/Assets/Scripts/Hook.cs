@@ -232,33 +232,27 @@ public class Hook : MonoBehaviour    //  フックスクリプト
             }
             await Task.Yield();
         }
-        if (retrieveTime < 0)
-        {
-            hitObj = hookEntityTF;    //  何にも当たらなかった場合フックが当たったことにする
-            ChangeState(new NotHitPlayer());
-        }
-        else
+        if (tempCollider.Length != 0 && tempCollider[0] != null)
         {
             hitObj = tempCollider[0].transform;
         }
-        if(hitObj.gameObject.tag == "Player")
-        {
-            ChangeState(new HitPlayer());
-        }
         else
         {
-            ChangeState(new NotHitPlayer());
+            hitObj = hookEntityTF;
         }
-        //if (tempCollider[0].tag == "Player")
-        //{
-        //    hitObj = tempCollider[0].transform;
-        //    ChangeState(new HitPlayer());
-        //}
-        //else
-        //{
-        //    hitObj = hookEntityTF;
-        //    ChangeState(new NotHitPlayer());
-        //}
+        switch (hitObj.gameObject.tag)
+        {
+            case "Player":
+                {
+                    ChangeState(new HitPlayer());
+                    break;
+                }
+            default:
+                {
+                    ChangeState(new NotHitPlayer());
+                    break;
+                }
+        }
         Debug.Log("throw終わり");
     }
     async void AttractPlayer ()    //  プレイヤー引き寄せ  

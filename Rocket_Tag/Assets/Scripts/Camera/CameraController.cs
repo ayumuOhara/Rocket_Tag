@@ -6,10 +6,11 @@ public class CameraController : MonoBehaviour
 {
     GameObject player;
     Transform playerTransform;                                    // 注視対象プレイヤー
+    Transform playerRightHandTransform;
     [SerializeField] private CameraController refCamera; 　       // カメラの水平回転を参照する用
     SetPlayerBool setPlayerBool;
 
-    [SerializeField] private float distance = 5.0f;               // 注視対象プレイヤーからカメラを離す距離
+    [SerializeField] private float distance = 2.0f;               // 注視対象プレイヤーからカメラを離す距離
     [SerializeField] private float verticalAngle = 20.0f;         // 垂直回転角度
     [SerializeField] private float minVerticalAngle = 20.0f;      // 垂直回転の最小角度
     [SerializeField] private float maxVerticalAngle = 50.0f;      // 垂直回転の最大角度
@@ -18,14 +19,19 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float turnSpeed = 5.0f;              // 回転速度
     [SerializeField] private Vector3 velocity;                    // 移動方向
     private float moveSpeed = 30.0f;                              // 移動速度
-    public bool isShaking = false;                                // カメラが振動しているか
-    public bool isAiming = false;                                 // エイム中か
+    private float aimDis = 4.0f;                                  //  ADS中のカメラ距離
+    private float tmpDis = 5.0f;                                  //  デフォルトのカメラ位置
+    private float minAimVerticalAngle = -20f;                     //  ADS中のカメラ距離
+    private float tmpMinverticalAngle = 20f;                      //  デフォルトのカメラの最低角度
+    public bool isShaking = false;                                //  カメラが振動しているか
+    public bool isAiming = false;                                 //  エイム中か
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerTransform = player.GetComponent<Transform>();
         setPlayerBool = player.GetComponent<SetPlayerBool>();
+        playerRightHandTransform = GameObject.Find("RightHand").GetComponent<Transform>();
 
         // 回転の初期化
         verticalAngle = Mathf.Clamp(verticalAngle, minVerticalAngle, maxVerticalAngle);
@@ -140,12 +146,18 @@ public class CameraController : MonoBehaviour
     {
         if(!isAiming)
         {
+            distance = tmpDis;
+            minVerticalAngle = tmpMinverticalAngle;
             // カメラの位置(transform.position)の更新
-            transform.position = playerTransform.position + new Vector3(0, 1.0f, 0) - transform.rotation * Vector3.forward * distance;
+            transform.position = Vector3.Lerp(transform.position, playerTransform.position + new Vector3(0, 1.0f, 0) - transform.rotation * Vector3.forward * distance, 20 * Time.deltaTime);
         }
         else
         {
-            transform.position = playerTransform.position + new Vector3(-1.02f, 1.74f, 2.75f) - transform.rotation * Vector3.forward * distance;
+            distance = aimDis;
+            minVerticalAngle = minAimVerticalAngle;
+            //transform.position = playerTransform.position + new Vector3(-1.02f, 1.74f, 2.75f) - transform.rotation * Vector3.forward * distance;
+            //transform.position = playerTransform.position + new Vector3(playerTransform.position.x + 1, playerTransform.position.y, 0f) - transform.rotation * Vector3.forward * distance;
+            transform.position = Vector3.Lerp(transform.position, playerTransform.position + new Vector3(playerRightHandTransform.localPosition.x + 0.2f, playerRightHandTransform.localPosition.y + 0.8f, 0f) - transform.rotation * Vector3.forward * distance, 20 * Time.deltaTime); 
         }
         
     }
