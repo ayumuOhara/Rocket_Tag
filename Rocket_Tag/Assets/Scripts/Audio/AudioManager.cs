@@ -21,21 +21,9 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // BGMÄ¶
-    public void PlayBGM(BGMManager.BGMType bgmType)
-    {
-        bgmManager.PlayBGM(bgmType);
-    }
-
     // SEÄ¶
     public void PlaySE(SEManager.SEType seType)
     {
         seManager.PlaySE(seType);
     }
 }
-
-// BGMÄ¶
-// AudioManager.Instance.PlayBGM(BGMManager.BGMType.BGM_1);
-
-// Œø‰Ê‰¹Ä¶
-// AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click);

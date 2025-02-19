@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
 public class SkillManager : MonoBehaviourPunCallbacks
@@ -21,6 +22,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject player;
     [SerializeField] GameObject rocketObj;
     [SerializeField] GameObject stickyZone;
+    [SerializeField] Image skillIcon;
 
     public bool finishSkill = true;
 
@@ -28,6 +30,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     public void SetSkill(SkillData newSkillData)
     {
         skillData = newSkillData;
+        skillIcon.sprite = newSkillData.skillIcon;
     }
 
     // 所持スキルを削除
@@ -41,6 +44,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
         playerMovement = GetComponent<PlayerMovement>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        skillIcon = GameObject.Find("SKillIcon").GetComponent<Image>();
 
         skillIdx = 0;
         SetSkill(skillDataBase.SkillData[skillIdx]);
@@ -55,7 +59,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log($"【{skillData.skillName}】を使用");
 
-                switch (skillData.SkillId)
+                switch (skillData.skillId)
                 {
                     case 101: break;
                     case 102: photonView.RPC("PutStickyZone", RpcTarget.All); break;
