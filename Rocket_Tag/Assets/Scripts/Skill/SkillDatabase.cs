@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "SkillDataBase", menuName = "Scriptable Objects/SkillDataBase")]
 public class SkillDataBase : ScriptableObject
@@ -11,8 +12,9 @@ public class SkillDataBase : ScriptableObject
 [System.Serializable]
 public class SkillData
 {
-    public int SkillId;
+    public int skillId;
     public SkillName skillName;
+    public Sprite skillIcon;
 
     public enum SkillName
     {
