@@ -95,10 +95,11 @@ internal class CamAim : MonoBehaviour
     float camMoveAddSpd_Aim = 4.5f;
     float headMoveSpd_Aim = 4.5f;
     float wholeBodyMoveSpd_Aim = 4.5f;
-    bool isAim = false;                                                                  ////  éŒ¾‹æI—¹  ////
+    bool isAim = false;
    
     internal CameraController _CamController
-    { get { return camController; } set { camController = value; } } 
+    { get { return camController; } set { camController = value; } }                     ////  éŒ¾‹æI—¹  ////
+
     void Start()                                                                         ////  ˆÈ‰ºˆ—‹æ  ////
     {
         Initialize();    //  ‰Šú‰»
