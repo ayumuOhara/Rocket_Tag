@@ -5165,7 +5165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rocketTime: 100
-  isTimeStart: 0
+  isTimeStart: 1
   timerView: {fileID: 2025218671}
   rocketCountText: {fileID: 766934791}
 --- !u!4 &2025218670
