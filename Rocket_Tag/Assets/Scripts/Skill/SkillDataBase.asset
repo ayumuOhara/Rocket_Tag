@@ -13,13 +13,18 @@ MonoBehaviour:
   m_Name: SkillDataBase
   m_EditorClassIdentifier: 
   SkillData:
-  - SkillId: 101
+  - skillId: 101
     skillName: 0
-  - SkillId: 102
+    skillIcon: {fileID: 21300000, guid: 7e8ed18ec9228f342817a84f69aaa345, type: 3}
+  - skillId: 102
     skillName: 1
-  - SkillId: 103
+    skillIcon: {fileID: 21300000, guid: 433ae7ed9f7e1c24dbd67ffdbec0fd51, type: 3}
+  - skillId: 103
     skillName: 2
-  - SkillId: 104
+    skillIcon: {fileID: 21300000, guid: bc9795856986bad4da658157b7397036, type: 3}
+  - skillId: 104
     skillName: 3
-  - SkillId: 105
+    skillIcon: {fileID: 21300000, guid: 25becfd9de7f18a4f80ebe50e80a5bea, type: 3}
+  - skillId: 105
     skillName: 4
+    skillIcon: {fileID: 21300000, guid: 5053797a049bd2741aa95296dff601b7, type: 3}

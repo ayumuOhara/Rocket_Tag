@@ -14699,7 +14699,7 @@ Transform:
   m_GameObject: {fileID: 1663361973685642462}
   serializedVersion: 2
   m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: -5.55, y: 3.22, z: 0.09}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34068,15 +34068,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5171299381639691350, guid: 7a000e2faf254504aac092a72bb80406, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.09
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5171299381639691350, guid: 7a000e2faf254504aac092a72bb80406, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3799999
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5171299381639691350, guid: 7a000e2faf254504aac092a72bb80406, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.03
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5171299381639691350, guid: 7a000e2faf254504aac092a72bb80406, type: 3}
       propertyPath: m_LocalRotation.w
@@ -34108,7 +34108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5174148453925550084, guid: 7a000e2faf254504aac092a72bb80406, type: 3}
       propertyPath: m_Name
-      value: FireSmoke
+      value: FrameSmoke
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

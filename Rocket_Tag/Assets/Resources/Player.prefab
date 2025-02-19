@@ -1808,13 +1808,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillDataBase: {fileID: 11400000, guid: ed8d1036479547b4fab7294aaf68ed13, type: 2}
   skillData:
-    SkillId: 0
+    skillId: 0
     skillName: 0
+    skillIcon: {fileID: 0}
   skillIdx: 0
   observeDistance: {fileID: 474657300711981693}
   player: {fileID: 7666606126202363588}
   rocketObj: {fileID: 4281978814399217487}
   stickyZone: {fileID: 5389891788530700, guid: 97e922af119d9f947936b1147ad629ef, type: 3}
+  skillIcon: {fileID: 0}
   finishSkill: 1
 --- !u!114 &7546664316037379923
 MonoBehaviour:

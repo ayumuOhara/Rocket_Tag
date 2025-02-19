@@ -13,8 +13,9 @@ public class EventData : ScriptableObject
     [Serializable]
     public class Event
     {
+        public string eventName;       // イベント名
         public EventType EVENT_TYPE;   // イベントの種類
-        public int eventPercent;      // 各イベントごとの数値
+        public int eventPercent;       // 各イベントごとの数値
     }
 
     public enum EventType

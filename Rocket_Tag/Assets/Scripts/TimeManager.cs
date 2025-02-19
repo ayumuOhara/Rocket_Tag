@@ -21,7 +21,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
 
     float[] decreaseValue  = { 1.0f, 3.0f, 6.0f };
     float[] decreaseUpTime = { 10, 20, 30 };
-    float[] stageUpTime = { 70, 30, 5 };
+    float[] stageUpTime = {100, 70, 30, 7};
 
     float floatStartTime = 2.2f;
     public bool isTimeStart = false;
@@ -37,7 +37,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
         isTimeStart = false;
         isTimeStop = false;
         timerView = GetComponent<PhotonView>();
-        rocketEffect = GameObject.Find("Bomb").GetComponent<RocketEffect>();
+        rocketEffect = GameObject.Find("Debuger").GetComponent<RocketEffect>();
         Initialize();
     }
 

@@ -4,11 +4,13 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; // シーン遷移に必要
 public class PhotonMaster : MonoBehaviourPunCallbacks
 {
     public Text statusText;
+    public Image cover;
     private const int MAX_PLAYER_PER_ROOM = 4;
-
+    bool isMatching = false; // マッチング中かどうか
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -29,10 +31,28 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     //これをボタンにつける
     public void FindOponent()
     {
-        if (PhotonNetwork.IsConnected)
+        if (PhotonNetwork.IsConnected && !isMatching)
         {
+            isMatching = true; // マッチング中フラグを立てる
             PhotonNetwork.JoinRandomRoom();
+            statusText.text = "ルームを探しています...";
         }
+    }
+
+    // マッチングキャンセルのメソッド
+    public void CancelMatching()
+    {
+        if (isMatching)
+        {
+            isMatching = false; // マッチング中フラグを解除
+            statusText.text = "マッチングをキャンセルしました。";
+            PhotonNetwork.LeaveRoom(); // ルームから退出
+        }
+        else
+        {
+            statusText.text = "ロビーに戻ります。";
+        }
+            SceneManager.LoadScene("Lobby"); // 戻りたいシーンに遷移
     }
 
     //Photonのコールバック
@@ -40,6 +60,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     {
         Debug.Log("マスターに繋ぎました。");
         statusText.text = "サーバーに接続しました。";
+        RemoveTheCover();
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -60,7 +81,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         if (playerCount != MAX_PLAYER_PER_ROOM)
         {
-            statusText.text = "対戦相手を待っています。";
+            statusText.text = $"対戦相手を待っています。\n　　　　　　　　({playerCount}/{MAX_PLAYER_PER_ROOM})";
         }
         else
         {
@@ -80,4 +101,17 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    /*
+     public override void OnLeftRoom()
+    {
+        Debug.Log("ルームを退出しました");
+        SceneManager.LoadScene("前のシーン名"); // 退出後に前のシーンに戻る
+    }
+    */
+
+    public void RemoveTheCover()
+    {
+        cover.gameObject.SetActive(false);
+    }    
 }

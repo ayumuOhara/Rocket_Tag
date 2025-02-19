@@ -6,6 +6,7 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
 {
     SetPlayerBool setPlayerBool;
     ObserveDistance observeDistance;
+    RocketEffect rocketEffect;
 
     private void Start()
     {
@@ -35,6 +36,8 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
             {
                 targetPhotonView.RPC("SetHasRocket", RpcTarget.All, !otherPlayer.hasRocket);
                 targetPhotonView.RPC("SetIsStun", RpcTarget.All, true);
+                //    ロケットを取得
+                rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
             }
         }
     }
