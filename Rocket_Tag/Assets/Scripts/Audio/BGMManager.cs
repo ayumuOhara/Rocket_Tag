@@ -6,6 +6,8 @@ public class BGMManager : MonoBehaviour
     [SerializeField] private AudioSource bgmAudioSource;
     [SerializeField] private List<AudioClip> bgmClips;
 
+    private BGMType currentBGM;
+
     // EnumによるBGM管理
     public enum BGMType
     {
@@ -17,8 +19,25 @@ public class BGMManager : MonoBehaviour
     // BGM再生メソッド
     public void PlayBGM(BGMType bgmType)
     {
-        int index = (int)bgmType;  // Enumからインデックスへ変換
-        PlayBGMFromList(index);
+        if(currentBGM == bgmType && bgmAudioSource.isPlaying)
+        {
+            return; // すでに再生中なら変更しない
+        }
+       
+        currentBGM = bgmType;
+
+        // 現在のBGMを止めてから、新しいBGMを再生
+        StopBGM();
+        PlayBGMFromList((int)bgmType);
+
+        //int index = (int)bgmType;  // Enumからインデックスへ変換
+        //PlayBGMFromList(index);
+    }
+
+    public void StopBGM()
+    {
+        bgmAudioSource.Stop();
+        bgmAudioSource.clip = null;
     }
 
     // リストからBGMを再生
@@ -26,7 +45,10 @@ public class BGMManager : MonoBehaviour
     {
         if (index >= 0 && index < bgmClips.Count)
         {
-            bgmAudioSource.PlayOneShot(bgmClips[index]);
+            bgmAudioSource.clip = bgmClips[index];
+            bgmAudioSource.Play();
+            //bgmAudioSource.PlayOneShot(bgmClips[index]);
+            Debug.Log("BGMを再生");
         }
         else
         {
