@@ -29,9 +29,6 @@ public class BGMManager : MonoBehaviour
         // 現在のBGMを止めてから、新しいBGMを再生
         StopBGM();
         PlayBGMFromList((int)bgmType);
-
-        //int index = (int)bgmType;  // Enumからインデックスへ変換
-        //PlayBGMFromList(index);
     }
 
     public void StopBGM()
@@ -47,8 +44,6 @@ public class BGMManager : MonoBehaviour
         {
             bgmAudioSource.clip = bgmClips[index];
             bgmAudioSource.Play();
-            //bgmAudioSource.PlayOneShot(bgmClips[index]);
-            Debug.Log("BGMを再生");
         }
         else
         {
