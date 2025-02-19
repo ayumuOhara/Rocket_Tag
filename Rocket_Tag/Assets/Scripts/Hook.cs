@@ -39,7 +39,6 @@ internal class HookThrow : HookState    //  フック投擲状態
     public void Enter(Hook hook)
     {
         Debug.Log("HookThrowState突入");
-
         hook.HookWrapper(Hook.HookProcess.THROW_HOOK);
     }
     public async void Update(Hook hook)
@@ -198,11 +197,12 @@ public class Hook : MonoBehaviour    //  フックスクリプト
         GameObject chainEntity = null;
         Collider[] tempCollider = new Collider[1];
 
-        Vector3 chainNotGenerateDis_Small = new Vector3(1.5f, 2f, 100f);
+        Vector3 chainNotGenerateDis_Small = new Vector3(1.5f, 2f, 10f);
         Vector3 chainNotGenerateDis_Big = new Vector3(1.5f, 2f, 0f);
         //Vector3 tempScreenCenter = GetVecForScreenCenter(playerTF.position);
         Vector3 tempScreenCenter = GetVecForScreenCenter(Vector3.zero);
-        Vector3 hookGeneratePos = playerRightHand.position + playerCamTF.forward * 1.35f;
+        Vector3 hookGeneratePos = playerRightHand.position + playerCamTF.forward * 4f;
+        Vector3 playerPos = playerTF.position;
 
         Debug.Log(tempScreenCenter);
         float throwSpd = 30f;
@@ -219,11 +219,12 @@ public class Hook : MonoBehaviour    //  フックスクリプト
         hookEntityTF = hookEntity.transform;
         hookEntityTF.LookAt(tempScreenCenter);
         Debug.Log("投擲キング");    //     投擲
-        while(chains[0] != null && ((tempCollider = GenerateHitDetection(hookEntityTF, belowPoint, topPoint, radius)) == null || tempCollider.Length == 0) && (retrieveTime -= Time.deltaTime) > 0)
+        while(((tempCollider = GenerateHitDetection(hookEntityTF, belowPoint, topPoint, radius)) == null || tempCollider.Length == 0) && (retrieveTime -= Time.deltaTime) > 0)
         {
             StraightMoveToPos(hookEntityTF, tempScreenCenter, (throwSpd + (throwAcceleration *= 1.1f)), 1);
-            while (chains[0] != null && !IsInRange(chains[chainsNo].transform.position, playerTF.position - chainNotGenerateDis_Small, playerTF.position + chainNotGenerateDis_Big))
+            while (!IsInRange(chains[chainsNo].transform.position, playerPos - chainNotGenerateDis_Small, playerPos + chainNotGenerateDis_Big))
             {
+                Debug.Log(playerPos);
                 GenerateObj(ref chainEntity, chainPrefab, chains[chainsNo].transform.position - chains[chainsNo].transform.forward * chainLongSide);
                 chainEntity.transform.LookAt(hookEntityTF);
                 chainEntity.transform.parent = hookEntityTF;

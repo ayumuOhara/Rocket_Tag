@@ -844,7 +844,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.8563604
+      value: -7.32
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
       propertyPath: m_LocalPosition.y
@@ -888,7 +888,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1662577726}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
       insertIndex: -1
@@ -896,6 +899,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
       insertIndex: -1
       addedObject: {fileID: 969129215}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 969129218}
   m_SourcePrefab: {fileID: 100100000, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
 --- !u!1 &969129211 stripped
 GameObject:
@@ -926,6 +932,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64618873737ed8b4daa7fe50440d43bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &969129218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 969129211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 097fc50aee217e145a0552e6fa5a0e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &969129220 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
+  m_PrefabInstance: {fileID: 969129210}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1119507442
 GameObject:
   m_ObjectHideFlags: 0
@@ -1331,6 +1354,7 @@ GameObject:
   - component: {fileID: 1662577724}
   - component: {fileID: 1662577727}
   - component: {fileID: 1662577728}
+  - component: {fileID: 1662577729}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: PlayerCamera
@@ -1405,13 +1429,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1662577723}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.011738837, y: -0, z: -0, w: 0.99993116}
-  m_LocalPosition: {x: -3.832, y: 2.555, z: -2.142}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -1.345, y: 0, z: 0}
+  m_Father: {fileID: 969129220}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1662577727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1478,6 +1502,29 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1662577729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1662577723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d765c19c068f2394bbc7ddbe0029989a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  refCamera: {fileID: 0}
+  distance: 2
+  verticalAngle: 20
+  minVerticalAngle: 20
+  maxVerticalAngle: 50
+  vRotation: {x: 0, y: 0, z: 0, w: 0}
+  hRotation: {x: 0, y: 0, z: 0, w: 0}
+  turnSpeed: 5
+  velocity: {x: 0, y: 0, z: 0}
+  isShaking: 0
+  isAiming: 0
 --- !u!1 &1693524535
 GameObject:
   m_ObjectHideFlags: 0
@@ -1663,7 +1710,6 @@ RectTransform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1662577726}
   - {fileID: 1545680910}
   - {fileID: 240249678}
   - {fileID: 1205941269}
