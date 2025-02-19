@@ -1628,6 +1628,7 @@ GameObject:
   - component: {fileID: 5648620419117286419}
   - component: {fileID: 5191879591132501865}
   - component: {fileID: 1207182245521648239}
+  - component: {fileID: -2980101725353078448}
   - component: {fileID: 7726809394241156031}
   - component: {fileID: 2759492702019797386}
   - component: {fileID: 9086714697225009793}
@@ -1686,6 +1687,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 5191879591132501865}
   - {fileID: 1207182245521648239}
+  - {fileID: -2980101725353078448}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1721,6 +1723,30 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &-2980101725353078448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7666606126202363588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: RunTagger
+  - Type: 4
+    SynchronizeType: 2
+    Name: RunRunner
+  m_SynchronizeLayers:
+  - SynchronizeType: 2
+    LayerIndex: 0
 --- !u!114 &7726809394241156031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1911,7 +1937,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb4c21bc364e8244c8d6d5a28c74df6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraController: {fileID: 0}
 --- !u!95 &1641661711016070242
 Animator:
   serializedVersion: 7

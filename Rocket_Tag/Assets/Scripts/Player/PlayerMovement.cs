@@ -5,6 +5,7 @@ using TMPro;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
+    SetPlayerBool setPlayerBool;
     SkillManager skillManager;
 
     [SerializeField] private Vector3 movingVelocity;             // 移動方向
@@ -29,6 +30,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     void Start()
     {
         refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
+        setPlayerBool = GetComponent<SetPlayerBool>();
         skillManager   = GetComponent<SkillManager>();
         animator = GetComponent<Animator>();
     }
@@ -66,10 +68,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     // 取得したベクトルの方向に移動&回転させる+ジャンプ処理
     public void PlayerMove()
     {
+        RunAnimation();
+
         // いずれかの方向に移動している場合
         if (movingVelocity.magnitude > 0)
         {
-            animator.SetBool("Running", true);
             _collider.material = noneFriction;
 
             // カメラの前方向をXZ平面に投影
@@ -95,8 +98,27 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
         else
         {
-            animator.SetBool("Running", false);
             _collider.material = defaultFriction; 
+        }
+    }
+
+    void RunAnimation()
+    {
+        if(movingVelocity.magnitude > 0 && photonView.IsMine)
+        {
+            if (setPlayerBool.hasRocket)
+            {
+                animator.SetBool("RunTagger", true);
+            }
+            else
+            {
+                animator.SetBool("RunRunner", true);
+            }
+        }
+        else
+        {
+            animator.SetBool("RunTagger", false);
+            animator.SetBool("RunRunner", false);
         }
     }
 

@@ -152,7 +152,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
     }
     internal bool IsStageUpTime()    //  ロケット炎エフェクト変化時間か判定
     {
-        return stageUpTime[rocketEffect.GetRocketStage()] > rocketTime;
+        return stageUpTime[rocketEffect._RocketStage] > rocketTime;
     }
 
     // 加速度をリセットし、関連カウントを初期化
