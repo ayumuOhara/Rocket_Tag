@@ -64,8 +64,11 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetHasRocket(bool newHasRocket)
     {
-        string playerName = PhotonNetwork.NickName;
-        uiLogManager.AddLog(playerName, UILogManager.LogType.ChangeTagger);
+        if (newHasRocket)
+        {
+            string playerName = PhotonNetwork.NickName;
+            uiLogManager.AddLog(playerName, UILogManager.LogType.ChangeTagger);
+        }        
 
         hasRocket = newHasRocket;
 
