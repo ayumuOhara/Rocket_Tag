@@ -27,4 +27,4 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 25becfd9de7f18a4f80ebe50e80a5bea, type: 3}
   - skillId: 105
     skillName: 4
-    skillIcon: {fileID: 21300000, guid: b815e629b112bb44b8696905eb9c55ed, type: 3}
+    skillIcon: {fileID: 21300000, guid: 2009141f2cef9354f8fde8128a3bf085, type: 3}
