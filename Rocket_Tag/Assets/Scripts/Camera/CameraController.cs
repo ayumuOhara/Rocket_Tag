@@ -152,8 +152,7 @@ public class CameraController : MonoBehaviour
         if(!isAiming)
         {
             distance = tmpDis;
-            minVerticalAngle = tmpMinverticalAngle;
-            playerMovement.SetMoveSpeed(tmpPlayerMoveSpeed);
+           // playerMovement.SetMoveSpeed(tmpPlayerMoveSpeed);
             // カメラの位置(transform.position)の更新
             transform.position = playerTransform.position + new Vector3(0, 1.0f, 0) - transform.rotation * Vector3.forward * distance;
         }
@@ -161,7 +160,7 @@ public class CameraController : MonoBehaviour
         {
             distance = aimDis;
             minVerticalAngle = minAimVerticalAngle;
-            playerMovement.SetMoveSpeed(aimMoveSpeed);
+           // playerMovement.SetMoveSpeed(aimMoveSpeed);
             //transform.position = playerTransform.position + new Vector3(-1.02f, 1.74f, 2.75f) - transform.rotation * Vector3.forward * distance;
             //transform.position = playerTransform.position + new Vector3(playerTransform.position.x + 1, playerTransform.position.y, 0f) - transform.rotation * Vector3.forward * distance;
             //transform.position = Vector3.Lerp(transform.position, playerTransform.position + new Vector3(playerRightHandTransform.localPosition.x + 0.2f, playerRightHandTransform.localPosition.y + 0.8f, 0f) - transform.rotation * Vector3.forward * distance, 20 * Time.deltaTime); 
