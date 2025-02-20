@@ -2,16 +2,14 @@ using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public class RotateObject : MonoBehaviourPun, IPunObservable
+public class Rotate : MonoBehaviourPun, IPunObservable
 {
     private string targetTag = "Player";
     [SerializeField] private float maxDistance = 5.0f;  // 検知する最大距離（Inspector で設定可）
 
     [Header("回転設定")]  // Inspector で分かりやすくするためのヘッダー
     [SerializeField] private float rotationSpeed = 100f;   // 初期回転速度
-    [SerializeField] private float switchInterval = 3f;    // 方向を切り替える間隔（秒）
 
-    private float timer = 0f;           // 経過時間を追跡するためのタイマー
     private Quaternion networkRotation; // ネットワーク同期用
 
     void Start()
@@ -23,14 +21,6 @@ public class RotateObject : MonoBehaviourPun, IPunObservable
     {
         if (photonView.IsMine)
         {
-            // 一定時間ごとに回転方向を反転
-            timer += Time.deltaTime;
-            if (timer >= switchInterval)
-            {
-                rotationSpeed = -rotationSpeed; // 回転方向を反転
-                timer = 0f;                     // タイマーをリセット
-            }
-
             // オブジェクトを回転させる
             transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
         }
@@ -89,5 +79,20 @@ public class RotateObject : MonoBehaviourPun, IPunObservable
         }
 
         return nearestObject;
+    }
+
+    // 回転方向を反転するメソッド（外部から呼び出し可能）
+    public void ReverseRotation()
+    {
+        rotationSpeed = -rotationSpeed;
+    }
+
+    // プレイヤーに当たったら回転方向を反転
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player")) // 触れたオブジェクトがプレイヤーの場合
+        {
+            ReverseRotation();
+        }
     }
 }
