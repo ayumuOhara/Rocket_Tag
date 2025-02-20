@@ -34,9 +34,10 @@ public class UILogManager : MonoBehaviourPunCallbacks
         }
 
         // UIを更新
-        UpdateLogDisplay();
+        photonView.RPC("UpdateLogDisplay", RpcTarget.All);
     }
 
+    [PunRPC]
     private void UpdateLogDisplay()
     {
         logText.text = string.Join("\n", logQueue);
@@ -46,9 +47,9 @@ public class UILogManager : MonoBehaviourPunCallbacks
     {
         switch (logType)
         {
-            case LogType.ChangeTagger: return $"{message}が鬼になりました！";
-            case LogType.Dead        : return $"{message}が脱落しました…";
-            case LogType.Event       : return $"{message}イベントが発生しました！！";
+            case LogType.ChangeTagger: return $"ロケットを所持 : {message}";
+            case LogType.Dead        : return $"脱落 : {message}";
+            case LogType.Event       : return $"イベント発生 : {message}";
             default:                   return $"存在しないタイプです。";
         }
     }

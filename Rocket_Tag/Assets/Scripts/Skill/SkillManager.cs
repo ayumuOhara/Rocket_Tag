@@ -79,7 +79,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
     {
         GameObject zone = Instantiate(stickyZone);
         Vector3 playerPos = player.transform.position;
-        playerPos += Vector3.down;
         zone.transform.position = playerPos;
     }
 
