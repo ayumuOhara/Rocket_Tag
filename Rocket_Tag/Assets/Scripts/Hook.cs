@@ -121,7 +121,7 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     Transform playerRightHand;
     Transform playerCamTF;
     Camera playerCam;
-    PlayerMovement playerMovement;  ////----結合の際使用
+    PlayerMovement playerMovement;
 
     Vector3 hookUnlockDis_Small;
     Vector3 hookUnlockDis_Big;
