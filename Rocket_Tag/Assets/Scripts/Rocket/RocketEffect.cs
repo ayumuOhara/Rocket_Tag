@@ -1,7 +1,7 @@
+using System.Collections;
 using Unity.Android.Gradle.Manifest;
 using Unity.VisualScripting;
 using UnityEngine;
-using static CamAim;
                                                                                                    ////  ロケットエフェクト生成・切り替え  ////
 internal interface EffectState                                                                     ////  以下State区  ////
 {
@@ -13,7 +13,6 @@ internal class FirstStage : EffectState   //  ロケット1段階目
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        Debug.Log("uuuuuuuuuuuuuuuuuuuu");
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
     }
     public void Update(RocketEffect rocketEffect)
@@ -86,7 +85,6 @@ internal class PrepareRocket : EffectState    //  次のロケットを用意している状態
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        Debug.Log("おおおおおお");
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -133,20 +131,46 @@ internal class RocketEffect : MonoBehaviour
     
     float smokeDelTime;
     int rocketStage;
+    bool didFalsed;    //  ロケット生成にタイミングを合わせるためのフラグ
 
     internal TimeManager _TimeMgr
     {  get { return timeMgr; } }
     internal int _RocketStage
     {  get { return rocketStage; } }                                                               ////  宣言区終了  ////
+    internal bool _DidFalsed
+    { get {  return didFalsed; } }
 
-    void Start()                                                                                   ////  以下処理区  ////
+    void OnEnable()                                                                                ////  以下処理区  ////
     {
-        Initialize();    //  初期化
+        //SetSetActive(didFalsed, this.gameObject);
+        //didFalsed = true;
+        //Initialize();    //  初期化
+    }
+    void Start()                                                                                  
+    {
+
     }
     void Update()
     {
-        currentState.Update(this);
+     //   currentState.Update(this);
     }                                                                                              ////  処理区終了  ////
+    void SetSetActive(bool flag, GameObject obj)    //  SetActiveを設定する
+    {
+        switch (flag != obj.activeSelf)
+        {
+            case true:
+                {
+                    obj.SetActive(flag);
+                    break;
+                }
+            case false:
+                {
+                    obj.SetActive(false);
+                    break;
+                }
+        }
+        obj.SetActive(flag);
+    }
     void Initialize()    //  初期化                                                                ////  以下関数区  ////
     {
         frameEffectPrefab = new GameObject[4];

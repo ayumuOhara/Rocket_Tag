@@ -26,7 +26,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
-        rocketEffect.SetRocket(transform);
+        //rocketEffect.SetRocket(transform);
         playerRb = player.GetComponent<Rigidbody>();
      
         //effect.transform.localPosition = effectOffset;
