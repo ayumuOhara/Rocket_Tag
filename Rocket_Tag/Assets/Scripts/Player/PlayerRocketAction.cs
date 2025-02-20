@@ -22,23 +22,26 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
             Debug.Log("ロケットを投擲した");
         }
 
-        // 近くのプレイヤーにロケットを渡す
-        GameObject target = observeDistance.GetTargetDistance();
-        if (target != null)
+        if (Input.GetMouseButton(1))
         {
-            // 自分の hasRocket を切り替え
-            photonView.RPC("SetHasRocket", RpcTarget.All, !setPlayerBool.hasRocket);
-
-            // ターゲットの hasRocket を切り替え
-            PhotonView targetPhotonView = target.GetComponent<PhotonView>();
-            SetPlayerBool otherPlayer = target.GetComponent<SetPlayerBool>();
-            if (targetPhotonView != null)
+            // 近くのプレイヤーにロケットを渡す
+            GameObject target = observeDistance.GetTargetDistance();
+            if (target != null)
             {
-                targetPhotonView.RPC("SetHasRocket", RpcTarget.All, !otherPlayer.hasRocket);
-                targetPhotonView.RPC("SetIsStun", RpcTarget.All, true);
-                //    ロケットを取得
-                rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+                // 自分の hasRocket を切り替え
+                photonView.RPC("SetHasRocket", RpcTarget.All, !setPlayerBool.hasRocket);
+
+                // ターゲットの hasRocket を切り替え
+                PhotonView targetPhotonView = target.GetComponent<PhotonView>();
+                SetPlayerBool otherPlayer = target.GetComponent<SetPlayerBool>();
+                if (targetPhotonView != null)
+                {
+                    targetPhotonView.RPC("SetHasRocket", RpcTarget.All, !otherPlayer.hasRocket);
+                    targetPhotonView.RPC("SetIsStun", RpcTarget.All, true);
+                    //    ロケットを取得
+                    rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+                }
             }
-        }
+        }        
     }
 }

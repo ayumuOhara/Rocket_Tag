@@ -1,15 +1,17 @@
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 
 public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
     [SerializeField] PlayerMovement playerMovement;
+    UILogManager uiLogManager;
     public TimeManager timeManager;
     public ResultScreen resultScreen;
     public PlayerRankManager playerRankManager;
     
 
-    [SerializeField] GameObject rocketObj;            // ロケット
+    [SerializeField] GameObject rocketObj;  // ロケット
 
     [SerializeField] public bool hasRocket; // ロケットを所持しているか
     [SerializeField] public bool isDead;    // 死亡判定
@@ -17,9 +19,10 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        timeManager       = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-        resultScreen      = GameObject.Find("Result"     ).GetComponent<ResultScreen>();
-        playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
+        uiLogManager      = GameObject.Find("UILogManager").GetComponent<UILogManager>();
+        timeManager       = GameObject.Find("TimeManager" ).GetComponent<TimeManager>();
+        resultScreen      = GameObject.Find("Result"      ).GetComponent<ResultScreen>();
+        playerRankManager = GameObject.Find("GameManager" ).GetComponent<PlayerRankManager>();
     }
 
     // プレイヤーの状態の初期化
@@ -36,10 +39,15 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetPlayerDead(bool newIsDead)
     {
+        string playerName = PhotonNetwork.NickName;
+        uiLogManager.AddLog(playerName, UILogManager.LogType.Dead);
+
         isDead = newIsDead;
-        this.gameObject.SetActive(false);
+
         playerRankManager.SetPlayerRank();
         resultScreen.ShowMyResult();
+
+        this.gameObject.SetActive(false);
     }
 
     [PunRPC]
@@ -56,9 +64,12 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetHasRocket(bool newHasRocket)
     {
+        string playerName = PhotonNetwork.NickName;
+        uiLogManager.AddLog(playerName, UILogManager.LogType.ChangeTagger);
+
         hasRocket = newHasRocket;
+
         rocketObj.SetActive(hasRocket);
-        Debug.Log($"TimeManager：{timeManager}");
         timeManager.ResetAcceleration();
     }
 }

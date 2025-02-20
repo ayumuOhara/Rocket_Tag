@@ -34,6 +34,7 @@ internal class Aiming : CamState    //  ADSèÛë‘
     public void Enter(CamAim camAim)
     {
         camAim._CamController.isAiming = true;
+        camAim._PlayerMovement.SetMoveSpeed(camAim._playerMoveSpd_Aim);
     }
     public void Update(CamAim camAim)
     {
@@ -45,25 +46,7 @@ internal class Aiming : CamState    //  ADSèÛë‘
     }
     public void Exit(CamAim camAim)
     {
-
-    }
-}
-internal class BackDefualtPos : CamState    //  ADSèÛë‘
-{
-    public void Enter(CamAim camAim)
-    {
-         
-    }
-    public void Update(CamAim camAim)
-    {
-        if(Input.GetMouseButtonDown(1))
-        {
-            camAim.ChangeState(new NotAiming());
-        }
-    }
-    public void Exit(CamAim camAim)
-    {
-
+        camAim._PlayerMovement.SetMoveSpeed(camAim._tmpPlayerMoveSpd);
     }
 }        ////  StateãÊèIóπ  ////
 internal class CamAim : MonoBehaviour
@@ -84,22 +67,30 @@ internal class CamAim : MonoBehaviour
     Transform playerTF;
     //Transform playerCamTF;    TEST------------------------
     CameraController camController;
+    PlayerMovement playerMovement;
 
     Quaternion playerStandRot;
-    Vector3 playerCamOffset = new Vector3(-1.02f, -1.74f, 2.75f);
-    Vector3 camAddSpdSlowedDis_Small = new Vector3(0.8f, 0.5f, 0.3f);
-    Vector3 camAddSpdSlowedDis_Big = new Vector3(0.8f, 0.5f, 0.3f);
+    Vector3 playerCamOffset;
+    Vector3 camAddSpdSlowedDis_Small;
+    Vector3 camAddSpdSlowedDis_Big;
     Vector3 currentAngle;
 
-    float camMoveSpd_Aim = 8f;
-    float camMoveAddSpd_Aim = 4.5f;
-    float headMoveSpd_Aim = 4.5f;
-    float wholeBodyMoveSpd_Aim = 4.5f;
-    bool isAim = false;
+    float playerMoveSpd_Aim;
+    float tmpPlayrMoveSpd;
+    float camMoveSpd_Aim;
+    float camMoveAddSpd_Aim;
+    float headMoveSpd_Aim;
+    float wholeBodyMoveSpd_Aim;
+    bool isAim;
    
     internal CameraController _CamController
     { get { return camController; } set { camController = value; } }                     ////  êÈåæãÊèIóπ  ////
-
+    internal PlayerMovement _PlayerMovement
+    { get { return playerMovement; } }
+    internal float _playerMoveSpd_Aim
+    { get { return playerMoveSpd_Aim; } }
+    internal float _tmpPlayerMoveSpd
+    { get { return tmpPlayrMoveSpd; } }
     void Start()                                                                         ////  à»â∫èàóùãÊ  ////
     {
         Initialize();    //  èâä˙âª
@@ -118,6 +109,19 @@ internal class CamAim : MonoBehaviour
         //playerCamTF = playerCam.transform;    TEST--------------------------
         currentAngle = playerTF.eulerAngles;
         camController = playerCam.GetComponent<CameraController>();
+        playerMovement = player.GetComponent<PlayerMovement>();
+
+        playerCamOffset = new Vector3(-1.02f, -1.74f, 2.75f);
+        camAddSpdSlowedDis_Small = new Vector3(0.8f, 0.5f, 0.3f);
+        camAddSpdSlowedDis_Big = new Vector3(0.8f, 0.5f, 0.3f);
+
+        tmpPlayrMoveSpd = playerMovement.GetMoveSpeed();
+        playerMoveSpd_Aim = 1.2f;
+        camMoveSpd_Aim = 8f;
+        camMoveAddSpd_Aim = 4.5f;
+        headMoveSpd_Aim = 4.5f;
+        wholeBodyMoveSpd_Aim = 4.5f;
+        isAim = false;
 
         ChangeState(new NotAiming());
         playerStandRot = playerTF.rotation;

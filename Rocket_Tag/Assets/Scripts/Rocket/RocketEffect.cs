@@ -13,6 +13,7 @@ internal class FirstStage : EffectState   //  ロケット1段階目
 {
     public void Enter(RocketEffect rocketEffect)
     {
+        Debug.Log("uuuuuuuuuuuuuuuuuuuu");
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
     }
     public void Update(RocketEffect rocketEffect)
@@ -60,7 +61,7 @@ internal class ThirdStage : EffectState    //  ロケット3段階目
             rocketEffect.ChangeState(new LastStage());
         }
     }
-    public void Exit(RocketEffect rocketEffeet)
+    public void Exit(RocketEffect rocketEffect)
     {
 
     }
@@ -70,7 +71,7 @@ internal class LastStage : EffectState    //  ロケット最終段階
     public void Enter(RocketEffect rocketEffect)
     {
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);    //  最終段階のエフェクト生成
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_FRAME_SMOKE);    //  煙を取得
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_SMOKE);    //  煙を取得
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -85,10 +86,11 @@ internal class PrepareRocket : EffectState    //  次のロケットを用意している状態
 {
     public void Enter(RocketEffect rocketEffect)
     {
-
+        Debug.Log("おおおおおお");
     }
     public void Update(RocketEffect rocketEffect)
     {
+        Debug.Log(123456789);
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
     }
     public void Exit(RocketEffect rocketEffect)
@@ -101,23 +103,31 @@ internal class RocketEffect : MonoBehaviour
     internal enum RocketEffectProcces    //  ロケットエフェクトの処理一覧                          ////  以下宣言区  ////
     {
         GENERATE_FRAMES,
+        GENERATE_SMOKE,
         SEARCH_FRAME_SMOKE,
         SMOKE_DIFFUSION,
         SEARCH_ROCKET,
     }
     internal enum EffectNo    //  エフェクトの種類
     {
-        Frame,
+        FRAME,
+        SMOKE,
     }
+
 
     EffectState currentState;
 
     GameObject[] frameEffectPrefab;
     GameObject frameEffectEntity;
+    GameObject smokeEffectPrefab;
+    GameObject smokeEntity;
     Transform rocket;
-    Transform smokeEntity;
+    ParticleSystem smokePS;
+    ParticleSystem.MainModule smokeMainModule;
+    ParticleSystem.ColorOverLifetimeModule smokeColorOverLifeTime;
+    Gradient smokeGradient;
     TimeManager timeMgr;
-
+            
     Vector3 frameEffectOffset;
     Vector3 smokeDiffusion;
     
@@ -142,13 +152,15 @@ internal class RocketEffect : MonoBehaviour
         frameEffectPrefab = new GameObject[4];
         ResourceLord();
         rocket = GameObject.Find("Rocket").GetComponent<Transform>();
+        smokeGradient = new Gradient();
+        smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.4f) };
         timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 
-        frameEffectOffset = new Vector3(0, -0.8f, 0);
+        frameEffectOffset = new Vector3(0, -0.6f, 0.5f);
         smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
 
         rocketStage = 0;
-        smokeDelTime = 7;
+        smokeDelTime = 12;
 
         ChangeState(new FirstStage());
 
@@ -168,22 +180,23 @@ internal class RocketEffect : MonoBehaviour
         {
             case RocketEffectProcces.GENERATE_FRAMES:
                 {
-                    GenerateEffect((int)EffectNo.Frame, frameEffectPrefab[rocketStage++], rocket, frameEffectOffset);//    TEST------------------------
-                    if (rocketStage == 4)
-                    {
-                        rocketStage = 0;
-                    }
+                    GenerateEffect((int)EffectNo.FRAME, frameEffectPrefab[rocketStage], rocket, frameEffectOffset);
+                    rocketStage = rocketStage != 3 ? ++rocketStage : 0; 
                     break;
                 }
-            case RocketEffectProcces.SEARCH_FRAME_SMOKE:
+            case RocketEffectProcces.GENERATE_SMOKE:
                 {
-                    smokeEntity = GameObject.Find("FrameSmoke").GetComponent<Transform>();
+                    GenerateEffect((int)EffectNo.SMOKE, smokeEffectPrefab, rocket, frameEffectOffset);
+                    smokePS = smokeEntity.GetComponent<ParticleSystem>();
+                    smokeMainModule = smokePS.main;
+                    smokeMainModule.startColor = Color.white;
+                    smokeColorOverLifeTime = smokePS.colorOverLifetime;
                     break;
                 }
             case RocketEffectProcces.SEARCH_ROCKET:
                 {
                     rocket = GameObject.Find("Rocket").GetComponent<Transform>();
-                    if (rocket != null && currentState == new PrepareRocket())
+                    if (rocket != null && currentState is PrepareRocket)
                     {
                         ChangeState(new FirstStage());
                     }
@@ -211,6 +224,12 @@ internal class RocketEffect : MonoBehaviour
                     frameEffectEntity.transform.localPosition += offset;
                     break;
                 }
+            case 1:
+                {
+                    smokeEntity = Instantiate(smokeEffectPrefab);
+                    smokeEntity.transform.position = rocket.position;
+                    break;
+                }
             default: break;
         }
     }
@@ -218,11 +237,12 @@ internal class RocketEffect : MonoBehaviour
     {
         if ((smokeDelTime -= Time.deltaTime) > 0)
         {
-            Debug.Log(333);
+            smokeColorOverLifeTime.color = smokeGradient;
             smokeEntity.transform.localScale = Vector3.Scale(smokeEntity.transform.localScale, smokeDiffusion);
         }
         else
         {
+            Debug.Log("TimeOut");
             Destroy(smokeEntity.gameObject);
             ChangeState(new PrepareRocket());
         }
@@ -233,5 +253,6 @@ internal class RocketEffect : MonoBehaviour
         frameEffectPrefab[1] = Resources.Load<GameObject>("SecondRocketFrame");
         frameEffectPrefab[2] = Resources.Load<GameObject>("ThirdRocketFrame");
         frameEffectPrefab[3] = Resources.Load<GameObject>("LastRocketFrame");
+        smokeEffectPrefab = Resources.Load<GameObject>("FrameSmoke");
     }
 }                                                                                                   ////  関数区終了  ////

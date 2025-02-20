@@ -7,6 +7,7 @@ using System.Collections;
 public class EventManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameManager gameManager;
+    [SerializeField] UILogManager uiLogManager;
     [SerializeField] private EventData eventData;          // EventDataの参照
     [SerializeField] private SkillDataBase skillDataBase;  // SkillDataの参照
     [SerializeField] GameObject blindEffect;               // 目つぶしイベント用UI
@@ -65,26 +66,31 @@ public class EventManager : MonoBehaviourPunCallbacks
             case EventData.EventType.BLIND:
                 Debug.Log("目隠しイベント開始");
                 StartCoroutine(BlindEvent());
+                uiLogManager.AddLog("メカクシ", UILogManager.LogType.Event);
                 break;
 
             case EventData.EventType.BOMB_AREA:
                 Debug.Log("エリアイベント開始");
                 StartCoroutine(BombAreaEvent());
+                uiLogManager.AddLog("エリア", UILogManager.LogType.Event);
                 break;
 
             case EventData.EventType.CHANGE_POS:
                 Debug.Log("位置入れ替えイベント開始");
                 photonView.RPC("ChangePos", RpcTarget.All);
+                uiLogManager.AddLog("位置入れ替え", UILogManager.LogType.Event);
                 break;
 
             case EventData.EventType.RANDOM_SPEED:
                 Debug.Log("速度変化イベント開始");
                 StartCoroutine(RandomSpeedEvent());
+                uiLogManager.AddLog("速度変化", UILogManager.LogType.Event);
                 break;
 
             case EventData.EventType.RANDOM_SKILL:
                 Debug.Log("スキル変化イベント開始");
                 StartCoroutine(RandomSkillEvent());
+                uiLogManager.AddLog("スキルチェンジ", UILogManager.LogType.Event);
                 break;
 
             default:
@@ -165,6 +171,7 @@ public class EventManager : MonoBehaviourPunCallbacks
         {
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
             int rndSpeed = Random.Range(minSpeed, maxSpeed);
+            Debug.Log($"速度変化：{rndSpeed}");
             playerMovement.SetMoveSpeed(rndSpeed);
         }
     }
@@ -187,10 +194,10 @@ public class EventManager : MonoBehaviourPunCallbacks
         foreach (GameObject player in playerList)
         {
             SkillManager skillManager = player.gameObject.GetComponent<SkillManager>();
-            //int rnd = Random.Range(0, skillDataBase.skillDatas.Length);
+            int rnd = Random.Range(0, skillDataBase.SkillData.Count);
 
-            //SkillData giveSkill = skillDataBase.skillDatas[rnd];
-            //skillManager.SetSkill(giveSkill);
+            SkillData giveSkill = skillDataBase.SkillData[rnd];
+            skillManager.SetSkill(giveSkill);
         }
 
         playerList.Clear();
