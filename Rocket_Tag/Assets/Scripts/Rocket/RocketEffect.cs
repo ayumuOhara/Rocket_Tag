@@ -13,6 +13,7 @@ internal class FirstStage : EffectState   //  ロケット1段階目
 {
     public void Enter(RocketEffect rocketEffect)
     {
+        Debug.Log("uuuuuuuuuuuuuuuuuuuu");
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
     }
     public void Update(RocketEffect rocketEffect)
@@ -60,7 +61,7 @@ internal class ThirdStage : EffectState    //  ロケット3段階目
             rocketEffect.ChangeState(new LastStage());
         }
     }
-    public void Exit(RocketEffect rocketEffeet)
+    public void Exit(RocketEffect rocketEffect)
     {
 
     }
@@ -85,10 +86,11 @@ internal class PrepareRocket : EffectState    //  次のロケットを用意している状態
 {
     public void Enter(RocketEffect rocketEffect)
     {
-
+        Debug.Log("おおおおおお");
     }
     public void Update(RocketEffect rocketEffect)
     {
+        Debug.Log(123456789);
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
     }
     public void Exit(RocketEffect rocketEffect)
@@ -179,7 +181,7 @@ internal class RocketEffect : MonoBehaviour
             case RocketEffectProcces.GENERATE_FRAMES:
                 {
                     GenerateEffect((int)EffectNo.FRAME, frameEffectPrefab[rocketStage], rocket, frameEffectOffset);
-                    rocketStage = rocketStage != 4 ? ++rocketStage : 0; 
+                    rocketStage = rocketStage != 3 ? ++rocketStage : 0; 
                     break;
                 }
             case RocketEffectProcces.GENERATE_SMOKE:
@@ -191,14 +193,10 @@ internal class RocketEffect : MonoBehaviour
                     smokeColorOverLifeTime = smokePS.colorOverLifetime;
                     break;
                 }
-            case RocketEffectProcces.SEARCH_FRAME_SMOKE:
-                {
-                    break;
-                }
             case RocketEffectProcces.SEARCH_ROCKET:
                 {
                     rocket = GameObject.Find("Rocket").GetComponent<Transform>();
-                    if (rocket != null && currentState == new PrepareRocket())
+                    if (rocket != null && currentState is PrepareRocket)
                     {
                         ChangeState(new FirstStage());
                     }
