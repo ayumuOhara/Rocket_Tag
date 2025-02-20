@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Photon.Pun;
-using static UILogManager;
 
 public class UILogManager : MonoBehaviourPunCallbacks
 {
@@ -13,8 +12,8 @@ public class UILogManager : MonoBehaviourPunCallbacks
         Event,
     }
 
-    [SerializeField] private TextMeshProUGUI logText; // ログ表示用のTextMeshPro
-    [SerializeField] private int maxLogCount = 5; // 最大ログ表示数
+    [SerializeField] private TextMeshProUGUI logText;
+    [SerializeField] private int maxLogCount = 5;
 
     private Queue<string> logQueue = new Queue<string>();
 
@@ -24,23 +23,22 @@ public class UILogManager : MonoBehaviourPunCallbacks
 
         string log = GetLogText(message, logType);
 
-        // ログをキューに追加
         logQueue.Enqueue(log);
 
-        // 表示数を超えたら古いログを削除
         if (logQueue.Count > maxLogCount)
         {
             logQueue.Dequeue();
         }
 
-        // UIを更新
-        photonView.RPC("UpdateLogDisplay", RpcTarget.All);
+        // ログを全クライアントに送信
+        photonView.RPC("UpdateLogDisplay", RpcTarget.All, string.Join("\n", logQueue));
     }
 
     [PunRPC]
-    private void UpdateLogDisplay()
+    private void UpdateLogDisplay(string logTextContent)
     {
-        logText.text = string.Join("\n", logQueue);
+        logQueue = new Queue<string>(logTextContent.Split('\n'));
+        logText.text = logTextContent;
     }
 
     string GetLogText(string message, LogType logType)
@@ -48,9 +46,9 @@ public class UILogManager : MonoBehaviourPunCallbacks
         switch (logType)
         {
             case LogType.ChangeTagger: return $"ロケットを所持 : {message}";
-            case LogType.Dead        : return $"脱落 : {message}";
-            case LogType.Event       : return $"イベント発生 : {message}";
-            default:                   return $"存在しないタイプです。";
+            case LogType.Dead: return $"脱落 : {message}";
+            case LogType.Event: return $"イベント発生 : {message}";
+            default: return $"存在しないタイプです。";
         }
     }
 }
