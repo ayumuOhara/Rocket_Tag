@@ -63,7 +63,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
                 {
                     case 101: break;
                     case 102: photonView.RPC("PutStickyZone", RpcTarget.All); break;
-                    case 103: DangerousGift();                                break;
+                    case 103: /*DangerousGift();*/                            break;
                     case 104: SmashPunch();                                   break;
                     case 105: StartCoroutine(Dash());                         break;
                 }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
     [SerializeField] PlayerMovement playerMovement;
-    UILogManager uiLogManager;
     public TimeManager timeManager;
     public ResultScreen resultScreen;
     public PlayerRankManager playerRankManager;
@@ -19,7 +18,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        uiLogManager      = GameObject.Find("UILogManager").GetComponent<UILogManager>();
         timeManager       = GameObject.Find("TimeManager" ).GetComponent<TimeManager>();
         resultScreen      = GameObject.Find("Result"      ).GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager" ).GetComponent<PlayerRankManager>();
@@ -39,9 +37,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetPlayerDead(bool newIsDead)
     {
-        string playerName = PhotonNetwork.NickName;
-        uiLogManager.AddLog(playerName, UILogManager.LogType.Dead);
-
         isDead = newIsDead;
 
         playerRankManager.SetPlayerRank();
@@ -64,12 +59,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetHasRocket(bool newHasRocket)
     {
-        if (newHasRocket)
-        {
-            string playerName = PhotonNetwork.NickName;
-            uiLogManager.AddLog(playerName, UILogManager.LogType.ChangeTagger);
-        }        
-
         hasRocket = newHasRocket;
 
         rocketObj.SetActive(hasRocket);

@@ -16,6 +16,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     Transform smoke;
     GameManager gameManager;
     TimeManager timeManager;
+    UILogManager uiLogManager;
     RocketEffect rocketEffect;
     [SerializeField] GameObject player;
     [SerializeField] Rigidbody playerRb;
@@ -25,8 +26,9 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         //smoke = Resources.Load<GameObject>("FireSmoke");
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+        uiLogManager = GameObject.Find("UILogManager").GetComponent<UILogManager>();
         rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
-        rocketEffect.SetRocket(transform);
+        //rocketEffect.SetRocket(transform);
         playerRb = player.GetComponent<Rigidbody>();
      
         //effect.transform.localPosition = effectOffset;
@@ -77,6 +79,9 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void DropOut()
     {
+        string playerName = PhotonNetwork.NickName;
+        uiLogManager.AddLog(playerName, UILogManager.LogType.Dead);
+
         timeManager.ResetRocketCount();
 
         if (PhotonNetwork.IsMasterClient)
