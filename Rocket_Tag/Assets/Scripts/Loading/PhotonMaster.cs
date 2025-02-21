@@ -78,19 +78,11 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("ルームに参加しました");
-        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-        if (playerCount != MAX_PLAYER_PER_ROOM)
-        {
-            statusText.text = $"対戦相手を待っています。\n　　　　　　　　({playerCount}/{MAX_PLAYER_PER_ROOM})";
-        }
-        else
-        {
-            statusText.text = "対戦相手が揃いました。バトルシーンに移動します。";
-        }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+        base.OnPlayerEnteredRoom(newPlayer);
         if (PhotonNetwork.IsMasterClient)
         {
             if (PhotonNetwork.CurrentRoom.PlayerCount == MAX_PLAYER_PER_ROOM)
@@ -102,15 +94,27 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
         }
     }
 
-    /*
-     public override void OnLeftRoom()
+    private void Update()
     {
-        Debug.Log("ルームを退出しました");
-        SceneManager.LoadScene("前のシーン名"); // 退出後に前のシーンに戻る
+        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        if (playerCount != MAX_PLAYER_PER_ROOM)
+        {
+            statusText.text = $"対戦相手を待っています。\n　　　　　　　　({playerCount}/{MAX_PLAYER_PER_ROOM})";
+        }
+        else
+        {
+            statusText.text = "対戦相手が揃いました。バトルシーンに移動します。";
+        }
     }
-    */
+        /*
+         public override void OnLeftRoom()
+        {
+            Debug.Log("ルームを退出しました");
+            SceneManager.LoadScene("前のシーン名"); // 退出後に前のシーンに戻る
+        }
+        */
 
-    public void RemoveTheCover()
+        public void RemoveTheCover()
     {
         cover.gameObject.SetActive(false);
     }    
