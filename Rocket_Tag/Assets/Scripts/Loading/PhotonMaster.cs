@@ -78,13 +78,11 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("ÉãÅ[ÉÄÇ…éQâ¡ÇµÇ‹ÇµÇΩ");
-        UpdateStatusText();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
-        UpdateStatusText();
         if (PhotonNetwork.IsMasterClient)
         {
             if (PhotonNetwork.CurrentRoom.PlayerCount == MAX_PLAYER_PER_ROOM)
@@ -96,7 +94,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
         }
     }
 
-    private void UpdateStatusText()
+    private void Update()
     {
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         if (playerCount != MAX_PLAYER_PER_ROOM)
