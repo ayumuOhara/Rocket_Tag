@@ -142,9 +142,15 @@ internal class RocketEffect : MonoBehaviour
 
     void OnEnable()                                                                                ////  ˆÈ‰ºˆ—‹æ  ////
     {
-        //SetSetActive(didFalsed, this.gameObject);
-        //didFalsed = true;
-        //Initialize();    //  ‰Šú‰»
+        SetSetActive(didFalsed, this.gameObject);
+        if(didFalsed)
+        {
+            Initialize();    //  ‰Šú‰»
+        }
+    }
+    void OnDisable()
+    {
+        didFalsed = true;
     }
     void Start()                                                                                  
     {
