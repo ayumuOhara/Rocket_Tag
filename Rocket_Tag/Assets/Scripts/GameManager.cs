@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
     [SerializeField] TextMeshProUGUI infoText;          // playerCntTextの説明文
     [SerializeField] GameObject readyButton;            // 準備完了ボタン
+    [SerializeField] GameObject rocketEffect;           // ロケットのエフェクト管理オブジェクト
     private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
     private bool isGameStarted = false;                 // ゲームが開始されたかどうかのフラグ
     private Player currentRocketHolder;                 // 現在のロケット保持者
@@ -83,6 +84,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void StartGame()
     {
+        rocketEffect.SetActive(true);
+
         timeManager.ResetRocketCount();
         if (isGameStarted) return;
 
@@ -141,6 +144,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (playerCount <= 1)
             {
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
+                rocketEffect.SetActive(false);
                 readyButton.SetActive(true);
                 playerReady.SetReady(false);
                 setPlayerBool.SetPlayerCondition();
