@@ -26,10 +26,10 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     }
 
     static GameObject[] skinPrefab;
-    static GameObject skinEntity;
+    GameObject skinEntity;
     Transform headTF;
-    Button redCap;
     Button undress;
+    Button redCap;
     Button strawHat;
     Button eringi;
     Button freeza;
