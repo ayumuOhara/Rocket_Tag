@@ -68,6 +68,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     // 取得したベクトルの方向に移動&回転させる+ジャンプ処理
     public void PlayerMove()
     {
+        if(setPlayerBool.isStun)
+        {
+            rb.linearVelocity = Vector3.zero;
+            return;
+        }
+
         RunAnimation();
 
         // いずれかの方向に移動している場合
