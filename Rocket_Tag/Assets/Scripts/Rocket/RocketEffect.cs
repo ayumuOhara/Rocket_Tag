@@ -158,7 +158,7 @@ internal class RocketEffect : MonoBehaviour
     }
     void Update()
     {
-     //   currentState.Update(this);
+        currentState.Update(this);
     }                                                                                              ////  ˆ—‹æI—¹  ////
     void SetSetActive(bool flag, GameObject obj)    //  SetActive‚ğİ’è‚·‚é
     {
