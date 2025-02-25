@@ -94,10 +94,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             ChooseRocketPlayer();
+            StartCoroutine(eventManager.TriggerRandomEvent());
+            StartCoroutine(CheckSurvivorCount());
         }
-
-        StartCoroutine(eventManager.TriggerRandomEvent());
-        StartCoroutine(CheckSurvivorCount());
     }
 
     public void ChooseRocketPlayer()

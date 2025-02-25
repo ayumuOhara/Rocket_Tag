@@ -51,6 +51,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         //}
         if (timeManager.IsLimitOver())
         {
+            Debug.Log("タイマーが０になりました");
             StartCoroutine(Explosion());
         }
     }

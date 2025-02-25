@@ -37,7 +37,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
         isTimeStart = false;
         isTimeStop = false;
         timerView = GetComponent<PhotonView>();
-        rocketEffect = GameObject.Find("Debuger").GetComponent<RocketEffect>();
+        //rocketEffect = GameObject.Find("Debuger").GetComponent<RocketEffect>();
         Initialize();
     }
 
