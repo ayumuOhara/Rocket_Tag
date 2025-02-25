@@ -44,7 +44,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
         playerMovement = GetComponent<PlayerMovement>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        skillIcon = GameObject.Find("SKillIcon").GetComponent<Image>();
+        skillIcon   = GameObject.Find("SKillIcon").GetComponent<Image>();
 
         skillIdx = 0;
         SetSkill(skillDataBase.SkillData[skillIdx]);
@@ -115,21 +115,17 @@ public class SkillManager : MonoBehaviourPunCallbacks
         PhotonView targetView = target.GetComponent<PhotonView>();
         targetView.RPC("SetIsStun", RpcTarget.All, true);
 
-        // ターゲットの Rigidbody を取得
         Rigidbody targetRb = target.GetComponent<Rigidbody>();
         if (targetRb != null)
         {
-            // 吹っ飛ばす方向を計算（プレイヤー → ターゲット の方向）
             Vector3 knockbackDirection = (target.transform.position - transform.position).normalized;
-
-            // 吹っ飛ばす力（適宜調整）
             float knockbackForce = 30f;
 
-            // ターゲットに力を加える
-            targetRb.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
-        }        
+            // 直接 velocity に適用して即座に動かす
+            targetRb.linearVelocity = knockbackDirection * knockbackForce;
+        }
     }
-    
+
     // ダッシュスキル
     IEnumerator Dash()
     {
