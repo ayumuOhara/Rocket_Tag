@@ -10,6 +10,8 @@ public class SkinGanarater : MonoBehaviour
         STRAW_HAT,
         ERINGI,
         FREEZA,
+        BEAR,
+        STAR,
     }
 
     enum SkinLocation    //  ƒXƒLƒ“‚ÌêŠ
@@ -37,7 +39,7 @@ public class SkinGanarater : MonoBehaviour
 
     void Initialize()     //  ‰Šú‰»
     {
-        skinPrefab = new GameObject[5];
+        skinPrefab = new GameObject[7];
         ResourceLord();
         headTF = GameObject.Find("Head").GetComponent<Transform>();
         SkinGenerate(skinLocation);
@@ -66,6 +68,8 @@ public class SkinGanarater : MonoBehaviour
             skinPrefab[2] = Resources.Load<GameObject>("StrawHat");
             skinPrefab[3] = Resources.Load<GameObject>("Eringi");
             skinPrefab[4] = Resources.Load<GameObject>("Freeza");
+            skinPrefab[5] = Resources.Load<GameObject>("Bear");
+            skinPrefab[6] = Resources.Load<GameObject>("Star");
         }
     }
 }
