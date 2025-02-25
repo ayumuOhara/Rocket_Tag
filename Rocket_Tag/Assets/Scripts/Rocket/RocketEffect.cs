@@ -140,13 +140,19 @@ internal class RocketEffect : MonoBehaviour
     internal bool _DidFalsed
     { get {  return didFalsed; } }
 
+    void Awake()
+    {
+        this.gameObject.SetActive(false);
+    }
+
     void OnEnable()                                                                                ////  ˆÈ‰ºˆ—‹æ  ////
     {
-        SetSetActive(didFalsed, this.gameObject);
-        if(didFalsed)
+        //SetSetActive(didFalsed, this.gameObject);
+        if (didFalsed)
         {
-            Initialize();    //  ‰Šú‰»
+           
         }
+
     }
     void OnDisable()
     {
@@ -154,7 +160,8 @@ internal class RocketEffect : MonoBehaviour
     }
     void Start()                                                                                  
     {
-
+        Debug.Log(554466);
+        Initialize();    //  ‰Šú‰»
     }
     void Update()
     {
