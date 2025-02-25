@@ -232,7 +232,7 @@ internal class RocketEffect : MonoBehaviour
                 }
             case RocketEffectProcces.SEARCH_ROCKET:
                 {
-                    rocket = GameObject.Find("Rocket(Clone)").GetComponent<Transform>();
+                    rocket = GameObject.Find("Rocket").GetComponent<Transform>();
                     if (rocket != null && currentState is PrepareRocket)
                     {
                         ChangeState(new FirstStage());
