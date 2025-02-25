@@ -38,9 +38,9 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     static int skinLocation;
 
     static internal GameObject[] _SkinPrefab
-    { get { return _SkinPrefab; } }
+    { get { return _SkinPrefab; }  }
     static internal int _SkinLocation
-    { get { return skinLocation; } }
+    { get { return skinLocation; } set { skinLocation = value; } }
 
     void Start()
     {
@@ -123,31 +123,32 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         Debug.Log(PlayerPrefs.GetInt("PlayerSkinNo"));
         SceneManager.sceneUnloaded -= SaveSkinNo;
     }
+    void OnApplicationQuit()    //  途中でアプリを落としたときにスキン番号をセーブ
+    {
+        PlayerPrefs.SetInt("PlayerSkinNo", skinNo);
+        PlayerPrefs.Save();
+    }
 }
 
 ////////////////////////////////////////////  スキン生成方法  //////////////////////////////////
 
 /* 下記の関数を定義して
- * void SkinGenerate(int skinLocation_)    //  スキンの生成
+    void SkinGenerate(int skinLocation_)    //  スキンの生成
     {
-        if(skinNo == 0)
+        int tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", 0);
+        if (tmpSkinNo != 0)
         {
-            Destroy(skinEntity);
-        }
-        else
-        {
-            switch (skinLocation)
+            switch (skinLocation_)
             {
                 case 0:
                     {
-                        Destroy(skinEntity);
-                        skinEntity = Instantiate(skinPrefab[skinNo], head);
+                        skinEntity = Instantiate(PlayerSkin._SkinPrefab , head);
                         break;
                     }
             }
         }
-        skinLocation = skinLocation_;
+        PlayerSkin._SkinLocation = skinLocation_;
     }
- * こいつで生成    SkinGenerate(PlayerSkin._SkinPrefab[PlayerSkin._SkinLocation]);
-   ※※　　HeadのTransformないと生成されません  ※※
- */
+ * こいつで生成    SkinGenerate(PlayerSkin._PlayerSkin._SkinLocation);
+   ※※　　HeadのTransformとスキンのエンティティがないと生成されません  ※※
+*/
