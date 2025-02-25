@@ -8,7 +8,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     float explodeRiseSpeed = 20f;
     float evacuateStarPos_Y = 40;
     int rocketStage = 0;
-    bool isExploding = false;
 
     Vector3 effectOffset = new Vector3(0, -1, 0);
     Vector3 smokeDiffusion = new Vector3(3, 0, 3);
@@ -28,7 +27,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         uiLogManager = GameObject.Find("UILogManager").GetComponent<UILogManager>();
-        //rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
+        rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
         //rocketEffect.SetRocket(transform);
         playerRb = player.GetComponent<Rigidbody>();
      
@@ -50,9 +49,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         //{
         //    Floating(player, floatSpeed);
         //}
-        if (timeManager.IsLimitOver() && !isExploding)
+        if (timeManager.IsLimitOver())
         {
-            isExploding = true;
             Debug.Log("タイマーが０になりました");
             StartCoroutine(Explosion());
         }

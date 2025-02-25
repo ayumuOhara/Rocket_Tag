@@ -27,7 +27,7 @@ public class EventManager : MonoBehaviourPunCallbacks
 
         while(true)
         {
-            yield return new WaitForSeconds(30.0f);
+            yield return new WaitForSeconds(20.0f);
 
             int totalPercent = 0;
 
