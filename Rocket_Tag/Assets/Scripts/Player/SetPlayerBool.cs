@@ -5,6 +5,7 @@ using UnityEngine;
 public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
     [SerializeField] PlayerMovement playerMovement;
+    [SerializeField] RocketEffect rocketEffect;
     public TimeManager timeManager;
     public ResultScreen resultScreen;
     public PlayerRankManager playerRankManager;
@@ -63,5 +64,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         rocketObj.SetActive(hasRocket);
         timeManager.ResetAcceleration();
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
     }
 }
