@@ -26,8 +26,9 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     }
 
     static GameObject[] skinPrefab;
-    static GameObject skinEntity;
+    GameObject skinEntity;
     Transform headTF;
+    Button undress;
     Button redCap;
     Button strawHat;
     Button eringi;
@@ -52,6 +53,7 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         skinPrefab = new GameObject[5];
         ResourceLord();
         headTF     = GameObject.Find("Head"            ).GetComponent<Transform>();
+        undress    = GameObject.Find("Undress"         ).GetComponent<Button>();
         redCap     = GameObject.Find("RedCap"          ).GetComponent<Button>();
         strawHat   = GameObject.Find("StrawHat"        ).GetComponent<Button>();
         eringi     = GameObject.Find("Eringi"          ).GetComponent<Button>();
@@ -59,10 +61,12 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         SetSkinNoByButton();    //  ボタン反応追加
 
         skinNo = PlayerPrefs.GetInt("PlayerSkinNo", 0);
+        Debug.Log(skinNo);
         SkinGenerate(skinLocation);
     }
     void SetSkinNoByButton()    //  ボタン押下に応じて、スキン番号変更関数を呼ぶ
     {
+        undress.onClick.AddListener(() => ChangeSkin((int)PlayerSkinNo.NONE, (int)SkinLocation.HEAD));
         redCap.onClick.AddListener(() => ChangeSkin((int)PlayerSkinNo.RED_CAP, (int)SkinLocation.HEAD));
         strawHat.onClick.AddListener(() => ChangeSkin((int)PlayerSkinNo.STRAW_HAT, (int)SkinLocation.HEAD));
         eringi.onClick.AddListener(() => ChangeSkin((int)PlayerSkinNo.ERINGI, (int)SkinLocation.HEAD));
@@ -71,6 +75,11 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     }
     void ChangeSkin(int clickSkinNo, int skinLocation)    //  スキン番号変更
     {
+        if(clickSkinNo == 0)
+        {
+            skinNo = clickSkinNo;
+            Destroy(skinEntity);
+        }
         if (skinNo != clickSkinNo)
         {
             skinNo = clickSkinNo;
