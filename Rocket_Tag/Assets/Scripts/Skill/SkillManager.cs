@@ -119,7 +119,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
         if (targetRb != null)
         {
             Vector3 knockbackDirection = (target.transform.position - transform.position).normalized;
-            float knockbackForce = 30f;
+            float knockbackForce = 130f;
 
             // ’¼Ú velocity ‚É“K—p‚µ‚Ä‘¦À‚É“®‚©‚·
             targetRb.linearVelocity = knockbackDirection * knockbackForce;
