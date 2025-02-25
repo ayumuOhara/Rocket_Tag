@@ -29,7 +29,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
 
     public PhotonView timerView;
     [SerializeField] TextMeshProUGUI rocketCountText;
-    RocketEffect rocketEffect;
+    [SerializeField] RocketEffect rocketEffect;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
