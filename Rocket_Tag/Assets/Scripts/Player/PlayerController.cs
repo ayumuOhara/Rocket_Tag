@@ -29,10 +29,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             if(setPlayerBool.isStun == false)
             {
-                if(Input.GetKey(KeyCode.E))
-                {
-                    skillManager.UseSkill();
-                }
+                //if(Input.GetKey(KeyCode.E))
+                //{
+                //    skillManager.UseSkill();
+                //}
 
                 if (setPlayerBool.hasRocket)
                 {
