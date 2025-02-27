@@ -89,7 +89,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
                 statusText.text = "対戦相手が揃いました。バトルシーンに移動します。";
-                PhotonNetwork.LoadLevel("Test_Takeshita");
+                PhotonNetwork.LoadLevel("PlayScene");
             }
         }
     }
