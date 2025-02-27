@@ -43,8 +43,8 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         isDead = newIsDead;
 
-        playerRankManager.SetPlayerRank();
-        resultScreen.ShowMyResult();
+        //playerRankManager.SetPlayerRank();
+        //resultScreen.ShowMyResult();
 
         this.gameObject.SetActive(false);
     }
