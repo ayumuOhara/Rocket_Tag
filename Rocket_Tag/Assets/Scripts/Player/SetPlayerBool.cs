@@ -46,7 +46,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         //playerRankManager.SetPlayerRank();
         //resultScreen.ShowMyResult();
 
-        //this.gameObject.SetActive(false);
+        this.gameObject.SetActive(false);
     }
 
     [PunRPC]
