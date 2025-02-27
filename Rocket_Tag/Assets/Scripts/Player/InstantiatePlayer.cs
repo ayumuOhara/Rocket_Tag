@@ -37,13 +37,13 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
         // プレイヤーをリスポーン地点に生成
         GameObject player = PhotonNetwork.Instantiate("Player", respawnPoint.position, Quaternion.identity);
 
-        debuger.SetComponents(player);
+        //debuger.SetComponents(player);
 
         // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
         gameManager.playerController = player.GetComponent<PlayerController>();
         gameManager.setPlayerBool = player.GetComponent<SetPlayerBool>();
 
-        inputPlayerName.SetActive(true);
+        //inputPlayerName.SetActive(true);
         playerCamera.SetActive(true);
         waitCamera.SetActive(false);
     }

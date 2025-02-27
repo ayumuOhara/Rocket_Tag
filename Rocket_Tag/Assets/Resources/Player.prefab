@@ -743,7 +743,6 @@ GameObject:
   - component: {fileID: 3646539363317497075}
   - component: {fileID: 1933549201709688723}
   - component: {fileID: 8442950744070984547}
-  - component: {fileID: 1208491497773281280}
   - component: {fileID: 6689842577889514490}
   m_Layer: 0
   m_Name: Rocket
@@ -856,21 +855,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 7666606126202363588}
   playerRb: {fileID: 2753298400814805652}
---- !u!114 &1208491497773281280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4281978814399217487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6f494644406f004a9ae1333b6165acb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colorMaterial:
-  - {fileID: 2100000, guid: 48c07bac491f0c54381e1739ea4ee41e, type: 2}
-  - {fileID: 2100000, guid: 80a2c1eba3f5a864e9fec051742a4a87, type: 2}
 --- !u!136 &6689842577889514490
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1801,7 +1785,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7666606126202363588}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 820cc424280cfe84bb7d0a22d8205e92, type: 3}
   m_Name: 
