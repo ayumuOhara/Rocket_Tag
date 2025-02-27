@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System.Collections;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class Alpha_Rocket : MonoBehaviourPunCallbacks
@@ -73,6 +74,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     void Floating(GameObject floated, float floatSpeed)
     {
         playerRb.useGravity = false;
+        Collider collider = player.GetComponent<CapsuleCollider>();
+        collider.isTrigger = true;
         floated.transform.position += Vector3.up * floatSpeed * Time.deltaTime;
     }
 
