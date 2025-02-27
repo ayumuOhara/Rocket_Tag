@@ -22,7 +22,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         //rocketEffect      = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
         timeManager       = GameObject.Find("TimeManager" ).GetComponent<TimeManager>();
-        resultScreen      = GameObject.Find("Result"      ).GetComponent<ResultScreen>();
+        //resultScreen      = GameObject.Find("Result"      ).GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager" ).GetComponent<PlayerRankManager>();
         //Debug.Log("rocketEffect" + rocketEffect);
     }
