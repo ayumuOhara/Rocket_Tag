@@ -1,62 +1,46 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+                                                                                           ////  ロケットエフェクト生成・切り替え  ////
 public class SkinGanarater : MonoBehaviour
 {
-    enum PlayerSkinNo    //  プレイヤースキン処理一覧
-    {
-        NONE,
-        RED_CAP,
-        STRAW_HAT,
-        ERINGI,
-        FREEZA,
-        BEAR,
-        STAR,
-    }
-    enum SkinLocation    //  スキンの場所
-    {
-        HEAD,
-        ARM,
-        CHEST,
-        LEG,
-    }
-
-    static GameObject[] skinPrefab;
-    Transform headTF;
+    static GameObject[] skinPrefab;                                                        ////  以下宣言区  ////
     GameObject skinEntity;
+    List<GameObject> TmpPlayerList;
+    Transform playerHipTF;
+    GameManager gameManager;
     static int skinLocation;
 
     static internal GameObject[] _SkinPrefab
-    { get { return _SkinPrefab; } }
-    static internal int _SkinLocation
-    { get { return skinLocation; } set { skinLocation = value; } }
-    void Start()
+    { get { return skinPrefab; } }                                                        ////  宣言区終了  ////                 
+    void Start()                                                                           ////  以下処理区  ////
     {
         Initialize();
-    }
-
-    void Initialize()     //  初期化
+    }                                                                                      ////  処理区終了  ////
+    void Initialize()     //  初期化                                                       ////  以下関数区  ////
     {
         skinPrefab = new GameObject[7];
         ResourceLord();
-        headTF = GameObject.Find("Head").GetComponent<Transform>();
-        SkinGenerate(skinLocation);
+        playerHipTF = GameObject.Find("Hip").GetComponent<Transform>();
+        SkinGenerate(playerHipTF);
     }
-    void SkinGenerate(int skinLocation_)    //  スキンの生成
+    void SkinGenerate(Transform playerHipTF_)    //  プレイヤーのスキンの生成
     {
         int tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", 0);
+        int tmpSkinLocation = PlayerPrefs.GetInt("PlayerSkinLocation", 0);
+
         if (tmpSkinNo != 0)
         {
-            switch (skinLocation_)
+            switch (tmpSkinLocation)
             {
                 case 0:
                     {
-                        skinEntity = Instantiate(skinPrefab[PlayerPrefs.GetInt("PlayerSkinNo", 0)], headTF);
+                        skinEntity = Instantiate(skinPrefab[tmpSkinNo], playerHipTF.Find("Spine/Head"));
                         break;
                     }
             }
         }
-        skinLocation = skinLocation_;
     }
     void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
     {
@@ -69,5 +53,5 @@ public class SkinGanarater : MonoBehaviour
             skinPrefab[5] = Resources.Load<GameObject>("Bear");
             skinPrefab[6] = Resources.Load<GameObject>("Star");
         }
-    }
+    }                                                                                      ////  関数区終了  ////
 }
