@@ -6,7 +6,7 @@ using UnityEngine;
 public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
     [SerializeField] PlayerMovement playerMovement;
-    RocketEffect rocketEffect;
+    //RocketEffect rocketEffect;
     public TimeManager timeManager;
     public ResultScreen resultScreen;
     public PlayerRankManager playerRankManager;
@@ -20,11 +20,11 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        rocketEffect      = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
+        //rocketEffect      = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
         timeManager       = GameObject.Find("TimeManager" ).GetComponent<TimeManager>();
         resultScreen      = GameObject.Find("Result"      ).GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager" ).GetComponent<PlayerRankManager>();
-        Debug.Log("rocketEffect" + rocketEffect);
+        //Debug.Log("rocketEffect" + rocketEffect);
     }
 
     // ÉvÉåÉCÉÑÅ[ÇÃèÛë‘ÇÃèâä˙âª
@@ -67,6 +67,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         rocketObj.SetActive(hasRocket);
         timeManager.ResetAcceleration();
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
     }
 }

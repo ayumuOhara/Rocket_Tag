@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         playerMovement = GetComponent<PlayerMovement>();
         playerRocketAction = GetComponent<PlayerRocketAction>();
         setPlayerBool = GetComponent<SetPlayerBool>();
-        skillManager = GetComponent<SkillManager>();
+        //skillManager = GetComponent<SkillManager>();
         observeDistance = GetComponent<ObserveDistance>();
         inputPlayerName = GameObject.Find("InputPlayerName").GetComponent<InputPlayerName>();
 
