@@ -13,7 +13,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
     [SerializeField] Transform respawnPoint;
     [SerializeField] GameObject inputPlayerName;
 
-#if false
+#if true
     void Start()
     {
         // マスターサーバーに接続
@@ -49,7 +49,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
     }
 #endif
 
-#if true
+#if false
     void Start()
     {
         if (PhotonNetwork.IsMasterClient)
