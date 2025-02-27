@@ -1,10 +1,16 @@
 using System.Collections.Generic;
+using System.Net.Sockets;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-                                                                                           ////  ロケットエフェクト生成・切り替え  ////
+////  ロケットエフェクト生成・切り替え  ////
 public class SkinGanarater : MonoBehaviour
 {
+    internal enum SkinGenerateProcces    //  スキンジェネレート内の処理一覧
+    {
+        IN_GAME_GENERATE,
+    }
+
     static GameObject[] skinPrefab;                                                        ////  以下宣言区  ////
     GameObject skinEntity;
     List<GameObject> TmpPlayerList;
@@ -16,14 +22,31 @@ public class SkinGanarater : MonoBehaviour
     { get { return skinPrefab; } }                                                        ////  宣言区終了  ////                 
     void Start()                                                                           ////  以下処理区  ////
     {
-        Initialize();
+        Initialize();    //  初期化
     }                                                                                      ////  処理区終了  ////
     void Initialize()     //  初期化                                                       ////  以下関数区  ////
     {
         skinPrefab = new GameObject[7];
         ResourceLord();
         playerHipTF = GameObject.Find("Hip").GetComponent<Transform>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        
         SkinGenerate(playerHipTF);
+    }
+    internal void SkinGenerateWrapper(SkinGenerateProcces skinGenerateProcces)   // ロケットエフェクトのラッパー関数
+    {
+        switch (skinGenerateProcces)
+        {
+            case SkinGenerateProcces.IN_GAME_GENERATE:    //  スキン生成処理群
+                {
+                    List<GameObject> tmpPlayerList = gameManager.GetPlayerList();
+                    for (int tmpPlayerListLen = 0; tmpPlayerListLen == tmpPlayerList.Count - 1; tmpPlayerListLen++)
+                    {
+                        SkinGenerate(tmpPlayerList[tmpPlayerListLen].transform);
+                    }
+                    break;
+                }
+        }
     }
     void SkinGenerate(Transform playerHipTF_)    //  プレイヤーのスキンの生成
     {
