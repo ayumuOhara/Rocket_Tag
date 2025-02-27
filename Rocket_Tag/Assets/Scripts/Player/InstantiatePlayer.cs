@@ -67,7 +67,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
         gameManager.playerController = player.GetComponent<PlayerController>();
         gameManager.setPlayerBool = player.GetComponent<SetPlayerBool>();
 
-        inputPlayerName.SetActive(true);
+        //inputPlayerName.SetActive(true);
         playerCamera.SetActive(true);
         waitCamera.SetActive(false);
     }

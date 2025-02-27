@@ -83,8 +83,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void DropOut()
     {
-        string playerName = PhotonNetwork.NickName;
-        uiLogManager.AddLog(playerName, UILogManager.LogType.Dead);
+        //string playerName = PhotonNetwork.NickName;
+        uiLogManager.AddLog("player", UILogManager.LogType.Dead);
 
         timeManager.ResetRocketCount();
 
