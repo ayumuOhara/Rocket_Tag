@@ -27,8 +27,8 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         LEG,
     }
 
-    static GameObject[] skinPrefab;
-    static GameObject skinEntity;
+    GameObject[] skinPrefab;
+    GameObject skinEntity;
     Transform headTF;
     Button undress;
     Button redCap;
@@ -38,13 +38,8 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     Button bear;
     Button star;
 
-    int skinNo;
-    static int skinLocation;
-
-    static internal GameObject[] _SkinPrefab
-    { get { return _SkinPrefab; }  }
-    static internal int _SkinLocation
-    { get { return skinLocation; } set { skinLocation = value; } }
+    int tmpSkinNo;
+    int tmpSkinLocation;
 
     void Start()
     {
@@ -54,8 +49,8 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     void Initialize()     //  初期化
     {
         SceneManager.sceneUnloaded += SaveSkinNo;
-        skinPrefab = new GameObject[7];
-        ResourceLord();
+        skinPrefab = SkinGanarater._SkinPrefab;
+        //ResourceLord();
         headTF     = GameObject.Find("Head"      ).GetComponent<Transform>();
         undress    = GameObject.Find("Undress"   ).GetComponent<Button>();
         redCap     = GameObject.Find("RedCap"    ).GetComponent<Button>();
@@ -66,8 +61,9 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         star       = GameObject.Find("Star"      ).GetComponent<Button>();
         SetSkinNoByButton();    //  ボタン反応追加
 
-        skinNo = PlayerPrefs.GetInt("PlayerSkinNo", 0);
-        SkinGenerate(skinLocation);
+        tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", 0);
+        tmpSkinLocation = PlayerPrefs.GetInt("PlayerSkinLocation", 0);
+        SkinGenerate(tmpSkinLocation);
     }
     void SetSkinNoByButton()    //  ボタン押下に応じて、スキン番号変更関数を呼ぶ
     {
@@ -82,15 +78,16 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     }
     void ChangeSkin(int clickSkinNo, int skinLocation)    //  スキン番号変更
     {
-        if (skinNo != clickSkinNo)
+        if (tmpSkinNo != clickSkinNo)
         {
-            skinNo = clickSkinNo;
+            tmpSkinNo = clickSkinNo;
+            tmpSkinLocation = skinLocation;
             SkinGenerate(skinLocation);
         }
     }
     void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
     {
-        if (skinPrefab[1] == null)
+        if (skinPrefab == null)
         {
             skinPrefab[1] = Resources.Load<GameObject>("RedCap");
             skinPrefab[2] = Resources.Load<GameObject>("StrawHat");
@@ -102,34 +99,33 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     }
     void SkinGenerate(int skinLocation_)    //  スキンの生成
     {
-        if(skinNo == 0)
+        Destroy(skinEntity);
+        if (tmpSkinNo != 0)
         {
-            Destroy(skinEntity);
-        }
-        else
-        {
-            switch (skinLocation)
+            switch (skinLocation_)
             {
                 case 0:
                     {
-                        Destroy(skinEntity);
-                        skinEntity = Instantiate(skinPrefab[skinNo], headTF);
+                        skinEntity = Instantiate(skinPrefab[tmpSkinNo], headTF);
                         break;
                     }
             }
         }
-        skinLocation = skinLocation_;
     }
     void SaveSkinNo(Scene scene)    //  シーンアンロード時にスキンセーブ
     {
-        PlayerPrefs.SetInt("PlayerSkinNo", skinNo);
-        PlayerPrefs.Save();
+        SaveDate_Skin();
         Debug.Log(PlayerPrefs.GetInt("PlayerSkinNo"));
         SceneManager.sceneUnloaded -= SaveSkinNo;
     }
     void OnApplicationQuit()    //  途中でアプリを落としたときにスキン番号をセーブ
     {
-        PlayerPrefs.SetInt("PlayerSkinNo", skinNo);
+        SaveDate_Skin();
+    }
+    void SaveDate_Skin()    //  スキン関係のデータをセーブ
+    {
+        PlayerPrefs.SetInt("PlayerSkinNo", tmpSkinNo);
+        PlayerPrefs.SetInt("PlayerSkinLocation", tmpSkinLocation);
         PlayerPrefs.Save();
     }
 }
