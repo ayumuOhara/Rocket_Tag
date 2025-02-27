@@ -31,8 +31,8 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
             PhotonView targetPhotonView = target.GetComponent<PhotonView>();
             if (targetPhotonView != null)
             {
-                string playerName = PhotonNetwork.NickName;
-                uiLogManager.AddLog(playerName, UILogManager.LogType.ChangeTagger);
+                //string playerName = PhotonNetwork.NickName;
+                uiLogManager.AddLog("player", UILogManager.LogType.ChangeTagger);
 
                 targetPhotonView.RPC("SetHasRocket", RpcTarget.All, !otherPlayer.hasRocket);
                 targetPhotonView.RPC("SetIsStun", RpcTarget.All, true);
