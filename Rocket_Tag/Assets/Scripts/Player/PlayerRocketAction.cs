@@ -19,21 +19,16 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
     // タッチ/投擲アクション
     public void RocketAction()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Debug.Log("ロケットを投擲した");
-        }
-
         // 近くのプレイヤーにロケットを渡す
         GameObject target = observeDistance.GetTargetDistance();
-        if (target != null)
+        SetPlayerBool otherPlayer = target.GetComponent<SetPlayerBool>();
+        if (target != null && !otherPlayer.hasRocket)
         {
             // 自分の hasRocket を切り替え
             photonView.RPC("SetHasRocket", RpcTarget.All, !setPlayerBool.hasRocket);
 
             // ターゲットの hasRocket を切り替え
             PhotonView targetPhotonView = target.GetComponent<PhotonView>();
-            SetPlayerBool otherPlayer = target.GetComponent<SetPlayerBool>();
             if (targetPhotonView != null)
             {
                 string playerName = PhotonNetwork.NickName;

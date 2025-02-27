@@ -67,6 +67,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             yield return null;
         }
         DropOut();
+        yield break;
     }
 
     void Floating(GameObject floated, float floatSpeed)
