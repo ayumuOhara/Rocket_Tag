@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Locker.unity
     guid: d89c6a0ec843f934da0f666954d8a463
+  - enabled: 1
+    path: Assets/Scenes/PlayScene.unity
+    guid: 363efedf2f0d48f4f806aae1abaa4bb8
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

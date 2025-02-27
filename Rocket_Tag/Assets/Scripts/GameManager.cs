@@ -16,14 +16,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
     [SerializeField] TextMeshProUGUI infoText;          // playerCntTextの説明文
     [SerializeField] GameObject readyButton;            // 準備完了ボタン
-    [SerializeField] GameObject rocketEffect;           // ロケットのエフェクト管理オブジェクト
+    //[SerializeField] GameObject rocketEffect;           // ロケットのエフェクト管理オブジェクト
     private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
     private bool isGameStarted = false;                 // ゲームが開始されたかどうかのフラグ
     private Player currentRocketHolder;                 // 現在のロケット保持者
+    private List<GameObject> cachedPlayerList = new List<GameObject>(); // プレイヤーリストのキャッシュ
 
     void Start()
     {
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(WaitPlayersReady());
         }
@@ -84,9 +85,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void StartGame()
     {
-        rocketEffect.SetActive(true);
+        //rocketEffect.SetActive(true);
 
-        timeManager.ResetRocketCount();
         if (isGameStarted) return;
 
         Debug.Log("プレイヤーが揃ったのでゲームを開始します");
@@ -96,27 +96,36 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            ChooseRocketPlayer();
+            StartCoroutine(ChooseRocketPlayerAndStart());
             StartCoroutine(eventManager.TriggerRandomEvent());
             StartCoroutine(CheckSurvivorCount());
         }
+    }
+
+    IEnumerator ChooseRocketPlayerAndStart()
+    {
+        // ロケット保持者を選定
+        ChooseRocketPlayer();
+        yield return null; // 非同期で実行
     }
 
     public void ChooseRocketPlayer()
     {
         Debug.Log("ロケット保持者を抽選します");
 
-        List<GameObject> players = GetPlayerList();
-        players.RemoveAll(player =>
+        // プレイヤーリストをキャッシュ
+        cachedPlayerList = GetPlayerList();
+        cachedPlayerList.RemoveAll(player =>
             player.GetComponent<PhotonView>().Owner == currentRocketHolder); // 既存保持者を除外
 
-        if (players.Count == 0)
+        if (cachedPlayerList.Count == 0)
         {
             Debug.LogWarning("候補者がいません");
+            return;
         }
 
-        int rnd = Random.Range(0, players.Count);
-        GameObject selectedPlayer = players[rnd];
+        int rnd = Random.Range(0, cachedPlayerList.Count);
+        GameObject selectedPlayer = cachedPlayerList[rnd];
         PhotonView targetPhotonView = selectedPlayer.GetComponent<PhotonView>();
 
         if (targetPhotonView != null)
@@ -134,9 +143,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         while (true)
         {
-            List<GameObject> players = GetPlayerList();
-            int playerCount = players.Count;
-            if(PhotonNetwork.IsMasterClient)
+            int playerCount = cachedPlayerList.Count;
+            if (PhotonNetwork.IsMasterClient)
             {
                 photonView.RPC("PlayerCntText", RpcTarget.All, playerCount, "生存人数");
             }
@@ -144,7 +152,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (playerCount <= 1)
             {
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
-                rocketEffect.SetActive(false);
+                //rocketEffect.SetActive(false);
                 readyButton.SetActive(true);
                 playerReady.SetReady(false);
                 setPlayerBool.SetPlayerCondition();

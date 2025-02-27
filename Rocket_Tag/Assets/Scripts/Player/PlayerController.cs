@@ -29,15 +29,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             if(setPlayerBool.isStun == false)
             {
-                skillManager.UseSkill();
+                //if(Input.GetKey(KeyCode.E))
+                //{
+                //    skillManager.UseSkill();
+                //}
 
                 if (setPlayerBool.hasRocket)
                 {
                     playerRocketAction.RocketAction();
                 }
             }
-
-            
         }
     }
 

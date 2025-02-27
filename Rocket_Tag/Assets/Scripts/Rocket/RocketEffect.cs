@@ -112,7 +112,6 @@ internal class RocketEffect : MonoBehaviour
         SMOKE,
     }
 
-
     EffectState currentState;
 
     GameObject[] frameEffectPrefab;
@@ -225,7 +224,9 @@ internal class RocketEffect : MonoBehaviour
                 }
             case RocketEffectProcces.SEARCH_ROCKET:
                 {
+                    rocket = null;
                     rocket = GameObject.Find("Rocket").GetComponent<Transform>();
+                    Debug.Log("rocketç¿ïWéÊìæ : " + rocket);
                     if (rocket != null && currentState is PrepareRocket)
                     {
                         ChangeState(new FirstStage());
@@ -283,6 +284,6 @@ internal class RocketEffect : MonoBehaviour
         frameEffectPrefab[1] = Resources.Load<GameObject>("SecondRocketFrame");
         frameEffectPrefab[2] = Resources.Load<GameObject>("ThirdRocketFrame");
         frameEffectPrefab[3] = Resources.Load<GameObject>("LastRocketFrame");
-        smokeEffectPrefab = Resources.Load<GameObject>("FrameSmoke");
+        smokeEffectPrefab    = Resources.Load<GameObject>("FrameSmoke");
     }
 }                                                                                                   ////  ä÷êîãÊèIóπ  ////
