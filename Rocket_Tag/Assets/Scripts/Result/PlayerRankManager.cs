@@ -7,6 +7,11 @@ public class PlayerRankManager : MonoBehaviour
     [SerializeField] InstantiatePlayer instantiatePlayer;
     public int playerRank;
 
+    private void Start()
+    {
+        instantiatePlayer = GameObject.Find("InstantiatePlayer").GetComponent<InstantiatePlayer>();
+    }
+
     public void SetPlayerRank()
     {
         //ƒvƒŒƒCƒ„[‚Ì‡ˆÊ‚ğİ’è
