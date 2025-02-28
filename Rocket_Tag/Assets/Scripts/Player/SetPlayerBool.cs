@@ -18,13 +18,13 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [SerializeField] public bool isDead;    // 死亡判定
     [SerializeField] public bool isStun;    // スタン判定
 
-    private void Start()
+    private void Awake()
     {
-        //rocketEffect      = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
-        timeManager       = GameObject.Find("TimeManager" ).GetComponent<TimeManager>();
+        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         resultScreen = GameObject.Find("Result").GetComponent<ResultScreen>();
-        playerRankManager = GameObject.Find("GameManager" ).GetComponent<PlayerRankManager>();
-        //Debug.Log("rocketEffect" + rocketEffect);
+        playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
+        GameObject result = GameObject.Find("Result");
+        result.SetActive(false);
     }
 
     // プレイヤーの状態の初期化
