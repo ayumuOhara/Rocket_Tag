@@ -18,7 +18,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [SerializeField] public bool isDead;    // Ž€–S”»’è
     [SerializeField] public bool isStun;    // ƒXƒ^ƒ“”»’è
 
-    private void Awake()
+    private void Start()
     {
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         resultScreen = GameObject.Find("Result").GetComponent<ResultScreen>();
