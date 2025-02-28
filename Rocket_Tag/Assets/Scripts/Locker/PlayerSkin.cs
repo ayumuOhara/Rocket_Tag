@@ -49,7 +49,7 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     void Initialize()     //  初期化
     {
         SceneManager.sceneUnloaded += SaveSkinNo;
-        skinPrefab = SkinGanarater._SkinPrefab;
+        skinPrefab = SkinGenerater._SkinPrefab;
         //ResourceLord();
         headTF     = GameObject.Find("Head"      ).GetComponent<Transform>();
         undress    = GameObject.Find("Undress"   ).GetComponent<Button>();
@@ -129,26 +129,3 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         PlayerPrefs.Save();
     }
 }
-
-////////////////////////////////////////////  スキン生成方法  //////////////////////////////////
-
-/* 下記の関数を定義して
-    void SkinGenerate(int skinLocation_)    //  スキンの生成
-    {
-        int tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", 0);
-        if (tmpSkinNo != 0)
-        {
-            switch (skinLocation_)
-            {
-                case 0:
-                    {
-                        skinEntity = Instantiate(PlayerSkin._SkinPrefab , head);
-                        break;
-                    }
-            }
-        }
-        PlayerSkin._SkinLocation = skinLocation_;
-    }
- * こいつで生成    SkinGenerate(PlayerSkin._PlayerSkin._SkinLocation);
-   ※※　　HeadのTransformとスキンのエンティティがないと生成されません  ※※
-*/

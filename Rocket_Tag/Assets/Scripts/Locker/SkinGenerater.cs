@@ -1,25 +1,26 @@
-using System.Collections.Generic;
+using System.Collections.Generic;                                                          ////  スキン生成スクリプト  ////
 using System.Net.Sockets;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-////  ロケットエフェクト生成・切り替え  ////
-public class SkinGanarater : MonoBehaviour
+public class SkinGenerater : MonoBehaviour
 {
+    /*  スキンの種類等はPlayerSkin.csにenumで宣言してあります  */
     internal enum SkinGenerateProcces    //  スキンジェネレート内の処理一覧
     {
         IN_GAME_GENERATE,
     }
-
+    
     static GameObject[] skinPrefab;                                                        ////  以下宣言区  ////
     GameObject skinEntity;
-    List<GameObject> TmpPlayerList;
     Transform playerHipTF;
     GameManager gameManager;
+
     static int skinLocation;
 
     static internal GameObject[] _SkinPrefab
-    { get { return skinPrefab; } }                                                        ////  宣言区終了  ////                 
+    { get { return skinPrefab; } }                                                         ////  宣言区終了  ////
+
     void Start()                                                                           ////  以下処理区  ////
     {
         Initialize();    //  初期化
@@ -40,7 +41,7 @@ public class SkinGanarater : MonoBehaviour
             case SkinGenerateProcces.IN_GAME_GENERATE:    //  スキン生成処理群
                 {
                     List<GameObject> tmpPlayerList = gameManager.GetPlayerList();
-                    for (int tmpPlayerListLen = 0; tmpPlayerListLen == tmpPlayerList.Count - 1; tmpPlayerListLen++)
+                    for (int tmpPlayerListLen = 0; tmpPlayerListLen < tmpPlayerList.Count; tmpPlayerListLen++)
                     {
                         SkinGenerate(tmpPlayerList[tmpPlayerListLen].transform);
                     }
