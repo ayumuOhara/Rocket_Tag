@@ -21,10 +21,10 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     private void Start()
     {
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-        resultScreen = GameObject.Find("Result").GetComponent<ResultScreen>();
+        //resultScreen = GameObject.Find("Result").GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
-        GameObject result = GameObject.Find("Result");
-        result.SetActive(false);
+        //GameObject result = GameObject.Find("Result");
+        //result.SetActive(false);
     }
 
     // ƒvƒŒƒCƒ„[‚Ìó‘Ô‚Ì‰Šú‰»
@@ -43,8 +43,8 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         isDead = newIsDead;
 
-        playerRankManager.SetPlayerRank();
-        resultScreen.ShowMyResult();
+        //playerRankManager.SetPlayerRank();
+        //resultScreen.ShowMyResult();
 
         this.gameObject.SetActive(false);
     }
