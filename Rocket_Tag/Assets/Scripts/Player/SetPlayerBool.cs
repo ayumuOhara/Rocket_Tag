@@ -22,7 +22,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         //rocketEffect      = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
         timeManager       = GameObject.Find("TimeManager" ).GetComponent<TimeManager>();
-        //resultScreen      = GameObject.Find("Result"      ).GetComponent<ResultScreen>();
+        resultScreen = GameObject.Find("Result").GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager" ).GetComponent<PlayerRankManager>();
         //Debug.Log("rocketEffect" + rocketEffect);
     }
@@ -43,8 +43,8 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         isDead = newIsDead;
 
-        //playerRankManager.SetPlayerRank();
-        //resultScreen.ShowMyResult();
+        playerRankManager.SetPlayerRank();
+        resultScreen.ShowMyResult();
 
         this.gameObject.SetActive(false);
     }
@@ -66,7 +66,12 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         hasRocket = newHasRocket;
 
         rocketObj.SetActive(hasRocket);
-        timeManager.ResetAcceleration();
+
+        if (timeManager != null)
+            timeManager.ResetAcceleration();
+        else
+            Debug.Log("timeManager‚ªnull‚Å‚·");
+
         //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
     }
 }
