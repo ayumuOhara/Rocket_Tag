@@ -31,7 +31,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         uiLogManager = GameObject.Find("UILogManager").GetComponent<UILogManager>();
         //rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
         //rocketEffect.SetRocket(transform);
-        playerRb = player.GetComponent<Rigidbody>();
      
         //effect.transform.localPosition = effectOffset;
     }
@@ -73,10 +72,12 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Floating(GameObject floated, float floatSpeed)
     {
+        Debug.Log($"floated確認：{floated}");
+
         playerRb.useGravity = false;
         Collider collider = player.GetComponent<CapsuleCollider>();
         collider.isTrigger = true;
-        floated.transform.position += Vector3.up * floatSpeed * Time.deltaTime;
+        player.transform.position += Vector3.up * floatSpeed * Time.deltaTime;
     }
 
     bool IsVeryHigh()
