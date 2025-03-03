@@ -44,33 +44,24 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetPlayerDead(bool newIsDead)
     {
-        if(photonView.IsMine)
+        Debug.Log("€–S”»’èF" + newIsDead);
+
+        isDead = newIsDead;
+
+        if (playerRankManager != null)
         {
-            isDead = newIsDead;
+            playerRankManager.SetPlayerRank();
+        }
 
-            if (playerRankManager != null)
-            {
-                playerRankManager.SetPlayerRank();
-            }
-            else
-            {
-                Debug.Log("playerRankManager‚ªnull‚Å‚·");
-            }
+        if (resultScreen != null)
+        {
+            resultScreen.ShowMyResult();
+        }
 
-            if (resultScreen != null)
-            {
-                resultScreen.ShowMyResult();
-            }
-            else
-            {
-                Debug.Log("resultScreen‚ªnull‚Å‚·");
-            }
-
-            if (isDead == true)
-            {
-                this.gameObject.SetActive(false);
-            }
-        }        
+        if (isDead == true)
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 
     [PunRPC]
