@@ -106,12 +106,6 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
         {
             statusText.text = "対戦相手が揃いました。バトルシーンに移動します。";
         }
-
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-            PhotonNetwork.LoadLevel("PlayScene");
-        }
     }
         /*
          public override void OnLeftRoom()
@@ -121,7 +115,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
         }
         */
 
-        public void RemoveTheCover()
+    public void RemoveTheCover()
     {
         cover.gameObject.SetActive(false);
     }    
