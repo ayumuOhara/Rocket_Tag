@@ -80,6 +80,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             gameManager.ChooseRocketPlayer();
         }
 
+        isExploding = false;
+
         photonView.RPC("SetPlayerDead", RpcTarget.All, true);
     }
 }
