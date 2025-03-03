@@ -13,15 +13,15 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        playerMovement = GetComponent<PlayerMovement>();
-        playerRocketAction = GetComponent<PlayerRocketAction>();
-        setPlayerBool = GetComponent<SetPlayerBool>();
-        Debug.Log("setPlayerBool : " + setPlayerBool);
-        //skillManager = GetComponent<SkillManager>();
-        observeDistance = GetComponent<ObserveDistance>();
-        //inputPlayerName = GameObject.Find("InputPlayerName").GetComponent<InputPlayerName>();
-
-        setPlayerBool.SetPlayerCondition();
+        if (photonView.IsMine)
+        {
+            playerMovement = GetComponent<PlayerMovement>();
+            playerRocketAction = GetComponent<PlayerRocketAction>();
+            setPlayerBool = GetComponent<SetPlayerBool>();
+            Debug.Log("setPlayerBool : " + setPlayerBool);
+            observeDistance = GetComponent<ObserveDistance>();
+            setPlayerBool.SetPlayerCondition();
+        }
     }
 
     void Update()
@@ -47,8 +47,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine && setPlayerBool.isDead == false)
         {
-            if ( setPlayerBool.isStun == false /*&& 
-                 inputPlayerName.isEnd == true*/    )
+            if (setPlayerBool.isStun == false)
             {
                 playerMovement.GetVelocity();
                 playerMovement.PlayerMove();

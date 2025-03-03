@@ -6,7 +6,6 @@ using UnityEngine;
 public class Rotate : MonoBehaviourPun, IPunObservable
 {
     private string targetTag = "Player";  // "Player"タグを持つオブジェクトにのみ影響
-    [SerializeField] private float maxDistance = 5.0f;  // 検知する最大距離（Inspectorで設定可）
 
     [Header("回転設定")]
     [SerializeField] private float rotationSpeed = 100f;   // 初期回転速度
@@ -26,8 +25,8 @@ public class Rotate : MonoBehaviourPun, IPunObservable
             // 回転床を回転させる
             transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
 
-            // 回転オブジェクトに乗っているプレイヤーに影響を与える
-            ApplyRotationToPlayersOnObject();
+            // 回転床に乗っているプレイヤーを回転させる
+            MovePlayersWithPlatform();
         }
         else
         {
@@ -49,45 +48,40 @@ public class Rotate : MonoBehaviourPun, IPunObservable
         }
     }
 
-    // 回転オブジェクトに乗っているプレイヤー全員に影響を与える
-    private void ApplyRotationToPlayersOnObject()
+    // プレイヤーを回転床と一緒に回転させる
+    private void MovePlayersWithPlatform()
     {
         foreach (var player in playersOnObject)
         {
-            if (player != null)
+            if (player != null && player.GetComponent<PhotonView>().IsMine)
             {
-                ApplyRotationToPlayer(player);
+                // プレイヤーを回転オブジェクトの回転に合わせて動かす
+                player.RotateAround(transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
             }
         }
     }
 
-    // プレイヤーを回転させる（Rigidbodyを使わずに）
-    private void ApplyRotationToPlayer(Transform player)
+    // プレイヤーが回転床に乗った場合
+    private void OnCollisionEnter(Collision collision)
     {
-        Vector3 centerOffset = player.position - transform.position;
-        centerOffset.y = 0; // 高さの変化を防ぐ
-
-        float angle = rotationSpeed * Time.deltaTime;
-        player.position = transform.position + Quaternion.Euler(0, angle, 0) * centerOffset;
-    }
-
-    // プレイヤーが回転オブジェクトに乗った場合
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag(targetTag))
+        if (collision.gameObject.CompareTag(targetTag))
         {
-            playersOnObject.Add(other.transform);
-            Debug.Log($"プレイヤー {other.name} が回転オブジェクトに乗った。現在のプレイヤー数: {playersOnObject.Count}");
+            Transform playerTransform = collision.transform;
+            playersOnObject.Add(playerTransform);
+
+            Debug.Log($"プレイヤー {collision.gameObject.name} が回転オブジェクトに乗った。");
         }
     }
 
-    // プレイヤーが回転オブジェクトから降りた場合
-    private void OnTriggerExit(Collider other)
+    // プレイヤーが回転床から降りた場合
+    private void OnCollisionExit(Collision collision)
     {
-        if (other.CompareTag(targetTag))
+        if (collision.gameObject.CompareTag(targetTag))
         {
-            playersOnObject.Remove(other.transform);
-            Debug.Log($"プレイヤー {other.name} が回転オブジェクトから降りた。現在のプレイヤー数: {playersOnObject.Count}");
+            Transform playerTransform = collision.transform;
+            playersOnObject.Remove(playerTransform);
+
+            Debug.Log($"プレイヤー {collision.gameObject.name} が回転オブジェクトから降りた。");
         }
     }
 

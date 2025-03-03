@@ -155,7 +155,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 //rocketEffect.SetActive(false);
                 readyButton.SetActive(true);
                 playerReady.SetReady(false);
-                setPlayerBool.SetPlayerCondition();
+                //setPlayerBool.SetPlayerCondition();
                 timeManager.isTimeStart = false;
                 StartCoroutine(WaitPlayersReady());
                 yield break;

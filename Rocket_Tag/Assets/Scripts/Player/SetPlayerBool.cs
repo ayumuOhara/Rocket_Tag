@@ -18,13 +18,16 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [SerializeField] public bool isDead;    // 死亡判定
     [SerializeField] public bool isStun;    // スタン判定
 
-    private void Awake()
+    private void Start()
     {
-        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-        resultScreen = GameObject.Find("Result").GetComponent<ResultScreen>();
-        playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
-        GameObject result = GameObject.Find("Result");
-        result.SetActive(false);
+        if(photonView.IsMine)
+        {
+            timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+            resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
+            playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
+            GameObject result = GameObject.Find("ResultUI");
+            result.SetActive(false);
+        }
     }
 
     // プレイヤーの状態の初期化
@@ -41,12 +44,24 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetPlayerDead(bool newIsDead)
     {
+        Debug.Log("死亡判定：" + newIsDead);
+
         isDead = newIsDead;
 
-        playerRankManager.SetPlayerRank();
-        resultScreen.ShowMyResult();
+        if (playerRankManager != null)
+        {
+            playerRankManager.SetPlayerRank();
+        }
 
-        this.gameObject.SetActive(false);
+        if (resultScreen != null)
+        {
+            resultScreen.ShowMyResult();
+        }
+
+        if (isDead == true)
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 
     [PunRPC]
@@ -65,13 +80,23 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         hasRocket = newHasRocket;
 
-        rocketObj.SetActive(hasRocket);
+        if (hasRocket)
+        {
+            rocketObj.SetActive(true);
+        }
+        else
+        {
+            rocketObj.SetActive(false);
+        }
 
         if (timeManager != null)
+        {
             timeManager.ResetAcceleration();
+        }
         else
+        {
             Debug.Log("timeManagerがnullです");
-
+        }
         //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
     }
 }

@@ -5,6 +5,8 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement; // シーン遷移に必要
+using UnityEditor;
+
 public class PhotonMaster : MonoBehaviourPunCallbacks
 {
     public Text statusText;
@@ -88,7 +90,6 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
             if (PhotonNetwork.CurrentRoom.PlayerCount == MAX_PLAYER_PER_ROOM)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
-                statusText.text = "対戦相手が揃いました。バトルシーンに移動します。";
                 PhotonNetwork.LoadLevel("PlayScene");
             }
         }
@@ -104,6 +105,12 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
         else
         {
             statusText.text = "対戦相手が揃いました。バトルシーンに移動します。";
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+            PhotonNetwork.LoadLevel("PlayScene");
         }
     }
         /*
