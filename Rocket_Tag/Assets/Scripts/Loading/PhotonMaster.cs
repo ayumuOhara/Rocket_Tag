@@ -88,7 +88,6 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
             if (PhotonNetwork.CurrentRoom.PlayerCount == MAX_PLAYER_PER_ROOM)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
-                statusText.text = "対戦相手が揃いました。バトルシーンに移動します。";
                 PhotonNetwork.LoadLevel("PlayScene");
             }
         }
