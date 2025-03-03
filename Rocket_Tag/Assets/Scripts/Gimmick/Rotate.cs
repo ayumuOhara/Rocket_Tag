@@ -53,9 +53,9 @@ public class Rotate : MonoBehaviourPun, IPunObservable
     {
         foreach (var player in playersOnObject)
         {
-            if (player != null)
+            if (player != null && player.GetComponent<PhotonView>().IsMine)
             {
-                // 回転床の回転に合わせてプレイヤーの位置を更新
+                // プレイヤーを回転オブジェクトの回転に合わせて動かす
                 player.RotateAround(transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
             }
         }
