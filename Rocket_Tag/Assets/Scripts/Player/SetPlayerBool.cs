@@ -23,7 +23,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         resultScreen = GameObject.Find("Result").GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
-        GameObject result = GameObject.Find("Result");
+        GameObject result = GameObject.Find("ResultUI");
         result.SetActive(false);
     }
 
