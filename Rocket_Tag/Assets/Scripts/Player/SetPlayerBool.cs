@@ -87,29 +87,25 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetHasRocket(bool newHasRocket)
     {
-        if (photonView.IsMine)
+        hasRocket = newHasRocket;
+
+        if (hasRocket)
         {
-            hasRocket = newHasRocket;
-
-            if (hasRocket)
-            {
-                rocketObj.SetActive(true);
-            }
-            else
-            {
-                rocketObj.SetActive(false);
-            }
-
-            if (timeManager != null)
-            {
-                timeManager.ResetAcceleration();
-            }
-            else
-            {
-                Debug.Log("timeManager‚ªnull‚Å‚·");
-            }
+            rocketObj.SetActive(true);
+        }
+        else
+        {
+            rocketObj.SetActive(false);
         }
 
+        if (timeManager != null)
+        {
+            timeManager.ResetAcceleration();
+        }
+        else
+        {
+            Debug.Log("timeManager‚ªnull‚Å‚·");
+        }
         //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
     }
 }
