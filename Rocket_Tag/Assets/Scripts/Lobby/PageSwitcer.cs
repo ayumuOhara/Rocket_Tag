@@ -11,8 +11,7 @@ public class PageSwitcher : MonoBehaviour
     [SerializeField] private Button backButton;
     [SerializeField] private Text statusText;
     [SerializeField] private GameObject onePageImage;
-    [SerializeField] private GameObject twoPageImageL;
-    [SerializeField] private GameObject twoPageImageR;
+    [SerializeField] private GameObject twoPageImage;
     [SerializeField] private GameObject threePageImage;
     [SerializeField] private GameObject fourPageImage;
 
@@ -75,8 +74,7 @@ public class PageSwitcher : MonoBehaviour
         fourSection.SetActive(false);
 
         onePageImage.SetActive(true);
-        twoPageImageL.SetActive(false);
-        twoPageImageR.SetActive(false);
+        twoPageImage.SetActive(false);
         threePageImage.SetActive(false);
         fourPageImage.SetActive(false);
     }
@@ -95,8 +93,7 @@ public class PageSwitcher : MonoBehaviour
         fourSection.SetActive(false);
 
         onePageImage.SetActive(false);
-        twoPageImageL.SetActive(true);
-        twoPageImageR.SetActive(true);
+        twoPageImage.SetActive(true);
         threePageImage.SetActive(false);
         fourPageImage.SetActive(false);
     }
@@ -115,8 +112,7 @@ public class PageSwitcher : MonoBehaviour
         fourSection.SetActive(false);
 
         onePageImage.SetActive(false);
-        twoPageImageL.SetActive(false);
-        twoPageImageR.SetActive(false);
+        twoPageImage.SetActive(false);
         threePageImage.SetActive(true);
         fourPageImage.SetActive(false);
     }
@@ -134,8 +130,7 @@ public class PageSwitcher : MonoBehaviour
         fourSection.SetActive(true);
 
         onePageImage.SetActive(false);
-        twoPageImageL.SetActive(false);
-        twoPageImageR.SetActive(false);
+        twoPageImage.SetActive(false);
         threePageImage.SetActive(false);
         fourPageImage.SetActive(true);
     }
