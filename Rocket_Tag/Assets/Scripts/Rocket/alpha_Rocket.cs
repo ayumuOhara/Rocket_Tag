@@ -38,8 +38,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     IEnumerator Explosion()
     {
-        timeManager.ResetRocketCount();
-
         Debug.Log("ロケット爆発");
         while (!IsVeryHigh())
         {
@@ -67,6 +65,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void DropOut()
     {
+        timeManager.ResetRocketCount();
+
         PhotonView photonView = player.GetComponent<PhotonView>();
 
         //string playerName = PhotonNetwork.NickName;
