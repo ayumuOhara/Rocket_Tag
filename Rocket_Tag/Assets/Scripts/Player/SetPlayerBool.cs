@@ -23,7 +23,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         if(photonView.IsMine)
         {
             timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-            resultScreen = FindObjectOfType<ResultScreen>();
+            resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
             playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
             GameObject result = GameObject.Find("ResultUI");
             result.SetActive(false);
@@ -44,30 +44,33 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetPlayerDead(bool newIsDead)
     {
-        isDead = newIsDead;
+        if(photonView.IsMine)
+        {
+            isDead = newIsDead;
 
-        if(playerRankManager != null)
-        {
-            playerRankManager.SetPlayerRank();
-        }
-        else
-        {
-            Debug.Log("playerRankManager‚ªnull‚Å‚·");
-        }
+            if (playerRankManager != null)
+            {
+                playerRankManager.SetPlayerRank();
+            }
+            else
+            {
+                Debug.Log("playerRankManager‚ªnull‚Å‚·");
+            }
 
-        if(resultScreen != null)
-        {
-            resultScreen.ShowMyResult();
-        }
-        else
-        {
-            Debug.Log("resultScreen‚ªnull‚Å‚·");
-        }
+            if (resultScreen != null)
+            {
+                resultScreen.ShowMyResult();
+            }
+            else
+            {
+                Debug.Log("resultScreen‚ªnull‚Å‚·");
+            }
 
-        if (isDead == true)
-        {
-            this.gameObject.SetActive(false);
-        }
+            if (isDead == true)
+            {
+                this.gameObject.SetActive(false);
+            }
+        }        
     }
 
     [PunRPC]
@@ -84,14 +87,28 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetHasRocket(bool newHasRocket)
     {
-        hasRocket = newHasRocket;
+        if (photonView.IsMine)
+        {
+            hasRocket = newHasRocket;
 
-        rocketObj.SetActive(hasRocket);
+            if (hasRocket)
+            {
+                rocketObj.SetActive(true);
+            }
+            else
+            {
+                rocketObj.SetActive(false);
+            }
 
-        if (timeManager != null)
-            timeManager.ResetAcceleration();
-        else
-            Debug.Log("timeManager‚ªnull‚Å‚·");
+            if (timeManager != null)
+            {
+                timeManager.ResetAcceleration();
+            }
+            else
+            {
+                Debug.Log("timeManager‚ªnull‚Å‚·");
+            }
+        }
 
         //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
     }
