@@ -26,6 +26,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             resultScreen = FindObjectOfType<ResultScreen>();
             Debug.Log(resultScreen);
             playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
+            Debug.Log(playerRankManager);
             GameObject result = GameObject.Find("ResultUI");
             result.SetActive(false);
         }
