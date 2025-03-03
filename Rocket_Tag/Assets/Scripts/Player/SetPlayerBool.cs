@@ -20,11 +20,15 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-        resultScreen = GameObject.Find("Result").GetComponent<ResultScreen>();
-        playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
-        GameObject result = GameObject.Find("ResultUI");
-        result.SetActive(false);
+        if(photonView.IsMine)
+        {
+            timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+            resultScreen = FindObjectOfType<ResultScreen>();
+            Debug.Log(resultScreen);
+            playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
+            GameObject result = GameObject.Find("ResultUI");
+            result.SetActive(false);
+        }
     }
 
     // ƒvƒŒƒCƒ„[‚Ìó‘Ô‚Ì‰Šú‰»
@@ -49,7 +53,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         if (isDead == true)
         {
             this.gameObject.SetActive(false);
-        }        
+        }
     }
 
     [PunRPC]

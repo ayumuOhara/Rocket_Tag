@@ -8,48 +8,26 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     float floatSpeed = 5f;
     float explodeRiseSpeed = 20f;
     float evacuateStarPos_Y = 40;
-    int rocketStage = 0;
     bool isExploding = false;
 
     Vector3 effectOffset = new Vector3(0, -1, 0);
     Vector3 smokeDiffusion = new Vector3(3, 0, 3);
 
-    GameObject effect;
-    Transform smoke;
     GameManager gameManager;
     TimeManager timeManager;
     UILogManager uiLogManager;
-    RocketEffect rocketEffect;
     [SerializeField] GameObject player;
     [SerializeField] Rigidbody playerRb;
 
     void Start()
     {
-        //smoke = Resources.Load<GameObject>("FireSmoke");
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         uiLogManager = GameObject.Find("UILogManager").GetComponent<UILogManager>();
-        //rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
-        //rocketEffect.SetRocket(transform);
-     
-        //effect.transform.localPosition = effectOffset;
     }
 
     void Update()
     {
-        //if (rocketStage > 2 && timeManager.isSecondStageTime())
-        //{
-        //    effect = rocketEffectPrefab[(rocketstage += 1)];
-        //}
-        //if (rocketStage > 3 && timeManager.isSecondStageTime())
-        //{
-        //    effect = rocketEffectPrefab[(rocketstage += 1)];
-        //smoke.transform.localScale = Vector3.Scale(smoke.transform.localScale, smokeDiffusion);
-        //}
-        //if (timeManager.IsFloatTime() && !timeManager.IsLimitOver())
-        //{
-        //    Floating(player, floatSpeed);
-        //}
         if (timeManager.IsLimitOver() && !isExploding)
         {
             isExploding = true;
@@ -98,8 +76,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         {
             Debug.Log("ロケットを抽選");
             gameManager.ChooseRocketPlayer();
+            photonView.RPC("SetPlayerDead", RpcTarget.All, true);
         }
-
-        photonView.RPC("SetPlayerDead", RpcTarget.All, true);
     }
 }

@@ -29,10 +29,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
-        setPlayerBool = GetComponent<SetPlayerBool>();
-        skillManager   = GetComponent<SkillManager>();
-        animator = GetComponent<Animator>();
+        if(photonView.IsMine)
+        {
+            refCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CameraController>();
+            setPlayerBool = GetComponent<SetPlayerBool>();
+            skillManager = GetComponent<SkillManager>();
+            animator = GetComponent<Animator>();
+        }
     }
 
     public void SetMoveSpeed(float _moveSpeed)
