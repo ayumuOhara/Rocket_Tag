@@ -24,6 +24,9 @@ public class Rotate : MonoBehaviourPun, IPunObservable
         {
             // 回転床を回転させる
             transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+
+            // 回転床に乗っているプレイヤーを回転させる
+            MovePlayersWithPlatform();
         }
         else
         {
@@ -45,6 +48,19 @@ public class Rotate : MonoBehaviourPun, IPunObservable
         }
     }
 
+    // プレイヤーを回転床と一緒に回転させる
+    private void MovePlayersWithPlatform()
+    {
+        foreach (var player in playersOnObject)
+        {
+            if (player != null && player.GetComponent<PhotonView>().IsMine)
+            {
+                // プレイヤーを回転オブジェクトの回転に合わせて動かす
+                player.RotateAround(transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
+            }
+        }
+    }
+
     // プレイヤーが回転床に乗った場合
     private void OnCollisionEnter(Collision collision)
     {
@@ -52,9 +68,6 @@ public class Rotate : MonoBehaviourPun, IPunObservable
         {
             Transform playerTransform = collision.transform;
             playersOnObject.Add(playerTransform);
-
-            // プレイヤーを回転オブジェクトの子にする
-            playerTransform.SetParent(transform);
 
             Debug.Log($"プレイヤー {collision.gameObject.name} が回転オブジェクトに乗った。");
         }
@@ -67,9 +80,6 @@ public class Rotate : MonoBehaviourPun, IPunObservable
         {
             Transform playerTransform = collision.transform;
             playersOnObject.Remove(playerTransform);
-
-            // プレイヤーの親を解除（ワールド座標を維持）
-            playerTransform.SetParent(null, true);
 
             Debug.Log($"プレイヤー {collision.gameObject.name} が回転オブジェクトから降りた。");
         }
