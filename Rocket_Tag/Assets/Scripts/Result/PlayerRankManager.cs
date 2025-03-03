@@ -14,12 +14,25 @@ public class PlayerRankManager : MonoBehaviour
 
     public void SetPlayerRank()
     {
-        //プレイヤーの順位を設定
-        playerRank = instantiatePlayer.GetCurrentPlayerCount();
+        if (instantiatePlayer == null)
+        {
+            Debug.LogError("instantiatePlayer is null!");
+            return;
+        }
 
-        //順位をカスタムプロパティに保存
+        playerRank = instantiatePlayer.GetCurrentPlayerCount();
+        Debug.Log("Player Rank: " + playerRank);
+
+        if (PhotonNetwork.LocalPlayer == null)
+        {
+            Debug.LogError("PhotonNetwork.LocalPlayer is null!");
+            return;
+        }
+
+        // 順位をカスタムプロパティに保存
         Hashtable playerProperties = new Hashtable();
         playerProperties.Add("PlayerRank", playerRank);
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperties);
     }
+
 }

@@ -24,9 +24,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         {
             timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
             resultScreen = FindObjectOfType<ResultScreen>();
-            Debug.Log(resultScreen);
             playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
-            Debug.Log(playerRankManager);
             GameObject result = GameObject.Find("ResultUI");
             result.SetActive(false);
         }
@@ -48,8 +46,23 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         isDead = newIsDead;
 
-        playerRankManager.SetPlayerRank();
-        resultScreen.ShowMyResult();
+        if(playerRankManager != null)
+        {
+            playerRankManager.SetPlayerRank();
+        }
+        else
+        {
+            Debug.Log("playerRankManager‚ªnull‚Å‚·");
+        }
+
+        if(resultScreen != null)
+        {
+            resultScreen.ShowMyResult();
+        }
+        else
+        {
+            Debug.Log("resultScreen‚ªnull‚Å‚·");
+        }
 
         if (isDead == true)
         {
