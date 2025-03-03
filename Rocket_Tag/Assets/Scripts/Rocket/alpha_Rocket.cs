@@ -39,13 +39,13 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     IEnumerator Explosion()
     {
         Debug.Log("ロケット爆発");
-        float time = 0;
-        while (time < 3.0f)
-        {
-            time += Time.deltaTime;
-            Floating(player, explodeRiseSpeed);
-            yield return null;
-        }
+        //float time = 0;
+        //while (time < 3.0f)
+        //{
+        //    time += Time.deltaTime;
+        //    Floating(player, explodeRiseSpeed);
+        //    yield return null;
+        //}
         DropOut();
         yield break;
     }
