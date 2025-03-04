@@ -1776,8 +1776,14 @@ MonoBehaviour:
   firstSection: {fileID: 1332954953}
   secondSection: {fileID: 1700682452}
   thirdSection: {fileID: 186441277}
+  fourSection: {fileID: 0}
   forwardButton: {fileID: 1186761756}
   backButton: {fileID: 1045982281}
+  statusText: {fileID: 0}
+  onePageImage: {fileID: 0}
+  twoPageImage: {fileID: 0}
+  threePageImage: {fileID: 0}
+  fourPageImage: {fileID: 0}
 --- !u!114 &696886194
 MonoBehaviour:
   m_ObjectHideFlags: 0
