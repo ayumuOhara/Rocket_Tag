@@ -25,7 +25,6 @@ public class TimeManager : MonoBehaviourPunCallbacks
 
     float floatStartTime = 2.2f;
     public bool isTimeStart = false;
-    bool isTimeStop = false;
 
     public PhotonView timerView;
     [SerializeField] TextMeshProUGUI rocketCountText;
@@ -35,20 +34,19 @@ public class TimeManager : MonoBehaviourPunCallbacks
     void Start()
     {
         isTimeStart = false;
-        isTimeStop = false;
         timerView = GetComponent<PhotonView>();
         //rocketEffect = GameObject.Find("Debuger").GetComponent<RocketEffect>();
         Initialize();
     }
 
-
     // Update is called once per frame
     void Update()
     {
-        if(isTimeStart && !isTimeStop)
+        if(isTimeStart)
         {
             CountDown();
             CheckForLevelUp();
+            Debug.Log($"【時間が0秒以下か】：{IsLimitOver()}");
         }        
     }
 
@@ -124,9 +122,12 @@ public class TimeManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void IsTimeStop(bool newIsTimeStop)
+    public bool IsTimeStart(bool newTimeStart)
     {
-        isTimeStop = newIsTimeStop;
+        string debug = newTimeStart == true ? "タイマースタート" : "タイマーストップ";
+        Debug.Log(debug);
+
+        return isTimeStart = newTimeStart;
     }
 
     public void ResetRocketCount()
@@ -161,7 +162,6 @@ public class TimeManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("加速度をリセットします");
         posessingTime = 0;
-        Debug.Log($"所持経過時間：{posessingTime}");
         decreaseLevel = DecreaseLevel.FIRST;
         Debug.Log($"加速度レベル：{decreaseLevel}");
     }

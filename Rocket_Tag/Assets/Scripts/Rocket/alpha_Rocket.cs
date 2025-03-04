@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
 
@@ -46,6 +47,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             yield return null;
         }
         DropOut();
+        isExploding = false;
         yield break;
     }
 
@@ -61,20 +63,24 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void DropOut()
     {
+        PhotonView photonView = player.GetComponent<PhotonView>();
+        PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
+
+        timePhoton.RPC("IsTimeStart", RpcTarget.All, false);
+        timeManager.ResetRocketCount();
+
         //string playerName = PhotonNetwork.NickName;
         uiLogManager.AddLog("player", UILogManager.LogType.Dead);
 
-        timeManager.ResetRocketCount();
-        timeManager.IsTimeStop(true);
-
         if (photonView.IsMine)
         {
-            gameManager.ChooseRocketPlayer();
-            timeManager.IsTimeStop(false);
+            Debug.Log("脱落処理開始");
 
-            PhotonView photonView = player.GetComponent<PhotonView>();
-            photonView.RPC("SetPlayerDead", RpcTarget.All, true);            
+            gameManager.ChooseRocketPlayer();
         }
+
+        timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
+        photonView.RPC("SetPlayerDead", RpcTarget.All, true);
 
         isExploding = false;        
     }
