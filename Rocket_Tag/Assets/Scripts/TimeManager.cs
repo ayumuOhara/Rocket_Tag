@@ -121,6 +121,12 @@ public class TimeManager : MonoBehaviourPunCallbacks
         return rocketTime <= timeLimit;
     }
 
+    [PunRPC]
+    public bool IsTimeStart(bool newTimeStart)
+    {
+        return isTimeStart = newTimeStart;
+    }
+
     public void ResetRocketCount()
     {
         rocketTime = initialTime;
