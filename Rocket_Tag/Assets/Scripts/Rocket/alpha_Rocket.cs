@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
 
@@ -65,12 +66,13 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         uiLogManager.AddLog("player", UILogManager.LogType.Dead);
 
         timeManager.ResetRocketCount();
-        timeManager.IsTimeStop(true);
+        PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
+        timePhoton.RPC("IsTimeStop", RpcTarget.All, true);
 
         if (photonView.IsMine)
         {
             gameManager.ChooseRocketPlayer();
-            timeManager.IsTimeStop(false);
+            timePhoton.RPC("IsTimeStop", RpcTarget.All, false);
 
             PhotonView photonView = player.GetComponent<PhotonView>();
             photonView.RPC("SetPlayerDead", RpcTarget.All, true);            
