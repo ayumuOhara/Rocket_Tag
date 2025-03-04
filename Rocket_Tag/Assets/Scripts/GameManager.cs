@@ -108,6 +108,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         // プレイヤーリストをキャッシュ
         cachedPlayerList = GetPlayerList();
+        Debug.Log("現在のプレイヤーリスト: " + cachedPlayerList.Count + "人");
+
         cachedPlayerList.RemoveAll(player =>
             player.GetComponent<PhotonView>().Owner == currentRocketHolder); // 既存保持者を除外
 
@@ -132,6 +134,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.LogWarning("PhotonView が見つかりません");
         }
     }
+
 
     IEnumerator CheckSurvivorCount()
     {
