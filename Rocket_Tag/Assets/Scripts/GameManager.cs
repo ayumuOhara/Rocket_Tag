@@ -178,4 +178,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         return players;
     }
+
+    public Player GetCurrentRocketHolder()
+    {
+        return currentRocketHolder;
+    }
+
 }
