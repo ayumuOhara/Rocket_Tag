@@ -25,7 +25,6 @@ public class TimeManager : MonoBehaviourPunCallbacks
 
     float floatStartTime = 2.2f;
     public bool isTimeStart = false;
-    bool isTimeStop = false;
 
     public PhotonView timerView;
     [SerializeField] TextMeshProUGUI rocketCountText;
@@ -35,17 +34,15 @@ public class TimeManager : MonoBehaviourPunCallbacks
     void Start()
     {
         isTimeStart = false;
-        isTimeStop = false;
         timerView = GetComponent<PhotonView>();
         //rocketEffect = GameObject.Find("Debuger").GetComponent<RocketEffect>();
         Initialize();
     }
 
-
     // Update is called once per frame
     void Update()
     {
-        if(isTimeStart && !isTimeStop)
+        if(isTimeStart)
         {
             CountDown();
             CheckForLevelUp();
@@ -122,12 +119,6 @@ public class TimeManager : MonoBehaviourPunCallbacks
     public bool IsLimitOver()
     {
         return rocketTime <= timeLimit;
-    }
-
-    [PunRPC]
-    public void IsTimeStop(bool newIsTimeStop)
-    {
-        isTimeStop = newIsTimeStop;
     }
 
     public void ResetRocketCount()
