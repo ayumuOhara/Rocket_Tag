@@ -9,8 +9,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     //RocketEffect rocketEffect;
     public TimeManager timeManager;
     public ResultScreen resultScreen;
-    public PlayerRankManager playerRankManager;
-    
+    public PlayerRankManager playerRankManager;    
 
     [SerializeField] GameObject rocketObj;  // ÉçÉPÉbÉg
 
@@ -26,7 +25,8 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
             playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
             GameObject result = GameObject.Find("ResultUI");
-            result.SetActive(false);
+            if(result != null)
+                result.SetActive(false);
         }
     }
 
@@ -37,7 +37,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         photonView.RPC("SetHasRocket", RpcTarget.All, false);
 
         photonView.RPC("SetPlayerDead", RpcTarget.All, false);
-        isStun = false;
+        photonView.RPC("SetIsStun", RpcTarget.All, false);
     }
 
     // éÄñSèàóù
@@ -48,15 +48,15 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         isDead = newIsDead;
 
-        if (playerRankManager != null)
-        {
-            playerRankManager.SetPlayerRank();
-        }
+        //if (playerRankManager != null)
+        //{
+        //    playerRankManager.SetPlayerRank();
+        //}
 
-        if (resultScreen != null)
-        {
-            resultScreen.ShowMyResult();
-        }
+        //if (resultScreen != null)
+        //{
+        //    resultScreen.ShowMyResult();
+        //}
 
         if (isDead == true)
         {
