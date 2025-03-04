@@ -124,6 +124,9 @@ public class TimeManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public bool IsTimeStart(bool newTimeStart)
     {
+        string debug = newTimeStart == true ? "タイマースタート" : "タイマーストップ";
+        Debug.Log(debug);
+
         return isTimeStart = newTimeStart;
     }
 
