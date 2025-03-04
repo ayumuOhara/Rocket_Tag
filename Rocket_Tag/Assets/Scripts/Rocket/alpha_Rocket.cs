@@ -69,14 +69,25 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         timePhoton.RPC("IsTimeStart", RpcTarget.All, false);
         timeManager.ResetRocketCount();
 
-        //string playerName = PhotonNetwork.NickName;
         uiLogManager.AddLog("player", UILogManager.LogType.Dead);
 
+<<<<<<< HEAD
+        // **ロケットを持っているプレイヤーが脱落した場合のみ次の保持者を選ぶ**
+        if (photonView.Owner == gameManager.GetCurrentRocketHolder())
+        {
+            if (PhotonNetwork.IsMasterClient)  // マスタークライアントが処理
+            {
+                gameManager.ChooseRocketPlayer();
+            }
+        }
+=======
         gameManager.ChooseRocketPlayer();
+>>>>>>> main
 
         timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
         photonView.RPC("SetPlayerDead", RpcTarget.All, true);
 
         isExploding = false;
     }
+
 }
