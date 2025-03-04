@@ -67,6 +67,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
 
         timePhoton.RPC("IsTimeStart", RpcTarget.All, false);
+        timeManager.ResetRocketCount();
+
         //string playerName = PhotonNetwork.NickName;
         uiLogManager.AddLog("player", UILogManager.LogType.Dead);
 
