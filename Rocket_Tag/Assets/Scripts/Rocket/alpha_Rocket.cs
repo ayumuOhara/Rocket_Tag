@@ -74,6 +74,10 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         // **プレイヤーリストの更新**
         gameManager.UpdateCachedPlayerList();
 
+        // **デバッグログ追加**
+        Debug.Log("プレイヤーが脱落しました：" + photonView.Owner.NickName);
+        Debug.Log("現在の生存プレイヤー数：" + gameManager.GetPlayerList().Count);
+
         // **ロケットを持っているプレイヤーが脱落した場合のみ次の保持者を選ぶ**
         if (photonView.Owner == gameManager.GetCurrentRocketHolder())
         {
@@ -88,4 +92,5 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
         isExploding = false;
     }
+
 }
