@@ -5011,9 +5011,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a13467edd5fb3146ae7eb2ca98803d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDistance: 5
   rotationSpeed: 100
-  switchInterval: 3
 --- !u!136 &398969857
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18473,9 +18471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a13467edd5fb3146ae7eb2ca98803d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDistance: 5
   rotationSpeed: 50
-  switchInterval: 3
 --- !u!114 &1855041067
 MonoBehaviour:
   m_ObjectHideFlags: 0
