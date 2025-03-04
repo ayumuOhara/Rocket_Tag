@@ -83,6 +83,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.IsMasterClient)  // マスタークライアントが処理
             {
+                // プレイヤーリスト更新後にロケット保持者を選ぶ
+                gameManager.UpdateCachedPlayerList();  // 再度キャッシュを更新
                 gameManager.ChooseRocketPlayer();
             }
         }
@@ -92,5 +94,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
         isExploding = false;
     }
+
 
 }
