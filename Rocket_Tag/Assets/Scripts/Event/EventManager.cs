@@ -171,7 +171,6 @@ public class EventManager : MonoBehaviourPunCallbacks
         {
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
             int rndSpeed = Random.Range(minSpeed, maxSpeed);
-            Debug.Log($"ë¨ìxïœâªÅF{rndSpeed}");
             playerMovement.SetMoveSpeed(rndSpeed);
         }
     }
