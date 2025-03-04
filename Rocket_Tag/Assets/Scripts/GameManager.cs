@@ -161,6 +161,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void PlayerCntText(int playerCnt, string text)
     {
+        Debug.Log($"残り人数【{playerCnt}】");
         playerCntText.text = $"{playerCnt} / {instantiatePlayer.GetCurrentPlayerCount()}";
         infoText.text = $"{text} / 参加人数";
     }
