@@ -6,10 +6,12 @@ public class PlayerRespawnTrigger : MonoBehaviour
     [SerializeField] private string stageTag = "Stage"; // ステージのタグ
     [SerializeField] private float searchRadius = 10f; // ステージ検索範囲
 
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(playerTag))
         {
+            FindFirstObjectByType<FadeManager>().StartFadeSequence();
             Transform nearestStage = FindNearestStage(other.transform.position);
             if (nearestStage != null)
             {
@@ -23,7 +25,6 @@ public class PlayerRespawnTrigger : MonoBehaviour
             }
         }
     }
-
     private Transform FindNearestStage(Vector3 playerPosition)
     {
         GameObject[] stages = GameObject.FindGameObjectsWithTag(stageTag);
