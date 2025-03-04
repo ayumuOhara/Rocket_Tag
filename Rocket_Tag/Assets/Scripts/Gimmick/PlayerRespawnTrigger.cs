@@ -11,7 +11,7 @@ public class PlayerRespawnTrigger : MonoBehaviour
     {
         if (other.CompareTag(playerTag))
         {
-            FindFirstObjectByType<FadeManager>().StartFadeSequence();
+            //FindFirstObjectByType<FadeManager>().StartFadeSequence();
             Transform nearestStage = FindNearestStage(other.transform.position);
             if (nearestStage != null)
             {
