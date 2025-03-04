@@ -76,6 +76,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.IsMasterClient)  // マスタークライアントが処理
             {
+                Debug.Log("ロケットを配る");
                 gameManager.ChooseRocketPlayer();
             }
         }
