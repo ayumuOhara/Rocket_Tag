@@ -9,8 +9,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     //RocketEffect rocketEffect;
     public TimeManager timeManager;
     public ResultScreen resultScreen;
-    public PlayerRankManager playerRankManager;
-    
+    public PlayerRankManager playerRankManager;    
 
     [SerializeField] GameObject rocketObj;  // ロケット
 
@@ -20,24 +19,20 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        if(photonView.IsMine)
-        {
-            timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-            resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
-            playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
-            GameObject result = GameObject.Find("ResultUI");
+        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+        resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
+        playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
+        GameObject result = GameObject.Find("ResultUI");
+        if (result != null)
             result.SetActive(false);
-        }
     }
 
     // プレイヤーの状態の初期化
     public void SetPlayerCondition()
     {
-        // ロケットの状態を初期化
         photonView.RPC("SetHasRocket", RpcTarget.All, false);
-
         photonView.RPC("SetPlayerDead", RpcTarget.All, false);
-        isStun = false;
+        photonView.RPC("SetIsStun", RpcTarget.All, false);
     }
 
     // 死亡処理
@@ -48,15 +43,15 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         isDead = newIsDead;
 
-        if (playerRankManager != null)
-        {
-            playerRankManager.SetPlayerRank();
-        }
+        //if (playerRankManager != null)
+        //{
+        //    playerRankManager.SetPlayerRank();
+        //}
 
-        if (resultScreen != null)
-        {
-            resultScreen.ShowMyResult();
-        }
+        //if (resultScreen != null)
+        //{
+        //    resultScreen.ShowMyResult();
+        //}
 
         if (isDead == true)
         {
@@ -79,6 +74,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     public void SetHasRocket(bool newHasRocket)
     {
         hasRocket = newHasRocket;
+        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 
         if (hasRocket)
         {
