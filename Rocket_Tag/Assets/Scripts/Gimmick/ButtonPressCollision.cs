@@ -5,6 +5,7 @@ public class ButtonPressCollision : MonoBehaviour
     private Vector3 originalPosition;
     public float pressDepth = 0.2f; // へこむ深さ
     private bool isPressed = false;
+    public float pressSpeed = 5f; // へこむ速度
 
     void Start()
     {
@@ -13,11 +14,11 @@ public class ButtonPressCollision : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // プレイヤーのタグを"Player"と仮定
         if (collision.gameObject.CompareTag("Player") && !isPressed)
         {
             isPressed = true;
-            transform.position = originalPosition - new Vector3(0, pressDepth, 0);
+            StopAllCoroutines();
+            StartCoroutine(PressButton());
         }
     }
 
@@ -26,7 +27,29 @@ public class ButtonPressCollision : MonoBehaviour
         if (collision.gameObject.CompareTag("Player") && isPressed)
         {
             isPressed = false;
-            transform.position = originalPosition;
+            StopAllCoroutines();
+            StartCoroutine(ReleaseButton());
         }
+    }
+
+    private System.Collections.IEnumerator PressButton()
+    {
+        Vector3 targetPosition = originalPosition - new Vector3(0, pressDepth, 0);
+        while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
+        {
+            transform.position = Vector3.Lerp(transform.position, targetPosition, pressSpeed * Time.deltaTime);
+            yield return null;
+        }
+        transform.position = targetPosition;
+    }
+
+    private System.Collections.IEnumerator ReleaseButton()
+    {
+        while (Vector3.Distance(transform.position, originalPosition) > 0.01f)
+        {
+            transform.position = Vector3.Lerp(transform.position, originalPosition, pressSpeed * Time.deltaTime);
+            yield return null;
+        }
+        transform.position = originalPosition;
     }
 }
