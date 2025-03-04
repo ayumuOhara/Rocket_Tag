@@ -137,31 +137,26 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         while (true)
         {
-            // **生存プレイヤーリストを最新にする**
-            UpdateCachedPlayerList();
-
             int playerCount = cachedPlayerList.Count;
             if (PhotonNetwork.IsMasterClient)
             {
                 photonView.RPC("PlayerCntText", RpcTarget.All, playerCount, "生存人数");
             }
 
-            Debug.Log("CheckSurvivorCount: 生存プレイヤー数 = " + playerCount);
-
             if (playerCount <= 1)
             {
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
+                //rocketEffect.SetActive(false);
                 readyButton.SetActive(true);
                 playerReady.SetReady(false);
+                //setPlayerBool.SetPlayerCondition();
                 timeManager.isTimeStart = false;
-
                 StartCoroutine(WaitPlayersReady());
                 yield break;
             }
             yield return null;
         }
     }
-
 
     [PunRPC]
     void PlayerCntText(int playerCnt, string text)
@@ -178,9 +173,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         players.RemoveAll(player =>
         {
             SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
-            bool isPlayerDead = spb != null && spb.isDead;
-            Debug.Log($"プレイヤー {player.name} の isDead 状態: {isPlayerDead}");
-            return isPlayerDead;
+            return spb != null && spb.isDead;
         });
 
         return players;
