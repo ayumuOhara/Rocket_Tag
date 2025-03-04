@@ -49,6 +49,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
         {
             CountDown();
             CheckForLevelUp();
+            Debug.Log($"【時間が0秒以下か】：{IsLimitOver()}");
         }        
     }
 
@@ -161,7 +162,6 @@ public class TimeManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("加速度をリセットします");
         posessingTime = 0;
-        Debug.Log($"所持経過時間：{posessingTime}");
         decreaseLevel = DecreaseLevel.FIRST;
         Debug.Log($"加速度レベル：{decreaseLevel}");
     }

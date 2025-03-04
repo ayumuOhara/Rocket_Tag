@@ -19,23 +19,18 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        if(photonView.IsMine)
-        {
-            timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-            resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
-            playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
-            GameObject result = GameObject.Find("ResultUI");
-            if(result != null)
-                result.SetActive(false);
-        }
+        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+        resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
+        playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
+        GameObject result = GameObject.Find("ResultUI");
+        if (result != null)
+            result.SetActive(false);
     }
 
     // プレイヤーの状態の初期化
     public void SetPlayerCondition()
     {
-        // ロケットの状態を初期化
         photonView.RPC("SetHasRocket", RpcTarget.All, false);
-
         photonView.RPC("SetPlayerDead", RpcTarget.All, false);
         photonView.RPC("SetIsStun", RpcTarget.All, false);
     }
@@ -79,6 +74,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     public void SetHasRocket(bool newHasRocket)
     {
         hasRocket = newHasRocket;
+        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 
         if (hasRocket)
         {
