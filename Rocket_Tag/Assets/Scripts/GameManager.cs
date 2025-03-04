@@ -108,6 +108,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         // プレイヤーリストをキャッシュ
         cachedPlayerList = GetPlayerList();
+        Debug.Log("現在のプレイヤーリスト: " + cachedPlayerList.Count + "人");
+
         cachedPlayerList.RemoveAll(player =>
             player.GetComponent<PhotonView>().Owner == currentRocketHolder); // 既存保持者を除外
 
@@ -133,30 +135,36 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+
     IEnumerator CheckSurvivorCount()
     {
         while (true)
         {
+            // **生存プレイヤーリストを最新にする**
+            UpdateCachedPlayerList();
+
             int playerCount = cachedPlayerList.Count;
             if (PhotonNetwork.IsMasterClient)
             {
                 photonView.RPC("PlayerCntText", RpcTarget.All, playerCount, "生存人数");
             }
 
+            Debug.Log("CheckSurvivorCount: 生存プレイヤー数 = " + playerCount);
+
             if (playerCount <= 1)
             {
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
-                //rocketEffect.SetActive(false);
                 readyButton.SetActive(true);
                 playerReady.SetReady(false);
-                //setPlayerBool.SetPlayerCondition();
                 timeManager.isTimeStart = false;
+
                 StartCoroutine(WaitPlayersReady());
                 yield break;
             }
             yield return null;
         }
     }
+
 
     [PunRPC]
     void PlayerCntText(int playerCnt, string text)
@@ -173,7 +181,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         players.RemoveAll(player =>
         {
             SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
-            return spb != null && spb.isDead;
+            bool isPlayerDead = spb != null && spb.isDead;
+            Debug.Log($"プレイヤー {player.name} の isDead 状態: {isPlayerDead}");
+            return isPlayerDead;
         });
 
         return players;
@@ -183,5 +193,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         return currentRocketHolder;
     }
-
+    public void UpdateCachedPlayerList()
+    {
+        cachedPlayerList = GetPlayerList();
+    }
 }
