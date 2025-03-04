@@ -183,5 +183,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         return currentRocketHolder;
     }
-
+    public void UpdateCachedPlayerList()
+    {
+        cachedPlayerList = GetPlayerList();
+    }
 }
