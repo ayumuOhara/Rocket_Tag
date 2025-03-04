@@ -96,17 +96,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            StartCoroutine(ChooseRocketPlayerAndStart());
+            ChooseRocketPlayer();
             StartCoroutine(eventManager.TriggerRandomEvent());
             StartCoroutine(CheckSurvivorCount());
         }
-    }
-
-    IEnumerator ChooseRocketPlayerAndStart()
-    {
-        // ロケット保持者を選定
-        ChooseRocketPlayer();
-        yield return null; // 非同期で実行
     }
 
     public void ChooseRocketPlayer()
@@ -130,6 +123,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (targetPhotonView != null)
         {
+            Debug.Log("プレイヤーにロケットを渡しました");
             currentRocketHolder = targetPhotonView.Owner;
             targetPhotonView.RPC("SetHasRocket", RpcTarget.All, true);
         }
