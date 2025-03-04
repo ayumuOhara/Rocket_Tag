@@ -71,7 +71,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
         uiLogManager.AddLog("player", UILogManager.LogType.Dead);
 
-<<<<<<< HEAD
         // **ロケットを持っているプレイヤーが脱落した場合のみ次の保持者を選ぶ**
         if (photonView.Owner == gameManager.GetCurrentRocketHolder())
         {
@@ -80,9 +79,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
                 gameManager.ChooseRocketPlayer();
             }
         }
-=======
-        gameManager.ChooseRocketPlayer();
->>>>>>> main
 
         timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
         photonView.RPC("SetPlayerDead", RpcTarget.All, true);
