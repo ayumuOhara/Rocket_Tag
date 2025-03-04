@@ -72,11 +72,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         //string playerName = PhotonNetwork.NickName;
         uiLogManager.AddLog("player", UILogManager.LogType.Dead);
 
-        if (photonView.IsMine)
-        {
-            Debug.Log("脱落処理開始");
-            gameManager.ChooseRocketPlayer();
-        }
+        gameManager.ChooseRocketPlayer();
+
         timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
         photonView.RPC("SetPlayerDead", RpcTarget.All, true);
 
