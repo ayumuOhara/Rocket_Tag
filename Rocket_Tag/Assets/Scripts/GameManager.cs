@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         while (true)
         {
-            int playerCount = cachedPlayerList.Count;
+            int playerCount = GetPlayerList().Count;
             if (PhotonNetwork.IsMasterClient)
             {
                 photonView.RPC("PlayerCntText", RpcTarget.All, playerCount, "生存人数");
@@ -161,6 +161,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void PlayerCntText(int playerCnt, string text)
     {
+        Debug.Log($"残り人数【{playerCnt}】");
         playerCntText.text = $"{playerCnt} / {instantiatePlayer.GetCurrentPlayerCount()}";
         infoText.text = $"{text} / 参加人数";
     }
