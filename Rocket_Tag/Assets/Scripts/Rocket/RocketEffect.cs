@@ -1,8 +1,10 @@
-using System.Collections;
+using System.Collections;                                                                          ////  ロケットエフェクト生成・切り替え  ////
 using Unity.Android.Gradle.Manifest;
 using Unity.VisualScripting;
 using UnityEngine;
-                                                                                                   ////  ロケットエフェクト生成・切り替え  ////
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+
 internal interface EffectState                                                                     ////  以下State区  ////
 {
     void Enter(RocketEffect arg);
@@ -124,25 +126,26 @@ internal class RocketEffect : MonoBehaviour
     ParticleSystem.ColorOverLifetimeModule smokeColorOverLifeTime;
     Gradient smokeGradient;
     TimeManager timeMgr;
-            
+
     Vector3 frameEffectOffset;
     Vector3 smokeDiffusion;
-    
+
     float smokeDelTime;
     int rocketStage;
     bool didFalsed;    //  ロケット生成にタイミングを合わせるためのフラグ
 
     internal TimeManager _TimeMgr
-    {  get { return timeMgr; } }
+    { get { return timeMgr; } }
     internal int _RocketStage
-    {  get { return rocketStage; } }                                                               ////  宣言区終了  ////
+    { get { return rocketStage; } }                                                               ////  宣言区終了  ////
     internal bool _DidFalsed
-    { get {  return didFalsed; } }
+    { get { return didFalsed; } }
 
     void OnEnable()                                                                                ////  以下処理区  ////
     {
+        /*  処理順を合わせるため最初にSetActive(false)にする  */
         SetSetActive(didFalsed, this.gameObject);
-        if(didFalsed)
+        if (didFalsed)
         {
             Initialize();    //  初期化
         }
@@ -150,10 +153,6 @@ internal class RocketEffect : MonoBehaviour
     void OnDisable()
     {
         didFalsed = true;
-    }
-    void Start()                                                                                  
-    {
-
     }
     void Update()
     {
@@ -196,7 +195,7 @@ internal class RocketEffect : MonoBehaviour
     }
     internal void ChangeState(EffectState newState)    //  状態遷移
     {
-        if(currentState != null)
+        if (currentState != null)
         {
             currentState.Exit(this);
         }
@@ -210,7 +209,7 @@ internal class RocketEffect : MonoBehaviour
             case RocketEffectProcces.GENERATE_FRAMES:
                 {
                     GenerateEffect((int)EffectNo.FRAME, frameEffectPrefab[rocketStage], rocket, frameEffectOffset);
-                    rocketStage = rocketStage != 3 ? ++rocketStage : 0; 
+                    rocketStage = rocketStage != 3 ? ++rocketStage : 0;
                     break;
                 }
             case RocketEffectProcces.GENERATE_SMOKE:
@@ -241,13 +240,13 @@ internal class RocketEffect : MonoBehaviour
             default: break;
         }
     }
-    void GenerateEffect(int effectNo ,GameObject effect, Transform parent, Vector3 offset)    //  エフェクト生成
+    void GenerateEffect(int effectNo, GameObject effect, Transform parent, Vector3 offset)    //  エフェクト生成
     {
         switch (effectNo)
         {
             case 0:
                 {
-                    if(frameEffectEntity != null)
+                    if (frameEffectEntity != null)
                     {
                         Destroy(frameEffectEntity);
                     }
@@ -284,6 +283,34 @@ internal class RocketEffect : MonoBehaviour
         frameEffectPrefab[1] = Resources.Load<GameObject>("SecondRocketFrame");
         frameEffectPrefab[2] = Resources.Load<GameObject>("ThirdRocketFrame");
         frameEffectPrefab[3] = Resources.Load<GameObject>("LastRocketFrame");
-        smokeEffectPrefab    = Resources.Load<GameObject>("FrameSmoke");
+        smokeEffectPrefab = Resources.Load<GameObject>("FrameSmoke");
     }
-}                                                                                                   ////  関数区終了  ////
+}
+    //void RocketEffectLoad()
+    //{
+    //    Task[] task;
+
+    //    AsyncOperationHandle<GameObject>[] playerSkinLordHandle;
+
+    //    const int numOfSkin = 6;
+
+    //    task = new Task[numOfSkin - 1];
+    //    playerSkinPrefab = new GameObject[numOfSkin];
+
+    //    playerSkinLordHandle = new AsyncOperationHandle<GameObject>[numOfSkin];
+
+    //    string[] skinNames = new string[] { "NotWearing", "RedCap", "StrawHat", "Eringi", "Freeza", "Bear" };
+
+    //    /*  スキンは永久的に使うので開放していない  */
+    //    for (int arrayNo = numOfSkin - 1; arrayNo > 0; arrayNo--)
+    //    {
+    //        playerSkinLordHandle[arrayNo] = Addressables.LoadAssetAsync<GameObject>(skinNames[arrayNo]);
+    //        task[arrayNo - 1] = playerSkinLordHandle[arrayNo].Task;
+    //    }
+    //    await Task.WhenAll(task);
+    //    for (int arrayNo = numOfSkin - 1; arrayNo > 0; arrayNo--)
+    //    {
+    //        playerSkinPrefab[arrayNo] = playerSkinLordHandle[arrayNo].Result;
+    //        await Task.Yield();
+    //    }
+    //}                                                                                                   ////  関数区終了  ////

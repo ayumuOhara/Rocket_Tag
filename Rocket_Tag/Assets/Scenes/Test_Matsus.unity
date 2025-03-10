@@ -131,7 +131,6 @@ GameObject:
   - component: {fileID: 240249677}
   - component: {fileID: 240249676}
   - component: {fileID: 240249675}
-  - component: {fileID: 240249679}
   m_Layer: 0
   m_Name: Stage
   m_TagString: Ground
@@ -229,18 +228,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &240249679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 240249674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef2489e6bbb497142956196320163519, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &789332842
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,9 +348,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 789332842}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fd44c75e932ff04eb225d9ec0f510a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 313e82964a03f534b9e3860b9a652531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSkinPrefab: []
 --- !u!1001 &969129210
 PrefabInstance:
   m_ObjectHideFlags: 0
