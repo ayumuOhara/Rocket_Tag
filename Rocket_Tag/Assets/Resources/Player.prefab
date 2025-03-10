@@ -1815,9 +1815,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba0f04057f8cf64aa564dde30b40925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resultUI: {fileID: 0}
   playerMovement: {fileID: 2759492702019797386}
   timeManager: {fileID: 0}
-  resultScreen: {fileID: 0}
   playerRankManager: {fileID: 0}
   rocketObj: {fileID: 4281978814399217487}
   hasRocket: 0
@@ -1898,7 +1898,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0ae76d2bdbbb454f8c13f815d6f05b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instantiatePlayer: {fileID: 0}
+  gameManager: {fileID: 0}
+  rankText: {fileID: 0}
   playerRank: 0
 --- !u!114 &8878140799993682093
 MonoBehaviour:

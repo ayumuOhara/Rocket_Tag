@@ -831,8 +831,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 248619067}
-        m_TargetAssemblyTypeName: ResultScreen, Assembly-CSharp
+      - m_Target: {fileID: 846908941}
+        m_TargetAssemblyTypeName: PlayerRankManager, Assembly-CSharp
         m_MethodName: LoadLobbyScene
         m_Mode: 1
         m_Arguments:
