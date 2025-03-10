@@ -40,8 +40,11 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         Debug.Log("ロケット爆発");
         float time = 0;
+
         while (time < 3.0f)
         {
+            if (time > 3.0f) break;
+
             time += Time.deltaTime;
             Floating(player, explodeRiseSpeed);
             yield return null;
