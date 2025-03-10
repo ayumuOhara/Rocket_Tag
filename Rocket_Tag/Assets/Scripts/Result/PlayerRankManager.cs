@@ -4,23 +4,23 @@ using ExitGames.Client.Photon;
 
 public class PlayerRankManager : MonoBehaviour
 {
-    [SerializeField] InstantiatePlayer instantiatePlayer;
+    [SerializeField] GameManager gameManager;
     public int playerRank;
 
     private void Start()
     {
-        instantiatePlayer = GameObject.Find("InstantiatePlayer").GetComponent<InstantiatePlayer>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     public void SetPlayerRank()
     {
-        if (instantiatePlayer == null)
+        if (gameManager == null)
         {
             Debug.LogError("instantiatePlayer is null!");
             return;
         }
 
-        playerRank = instantiatePlayer.GetCurrentPlayerCount();
+        playerRank = gameManager.GetPlayerList().Count;
         Debug.Log("Player Rank: " + playerRank);
 
         if (PhotonNetwork.LocalPlayer == null)
@@ -31,7 +31,7 @@ public class PlayerRankManager : MonoBehaviour
 
         // 順位をカスタムプロパティに保存
         Hashtable playerProperties = new Hashtable();
-        playerProperties.Add("PlayerRank", playerRank);
+        playerProperties["PlayerRank"] = playerRank;
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperties);
     }
 
