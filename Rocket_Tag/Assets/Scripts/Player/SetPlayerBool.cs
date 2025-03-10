@@ -10,7 +10,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [SerializeField] PlayerMovement playerMovement;
     //RocketEffect rocketEffect;
     public TimeManager timeManager;
-    public ResultScreen resultScreen;
+    //public ResultScreen resultScreen;
     public PlayerRankManager playerRankManager;
 
     [SerializeField] GameObject rocketObj;  // ÉçÉPÉbÉg
@@ -22,7 +22,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     private void Start()
     {
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-        resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
+        //resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
         resultUI = GameObject.Find("ResultUI");
         if (resultUI != null)
@@ -51,10 +51,10 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             playerRankManager.SetPlayerRank();
         }
 
-        if (resultScreen != null)
-        {
-            resultScreen.ShowMyResult();
-        }
+        //if (resultScreen != null)
+        //{
+        //    resultScreen.ShowMyResult();
+        //}
     }
 
     [PunRPC]

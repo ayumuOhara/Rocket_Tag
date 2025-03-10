@@ -1,10 +1,13 @@
 using UnityEngine;
 using Photon.Pun;
 using ExitGames.Client.Photon;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerRankManager : MonoBehaviour
 {
     [SerializeField] GameManager gameManager;
+    [SerializeField] TextMeshProUGUI rankText;
     public int playerRank;
 
     private void Start()
@@ -33,6 +36,25 @@ public class PlayerRankManager : MonoBehaviour
         Hashtable playerProperties = new Hashtable();
         playerProperties["PlayerRank"] = playerRank;
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperties);
+    }
+    public void ShowMyResult()
+    {
+        int myRank = 1;
+
+        //自分の順位をカスタムプロパティから取得
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("PlayerRank"))
+        {
+            Debug.Log((int)PhotonNetwork.LocalPlayer.CustomProperties["PlayerRank"]);
+            myRank = (int)PhotonNetwork.LocalPlayer.CustomProperties["PlayerRank"];
+        }
+
+        rankText.text = myRank.ToString() + "位!";
+    }
+
+    // ロビー画面への遷移
+    public void LoadLobbyScene()
+    {
+        SceneManager.LoadScene("Lobby");
     }
 
 }
