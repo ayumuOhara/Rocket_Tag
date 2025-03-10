@@ -53,10 +53,10 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         //    resultScreen.ShowMyResult();
         //}
 
-        if (isDead == true)
-        {
-            this.gameObject.SetActive(false);
-        }
+        //if (isDead == true)
+        //{
+        //    this.gameObject.SetActive(false);
+        //}
     }
 
     [PunRPC]
