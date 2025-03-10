@@ -176,6 +176,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             return spb != null && spb.isDead;
         });
 
+        Debug.Log($"ƒvƒŒƒCƒ„[‚Ì¶‘¶ƒŠƒXƒgGy{players.Count}z");
+
         return players;
     }
 
