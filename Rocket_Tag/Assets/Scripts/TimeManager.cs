@@ -149,7 +149,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
     void LevelUp()
     {
         decreaseLevel++;
-        Debug.Log($"タイマーの減少速度がアップしました: {decreaseLevel}");
+        //Debug.Log($"タイマーの減少速度がアップしました: {decreaseLevel}");
     }
 
     internal bool IsStageUpTime()    //  ロケット炎エフェクト変化時間か判定
@@ -160,9 +160,9 @@ public class TimeManager : MonoBehaviourPunCallbacks
     // 加速度をリセットし、関連カウントを初期化
     public void ResetAcceleration()
     {
-        Debug.Log("加速度をリセットします");
+        //Debug.Log("加速度をリセットします");
         posessingTime = 0;
         decreaseLevel = DecreaseLevel.FIRST;
-        Debug.Log($"加速度レベル：{decreaseLevel}");
+        //Debug.Log($"加速度レベル：{decreaseLevel}");
     }
 }
