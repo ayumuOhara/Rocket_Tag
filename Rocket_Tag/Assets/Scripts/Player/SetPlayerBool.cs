@@ -55,7 +55,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         if (isDead == true)
         {
-            rocketObj.SetActive(false);
+            this.gameObject.SetActive(false);
         }
     }
 
