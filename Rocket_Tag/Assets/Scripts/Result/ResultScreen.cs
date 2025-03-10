@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class ResultScreen : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI rankText;
+    int myRank = 1;
 
     //void Update()
     //{
@@ -13,8 +14,6 @@ public class ResultScreen : MonoBehaviour
 
     public void ShowMyResult()
     {
-        int myRank = 1;
-
         //自分の順位をカスタムプロパティから取得
         if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("PlayerRank"))
         {
