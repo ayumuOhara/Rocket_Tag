@@ -43,15 +43,15 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         isDead = newIsDead;
 
-        //if (playerRankManager != null)
-        //{
-        //    playerRankManager.SetPlayerRank();
-        //}
+        if (playerRankManager != null)
+        {
+            playerRankManager.SetPlayerRank();
+        }
 
-        //if (resultScreen != null)
-        //{
-        //    resultScreen.ShowMyResult();
-        //}
+        if (resultScreen != null)
+        {
+            resultScreen.ShowMyResult();
+        }
     }
 
     [PunRPC]
