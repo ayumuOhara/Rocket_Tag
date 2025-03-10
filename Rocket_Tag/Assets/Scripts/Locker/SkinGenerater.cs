@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;                                                          ////  スキン生成スクリプト  ////
 using System.Net.Sockets;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 public class SkinGenerater : MonoBehaviour
 {
@@ -14,14 +17,20 @@ public class SkinGenerater : MonoBehaviour
         IN_GAME_GENERATE,
     }
     
-    static GameObject[] skinPrefab;    //  [0]はなにも着ていない状態を表現するために使っています
+    static GameObject[] playerSkinPrefab;    //  [0]はなにも着ていない状態を表現するために使っています
     GameObject skinEntity;
     Transform playerHipTF;
+
+    const string skinLoadError = "Error:Skin is didn't load";    //  msg for debug--------------
+    const string playerHipLoadError = "Error:Player's hip doesn't exist";    //  msg for debug---------------------
+    const string gameMngNotFound = "Error: GameManager didn't find";    //  msg for debug------------------
+    const string couldntGetPlayerList = "Error: PlayerList couldn't get";    //  msg for debug------------------
+    const string playerPrefasUnexpectedValue = "Playerprefas value is strange";    //  msg for debug------------------
 
     static int skinLocation;
 
     static internal GameObject[] _SkinPrefab
-    { get { return skinPrefab; } }                                                         ////  宣言区終了  ////
+    { get { return playerSkinPrefab; } }                                                   ////  宣言区終了  ////
 
     void Start()                                                                           ////  以下処理区  ////
     {
@@ -29,14 +38,14 @@ public class SkinGenerater : MonoBehaviour
     }                                                                                      ////  処理区終了  ////
     void Initialize()     //  初期化                                                       ////  以下関数区  ////
     {
-        if (skinPrefab == null)
+        if (playerSkinPrefab == null)
         {
-            ResourceLord();
+            PlayerSkinLord();
         }
         playerHipTF = GameObject.Find("Hip").GetComponent<Transform>();
 
-        IsNull_Array(skinPrefab, false, null, false, "Error:Skin is didn't Load", null);    //  Mesaage for Debug---------------------
-        IsNull_Variable(playerHipTF, false, "Error:Player's hip doesn't exist");    //  Mesaage for Debug------------------------------
+        IsNull_Array(playerSkinPrefab, false, null, false, skinLoadError , null);    //  msg for debug---------------------
+        IsNull_Variable(playerHipTF, false, playerHipLoadError);    //  msg for debug------------------------------
 
         SkinGenerate(playerHipTF);
     }
@@ -56,8 +65,8 @@ public class SkinGenerater : MonoBehaviour
         GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         GameObject[] tmpPlayerList = gameManager.GetPlayerList().ToArray();
 
-        IsNull_Variable(gameManager, false, "Error: GameManager didn't Find");    //  Message for debug---------------------------
-        IsNull_Array(tmpPlayerList, false, null, false, null, "Error: PlayerList Couldn't List");  //  Message for debug------------------
+        IsNull_Variable(gameManager, false, gameMngNotFound);    //  Msg for debug---------------------------
+        IsNull_Array(tmpPlayerList, false, null, false, null, couldntGetPlayerList);  //  Msg for debug------------------
 
         for (int tmpPlayerListLen = 0; tmpPlayerListLen < tmpPlayerList.Length; tmpPlayerListLen++)
         {
@@ -73,7 +82,7 @@ public class SkinGenerater : MonoBehaviour
         {
             tmpSkinNo = 0;
             tmpSkinLocation = 0;
-            Debug.Log("Error: PlayerPrefs is unable");    //  debug--------------
+            Debug.Log(playerPrefasUnexpectedValue);    //  debug--------------
         }
         if (tmpSkinNo != 0)
         {
@@ -81,7 +90,7 @@ public class SkinGenerater : MonoBehaviour
             {
                 case 0:
                     {
-                        skinEntity = Instantiate(skinPrefab[tmpSkinNo], playerHipTF.Find("Spine/Head"));
+                        skinEntity = Instantiate(playerSkinPrefab[tmpSkinNo], playerHipTF_.Find("Spine/Head"));
                         break;
                     }
             }
@@ -89,7 +98,7 @@ public class SkinGenerater : MonoBehaviour
     }
     bool IsUnexpectedValue(int[] value, int[] unExpectedValue)    //  値チェック
     {
-        for (int arrayNo = value.Length; arrayNo > 0; --arrayNo)
+        for (int arrayNo = value.Length - 1; arrayNo > 0; --arrayNo)
         {
             if (value[arrayNo] == unExpectedValue[arrayNo])
             {
@@ -112,7 +121,7 @@ public class SkinGenerater : MonoBehaviour
         }
         if (isCheckPoint)
         {
-            for (int arrayNo = checkPoint.Length; arrayNo > 0; --arrayNo)
+            for (int arrayNo = checkPoint.Length - 1; arrayNo > 0; --arrayNo)
             {
                 if (value[checkPoint[arrayNo]] == null)
                 {
@@ -142,15 +151,46 @@ public class SkinGenerater : MonoBehaviour
         Debug.Log(errorMsg);    //  debug--------------------------
         return false;
     }
-    void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
+    async void PlayerSkinLord()     //  プレイヤースキン読み込み
     {
-        skinPrefab = new GameObject[7];
-        skinPrefab[1] = Resources.Load<GameObject>("RedCap");
-        skinPrefab[2] = Resources.Load<GameObject>("StrawHat");
-        skinPrefab[3] = Resources.Load<GameObject>("Eringi");
-        skinPrefab[4] = Resources.Load<GameObject>("Freeza");
-        skinPrefab[5] = Resources.Load<GameObject>("Bear");
-        skinPrefab[6] = Resources.Load<GameObject>("Star");
+        playerSkinPrefab = new GameObject[7];
+
+        var tasks = new List<Task>();
+        string[] skinNames = new string[] { "RedCap", "StrawHat", "Eringi", "Freeza", "Bear", "Star" };
+
+        //AsyncOperationHandle<GameObject> loadHandle;
+        foreach (string skinName in skinNames)
+        {
+            var loadHandle  = Addressables.LoadAssetAsync<GameObject>(skinNames);
+            tasks.Add(loadHandle.Task);
+        }
+        await Task.WhenAll(tasks);
+
+        for (int i = skinNames.Length - 1; i > 0; --i)
+        {
+            var loadHandle = tasks;
+            //playerSkinPrefab[i] = loadHandle.Result;
+        }
+
+        /*  スキンは永久的に使うので開放していない  */
+        AsyncOperationHandle<GameObject> redCapHandle = Addressables.LoadAssetAsync<GameObject>("RedCap");
+        await redCapHandle.Task;
+        playerSkinPrefab[1] = redCapHandle.Result;
+        AsyncOperationHandle<GameObject> strawHatHandle = Addressables.LoadAssetAsync<GameObject>("StrawHat");
+        await strawHatHandle.Task;
+        playerSkinPrefab[2] = strawHatHandle.Result;
+        AsyncOperationHandle<GameObject> eringiHandle = Addressables.LoadAssetAsync<GameObject>("Eringi");
+        await eringiHandle.Task;
+        playerSkinPrefab[3] = eringiHandle.Result;
+        AsyncOperationHandle<GameObject> freezaHandle = Addressables.LoadAssetAsync<GameObject>("Freeza");
+        await freezaHandle.Task;
+        playerSkinPrefab[4] = freezaHandle.Result;
+        AsyncOperationHandle<GameObject> bearHandle = Addressables.LoadAssetAsync<GameObject>("Bear");
+        await bearHandle.Task;
+        playerSkinPrefab[5] = bearHandle.Result;
+        AsyncOperationHandle<GameObject> star = Addressables.LoadAssetAsync<GameObject>("Star");
+        await star.Task;
+        playerSkinPrefab[6] = star.Result;
     }                                                                                      ////  関数区終了  ////
 }
 /*                                                                                         ////  以下コード保存  ////
@@ -188,4 +228,14 @@ public class SkinGenerater : MonoBehaviour
         }
         return false;
     }
+    //void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
+    //{
+    //    playerSkinPrefab = new GameObject[7];
+    //    playerSkinPrefab[1] = Resources.Load<GameObject>("RedCap");
+    //    playerSkinPrefab[2] = Resources.Load<GameObject>("StrawHat");
+    //    playerSkinPrefab[3] = Resources.Load<GameObject>("Eringi");
+    //    playerSkinPrefab[4] = Resources.Load<GameObject>("Freeza");
+    //    playerSkinPrefab[5] = Resources.Load<GameObject>("Bear");
+    //    playerSkinPrefab[6] = Resources.Load<GameObject>("Star");
+    //}      
  */
