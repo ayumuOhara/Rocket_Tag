@@ -180,24 +180,6 @@ public class SkinGenerater : MonoBehaviour
             playerSkinPrefab[arrayNo] = playerSkinLordHandle[arrayNo].Result;
             await Task.Yield();
         }
-        //AsyncOperationHandle<GameObject> redCapHandle = Addressables.LoadAssetAsync<GameObject>("RedCap");
-        //await redCapHandle.Task;
-        //playerSkinPrefab[1] = redCapHandle.Result;
-        //AsyncOperationHandle<GameObject> strawHatHandle = Addressables.LoadAssetAsync<GameObject>("StrawHat");
-        //await strawHatHandle.Task;
-        //playerSkinPrefab[2] = strawHatHandle.Result;
-        //AsyncOperationHandle<GameObject> eringiHandle = Addressables.LoadAssetAsync<GameObject>("Eringi");
-        //await eringiHandle.Task;
-        //playerSkinPrefab[3] = eringiHandle.Result;
-        //AsyncOperationHandle<GameObject> freezaHandle = Addressables.LoadAssetAsync<GameObject>("Freeza");
-        //await freezaHandle.Task;
-        //playerSkinPrefab[4] = freezaHandle.Result;
-        //AsyncOperationHandle<GameObject> bearHandle = Addressables.LoadAssetAsync<GameObject>("Bear");
-        //await bearHandle.Task;
-        //playerSkinPrefab[5] = bearHandle.Result;
-        //AsyncOperationHandle<GameObject> star = Addressables.LoadAssetAsync<GameObject>("Star");
-        //await star.Task;
-        //playerSkinPrefab[6] = star.Result;
     }                                                                                      ////  関数区終了  ////
 }
 /*                                                                                         ////  以下コード保存  ////
@@ -245,4 +227,22 @@ public class SkinGenerater : MonoBehaviour
     //    playerSkinPrefab[5] = Resources.Load<GameObject>("Bear");
     //    playerSkinPrefab[6] = Resources.Load<GameObject>("Star");
     //}      
+        //AsyncOperationHandle<GameObject> redCapHandle = Addressables.LoadAssetAsync<GameObject>("RedCap");
+        //await redCapHandle.Task;
+        //playerSkinPrefab[1] = redCapHandle.Result;
+        //AsyncOperationHandle<GameObject> strawHatHandle = Addressables.LoadAssetAsync<GameObject>("StrawHat");
+        //await strawHatHandle.Task;
+        //playerSkinPrefab[2] = strawHatHandle.Result;
+        //AsyncOperationHandle<GameObject> eringiHandle = Addressables.LoadAssetAsync<GameObject>("Eringi");
+        //await eringiHandle.Task;
+        //playerSkinPrefab[3] = eringiHandle.Result;
+        //AsyncOperationHandle<GameObject> freezaHandle = Addressables.LoadAssetAsync<GameObject>("Freeza");
+        //await freezaHandle.Task;
+        //playerSkinPrefab[4] = freezaHandle.Result;
+        //AsyncOperationHandle<GameObject> bearHandle = Addressables.LoadAssetAsync<GameObject>("Bear");
+        //await bearHandle.Task;
+        //playerSkinPrefab[5] = bearHandle.Result;
+        //AsyncOperationHandle<GameObject> star = Addressables.LoadAssetAsync<GameObject>("Star");
+        //await star.Task;
+        //playerSkinPrefab[6] = star.Result;
  */
