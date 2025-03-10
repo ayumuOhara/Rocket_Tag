@@ -5338,7 +5338,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0ae76d2bdbbb454f8c13f815d6f05b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instantiatePlayer: {fileID: 897190058}
+  gameManager: {fileID: 0}
+  rankText: {fileID: 1782522368}
   playerRank: 0
 --- !u!114 &846908942
 MonoBehaviour:
