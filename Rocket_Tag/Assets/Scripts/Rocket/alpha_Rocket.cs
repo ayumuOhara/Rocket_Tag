@@ -66,23 +66,26 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         PhotonView photonView = player.GetComponent<PhotonView>();
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
 
-        timePhoton.RPC("IsTimeStart", RpcTarget.All, false);
-        timeManager.ResetRocketCount();
+        if (PhotonNetwork.IsMasterClient)  // マスタークライアントが処理
+        {
+            timePhoton.RPC("IsTimeStart", RpcTarget.All, false);
+            timeManager.ResetRocketCount();
+        }
 
         uiLogManager.AddLog("player", UILogManager.LogType.Dead);
 
         // **ロケットを持っているプレイヤーが脱落した場合のみ次の保持者を選ぶ**
         if (photonView.Owner == gameManager.GetCurrentRocketHolder())
         {
+            Debug.Log("ロケットを配る");
             if (PhotonNetwork.IsMasterClient)  // マスタークライアントが処理
             {
                 Debug.Log("ロケットを配る");
                 gameManager.ChooseRocketPlayer();
+                timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
+                photonView.RPC("SetPlayerDead", RpcTarget.All, true);
             }
         }
-
-        timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
-        photonView.RPC("SetPlayerDead", RpcTarget.All, true);
 
         isExploding = false;
     }
