@@ -48,7 +48,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             yield return null;
         }
         DropOut();
-        isExploding = false;
         yield break;
     }
 
@@ -65,6 +64,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     void DropOut()
     {
         Debug.Log("脱落処理開始");
+
+        if (isExploding) return;
         
         PhotonView photonView = player.GetComponent<PhotonView>();
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
@@ -84,8 +85,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
             photonView.RPC("SetPlayerDead", RpcTarget.All, true);
         }
-
-        isExploding = false;
     }
 
 }
