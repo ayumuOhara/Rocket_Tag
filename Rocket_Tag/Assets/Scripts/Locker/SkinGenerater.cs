@@ -38,11 +38,11 @@ public class SkinGenerater : MonoBehaviour
     {
         Initialize();    //  初期化
     }                                                                                      ////  処理区終了  ////
-    void Initialize()     //  初期化                                                       ////  以下関数区  ////
+    async void Initialize()     //  初期化                                                 ////  以下関数区  ////
     {
         if (playerSkinPrefab == null)
         {
-            PlayerSkinLord();
+            await PlayerSkinLord();
         }
         playerHipTF = GameObject.Find("Hip").GetComponent<Transform>();
 
@@ -80,7 +80,7 @@ public class SkinGenerater : MonoBehaviour
         int tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", -1);
         int tmpSkinLocation = PlayerPrefs.GetInt("PlayerSkinLocation", -1);
 
-        if (!(IsUnexpectedValue(new int[] {tmpSkinNo, tmpSkinLocation }, new int[] {-1, -1})))
+        if (IsUnexpectedValue(new int[] {tmpSkinNo, tmpSkinLocation }, new int[] {-1, -1}))
         {
             tmpSkinNo = 0;
             tmpSkinLocation = 0;
@@ -136,8 +136,8 @@ public class SkinGenerater : MonoBehaviour
                 Debug.Log(errorMsg_PointNull);    //  debug-------------------
                 return false;
             }
+            Debug.Log(errorMsg_PointNull);    //  debug--------------------------
         }
-        Debug.Log(errorMsg_PointNull);    //  debug--------------------------
         return false;
     }
     bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)    //  変数のヌルチェック、危険性があった場合強制クラッシュ
@@ -148,12 +148,12 @@ public class SkinGenerater : MonoBehaviour
             {
                 Environment.FailFast(errorMsg);    //  クラッシュ
             }
+            Debug.Log(errorMsg);    //  debug--------------------------
             return true;
         }
-        Debug.Log(errorMsg);    //  debug--------------------------
         return false;
     }
-    async void PlayerSkinLord()     //  プレイヤースキン読み込み
+    async Task PlayerSkinLord()     //  プレイヤースキン読み込み
     {
         Task[] task;
 
