@@ -78,6 +78,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         if (hasRocket)
         {
+            Debug.Log("ƒƒPƒbƒg‚ğó‚¯æ‚è‚Ü‚·");
             rocketObj.SetActive(true);
         }
         else
