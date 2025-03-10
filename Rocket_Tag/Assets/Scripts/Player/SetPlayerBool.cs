@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
+    [SerializeField] GameObject resultUI;
+
     [SerializeField] PlayerMovement playerMovement;
     //RocketEffect rocketEffect;
     public TimeManager timeManager;
     public ResultScreen resultScreen;
-    public PlayerRankManager playerRankManager;    
+    public PlayerRankManager playerRankManager;
 
     [SerializeField] GameObject rocketObj;  // ロケット
 
@@ -22,9 +24,9 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
-        GameObject result = GameObject.Find("ResultUI");
-        if (result != null)
-            result.SetActive(false);
+        resultUI = GameObject.Find("ResultUI");
+        if (resultUI != null)
+            resultUI.SetActive(false);
     }
 
     // プレイヤーの状態の初期化
@@ -42,6 +44,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         Debug.Log("死亡判定：" + newIsDead);
 
         isDead = newIsDead;
+        resultUI.SetActive(true);
 
         if (playerRankManager != null)
         {
