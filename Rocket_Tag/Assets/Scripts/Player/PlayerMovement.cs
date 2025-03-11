@@ -26,6 +26,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     bool isDash = false;                                    // ダッシュ中か
 
     Animator animator;
+    private bool isPlayingFootstep = false;  // 足音SEの再生管理
+
 
     void Start()
     {
@@ -126,11 +128,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             {
                 animator.SetBool("RunRunner", true);
             }
+            // 足音SEを再生（すでに鳴っていたら再生しない）
+            if (!isPlayingFootstep)
+            {
+                AudioManager.Instance.PlaySE(SEManager.SEType.Dash); //走る音
+                isPlayingFootstep = true;
+            }
         }
         else
         {
             animator.SetBool("RunTagger", false);
             animator.SetBool("RunRunner", false);
+
+            // 移動をやめたらSEを停止
+            if (isPlayingFootstep)
+            {
+                AudioManager.Instance.PlaySE(SEManager.SEType.Dash);
+                isPlayingFootstep = false;
+            }
         }
     }
 
