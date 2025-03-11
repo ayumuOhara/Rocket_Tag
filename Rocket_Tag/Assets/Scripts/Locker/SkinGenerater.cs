@@ -184,42 +184,6 @@ async void Initialize()     //  初期化                                          
             await Task.Yield();
         }
     }                                                                                      ////  関数区終了  ////
-}
-/*                                                                                         ////  以下コード保存  ////
-     bool IsUnexpectedValue    //  値チェック
-    (bool isCompare, bool isCheckRange, bool isCheckBigger, int[] value, int[] unExpectedValue, int[] expectedValue_Bigger)
-    {
-        if(isCompare)
-        {
-            if (isCheckRange)
-            {
-                for (int arrayNo = value.Length; arrayNo > 0; --arrayNo)
-                {
-                    if(!(unExpectedValue[arrayNo] < value[arrayNo] && value[arrayNo] < expectedValue_Bigger[arrayNo]))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            if (isCheckBigger)
-            {
-                for(int arrayNo = value.Length; arrayNo > 0; --arrayNo)
-                {
-                    if(value[arrayNo] < unExpectedValue[arrayNo])
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-        if (value[0] == unExpectedValue[0])
-        {
-            return true;
-        }
-        return false;
-    }
     //void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
     //{
     //    playerSkinPrefab = new GameObject[7];
@@ -229,23 +193,59 @@ async void Initialize()     //  初期化                                          
     //    playerSkinPrefab[4] = Resources.Load<GameObject>("Freeza");
     //    playerSkinPrefab[5] = Resources.Load<GameObject>("Bear");
     //    playerSkinPrefab[6] = Resources.Load<GameObject>("Star");
-    //}      
-        //AsyncOperationHandle<GameObject> redCapHandle = Addressables.LoadAssetAsync<GameObject>("RedCap");
-        //await redCapHandle.Task;
-        //playerSkinPrefab[1] = redCapHandle.Result;
-        //AsyncOperationHandle<GameObject> strawHatHandle = Addressables.LoadAssetAsync<GameObject>("StrawHat");
-        //await strawHatHandle.Task;
-        //playerSkinPrefab[2] = strawHatHandle.Result;
-        //AsyncOperationHandle<GameObject> eringiHandle = Addressables.LoadAssetAsync<GameObject>("Eringi");
-        //await eringiHandle.Task;
-        //playerSkinPrefab[3] = eringiHandle.Result;
-        //AsyncOperationHandle<GameObject> freezaHandle = Addressables.LoadAssetAsync<GameObject>("Freeza");
-        //await freezaHandle.Task;
-        //playerSkinPrefab[4] = freezaHandle.Result;
-        //AsyncOperationHandle<GameObject> bearHandle = Addressables.LoadAssetAsync<GameObject>("Bear");
-        //await bearHandle.Task;
-        //playerSkinPrefab[5] = bearHandle.Result;
-        //AsyncOperationHandle<GameObject> star = Addressables.LoadAssetAsync<GameObject>("Star");
-        //await star.Task;
-        //playerSkinPrefab[6] = star.Result;
- */
+    //}
+}
+////  以下コード保存  ////
+//bool IsUnexpectedValue    //  値チェック
+//(bool isCompare, bool isCheckRange, bool isCheckBigger, int[] value, int[] unExpectedValue, int[] expectedValue_Bigger)
+//{
+//    if (isCompare)
+//    {
+//        if (isCheckRange)
+//        {
+//            for (int arrayNo = value.Length; arrayNo > 0; --arrayNo)
+//            {
+//                if (!(unExpectedValue[arrayNo] < value[arrayNo] && value[arrayNo] < expectedValue_Bigger[arrayNo]))
+//                {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
+//        if (isCheckBigger)
+//        {
+//            for (int arrayNo = value.Length; arrayNo > 0; --arrayNo)
+//            {
+//                if (value[arrayNo] < unExpectedValue[arrayNo])
+//                {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
+//    }
+//    if (value[0] == unExpectedValue[0])
+//    {
+//        return true;
+//    }
+//    return false;
+//}
+
+//AsyncOperationHandle<GameObject> redCapHandle = Addressables.LoadAssetAsync<GameObject>("RedCap");
+//await redCapHandle.Task;
+//playerSkinPrefab[1] = redCapHandle.Result;
+//AsyncOperationHandle<GameObject> strawHatHandle = Addressables.LoadAssetAsync<GameObject>("StrawHat");
+//await strawHatHandle.Task;
+//playerSkinPrefab[2] = strawHatHandle.Result;
+//AsyncOperationHandle<GameObject> eringiHandle = Addressables.LoadAssetAsync<GameObject>("Eringi");
+//await eringiHandle.Task;
+//playerSkinPrefab[3] = eringiHandle.Result;
+//AsyncOperationHandle<GameObject> freezaHandle = Addressables.LoadAssetAsync<GameObject>("Freeza");
+//await freezaHandle.Task;
+//playerSkinPrefab[4] = freezaHandle.Result;
+//AsyncOperationHandle<GameObject> bearHandle = Addressables.LoadAssetAsync<GameObject>("Bear");
+//await bearHandle.Task;
+//playerSkinPrefab[5] = bearHandle.Result;
+//AsyncOperationHandle<GameObject> star = Addressables.LoadAssetAsync<GameObject>("Star");
+//await star.Task;
+//playerSkinPrefab[6] = star.Result;

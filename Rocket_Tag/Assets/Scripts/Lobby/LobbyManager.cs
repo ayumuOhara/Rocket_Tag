@@ -6,7 +6,7 @@ public class LobbyManager : MonoBehaviour
     // ゲーム画面への遷移
     public void LoadGameScene()
     {
-        SceneManager.LoadScene("Test_Takeshita"); // ゲーム画面のシーン名
+        SceneManager.LoadScene("Test_Shiromoto"); // ゲーム画面のシーン名
     }
 
     // ショップ画面への遷移
