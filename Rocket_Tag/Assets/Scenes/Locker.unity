@@ -2507,7 +2507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
       propertyPath: m_Name
-      value: pico_labo_chr_picolabo_00
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: db8198e635f0f3b45a3d30bbce3d4f75, type: 3}
       propertyPath: m_Controller
