@@ -1,4 +1,4 @@
-using Photon.Pun;
+ï»¿using Photon.Pun;
 using UnityEngine;
 using System.Collections;
 using TMPro;
@@ -8,25 +8,25 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     SetPlayerBool setPlayerBool;
     SkillManager skillManager;
 
-    [SerializeField] private Vector3 movingVelocity;             // ˆÚ“®•ûŒü
-    [SerializeField] private float moveSpeed = 20.0f;            // ˆÚ“®‘¬“x
-    [SerializeField] private float defaultMoveSpeed = 20.0f;     // ’Êí‚ÌˆÚ“®‘¬“x
-    [SerializeField] private float applySpeed = 0.2f;            // ‰ñ“]‚Ì“K—p‘¬“x
-    [SerializeField] private float jumpForce = 20.0f;            // ƒWƒƒƒ“ƒv—Í
-    private bool isGround = false;                               // Ú’n”»’è
-    private float groundLimit = 0.7f;                            // Ú’n”»’è‚Ì‚µ‚«‚¢’l
-    [SerializeField] private CameraController refCamera;      @ // ƒJƒƒ‰‚Ì…•½‰ñ“]‚ğQÆ‚·‚é—p
+    [SerializeField] private Vector3 movingVelocity;             // ç§»å‹•æ–¹å‘
+    [SerializeField] private float moveSpeed = 20.0f;            // ç§»å‹•é€Ÿåº¦
+    [SerializeField] private float defaultMoveSpeed = 20.0f;     // é€šå¸¸ã®ç§»å‹•é€Ÿåº¦
+    [SerializeField] private float applySpeed = 0.2f;            // å›è»¢ã®é©ç”¨é€Ÿåº¦
+    [SerializeField] private float jumpForce = 20.0f;            // ã‚¸ãƒ£ãƒ³ãƒ—åŠ›
+    private bool isGround = false;                               // æ¥åœ°åˆ¤å®š
+    private float groundLimit = 0.7f;                            // æ¥åœ°åˆ¤å®šã®ã—ãã„å€¤
+    [SerializeField] private CameraController refCamera;      ã€€ // ã‚«ãƒ¡ãƒ©ã®æ°´å¹³å›è»¢ã‚’å‚ç…§ã™ã‚‹ç”¨
 
     [SerializeField] Rigidbody rb;
     [SerializeField] CapsuleCollider _collider;
-    [SerializeField] PhysicsMaterial defaultFriction;       // ’Êíó‘Ô‚Ì–€C
-    [SerializeField] PhysicsMaterial noneFriction;          // •ûŒüƒL[“ü—Í’†‚Ì–€C
+    [SerializeField] PhysicsMaterial defaultFriction;       // é€šå¸¸çŠ¶æ…‹ã®æ‘©æ“¦
+    [SerializeField] PhysicsMaterial noneFriction;          // æ–¹å‘ã‚­ãƒ¼å…¥åŠ›ä¸­ã®æ‘©æ“¦
 
-    float stunTime = 3.0f;                                  // ƒXƒ^ƒ“ŠÔ
-    bool isDash = false;                                    // ƒ_ƒbƒVƒ…’†‚©
+    float stunTime = 3.0f;                                  // ã‚¹ã‚¿ãƒ³æ™‚é–“
+    bool isDash = false;                                    // ãƒ€ãƒƒã‚·ãƒ¥ä¸­ã‹
 
     Animator animator;
-    private bool isPlayingFootstep = false;  // ‘«‰¹SE‚ÌÄ¶ŠÇ—
+    private bool isPlayingFootstep = false;  // è¶³éŸ³SEã®å†ç”Ÿç®¡ç†
 
 
     void Start()
@@ -55,22 +55,22 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         return defaultMoveSpeed;
     }
 
-    // ‰Ÿ‰º‚³‚ê‚½ˆÚ“®ƒL[‚É‰‚¶‚ÄƒxƒNƒgƒ‹‚ğæ“¾
+    // æŠ¼ä¸‹ã•ã‚ŒãŸç§»å‹•ã‚­ãƒ¼ã«å¿œã˜ã¦ãƒ™ã‚¯ãƒˆãƒ«ã‚’å–å¾—
     public void GetVelocity()
     {
         movingVelocity = Vector3.zero;
-        // GetAxisRaw‚ğg‚Á‚ÄˆÚ“®‚·‚é•ûŒü‚ğæ“¾
+        // GetAxisRawã‚’ä½¿ã£ã¦ç§»å‹•ã™ã‚‹æ–¹å‘ã‚’å–å¾—
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
 
         Vector3 movingDirection = new Vector3(x, 0, z);
-        // Î‚ßˆÚ“®‚ª‘¬‚­‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
+        // æ–œã‚ç§»å‹•ãŒé€Ÿããªã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
         movingDirection.Normalize();
 
         movingVelocity = movingDirection * moveSpeed;
     }
 
-    // æ“¾‚µ‚½ƒxƒNƒgƒ‹‚Ì•ûŒü‚ÉˆÚ“®&‰ñ“]‚³‚¹‚é+ƒWƒƒƒ“ƒvˆ—
+    // å–å¾—ã—ãŸãƒ™ã‚¯ãƒˆãƒ«ã®æ–¹å‘ã«ç§»å‹•&å›è»¢ã•ã›ã‚‹+ã‚¸ãƒ£ãƒ³ãƒ—å‡¦ç†
     public void PlayerMove()
     {
         if(setPlayerBool != null)
@@ -83,31 +83,32 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
 
         RunAnimation();
+        HandleFootstepSE();
 
-        // ‚¢‚¸‚ê‚©‚Ì•ûŒü‚ÉˆÚ“®‚µ‚Ä‚¢‚éê‡
+        // ã„ãšã‚Œã‹ã®æ–¹å‘ã«ç§»å‹•ã—ã¦ã„ã‚‹å ´åˆ
         if (movingVelocity.magnitude > 0)
         {
             _collider.material = noneFriction;
 
-            // ƒJƒƒ‰‚Ì‘O•ûŒü‚ğXZ•½–Ê‚É“Š‰e
+            // ã‚«ãƒ¡ãƒ©ã®å‰æ–¹å‘ã‚’XZå¹³é¢ã«æŠ•å½±
             Vector3 cameraForward = refCamera.transform.forward;
             cameraForward.y = 0;
             cameraForward.Normalize();
 
-            // ƒJƒƒ‰‚Ì‰E•ûŒü‚ğæ“¾
+            // ã‚«ãƒ¡ãƒ©ã®å³æ–¹å‘ã‚’å–å¾—
             Vector3 cameraRight = refCamera.transform.right;
 
-            // ƒJƒƒ‰Šî€‚ÅˆÚ“®•ûŒü‚ğÄŒvZ
+            // ã‚«ãƒ¡ãƒ©åŸºæº–ã§ç§»å‹•æ–¹å‘ã‚’å†è¨ˆç®—
             Vector3 adjustedVelocity = cameraForward * movingVelocity.z + cameraRight * movingVelocity.x;
 
-            // ƒvƒŒƒCƒ„[‚Ì‰ñ“](transform.rotation)‚ÌXV
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å›è»¢(transform.rotation)ã®æ›´æ–°
             if (adjustedVelocity.magnitude > 0)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(adjustedVelocity);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, applySpeed);
             }
 
-            // ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ÌXV
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã®æ›´æ–°
             rb.linearVelocity = new Vector3(adjustedVelocity.x, rb.linearVelocity.y, adjustedVelocity.z);
         }
         else
@@ -128,19 +129,27 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             {
                 animator.SetBool("RunRunner", true);
             }
-            // ‘«‰¹SE‚ğÄ¶i‚·‚Å‚É–Â‚Á‚Ä‚¢‚½‚çÄ¶‚µ‚È‚¢j
-            if (!isPlayingFootstep)
-            {
-                AudioManager.Instance.PlaySE(SEManager.SEType.Dash); //‘–‚é‰¹
-                isPlayingFootstep = true;
-            }
         }
         else
         {
             animator.SetBool("RunTagger", false);
             animator.SetBool("RunRunner", false);
+        }
+    }
 
-            // ˆÚ“®‚ğ‚â‚ß‚½‚çSE‚ğ’â~
+    // ğŸ†• è¶³éŸ³SEã‚’ç®¡ç†ã™ã‚‹é–¢æ•°
+    void HandleFootstepSE()
+    {
+        if (movingVelocity.magnitude > 0 && photonView.IsMine)
+        {
+            if (!isPlayingFootstep)
+            {
+                AudioManager.Instance.PlaySE(SEManager.SEType.Dash);
+                isPlayingFootstep = true;
+            }
+        }
+        else
+        {
             if (isPlayingFootstep)
             {
                 AudioManager.Instance.PlaySE(SEManager.SEType.Dash);
@@ -151,7 +160,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     public void JumpAction()
     {
-        // ƒWƒƒƒ“ƒvˆ—
+        // ã‚¸ãƒ£ãƒ³ãƒ—å‡¦ç†
         if (Input.GetKey(KeyCode.Space) && isGround)
         {
             isGround = false;
@@ -159,18 +168,18 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
     }
 
-    // Õ“Ë”»’è
+    // è¡çªåˆ¤å®š
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
             foreach (ContactPoint contact in collision.contacts)
             {
-                // ÚG“_‚Ì–@ü‚ªãŒü‚«i’n–Êj‚É‹ß‚¢ê‡‚Ì‚İÚ’n”»’è‚ğs‚¤
+                // æ¥è§¦ç‚¹ã®æ³•ç·šãŒä¸Šå‘ãï¼ˆåœ°é¢ï¼‰ã«è¿‘ã„å ´åˆã®ã¿æ¥åœ°åˆ¤å®šã‚’è¡Œã†
                 if (Vector3.Dot(contact.normal, Vector3.up) > groundLimit)
                 {
                     isGround = true;
-                    break; // Ú’n‚ğŒŸo‚µ‚½‚çƒ‹[ƒv‚ğI—¹
+                    break; // æ¥åœ°ã‚’æ¤œå‡ºã—ãŸã‚‰ãƒ«ãƒ¼ãƒ—ã‚’çµ‚äº†
                 }
             }
         }
@@ -181,7 +190,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
     }
 
-    // ƒ^ƒbƒ`‚³‚ê‚½‚Æ‚«‚É’â~
+    // ã‚¿ãƒƒãƒã•ã‚ŒãŸã¨ãã«åœæ­¢
     public IEnumerator StunPlayer()
     {
         _collider.material = defaultFriction;
