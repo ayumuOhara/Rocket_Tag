@@ -23,6 +23,7 @@ public class SkinGenerater : MonoBehaviour
     GameObject skinEntity;
     Transform playerTF;
 
+    const string inGameSceneName = "PlayScene";
     const string skinLoadError = "Error:Skin is didn't load";    //  msg for debug--------------
     const string playerHipLoadError = "Error:Player's hip doesn't exist";    //  msg for debug---------------------
     const string gameMngNotFound = "Error: GameManager didn't find";    //  msg for debug------------------
@@ -36,16 +37,18 @@ public class SkinGenerater : MonoBehaviour
 
     void Start()                                                                           ////  ˆÈ‰ºˆ—‹æ  ////
     {
-        Initialize();    //  ‰Šú‰»
+        if (SceneManager.GetActiveScene().name != inGameSceneName)
+        {
+            Initialize();    //  ‰Šú‰»
+        }
     }                                                                                      ////  ˆ—‹æI—¹  ////
-    async void Initialize()     //  ‰Šú‰»                                                 ////  ˆÈ‰ºŠÖ”‹æ  ////
+async void Initialize()     //  ‰Šú‰»                                                 ////  ˆÈ‰ºŠÖ”‹æ  ////
     {
         if (playerSkinPrefab == null)
         {
             await PlayerSkinLord();
         }
-        playerTF = GameObject.Find("Player").GetComponent<Transform>();
-
+            playerTF = GameObject.Find("Player").GetComponent<Transform>();
         IsNull_Array(playerSkinPrefab, false, null, false, skinLoadError , null);    //  msg for debug---------------------
         IsNull_Variable(playerTF, false, playerHipLoadError);    //  msg for debug------------------------------
 
