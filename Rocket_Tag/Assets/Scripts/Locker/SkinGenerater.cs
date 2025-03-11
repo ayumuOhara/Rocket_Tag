@@ -21,7 +21,7 @@ public class SkinGenerater : MonoBehaviour
     
     static GameObject[] playerSkinPrefab;    //  [0]はなにも着ていない状態を表現するために使っています
     GameObject skinEntity;
-    Transform playerHipTF;
+    Transform playerTF;
 
     const string skinLoadError = "Error:Skin is didn't load";    //  msg for debug--------------
     const string playerHipLoadError = "Error:Player's hip doesn't exist";    //  msg for debug---------------------
@@ -44,12 +44,12 @@ public class SkinGenerater : MonoBehaviour
         {
             await PlayerSkinLord();
         }
-        playerHipTF = GameObject.Find("Hip").GetComponent<Transform>();
+        playerTF = GameObject.Find("Player").GetComponent<Transform>();
 
         IsNull_Array(playerSkinPrefab, false, null, false, skinLoadError , null);    //  msg for debug---------------------
-        IsNull_Variable(playerHipTF, false, playerHipLoadError);    //  msg for debug------------------------------
+        IsNull_Variable(playerTF, false, playerHipLoadError);    //  msg for debug------------------------------
 
-        SkinGenerate(playerHipTF);
+        SkinGenerate(playerTF);
     }
     internal void SkinGenerateWrapper(SkinGenerateProcces skinGenerateProcces)   // ロケットエフェクトのラッパー関数
     {
@@ -75,7 +75,7 @@ public class SkinGenerater : MonoBehaviour
             SkinGenerate(tmpPlayerList[tmpPlayerListLen].transform);
         }
     }
-    void SkinGenerate(Transform playerHipTF_)    //  プレイヤーのスキンの生成
+    void SkinGenerate(Transform playerTF_)    //  プレイヤーのスキンの生成
     {
         int tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", -1);
         int tmpSkinLocation = PlayerPrefs.GetInt("PlayerSkinLocation", -1);
@@ -92,7 +92,7 @@ public class SkinGenerater : MonoBehaviour
             {
                 case 0:
                     {
-                        skinEntity = Instantiate(playerSkinPrefab[tmpSkinNo], playerHipTF_.Find("Spine/Head"));
+                        skinEntity = Instantiate(playerSkinPrefab[tmpSkinNo], playerTF_.Find("root/Hip/Spine/Head"));
                         break;
                     }
             }
