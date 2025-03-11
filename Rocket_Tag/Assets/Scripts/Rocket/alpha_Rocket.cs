@@ -65,8 +65,9 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         Debug.Log("脱落処理開始");
 
-        if (isExploding) return;
-        
+        SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
+        if (spb.isDead) return;
+
         PhotonView photonView = player.GetComponent<PhotonView>();
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
 
