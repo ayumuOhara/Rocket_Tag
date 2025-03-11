@@ -68,14 +68,14 @@ async void Initialize()     //  初期化                                          
     void InGameGenerate()    //  インゲームのスキン生成処理(プレイヤーがインゲームに生成されたタイミングで呼び出される)
     {
         GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        GameObject[] tmpPlayerList = gameManager.GetPlayerList().ToArray();
+        List<GameObject> tmpPlayerList = gameManager.GetPlayerList();
 
         IsNull_Variable(gameManager, false, gameMngNotFound);    //  Msg for debug---------------------------
-        IsNull_Array(tmpPlayerList, false, null, false, null, couldntGetPlayerList);  //  Msg for debug------------------
+        //IsNull_Array(tmpPlayerList, false, null, false, null, couldntGetPlayerList);  //  Msg for debug------------------
 
-        for (int tmpPlayerListLen = 0; tmpPlayerListLen < tmpPlayerList.Length; tmpPlayerListLen++)
+        for (int tmpPlayerListLen = 0; tmpPlayerListLen < tmpPlayerList.Count; tmpPlayerListLen++)
         {
-            SkinGenerate(tmpPlayerList[tmpPlayerListLen].transform);
+            SkinGenerate(tmpPlayerList[tmpPlayerListLen].gameObject.transform);
         }
     }
     void SkinGenerate(Transform playerTF_)    //  プレイヤーのスキンの生成
