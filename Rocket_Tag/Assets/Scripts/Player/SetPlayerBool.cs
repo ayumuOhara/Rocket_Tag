@@ -44,7 +44,11 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         Debug.Log("€–S”»’èF" + newIsDead);
 
         isDead = newIsDead;
-        resultUI.SetActive(true);
+
+        if (isDead)
+        {
+            resultUI.SetActive(true);
+        }
 
         if (playerRankManager != null)
         {
