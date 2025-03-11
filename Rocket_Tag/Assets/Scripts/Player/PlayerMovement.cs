@@ -124,10 +124,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             if (setPlayerBool.hasRocket)
             {
                 animator.SetBool("RunTagger", true);
+                animator.SetBool("RunRunner", false);
             }
             else
             {
                 animator.SetBool("RunRunner", true);
+                animator.SetBool("RunTagger", false);
             }
         }
         else
