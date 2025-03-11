@@ -53,7 +53,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         if (playerRankManager != null)
         {
             playerRankManager.SetPlayerRank();
-            playerRankManager.ShowMyResult();
+            //playerRankManager.ShowMyResult();
         }
 
         //if (resultScreen != null)
