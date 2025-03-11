@@ -9,6 +9,6 @@ public class TitleScreenManager : MonoBehaviour
     {
         SceneManager.LoadScene("Lobby"); // ロビー画面のシーン名
         AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
-        FadeManager fadeManager = FindFirstObjectByType<FadeManager>();
+        //FadeManager fadeManager = FindFirstObjectByType<FadeManager>();
     }
 }
