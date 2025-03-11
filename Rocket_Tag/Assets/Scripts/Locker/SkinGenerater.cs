@@ -62,7 +62,7 @@ public class SkinGenerater : MonoBehaviour
                 }
         }
     }
-    void InGameGenerate()    //  インゲームのスキン生成処理
+    void InGameGenerate()    //  インゲームのスキン生成処理(プレイヤーがインゲームに生成されたタイミングで呼び出される)
     {
         GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         GameObject[] tmpPlayerList = gameManager.GetPlayerList().ToArray();
