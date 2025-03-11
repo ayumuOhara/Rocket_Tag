@@ -9,6 +9,8 @@ public class PlayerRankManager : MonoBehaviour
     [SerializeField] GameManager gameManager;
     [SerializeField] TextMeshProUGUI rankText;
     public int playerRank;
+    
+    Hashtable playerProperties = new Hashtable();
 
     private void Start()
     {
@@ -33,7 +35,7 @@ public class PlayerRankManager : MonoBehaviour
         }
 
         // 順位をカスタムプロパティに保存
-        Hashtable playerProperties = new Hashtable();
+        //Hashtable playerProperties = new Hashtable();
         playerProperties["PlayerRank"] = playerRank;
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperties);
     }
