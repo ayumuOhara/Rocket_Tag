@@ -20,15 +20,17 @@ public class SkinGenerater : MonoBehaviour
     }
     
     static GameObject[] playerSkinPrefab;    //  [0]はなにも着ていない状態を表現するために使っています
-    GameObject skinEntity;
+    GameObject skinEntityHead;
     Transform playerTF;
 
     const string inGameSceneName = "PlayScene";
     const string skinLoadError = "Error:Skin is didn't load";    //  msg for debug--------------
-    const string playerHipLoadError = "Error:Player's hip doesn't exist";    //  msg for debug---------------------
+    const string playerTFLoadError = "Error:Player's hip doesn't exist";    //  msg for debug---------------------
+    const string playerTFIsAssignedThis = "PlayerTF is Assigned [This.transform]";    //  msg for debug---------------------
     const string gameMngNotFound = "Error: GameManager didn't find";    //  msg for debug------------------
     const string couldntGetPlayerList = "Error: PlayerList couldn't get";    //  msg for debug------------------
     const string playerPrefasUnexpectedValue = "Playerprefas value is strange";    //  msg for debug------------------
+    const string scriptProssesFinish = "SkinGenerater.cs's process is stop";    //  msg for debug------------------
 
     static int skinLocation;
 
@@ -48,10 +50,17 @@ async void Initialize()     //  初期化                                          
         {
             await PlayerSkinLord();
         }
-            playerTF = GameObject.Find("Player").GetComponent<Transform>();
-        IsNull_Array(playerSkinPrefab, false, null, false, skinLoadError , null);    //  msg for debug---------------------
-        IsNull_Variable(playerTF, false, playerHipLoadError);    //  msg for debug------------------------------
-
+        playerTF = GameObject.Find("Player").GetComponent<Transform>();
+        if(IsNull_Variable(playerTF, false, playerTFLoadError))    //  msg for debug------------------------------
+        {
+            Debug.Log(playerTFIsAssignedThis);    //  msg for debug------------
+            playerTF = this.transform;   
+        }
+        if (IsNull_Array(playerSkinPrefab, false, null, false, skinLoadError, null))    //  msg for debug---------------------
+        {
+            Debug.Log(scriptProssesFinish);    //  msg for debug---------------------
+            return;
+        }
         SkinGenerate(playerTF);
     }
     internal void SkinGenerateWrapper(SkinGenerateProcces skinGenerateProcces)   // ロケットエフェクトのラッパー関数
@@ -71,7 +80,7 @@ async void Initialize()     //  初期化                                          
         GameObject[] tmpPlayerList = gameManager.GetPlayerList().ToArray();
 
         IsNull_Variable(gameManager, false, gameMngNotFound);    //  Msg for debug---------------------------
-        //IsNull_Array(tmpPlayerList, false, null, false, null, couldntGetPlayerList);  //  Msg for debug------------------
+        IsNull_Array(tmpPlayerList, false, null, false, null, couldntGetPlayerList);  //  Msg for debug------------------
 
         for (int tmpPlayerListLen = 0; tmpPlayerListLen < tmpPlayerList.Length; tmpPlayerListLen++)
         {
@@ -95,7 +104,7 @@ async void Initialize()     //  初期化                                          
             {
                 case 0:
                     {
-                        skinEntity = Instantiate(playerSkinPrefab[tmpSkinNo], playerTF_.Find("root/Hip/Spine/Head"));
+                        skinEntityHead = Instantiate(playerSkinPrefab[tmpSkinNo], playerTF_.Find("root/Hip/Spine/Head"));
                         break;
                     }
             }
@@ -109,6 +118,19 @@ async void Initialize()     //  初期化                                          
             {
                 return true;
             }
+        }
+        return false;
+    }
+    bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)    //  変数のヌルチェック、危険性があった場合強制クラッシュ
+    {
+        if (value == null)
+        {
+            if (haveToClach)
+            {
+                Environment.FailFast(errorMsg);    //  クラッシュ
+            }
+            Debug.Log(errorMsg);    //  debug--------------------------
+            return true;
         }
         return false;
     }
@@ -140,19 +162,6 @@ async void Initialize()     //  初期化                                          
                 return false;
             }
             Debug.Log(errorMsg_PointNull);    //  debug--------------------------
-        }
-        return false;
-    }
-    bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)    //  変数のヌルチェック、危険性があった場合強制クラッシュ
-    {
-        if(value == null)
-        {
-            if(haveToClach)
-            {
-                Environment.FailFast(errorMsg);    //  クラッシュ
-            }
-            Debug.Log(errorMsg);    //  debug--------------------------
-            return true;
         }
         return false;
     }
