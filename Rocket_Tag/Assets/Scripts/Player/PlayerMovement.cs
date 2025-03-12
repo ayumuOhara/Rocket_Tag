@@ -26,7 +26,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     bool isDash = false;                                    // ダッシュ中か
 
     Animator animator;
-    private bool isPlayingFootstep = false;  // 足音SEの再生管理
+    [SerializeField] private AudioSource footstepAudioSource; // 足音用のAudioSource
+    //private bool isPlayingFootstep = false;  // 足音SEの再生管理
 
 
     void Start()
@@ -144,18 +145,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         if (movingVelocity.magnitude > 0 && photonView.IsMine)
         {
-            if (!isPlayingFootstep)
+            if (!footstepAudioSource.isPlaying)
             {
-                AudioManager.Instance.PlaySE(SEManager.SEType.Dash);
-                isPlayingFootstep = true;
+                footstepAudioSource.Play(); // 足音SEを再生
             }
         }
         else
         {
-            if (isPlayingFootstep)
+            if (footstepAudioSource.isPlaying)
             {
-                AudioManager.Instance.PlaySE(SEManager.SEType.Dash);
-                isPlayingFootstep = false;
+                footstepAudioSource.Stop(); // 足音SEを停止
             }
         }
     }
