@@ -1,3 +1,4 @@
+using System;
 using System.Collections;                                                                          ////  ロケットエフェクト生成・切り替え  ////
 using System.Threading.Tasks;
 using Unity.Android.Gradle.Manifest;
@@ -134,6 +135,10 @@ internal class RocketEffect : MonoBehaviour
     float smokeDelTime;
     int rocketStage;
     bool didFalsed;    //  ロケット生成にタイミングを合わせるためのフラグ
+    const string rocketNotFound = "Error:Rocket Not Found";    //  msg for debug--------------
+    const string rocketIsAssginedThis = "Rocket variable is assigned [this.transform]";
+    const string couldntGetTimemgr = "Error:Couldn't Get timeMgr";    //  msg for debug---------------------
+    const string scriptProssesFinish = "RocketEffect.cs's process is stop";    //  msg for debug------------------
 
     internal TimeManager _TimeMgr
     { get { return timeMgr; } }
@@ -161,18 +166,13 @@ internal class RocketEffect : MonoBehaviour
     }                                                                                              ////  処理区終了  ////
     void SetSetActive(bool flag, GameObject obj)    //  SetActiveを設定する
     {
-        switch (flag != obj.activeSelf)
+        if (flag != obj.activeSelf)
         {
-            case true:
-                {
-                    obj.SetActive(flag);
-                    break;
-                }
-            case false:
-                {
-                    obj.SetActive(false);
-                    break;
-                }
+            obj.SetActive(flag);
+        }
+        else
+        {
+            obj.SetActive(false);
         }
     }
     async void Initialize()    //  初期化                                                                ////  以下関数区  ////
@@ -190,6 +190,17 @@ internal class RocketEffect : MonoBehaviour
 
         rocketStage = 0;
         smokeDelTime = 12;
+
+        if(IsNull_Variable(rocket, false, rocketNotFound))    //  msg for debug-----------------------
+        {
+            Debug.Log(rocketIsAssginedThis);    //  msg for debug-----------------
+            rocket = this.transform;
+        }
+        if (IsNull_Variable(timeMgr, false, couldntGetTimemgr))
+        {
+            Debug.Log(scriptProssesFinish);    //  msg for debug-------------------
+            return;
+        }
     }
     internal void ChangeState(EffectState newState)    //  状態遷移
     {
@@ -223,7 +234,11 @@ internal class RocketEffect : MonoBehaviour
                 {
                     rocket = null;
                     rocket = GameObject.Find("Rocket").GetComponent<Transform>();
-                    Debug.Log("rocket座標取得 : " + rocket);
+                    if (IsNull_Variable(rocket, false, rocketNotFound))    //  msg for debug-------------------
+                    {
+                        Debug.Log(rocketIsAssginedThis);    //  msg for debug--------------------
+                        rocket = this.transform;
+                    }
                     if (rocket != null && currentState is PrepareRocket)
                     {
                         ChangeState(new FirstStage());
@@ -270,10 +285,54 @@ internal class RocketEffect : MonoBehaviour
         }
         else
         {
-            Debug.Log("TimeOut");
+            Debug.Log("TimeOut");    //  msg for debug----------------
             Destroy(smokeEntity.gameObject);
             ChangeState(new PrepareRocket());
         }
+    }
+    bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)    //  変数のヌルチェック、危険性があった場合強制クラッシュ
+    {
+        if (value == null)
+        {
+            if (haveToClach)
+            {
+                Environment.FailFast(errorMsg);    //  クラッシュ
+            }
+            Debug.Log(errorMsg);    //  debug--------------------------
+            return true;
+        }
+        return false;
+    }
+    bool IsNull_Array<T>     //  配列のヌルチェック、危険性があった場合強制クラッシュ
+    (T[] value, bool isCheckPoint, int[] checkPoint, bool haveToClach, string errorMsg_PointNull, string errorMsg_AllNull)
+    {
+        if (value == null || value.Length == 0)
+        {
+            if (haveToClach)
+            {
+                Environment.FailFast(errorMsg_AllNull);    //  クラッシュ
+            }
+            Debug.Log(errorMsg_AllNull);    //  debug------------------
+            return true;
+        }
+        if (isCheckPoint)
+        {
+            for (int arrayNo = checkPoint.Length - 1; arrayNo >= 0; arrayNo--)
+            {
+                if (value[checkPoint[arrayNo]] == null)
+                {
+                    if (haveToClach)
+                    {
+                        Environment.FailFast(errorMsg_PointNull);    //  クラッシュ
+                    }
+                    return true;
+                }
+                Debug.Log(errorMsg_PointNull);    //  debug-------------------
+                return false;
+            }
+            Debug.Log(errorMsg_PointNull);    //  debug--------------------------
+        }
+        return false;
     }
     async Task RocketEffectLoad()    //  ロケットエフェクトのロード
     {
@@ -293,7 +352,7 @@ internal class RocketEffect : MonoBehaviour
 
         loadHandles = new AsyncOperationHandle<GameObject>[numOfFrameEffect + numOfSmokeEffect];
 
-        loadHandleArrayNo = 0;    //  同一的な配列の要素数を指定するために使うときもあります。
+        loadHandleArrayNo = 0;    //  同一的な配列の要素数を指定するために使うときもあります
         smokeEffectName = "FrameSmoke";
 
         for(string loadName; loadHandleArrayNo < numOfFrameEffect + numOfSmokeEffect; loadHandleArrayNo++)
@@ -319,7 +378,6 @@ internal class RocketEffect : MonoBehaviour
             {
                 smokeEffectPrefab = loadHandles[loadHandleArrayNo].Result;
             }
-            await Task.Yield();
         }
     }                                                                                              ////  以下関数区  ////
 }                                                                                                 

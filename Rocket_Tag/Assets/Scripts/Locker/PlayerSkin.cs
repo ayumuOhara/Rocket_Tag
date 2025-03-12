@@ -74,7 +74,6 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         freeza.onClick.AddListener  (() => ChangeSkin((int)PlayerSkinNo.FREEZA,    (int)SkinLocation.HEAD));
         bear.onClick.AddListener    (() => ChangeSkin((int)PlayerSkinNo.BEAR,      (int)SkinLocation.HEAD));
         star.onClick.AddListener    (() => ChangeSkin((int)PlayerSkinNo.STAR,      (int)SkinLocation.HEAD));
-        Debug.Log(3);
     }
     void ChangeSkin(int clickSkinNo, int skinLocation)    //  スキン番号変更
     {
@@ -115,7 +114,6 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     void SaveSkinNo(Scene scene)    //  シーンアンロード時にスキンセーブ
     {
         SaveDate_Skin();
-        Debug.Log(PlayerPrefs.GetInt("PlayerSkinNo"));
         SceneManager.sceneUnloaded -= SaveSkinNo;
     }
     void OnApplicationQuit()    //  途中でアプリを落としたときにスキン番号をセーブ
