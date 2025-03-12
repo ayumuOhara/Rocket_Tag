@@ -104,8 +104,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void ChooseRocketPlayer()
     {
-        Debug.Log("ロケット保持者を抽選します");
-
         // プレイヤーリストをキャッシュ
         cachedPlayerList = GetPlayerList();
         cachedPlayerList.RemoveAll(player => player.GetComponent<PhotonView>().Owner == currentRocketHolder); // 既存保持者を除外
@@ -145,10 +143,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (playerCount <= 1)
             {
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
-                //rocketEffect.SetActive(false);
                 readyButton.SetActive(true);
                 playerReady.SetReady(false);
-                //setPlayerBool.SetPlayerCondition();
                 timeManager.isTimeStart = false;
                 StartCoroutine(WaitPlayersReady());
                 yield break;
@@ -174,8 +170,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
             return spb != null && spb.isDead;
         });
-
-        Debug.Log($"プレイヤーの生存リスト；【{players.Count}】");
 
         return players;
     }
