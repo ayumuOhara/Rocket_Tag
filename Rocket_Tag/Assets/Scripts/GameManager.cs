@@ -145,10 +145,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (playerCount <= 1)
             {
                 Debug.Log("¶‘¶l”‚ª‚Pl‚É‚È‚Á‚½‚Ì‚ÅƒQ[ƒ€‚ðI—¹‚µ‚Ü‚·");
-                //rocketEffect.SetActive(false);
                 readyButton.SetActive(true);
                 playerReady.SetReady(false);
-                //setPlayerBool.SetPlayerCondition();
                 timeManager.isTimeStart = false;
                 StartCoroutine(WaitPlayersReady());
                 yield break;
