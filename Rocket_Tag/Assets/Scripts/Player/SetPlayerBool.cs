@@ -46,7 +46,10 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         if (isDead)
         {
             resultUI = GameObject.Find("ResultUI");
-            resultUI.SetActive(true);
+            if(resultUI != null)
+            {
+                resultUI.SetActive(true);
+            }
         }
 
         if (playerRankManager != null)
