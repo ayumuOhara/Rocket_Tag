@@ -49,7 +49,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         if (isDead)
         {
-            if(resultUI != null)
+            if (resultUI != null)
             {
                 resultUI.SetActive(true);
             }
@@ -57,11 +57,11 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             {
                 Debug.Log("ResultUI‚ªŽæ“¾‚Å‚«‚Ä‚¢‚Ü‚¹‚ñ");
             }
-        }
 
-        if (playerRankManager != null)
-        {
-            playerRankManager.SetPlayerRank();
+            if (playerRankManager != null)
+            {
+                playerRankManager.SetPlayerRank();
+            }
         }
     }
 
