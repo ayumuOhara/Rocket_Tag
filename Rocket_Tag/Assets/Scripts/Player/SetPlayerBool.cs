@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
+    [SerializeField] GameObject resultUI;
+
     [SerializeField] PlayerMovement playerMovement;
     //RocketEffect rocketEffect;
     public TimeManager timeManager;
-    public ResultScreen resultScreen;
-    public PlayerRankManager playerRankManager;    
+    //public ResultScreen resultScreen;
+    public PlayerRankManager playerRankManager;
 
     [SerializeField] GameObject rocketObj;  // ロケット
 
@@ -17,14 +19,18 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [SerializeField] public bool isDead;    // 死亡判定
     [SerializeField] public bool isStun;    // スタン判定
 
-    private void Start()
+    private void Awake()
     {
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-        resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
+        //resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
-        GameObject result = GameObject.Find("ResultUI");
-        if (result != null)
-            result.SetActive(false);
+        resultUI = GameObject.Find("ResultUI");
+    }
+
+    private void Start()
+    {       
+        if (resultUI != null)
+            resultUI.SetActive(false);
     }
 
     // プレイヤーの状態の初期化
@@ -39,19 +45,24 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetPlayerDead(bool newIsDead)
     {
-        Debug.Log("死亡判定：" + newIsDead);
-
         isDead = newIsDead;
 
-        //if (playerRankManager != null)
-        //{
-        //    playerRankManager.SetPlayerRank();
-        //}
+        if (isDead && photonView.IsMine)
+        {
+            if (resultUI != null)
+            {
+                resultUI.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("ResultUIが取得できていません");
+            }
 
-        //if (resultScreen != null)
-        //{
-        //    resultScreen.ShowMyResult();
-        //}
+            if (playerRankManager != null)
+            {
+                playerRankManager.SetPlayerRank();
+            }
+        }
     }
 
     [PunRPC]
@@ -73,8 +84,8 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         if (hasRocket)
         {
-            Debug.Log("ロケットを受け取ります");
             rocketObj.SetActive(true);
+            Debug.Log("ロケットを受け取ります");
         }
         else
         {

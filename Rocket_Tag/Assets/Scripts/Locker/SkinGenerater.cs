@@ -1,5 +1,7 @@
-using System;
-using System.Collections.Generic;                                                          ////  スキン生成スクリプト  ////
+using System;                                                                              ////  スキン生成スクリプト  ////
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -18,14 +20,17 @@ public class SkinGenerater : MonoBehaviour
     }
     
     static GameObject[] playerSkinPrefab;    //  [0]はなにも着ていない状態を表現するために使っています
-    GameObject skinEntity;
-    Transform playerHipTF;
+    GameObject skinEntityHead;
+    Transform playerTF;
 
+    const string inGameSceneName = "PlayScene";
     const string skinLoadError = "Error:Skin is didn't load";    //  msg for debug--------------
-    const string playerHipLoadError = "Error:Player's hip doesn't exist";    //  msg for debug---------------------
+    const string playerTFLoadError = "Error:Player's hip doesn't exist";    //  msg for debug---------------------
+    const string playerTFIsAssignedThis = "PlayerTF is Assigned [This.transform]";    //  msg for debug---------------------
     const string gameMngNotFound = "Error: GameManager didn't find";    //  msg for debug------------------
     const string couldntGetPlayerList = "Error: PlayerList couldn't get";    //  msg for debug------------------
     const string playerPrefasUnexpectedValue = "Playerprefas value is strange";    //  msg for debug------------------
+    const string scriptProssesFinish = "SkinGenerater.cs's process is stop";    //  msg for debug------------------
 
     static int skinLocation;
 
@@ -34,20 +39,29 @@ public class SkinGenerater : MonoBehaviour
 
     void Start()                                                                           ////  以下処理区  ////
     {
-        Initialize();    //  初期化
+        if (SceneManager.GetActiveScene().name != inGameSceneName)
+        {
+            Initialize();    //  初期化
+        }
     }                                                                                      ////  処理区終了  ////
-    void Initialize()     //  初期化                                                       ////  以下関数区  ////
+async void Initialize()     //  初期化                                                 ////  以下関数区  ////
     {
         if (playerSkinPrefab == null)
         {
-            PlayerSkinLord();
+            await PlayerSkinLord();
         }
-        playerHipTF = GameObject.Find("Hip").GetComponent<Transform>();
-
-        IsNull_Array(playerSkinPrefab, false, null, false, skinLoadError , null);    //  msg for debug---------------------
-        IsNull_Variable(playerHipTF, false, playerHipLoadError);    //  msg for debug------------------------------
-
-        SkinGenerate(playerHipTF);
+        playerTF = GameObject.Find("Player").GetComponent<Transform>();
+        if(IsNull_Variable(playerTF, false, playerTFLoadError))    //  msg for debug------------------------------
+        {
+            Debug.Log(playerTFIsAssignedThis);    //  msg for debug------------
+            playerTF = this.transform;   
+        }
+        if (IsNull_Array(playerSkinPrefab, false, null, false, skinLoadError, null))    //  msg for debug---------------------
+        {
+            Debug.Log(scriptProssesFinish);    //  msg for debug---------------------
+            return;
+        }
+        SkinGenerate(playerTF);
     }
     internal void SkinGenerateWrapper(SkinGenerateProcces skinGenerateProcces)   // ロケットエフェクトのラッパー関数
     {
@@ -60,7 +74,7 @@ public class SkinGenerater : MonoBehaviour
                 }
         }
     }
-    void InGameGenerate()    //  インゲームのスキン生成処理
+    void InGameGenerate()    //  インゲームのスキン生成処理(プレイヤーがインゲームに生成されたタイミングで呼び出される)
     {
         GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         GameObject[] tmpPlayerList = gameManager.GetPlayerList().ToArray();
@@ -70,15 +84,15 @@ public class SkinGenerater : MonoBehaviour
 
         for (int tmpPlayerListLen = 0; tmpPlayerListLen < tmpPlayerList.Length; tmpPlayerListLen++)
         {
-            SkinGenerate(tmpPlayerList[tmpPlayerListLen].transform);
+            SkinGenerate(tmpPlayerList[tmpPlayerListLen].gameObject.transform);
         }
     }
-    void SkinGenerate(Transform playerHipTF_)    //  プレイヤーのスキンの生成
+    void SkinGenerate(Transform playerTF_)    //  プレイヤーのスキンの生成
     {
         int tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", -1);
         int tmpSkinLocation = PlayerPrefs.GetInt("PlayerSkinLocation", -1);
 
-        if (!(IsUnexpectedValue(new int[] {tmpSkinNo, tmpSkinLocation }, new int[] {-1, -1})))
+        if (IsUnexpectedValue(new int[] {tmpSkinNo, tmpSkinLocation }, new int[] {-1, -1}))
         {
             tmpSkinNo = 0;
             tmpSkinLocation = 0;
@@ -90,7 +104,7 @@ public class SkinGenerater : MonoBehaviour
             {
                 case 0:
                     {
-                        skinEntity = Instantiate(playerSkinPrefab[tmpSkinNo], playerHipTF_.Find("Spine/Head"));
+                        skinEntityHead = Instantiate(playerSkinPrefab[tmpSkinNo], playerTF_.Find("root/Hip/Spine/Head"));
                         break;
                     }
             }
@@ -98,12 +112,25 @@ public class SkinGenerater : MonoBehaviour
     }
     bool IsUnexpectedValue(int[] value, int[] unExpectedValue)    //  値チェック
     {
-        for (int arrayNo = value.Length - 1; arrayNo > 0; --arrayNo)
+        for (int arrayNo = value.Length - 1; arrayNo >= 0; --arrayNo)
         {
             if (value[arrayNo] == unExpectedValue[arrayNo])
             {
                 return true;
             }
+        }
+        return false;
+    }
+    bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)    //  変数のヌルチェック、危険性があった場合強制クラッシュ
+    {
+        if (value == null)
+        {
+            if (haveToClach)
+            {
+                Environment.FailFast(errorMsg);    //  クラッシュ
+            }
+            Debug.Log(errorMsg);    //  debug--------------------------
+            return true;
         }
         return false;
     }
@@ -121,7 +148,7 @@ public class SkinGenerater : MonoBehaviour
         }
         if (isCheckPoint)
         {
-            for (int arrayNo = checkPoint.Length - 1; arrayNo > 0; --arrayNo)
+            for (int arrayNo = checkPoint.Length - 1; arrayNo >= 0; arrayNo--)
             {
                 if (value[checkPoint[arrayNo]] == null)
                 {
@@ -134,108 +161,71 @@ public class SkinGenerater : MonoBehaviour
                 Debug.Log(errorMsg_PointNull);    //  debug-------------------
                 return false;
             }
+            Debug.Log(errorMsg_PointNull);    //  debug--------------------------
         }
-        Debug.Log(errorMsg_PointNull);    //  debug--------------------------
         return false;
     }
-    bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)    //  変数のヌルチェック、危険性があった場合強制クラッシュ
+    async Task PlayerSkinLord()     //  プレイヤースキン読み込み
     {
-        if(value == null)
-        {
-            if(haveToClach)
-            {
-                Environment.FailFast(errorMsg);    //  クラッシュ
-            }
-            return true;
-        }
-        Debug.Log(errorMsg);    //  debug--------------------------
-        return false;
-    }
-    async void PlayerSkinLord()     //  プレイヤースキン読み込み
-    {
-        playerSkinPrefab = new GameObject[7];
+        Task[] task;
 
-        var tasks = new List<Task>();
-        string[] skinNames = new string[] { "RedCap", "StrawHat", "Eringi", "Freeza", "Bear", "Star" };
+        AsyncOperationHandle<GameObject>[] playerSkinLordHandle;
 
-        //AsyncOperationHandle<GameObject> loadHandle;
-        foreach (string skinName in skinNames)
-        {
-            var loadHandle  = Addressables.LoadAssetAsync<GameObject>(skinNames);
-            tasks.Add(loadHandle.Task);
-        }
-        await Task.WhenAll(tasks);
+        const int numOfSkin = 7;
+        string[] skinNames = new string[] { "NotWearing", "RedCap", "StrawHat", "Eringi", "Freeza", "Bear", "Star" };
 
-        for (int i = skinNames.Length - 1; i > 0; --i)
-        {
-            var loadHandle = tasks;
-            //playerSkinPrefab[i] = loadHandle.Result;
-        }
+        task = new Task[numOfSkin - 1];
+        playerSkinPrefab = new GameObject[numOfSkin];
+
+        playerSkinLordHandle = new AsyncOperationHandle<GameObject>[numOfSkin];
+
 
         /*  スキンは永久的に使うので開放していない  */
-        AsyncOperationHandle<GameObject> redCapHandle = Addressables.LoadAssetAsync<GameObject>("RedCap");
-        await redCapHandle.Task;
-        playerSkinPrefab[1] = redCapHandle.Result;
-        AsyncOperationHandle<GameObject> strawHatHandle = Addressables.LoadAssetAsync<GameObject>("StrawHat");
-        await strawHatHandle.Task;
-        playerSkinPrefab[2] = strawHatHandle.Result;
-        AsyncOperationHandle<GameObject> eringiHandle = Addressables.LoadAssetAsync<GameObject>("Eringi");
-        await eringiHandle.Task;
-        playerSkinPrefab[3] = eringiHandle.Result;
-        AsyncOperationHandle<GameObject> freezaHandle = Addressables.LoadAssetAsync<GameObject>("Freeza");
-        await freezaHandle.Task;
-        playerSkinPrefab[4] = freezaHandle.Result;
-        AsyncOperationHandle<GameObject> bearHandle = Addressables.LoadAssetAsync<GameObject>("Bear");
-        await bearHandle.Task;
-        playerSkinPrefab[5] = bearHandle.Result;
-        AsyncOperationHandle<GameObject> star = Addressables.LoadAssetAsync<GameObject>("Star");
-        await star.Task;
-        playerSkinPrefab[6] = star.Result;
+        for (int arrayNo = numOfSkin - 1; arrayNo > 0; arrayNo--)
+        {
+            playerSkinLordHandle[arrayNo] = Addressables.LoadAssetAsync<GameObject>(skinNames[arrayNo]);
+            task[arrayNo - 1] = playerSkinLordHandle[arrayNo].Task;
+        }
+        await Task.WhenAll(task);
+        for (int arrayNo = numOfSkin - 1; arrayNo > 0; arrayNo--)
+        {
+            playerSkinPrefab[arrayNo] = playerSkinLordHandle[arrayNo].Result;
+            await Task.Yield();
+        }
     }                                                                                      ////  関数区終了  ////
 }
-/*                                                                                         ////  以下コード保存  ////
-     bool IsUnexpectedValue    //  値チェック
-    (bool isCompare, bool isCheckRange, bool isCheckBigger, int[] value, int[] unExpectedValue, int[] expectedValue_Bigger)
-    {
-        if(isCompare)
-        {
-            if (isCheckRange)
-            {
-                for (int arrayNo = value.Length; arrayNo > 0; --arrayNo)
-                {
-                    if(!(unExpectedValue[arrayNo] < value[arrayNo] && value[arrayNo] < expectedValue_Bigger[arrayNo]))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            if (isCheckBigger)
-            {
-                for(int arrayNo = value.Length; arrayNo > 0; --arrayNo)
-                {
-                    if(value[arrayNo] < unExpectedValue[arrayNo])
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-        if (value[0] == unExpectedValue[0])
-        {
-            return true;
-        }
-        return false;
-    }
-    //void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
-    //{
-    //    playerSkinPrefab = new GameObject[7];
-    //    playerSkinPrefab[1] = Resources.Load<GameObject>("RedCap");
-    //    playerSkinPrefab[2] = Resources.Load<GameObject>("StrawHat");
-    //    playerSkinPrefab[3] = Resources.Load<GameObject>("Eringi");
-    //    playerSkinPrefab[4] = Resources.Load<GameObject>("Freeza");
-    //    playerSkinPrefab[5] = Resources.Load<GameObject>("Bear");
-    //    playerSkinPrefab[6] = Resources.Load<GameObject>("Star");
-    //}      
- */
+////  以下コード保存  ////
+//bool IsUnexpectedValue    //  値チェック
+//(bool isCompare, bool isCheckRange, bool isCheckBigger, int[] value, int[] unExpectedValue, int[] expectedValue_Bigger)
+//{
+//    if (isCompare)
+//    {
+//        if (isCheckRange)
+//        {
+//            for (int arrayNo = value.Length; arrayNo > 0; --arrayNo)
+//            {
+//                if (!(unExpectedValue[arrayNo] < value[arrayNo] && value[arrayNo] < expectedValue_Bigger[arrayNo]))
+//                {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
+//        if (isCheckBigger)
+//        {
+//            for (int arrayNo = value.Length; arrayNo > 0; --arrayNo)
+//            {
+//                if (value[arrayNo] < unExpectedValue[arrayNo])
+//                {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
+//    }
+//    if (value[0] == unExpectedValue[0])
+//    {
+//        return true;
+//    }
+//    return false;
+//}

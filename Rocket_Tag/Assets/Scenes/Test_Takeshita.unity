@@ -5439,6 +5439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debuger: {fileID: 1937437021}
+  skinGanarater: {fileID: 0}
   playerCamera: {fileID: 504838158}
   waitCamera: {fileID: 868873593}
   gameManager: {fileID: 570120166}

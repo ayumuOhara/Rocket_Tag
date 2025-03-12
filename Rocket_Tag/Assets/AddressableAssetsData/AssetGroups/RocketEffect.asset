@@ -10,38 +10,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: PlayerSkin
+  m_Name: RocketEffect
   m_EditorClassIdentifier: 
-  m_GroupName: PlayerSkin
-  m_GUID: f7bd5e203fd8b3141849db93df95168c
+  m_GroupName: RocketEffect
+  m_GUID: d9886f6aa2d0a2147b68589bea9710ce
   m_SerializeEntries:
-  - m_GUID: 7c90d446b76c5844eb294159b7bf1d31
-    m_Address: Star
+  - m_GUID: 2955a154567c79341a079774ace2a434
+    m_Address: ThridRocketFrame
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: aff2fc3c7481bbe49a9e0c0a07f6362a
-    m_Address: Bear
+  - m_GUID: 7a000e2faf254504aac092a72bb80406
+    m_Address: FrameSmoke
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b3356faa1e6e13144a36154c73012aa8
-    m_Address: Freeza
+  - m_GUID: 9449b62aab9b2b4448d8a44f42783d8c
+    m_Address: FirstRocketFrame
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bf71dab401755c14c841c734aa6c50fa
-    m_Address: Eringi
+  - m_GUID: aeac583b900474b45afd2fb88c53881e
+    m_Address: LastRocketFrame
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d4aa6d139f9f48447b13ca0e86f658f8
-    m_Address: RedCap
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fd3f681b423f200498041e0692d14194
-    m_Address: StrawHat
+  - m_GUID: d3b8f89d02db01348a81895fab26d984
+    m_Address: SecondRocketFrame
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -49,5 +44,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: 00bb6419600732146a204053851d83b5, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 3426ae5d9670bfe4dbb05c03ee936e1d, type: 2}
-    - {fileID: 11400000, guid: 361ce09f68d233b4fa86581f3aec92cb, type: 2}
+    - {fileID: 11400000, guid: dcf643877239cfe48b158965a6e0ed8a, type: 2}
+    - {fileID: 11400000, guid: 8dfdcc8473edd8f4bb7c408145b3e300, type: 2}

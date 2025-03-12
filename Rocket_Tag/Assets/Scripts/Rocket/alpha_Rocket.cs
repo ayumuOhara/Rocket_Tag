@@ -48,7 +48,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             yield return null;
         }
         DropOut();
-        isExploding = false;
         yield break;
     }
 
@@ -65,27 +64,36 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     void DropOut()
     {
         Debug.Log("脱落処理開始");
-        
-        PhotonView photonView = player.GetComponent<PhotonView>();
+
+        //SetPlayerBool spb = this.player.GetComponent<SetPlayerBool>();
+        //if (spb.isDead)
+        //{
+        //    Debug.Log("プレイヤーが脱落しているので処理を停止");
+        //    return;
+        //}
+        //else
+        //{
+        //    Debug.Log("プレイヤーが脱落していないので処理を続行");
+        //}
+
+        PhotonView photonView = this.player.GetComponent<PhotonView>();
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
 
         if (PhotonNetwork.IsMasterClient)
         {
             timePhoton.RPC("IsTimeStart", RpcTarget.All, false);
             timeManager.ResetRocketCount();
-        }
 
-        uiLogManager.AddLog("player", UILogManager.LogType.Dead);
+            uiLogManager.AddLog("player", UILogManager.LogType.Dead);
 
-        if (PhotonNetwork.IsMasterClient)
-        {
             Debug.Log("ロケットを配る");
+            photonView.RPC("SetPlayerDead", RpcTarget.All, true);
+            Debug.Log("ロケットを所持しているプレイヤーを脱落");
+
             gameManager.ChooseRocketPlayer();
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
-            photonView.RPC("SetPlayerDead", RpcTarget.All, true);
+            
         }
-
-        isExploding = false;
     }
 
 }

@@ -11,6 +11,9 @@ public class FanRotation : MonoBehaviour
     // 振り子の速度
     public float swingSpeed = 2f;
 
+    // Y軸の回転 (Inspectorで設定可能)
+    public float rotationY = 0f;
+
     private float time;
 
     void Update()
@@ -21,7 +24,7 @@ public class FanRotation : MonoBehaviour
         // 振り子の角度を計算 (sin波で往復運動)
         float angle = centerAngle + Mathf.Sin(time) * swingAngle;
 
-        // 計算された角度を適用
-        transform.localRotation = Quaternion.Euler(0, 0, angle);
+        // 計算された角度を適用 (Y軸の回転をInspectorで調整可能にする)
+        transform.localRotation = Quaternion.Euler(0, rotationY, angle);
     }
 }
