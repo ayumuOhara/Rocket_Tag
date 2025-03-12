@@ -19,12 +19,16 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [SerializeField] public bool isDead;    // Ž€–S”»’è
     [SerializeField] public bool isStun;    // ƒXƒ^ƒ“”»’è
 
-    private void Start()
+    private void Awake()
     {
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         //resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
         resultUI = GameObject.Find("ResultUI");
+    }
+
+    private void Start()
+    {       
         if (resultUI != null)
             resultUI.SetActive(false);
     }
@@ -45,7 +49,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         if (isDead)
         {
-            resultUI = GameObject.Find("ResultUI");
             if(resultUI != null)
             {
                 resultUI.SetActive(true);
