@@ -108,8 +108,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         // プレイヤーリストをキャッシュ
         cachedPlayerList = GetPlayerList();
-        cachedPlayerList.RemoveAll(player =>
-            player.GetComponent<PhotonView>().Owner == currentRocketHolder); // 既存保持者を除外
+        cachedPlayerList.RemoveAll(player => player.GetComponent<PhotonView>().Owner == currentRocketHolder); // 既存保持者を除外
 
         if (cachedPlayerList.Count == 0)
         {

@@ -8,7 +8,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 {
     float explodeRiseSpeed = 20f;
     bool isExploding = false;
-    bool isEnd = false;
 
     GameManager gameManager;
     TimeManager timeManager;
@@ -66,13 +65,15 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         Debug.Log("脱落処理開始");
 
-        if (isExploding) return;
+        SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
+        if (spb.isDead) return;
 
         PhotonView photonView = player.GetComponent<PhotonView>();
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
 
         if (PhotonNetwork.IsMasterClient)
         {
+            photonView.RPC("SetPlayerDead", RpcTarget.All, true);
             timePhoton.RPC("IsTimeStart", RpcTarget.All, false);
             timeManager.ResetRocketCount();
         }
@@ -84,7 +85,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             Debug.Log("ロケットを配る");
             gameManager.ChooseRocketPlayer();
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
-            photonView.RPC("SetPlayerDead", RpcTarget.All, true);
+            
         }
     }
 
