@@ -7,7 +7,7 @@ using Photon.Realtime;
 public class InstantiatePlayer : MonoBehaviourPunCallbacks
 {
     [SerializeField] Debuger debuger;
-    //[SerializeField] SkinGenerater skinGanarater;
+    [SerializeField] SkinGenerater skinGanarater;
     [SerializeField] GameObject playerCamera;
     [SerializeField] GameObject waitCamera;
     [SerializeField] GameManager gameManager;
@@ -63,7 +63,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
         GameObject player = PhotonNetwork.Instantiate("Player", respawnPoint.position, Quaternion.identity);
 
         //debuger.SetComponents(player);
-        //skinGanarater.SkinGenerateWrapper(SkinGenerater.SkinGenerateProcces.IN_GAME_GENERATE);
+        skinGanarater.SkinGenerateWrapper(SkinGenerater.SkinGenerateProcces.IN_GAME_GENERATE);
         // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
         gameManager.playerController = player.GetComponent<PlayerController>();
         gameManager.setPlayerBool = player.GetComponent<SetPlayerBool>();
