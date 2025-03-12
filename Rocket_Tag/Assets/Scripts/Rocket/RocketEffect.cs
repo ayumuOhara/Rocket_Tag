@@ -1,4 +1,5 @@
 using System.Collections;                                                                          ////  ロケットエフェクト生成・切り替え  ////
+using System.Threading.Tasks;
 using Unity.Android.Gradle.Manifest;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -173,12 +174,12 @@ internal class RocketEffect : MonoBehaviour
                     break;
                 }
         }
-        obj.SetActive(flag);
     }
-    void Initialize()    //  初期化                                                                ////  以下関数区  ////
+    async void Initialize()    //  初期化                                                                ////  以下関数区  ////
     {
-        frameEffectPrefab = new GameObject[4];
-        ResourceLord();
+        ChangeState(new FirstStage());
+        
+        await RocketEffectLoad();
         rocket = GameObject.Find("Rocket").GetComponent<Transform>();
         smokeGradient = new Gradient();
         smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.4f) };
@@ -189,9 +190,6 @@ internal class RocketEffect : MonoBehaviour
 
         rocketStage = 0;
         smokeDelTime = 12;
-
-        ChangeState(new FirstStage());
-
     }
     internal void ChangeState(EffectState newState)    //  状態遷移
     {
@@ -277,16 +275,56 @@ internal class RocketEffect : MonoBehaviour
             ChangeState(new PrepareRocket());
         }
     }
-    void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
+    async Task RocketEffectLoad()    //  ロケットエフェクトのロード
     {
-        frameEffectPrefab[0] = Resources.Load<GameObject>("FirstRocketFrame");
-        frameEffectPrefab[1] = Resources.Load<GameObject>("SecondRocketFrame");
-        frameEffectPrefab[2] = Resources.Load<GameObject>("ThirdRocketFrame");
-        frameEffectPrefab[3] = Resources.Load<GameObject>("LastRocketFrame");
-        smokeEffectPrefab = Resources.Load<GameObject>("FrameSmoke");
-    }
-}
-    //void RocketEffectLoad()
+        Task[] loadTasks;
+
+        AsyncOperationHandle<GameObject>[] loadHandles;
+
+        const int numOfFrameEffect = 4;
+        const int numOfSmokeEffect = 1;
+        int loadHandleArrayNo;
+        string[] frameEffectNames = {"FirstRocketFrame","SecondRocketFrame", "ThirdRocketFrame", "LastRocketFrame"};
+        string smokeEffectName;
+
+        loadTasks = new Task[numOfFrameEffect];
+
+        frameEffectPrefab = new GameObject[numOfFrameEffect];
+
+        loadHandles = new AsyncOperationHandle<GameObject>[numOfFrameEffect + numOfSmokeEffect];
+
+        loadHandleArrayNo = 0;    //  同一的な配列の要素数を指定するために使うときもあります。
+        smokeEffectName = "FrameSmoke";
+
+        for(string loadName; loadHandleArrayNo < numOfFrameEffect + numOfSmokeEffect; loadHandleArrayNo++)
+        {
+            if(loadHandleArrayNo < numOfFrameEffect)
+            {
+                loadHandles[loadHandleArrayNo] = Addressables.LoadAssetAsync<GameObject>(frameEffectNames[loadHandleArrayNo]);
+            }
+            else
+            {
+                loadHandles[loadHandleArrayNo] = Addressables.LoadAssetAsync<GameObject>(smokeEffectName);
+            }
+            loadTasks[loadHandleArrayNo] = loadHandles[loadHandleArrayNo].Task;
+        }
+        await Task.WhenAll(loadTasks);
+        for(loadHandleArrayNo = 0; loadHandleArrayNo < numOfFrameEffect + numOfSmokeEffect; loadHandleArrayNo++)
+        {
+            if (loadHandleArrayNo < numOfFrameEffect)
+            {
+                frameEffectPrefab[loadHandleArrayNo] = loadHandles[loadHandleArrayNo].Result;
+            }
+            else
+            {
+                smokeEffectPrefab = loadHandles[loadHandleArrayNo].Result;
+            }
+            await Task.Yield();
+        }
+    }                                                                                              ////  以下関数区  ////
+}                                                                                                 
+                                                                                                   ////  以下コード保存場所  ////
+/*    //void RocketEffectLoad()
     //{
     //    Task[] task;
 
@@ -302,15 +340,27 @@ internal class RocketEffect : MonoBehaviour
     //    string[] skinNames = new string[] { "NotWearing", "RedCap", "StrawHat", "Eringi", "Freeza", "Bear" };
 
     //    /*  スキンは永久的に使うので開放していない  */
-    //    for (int arrayNo = numOfSkin - 1; arrayNo > 0; arrayNo--)
-    //    {
-    //        playerSkinLordHandle[arrayNo] = Addressables.LoadAssetAsync<GameObject>(skinNames[arrayNo]);
-    //        task[arrayNo - 1] = playerSkinLordHandle[arrayNo].Task;
-    //    }
-    //    await Task.WhenAll(task);
-    //    for (int arrayNo = numOfSkin - 1; arrayNo > 0; arrayNo--)
-    //    {
-    //        playerSkinPrefab[arrayNo] = playerSkinLordHandle[arrayNo].Result;
-    //        await Task.Yield();
-    //    }
-    //}                                                                                                   ////  関数区終了  ////
+//    for (int arrayNo = numOfSkin - 1; arrayNo > 0; arrayNo--)
+//    {
+//        playerSkinLordHandle[arrayNo] = Addressables.LoadAssetAsync<GameObject>(skinNames[arrayNo]);
+//        task[arrayNo - 1] = playerSkinLordHandle[arrayNo].Task;
+//    }
+//    await Task.WhenAll(task);
+//    for (int arrayNo = numOfSkin - 1; arrayNo > 0; arrayNo--)
+//    {
+//        playerSkinPrefab[arrayNo] = playerSkinLordHandle[arrayNo].Result;
+//        await Task.Yield();
+//    }
+//
+//
+//void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
+//{
+//    frameEffectPrefab[0] = Resources.Load<GameObject>("FirstRocketFrame");
+//    frameEffectPrefab[1] = Resources.Load<GameObject>("SecondRocketFrame");
+//    frameEffectPrefab[2] = Resources.Load<GameObject>("ThirdRocketFrame");
+//    frameEffectPrefab[3] = Resources.Load<GameObject>("LastRocketFrame");
+//    smokeEffectPrefab = Resources.Load<GameObject>("FrameSmoke");
+//}
+
+
+
