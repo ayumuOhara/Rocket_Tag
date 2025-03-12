@@ -143,10 +143,10 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (playerCount <= 1)
             {
                 Debug.Log("¶‘¶l”‚ª‚Pl‚É‚È‚Á‚½‚Ì‚ÅƒQ[ƒ€‚ðI—¹‚µ‚Ü‚·");
-                readyButton.SetActive(true);
-                playerReady.SetReady(false);
-                timeManager.isTimeStart = false;
-                StartCoroutine(WaitPlayersReady());
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.LoadLevel("Result");
+                }
                 yield break;
             }
             yield return null;
