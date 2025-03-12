@@ -66,7 +66,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         Debug.Log("脱落処理開始");
 
-        if (isEnd) return;
+        if (isExploding) return;
 
         PhotonView photonView = player.GetComponent<PhotonView>();
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
@@ -86,8 +86,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
             photonView.RPC("SetPlayerDead", RpcTarget.All, true);
         }
-
-        isEnd = true;
     }
 
 }
