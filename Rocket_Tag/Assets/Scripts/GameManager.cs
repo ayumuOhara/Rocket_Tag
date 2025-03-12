@@ -104,8 +104,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void ChooseRocketPlayer()
     {
-        Debug.Log("ロケット保持者を抽選します");
-
         // プレイヤーリストをキャッシュ
         cachedPlayerList = GetPlayerList();
         cachedPlayerList.RemoveAll(player => player.GetComponent<PhotonView>().Owner == currentRocketHolder); // 既存保持者を除外
@@ -172,8 +170,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
             return spb != null && spb.isDead;
         });
-
-        Debug.Log($"プレイヤーの生存リスト；【{players.Count}】");
 
         return players;
     }
