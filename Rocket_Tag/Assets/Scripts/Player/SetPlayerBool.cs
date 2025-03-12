@@ -53,13 +53,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         if (playerRankManager != null)
         {
             playerRankManager.SetPlayerRank();
-            //playerRankManager.ShowMyResult();
         }
-
-        //if (resultScreen != null)
-        //{
-        //    resultScreen.ShowMyResult();
-        //}
     }
 
     [PunRPC]
@@ -81,8 +75,8 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
         if (hasRocket)
         {
-            Debug.Log("ロケットを受け取ります");
             rocketObj.SetActive(true);
+            Debug.Log("ロケットを受け取ります");
         }
         else
         {
