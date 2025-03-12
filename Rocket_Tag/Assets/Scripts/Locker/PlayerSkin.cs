@@ -50,7 +50,6 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     {
         SceneManager.sceneUnloaded += SaveSkinNo;
         skinPrefab = SkinGenerater._SkinPrefab;
-        //ResourceLord();
         headTF     = GameObject.Find("Head"      ).GetComponent<Transform>();
         undress    = GameObject.Find("Undress"   ).GetComponent<Button>();
         redCap     = GameObject.Find("RedCap"    ).GetComponent<Button>();
@@ -86,15 +85,15 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     }
     void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
     {
-        if (skinPrefab == null)
-        {
-            skinPrefab[1] = Resources.Load<GameObject>("RedCap");
-            skinPrefab[2] = Resources.Load<GameObject>("StrawHat");
-            skinPrefab[3] = Resources.Load<GameObject>("Eringi");
-            skinPrefab[4] = Resources.Load<GameObject>("Freeza");
-            skinPrefab[5] = Resources.Load<GameObject>("Bear");
-            skinPrefab[6] = Resources.Load<GameObject>("Star");
-        }
+        //if (skinPrefab == null)
+        //{
+        //    skinPrefab[1] = Resources.Load<GameObject>("RedCap");
+        //    skinPrefab[2] = Resources.Load<GameObject>("StrawHat");
+        //    skinPrefab[3] = Resources.Load<GameObject>("Eringi");
+        //    skinPrefab[4] = Resources.Load<GameObject>("Freeza");
+        //    skinPrefab[5] = Resources.Load<GameObject>("Bear");
+        //    skinPrefab[6] = Resources.Load<GameObject>("Star");
+        //}
     }
     void SkinGenerate(int skinLocation_)    //  スキンの生成
     {
