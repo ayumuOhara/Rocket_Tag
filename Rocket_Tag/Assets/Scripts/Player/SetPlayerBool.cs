@@ -47,7 +47,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {
         isDead = newIsDead;
 
-        if (isDead)
+        if (isDead && photonView.IsMine)
         {
             if (resultUI != null)
             {
