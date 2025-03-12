@@ -171,8 +171,8 @@ async void Initialize()     //  èâä˙âª                                          
 
         AsyncOperationHandle<GameObject>[] playerSkinLordHandle;
 
-        const int numOfSkin = 6;
-        string[] skinNames = new string[] { "NotWearing", "RedCap", "StrawHat", "Eringi", "Freeza", "Bear" };
+        const int numOfSkin = 7;
+        string[] skinNames = new string[] { "NotWearing", "RedCap", "StrawHat", "Eringi", "Freeza", "Bear", "Star" };
 
         task = new Task[numOfSkin - 1];
         playerSkinPrefab = new GameObject[numOfSkin];
