@@ -50,6 +50,10 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             {
                 resultUI.SetActive(true);
             }
+            else
+            {
+                Debug.Log("ResultUI‚ªŽæ“¾‚Å‚«‚Ä‚¢‚Ü‚¹‚ñ");
+            }
         }
 
         if (playerRankManager != null)
