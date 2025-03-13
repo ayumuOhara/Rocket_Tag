@@ -7,13 +7,11 @@ public class PageSwitcher : MonoBehaviour
     [SerializeField] private GameObject secondSection;
     [SerializeField] private GameObject thirdSection;
     [SerializeField] private GameObject fourSection;
+    [SerializeField] private GameObject fiveSection;
     [SerializeField] private Button forwardButton;
     [SerializeField] private Button backButton;
     [SerializeField] private Text statusText;
-    [SerializeField] private GameObject onePageImage;
-    [SerializeField] private GameObject twoPageImage;
-    [SerializeField] private GameObject threePageImage;
-    [SerializeField] private GameObject fourPageImage;
+    [SerializeField] private Text pageText;
 
 
     private GameObject currentSection;
@@ -42,6 +40,10 @@ public class PageSwitcher : MonoBehaviour
         {
             ShowFourSection();
         }
+        else if (currentSection == fourSection)
+        {
+            ShowFiveSection();
+        }
     }
 
     public void GoBackSection()
@@ -58,12 +60,17 @@ public class PageSwitcher : MonoBehaviour
         {
             ShowThirdSection();
         }
+        else if (currentSection == fiveSection)
+        {
+            ShowFourSection();
+        }
     }
 
     private void ShowFirstSection()
     {
         currentSection = firstSection; // 現在のセクションを更新
         NewText();
+        pageText.text = "1/5";
 
         forwardButton.gameObject.SetActive(true); // 次へ進むボタンを表示
         backButton.gameObject.SetActive(false);   // 戻るボタンを非表示
@@ -72,17 +79,14 @@ public class PageSwitcher : MonoBehaviour
         secondSection.SetActive(false);
         thirdSection.SetActive(false);
         fourSection.SetActive(false);
-
-        onePageImage.SetActive(true);
-        twoPageImage.SetActive(false);
-        threePageImage.SetActive(false);
-        fourPageImage.SetActive(false);
+        fiveSection.SetActive(false);
     }
 
     private void ShowSecondSection()
     {
         currentSection = secondSection; // 現在のセクションを更新
         NewText();
+        pageText.text = "2/5";
 
         forwardButton.gameObject.SetActive(true); // 次へ進むボタンを表示
         backButton.gameObject.SetActive(true);    // 戻るボタンを表示
@@ -91,17 +95,14 @@ public class PageSwitcher : MonoBehaviour
         secondSection.SetActive(true);
         thirdSection.SetActive(false);
         fourSection.SetActive(false);
-
-        onePageImage.SetActive(false);
-        twoPageImage.SetActive(true);
-        threePageImage.SetActive(false);
-        fourPageImage.SetActive(false);
+        fiveSection.SetActive(false);
     }
 
     private void ShowThirdSection()
     {
         currentSection = thirdSection; // 現在のセクションを更新
         NewText();
+        pageText.text = "3/5";
 
         forwardButton.gameObject.SetActive(true); // 次へ進むボタンを非表示
         backButton.gameObject.SetActive(true);     // 戻るボタンを表示
@@ -110,16 +111,28 @@ public class PageSwitcher : MonoBehaviour
         secondSection.SetActive(false);
         thirdSection.SetActive(true);
         fourSection.SetActive(false);
-
-        onePageImage.SetActive(false);
-        twoPageImage.SetActive(false);
-        threePageImage.SetActive(true);
-        fourPageImage.SetActive(false);
+        fiveSection.SetActive(false);
     }
     private void ShowFourSection()
     {
         currentSection = fourSection; // 現在のセクションを更新
         NewText();
+        pageText.text = "4/5";
+
+        forwardButton.gameObject.SetActive(true); // 次へ進むボタンを非表示
+        backButton.gameObject.SetActive(true);     // 戻るボタンを表示
+
+        firstSection.SetActive(false);
+        secondSection.SetActive(false);
+        thirdSection.SetActive(false);
+        fourSection.SetActive(true);
+        fiveSection.SetActive(false);
+    }
+    private void ShowFiveSection()
+    {
+        currentSection = fiveSection; // 現在のセクションを更新
+        NewText();
+        pageText.text = "5/5";
 
         forwardButton.gameObject.SetActive(false); // 次へ進むボタンを非表示
         backButton.gameObject.SetActive(true);     // 戻るボタンを表示
@@ -127,14 +140,9 @@ public class PageSwitcher : MonoBehaviour
         firstSection.SetActive(false);
         secondSection.SetActive(false);
         thirdSection.SetActive(false);
-        fourSection.SetActive(true);
-
-        onePageImage.SetActive(false);
-        twoPageImage.SetActive(false);
-        threePageImage.SetActive(false);
-        fourPageImage.SetActive(true);
+        fourSection.SetActive(false);
+        fiveSection.SetActive(true);
     }
-
     public void NewText()
     {
         if(currentSection == firstSection) //チュートリアルテキスト（１ページ目）
@@ -146,16 +154,22 @@ public class PageSwitcher : MonoBehaviour
         else if(currentSection == secondSection)//チュートリアルテキスト（２ページ目）
         {
             statusText.text =
-                "移動方法はWASDと矢印キーの両方に対応。\nマウスを動かすと視点が変わり、\nALTキーを押すとマウスカーソルが出てきて\n設定を開いたりできるぞ。\n"//ここに入力
+                "移動方法はWASDキー。\nまたは矢印キーの両方に対応。\n"//ここに入力
                 ;
         }
         else if(currentSection == thirdSection)//チュートリアルテキスト（３ページ目）
         {
             statusText.text =
-                "追い詰められてもスキルで逆転。\nEキーを押して、鬼から逃げろ‼\n鬼をなすり付けろ‼\n"//ここに入力
+                "マウスを動かすと視点が変わり、\nALTキーを押すとマウスカーソルが出てきて\n設定を開いたりできるぞ。\n"//ここに入力
                 ;
         }
         else if (currentSection == fourSection)//チュートリアルテキスト（４ページ目）
+        {
+            statusText.text =
+                "追い詰められてもスキルで逆転。\nEキーを押して、鬼から逃げろ‼\n鬼をなすり付けろ‼\n"//ここに入力
+                ;
+        }
+        else if (currentSection == fiveSection)//チュートリアルテキスト（５ページ目）
         {
             statusText.text =
                 "マップ内では、定期的にイベントが発生。\nプレイヤーにランダムな効果を与える。\n何が起こるかは君次第‼\n"//ここに入力
