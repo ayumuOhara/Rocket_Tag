@@ -179,7 +179,6 @@ async void Initialize()     //  初期化                                          
 
         playerSkinLordHandle = new AsyncOperationHandle<GameObject>[numOfSkin];
 
-
         /*  スキンは永久的に使うので開放していない  */
         for (int arrayNo = numOfSkin - 1; arrayNo > 0; arrayNo--)
         {
