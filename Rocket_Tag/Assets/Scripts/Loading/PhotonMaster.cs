@@ -13,8 +13,19 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     public Image cover;
     private const int MAX_PLAYER_PER_ROOM = 4;
     bool isMatching = false; // マッチング中かどうか
+    public static PhotonMaster instance;
+
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         DontDestroyOnLoad(gameObject);
         PhotonNetwork.AutomaticallySyncScene = true;
     }
