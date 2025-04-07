@@ -31,7 +31,10 @@ public class BGMController : MonoBehaviour
             case "Lobby":
                  bgmManager.PlayBGM(BGMManager.BGMType.BGM_2);
                 break;
-            case "Test_Takeshita":
+            case "Test_Shiromoto":
+                bgmManager.PlayBGM(BGMManager.BGMType.BGM_2);
+                break;
+            case "PlayScene":
                  bgmManager.PlayBGM(BGMManager.BGMType.BGM_3);
                 break;
         }

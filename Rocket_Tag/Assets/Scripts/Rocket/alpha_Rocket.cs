@@ -92,7 +92,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
             gameManager.ChooseRocketPlayer();
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
-            
         }
     }
 
