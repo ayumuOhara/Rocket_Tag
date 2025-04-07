@@ -39,6 +39,7 @@ public class SkinGenerater : MonoBehaviour
 
     void Start()                                                                           ////  以下処理区  ////
     {
+        Debug.Log(42);
         if (SceneManager.GetActiveScene().name != inGameSceneName)
         {
             Initialize();    //  初期化
@@ -62,9 +63,11 @@ async void Initialize()     //  初期化                                          
             return;
         }
         SkinGenerate(playerTF);
+        Debug.Log(65);
     }
     internal void SkinGenerateWrapper(SkinGenerateProcces skinGenerateProcces)   // ロケットエフェクトのラッパー関数
     {
+        Debug.Log(69);
         switch (skinGenerateProcces)
         {
             case SkinGenerateProcces.IN_GAME_GENERATE:    //  インゲームスキン生成処理群
