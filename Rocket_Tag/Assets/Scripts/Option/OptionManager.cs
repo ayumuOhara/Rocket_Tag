@@ -6,10 +6,27 @@ public class OptionManager : MonoBehaviour
 {
     [SerializeField] GameObject optionPanel;
 
+     void Update()
+    {
+        //オプション画面の表示切り替え
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(optionPanel.activeSelf)
+            {
+                HideOptionPanel();
+            }
+            else
+            {
+                ShowOptionPanel();
+            }
+        }
+    }
+
     //オプション画面を表示
     public void ShowOptionPanel()
     {
         optionPanel.SetActive(true);
+        Cursor.visible = true;        //マウスカーソルを表示
         AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
     }
 
@@ -17,6 +34,7 @@ public class OptionManager : MonoBehaviour
     public void HideOptionPanel()
     {
         optionPanel.SetActive(false);
+        Cursor.visible = false;      //マウスカーソルを非表示
     }
     //ゲーム終了
     public void QuitGame()
