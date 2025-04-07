@@ -1,7 +1,6 @@
 using System;
 using System.Collections;                                                                          ////  ロケットエフェクト生成・切り替え  ////
 using System.Threading.Tasks;
-//using Unity.Android.Gradle.Manifest;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -78,7 +77,7 @@ internal class LastStage : EffectState    //  ロケット最終段階
     }
     public void Update(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SMOKE_DIFFUSION);    //  煙を取得
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SMOKE_DIFFUSION);    //  煙を拡散
     }
     public void Exit(RocketEffect rocketEffect)
     {
@@ -239,7 +238,7 @@ internal class RocketEffect : MonoBehaviour
                         Debug.Log(rocketIsAssginedThis);    //  msg for debug--------------------
                         rocket = this.transform;
                     }
-                    if (rocket != null && currentState is PrepareRocket)
+                    if (currentState is PrepareRocket)
                     {
                         ChangeState(new FirstStage());
                     }
