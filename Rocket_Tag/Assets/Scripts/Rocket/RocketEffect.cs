@@ -1,7 +1,7 @@
 using System;
 using System.Collections;                                                                          ////  ロケットエフェクト生成・切り替え  ////
 using System.Threading.Tasks;
-using Unity.Android.Gradle.Manifest;
+//using Unity.Android.Gradle.Manifest;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
