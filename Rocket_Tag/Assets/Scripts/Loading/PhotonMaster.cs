@@ -17,16 +17,6 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        if(instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        DontDestroyOnLoad(gameObject);
         PhotonNetwork.AutomaticallySyncScene = true;
     }
     // Start is called before the first frame update
