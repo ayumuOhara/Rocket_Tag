@@ -14,6 +14,8 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
         uiLogManager = GameObject.Find("UILogManager").GetComponent<UILogManager>();
         setPlayerBool = GetComponent<SetPlayerBool>();
         observeDistance = GetComponent<ObserveDistance>();
+
+        rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
     }
 
     // タッチ/投擲アクション
