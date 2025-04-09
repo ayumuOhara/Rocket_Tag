@@ -7,13 +7,27 @@ public class Test : MonoBehaviour
 {
     GameObject[] frameEffectPrefab;
     GameObject smokeEffectPrefab;
+    public GameObject a;
+    GameObject parent;
+    public GameObject P1;
     async void Start()
     {
        await RocketEffectLoad();
     }
     void Update()
     {
-        
+        if(Input.GetMouseButtonDown(0))
+        {
+            if(parent == P1)
+            {
+                parent = GameObject.Find("Cube");
+            }
+            else if(parent != P1)
+            {
+                parent = P1;
+            }
+            GameObject b = Instantiate(a, parent.transform);
+        }
     }
     async Task RocketEffectLoad()    //  ロケットエフェクトのロード
     {
