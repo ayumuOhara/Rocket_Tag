@@ -345,7 +345,7 @@ internal class RocketEffect : MonoBehaviour
         string[] frameEffectNames = {"FirstRocketFrame","SecondRocketFrame", "ThirdRocketFrame", "LastRocketFrame"};
         string smokeEffectName;
 
-        loadTasks = new Task[numOfFrameEffect];
+        loadTasks = new Task[numOfFrameEffect + numOfSmokeEffect];
 
         frameEffectPrefab = new GameObject[numOfFrameEffect];
 
