@@ -177,7 +177,7 @@ internal class RocketEffect : MonoBehaviour
     async void Initialize()
     {
         await RocketEffectLoad();
-        rocket = GameObject.Find("Rocket").GetComponent<Transform>();
+        rocket = GameObject.Find("Cylinder").GetComponent<Transform>();
         smokeGradient = new Gradient();
         smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.4f) };
         timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
