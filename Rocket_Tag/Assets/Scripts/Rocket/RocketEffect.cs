@@ -163,7 +163,7 @@ internal class RocketEffect : MonoBehaviour
     {
         currentState.Update(this);
     }                                                                                              ////  処理区終了  ////
-    void SetSetActive(bool flag, GameObject obj)    //  SetActiveを設定する
+    void SetSetActive(bool flag, GameObject obj)    //  SetActiveを設定する                        ////  以下関数区  ////
     {
         if (flag != obj.activeSelf)
         {
@@ -174,15 +174,15 @@ internal class RocketEffect : MonoBehaviour
             obj.SetActive(false);
         }
     }
-    async void Initialize()    //  初期化                                                                ////  以下関数区  ////
+    async void Initialize()
     {
-        ChangeState(new FirstStage());
-        
         await RocketEffectLoad();
-        rocket = GameObject.Find("Rocket").GetComponent<Transform>();
+        rocket = GameObject.Find("Cylinder").GetComponent<Transform>();
         smokeGradient = new Gradient();
         smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.4f) };
         timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+
+        ChangeState(new FirstStage());
 
         frameEffectOffset = new Vector3(0, -0.6f, 0.5f);
         smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
@@ -258,7 +258,7 @@ internal class RocketEffect : MonoBehaviour
         {
             case 0:
                 {
-                    if (frameEffectEntity != null)
+                    if (!IsNull_Variable(frameEffectEntity, false, ""))
                     {
                         Destroy(frameEffectEntity);
                     }
@@ -342,10 +342,10 @@ internal class RocketEffect : MonoBehaviour
         const int numOfFrameEffect = 4;
         const int numOfSmokeEffect = 1;
         int loadHandleArrayNo;
-        string[] frameEffectNames = {"FirstRocketFrame","SecondRocketFrame", "ThirdRocketFrame", "LastRocketFrame"};
+        string[] frameEffectNames = { "FirstRocketFrame", "SecondRocketFrame", "ThirdRocketFrame", "LastRocketFrame" };
         string smokeEffectName;
 
-        loadTasks = new Task[numOfFrameEffect];
+        loadTasks = new Task[numOfFrameEffect + numOfSmokeEffect];
 
         frameEffectPrefab = new GameObject[numOfFrameEffect];
 
@@ -354,9 +354,9 @@ internal class RocketEffect : MonoBehaviour
         loadHandleArrayNo = 0;    //  同一的な配列の要素数を指定するために使うときもあります
         smokeEffectName = "FrameSmoke";
 
-        for(string loadName; loadHandleArrayNo < numOfFrameEffect + numOfSmokeEffect; loadHandleArrayNo++)
+        for (; loadHandleArrayNo < numOfFrameEffect + numOfSmokeEffect; loadHandleArrayNo++)
         {
-            if(loadHandleArrayNo < numOfFrameEffect)
+            if (loadHandleArrayNo < numOfFrameEffect)
             {
                 loadHandles[loadHandleArrayNo] = Addressables.LoadAssetAsync<GameObject>(frameEffectNames[loadHandleArrayNo]);
             }
@@ -367,7 +367,7 @@ internal class RocketEffect : MonoBehaviour
             loadTasks[loadHandleArrayNo] = loadHandles[loadHandleArrayNo].Task;
         }
         await Task.WhenAll(loadTasks);
-        for(loadHandleArrayNo = 0; loadHandleArrayNo < numOfFrameEffect + numOfSmokeEffect; loadHandleArrayNo++)
+        for (loadHandleArrayNo = 0; loadHandleArrayNo < numOfFrameEffect + numOfSmokeEffect; loadHandleArrayNo++)
         {
             if (loadHandleArrayNo < numOfFrameEffect)
             {
@@ -378,8 +378,8 @@ internal class RocketEffect : MonoBehaviour
                 smokeEffectPrefab = loadHandles[loadHandleArrayNo].Result;
             }
         }
-    }                                                                                              ////  以下関数区  ////
-}                                                                                                 
+    }
+}
                                                                                                    ////  以下コード保存場所  ////
 /*    //void RocketEffectLoad()
     //{
