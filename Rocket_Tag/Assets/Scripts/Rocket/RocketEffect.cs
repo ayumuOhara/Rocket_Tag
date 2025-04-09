@@ -176,13 +176,13 @@ internal class RocketEffect : MonoBehaviour
     }
     async void Initialize()
     {
-        ChangeState(new FirstStage());
-        
         await RocketEffectLoad();
         rocket = GameObject.Find("Rocket").GetComponent<Transform>();
         smokeGradient = new Gradient();
         smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.4f) };
         timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+
+        ChangeState(new FirstStage());
 
         frameEffectOffset = new Vector3(0, -0.6f, 0.5f);
         smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
