@@ -1,5 +1,6 @@
 using System;
 using System.Collections;                                                                          ////  ロケットエフェクト生成・切り替え  ////
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -117,6 +118,7 @@ internal class RocketEffect : MonoBehaviour
 
     EffectState currentState;
 
+    //Task effectLoadTask;    //  for debug--------------------------
     GameObject[] frameEffectPrefab;
     GameObject frameEffectEntity;
     GameObject smokeEffectPrefab;
@@ -134,6 +136,7 @@ internal class RocketEffect : MonoBehaviour
     float smokeDelTime;
     int rocketStage;
     bool didFalsed;    //  ロケット生成にタイミングを合わせるためのフラグ
+    bool isEffectLoaded;
     const string rocketNotFound = "Error:Rocket Not Found";    //  msg for debug--------------
     const string rocketIsAssginedThis = "Rocket variable is assigned [this.transform]";
     const string couldntGetTimemgr = "Error:Couldn't Get timeMgr";    //  msg for debug---------------------
@@ -148,20 +151,36 @@ internal class RocketEffect : MonoBehaviour
 
     void OnEnable()                                                                                ////  以下処理区  ////
     {
-        /*  処理順を合わせるため最初にSetActive(false)にする  */
-        SetSetActive(didFalsed, this.gameObject);
-        if (didFalsed)
-        {
-            Initialize();    //  初期化
-        }
+        /*  for debug---------------------------------------  */
+        ///*  処理順を合わせるため最初にSetActive(false)にする  */
+        //SetSetActive(didFalsed, this.gameObject);
+        //if (didFalsed)
+        //{
+        //    Initialize();    //  初期化
+        //}
+        Initialize();
     }
-    void OnDisable()
-    {
-        didFalsed = true;
-    }
+    //void OnDisable()
+    //{
+    //    didFalsed = true;
+    //}
+    //void Start()
+    //{
+    /*  for debug--------------------------------  */
+    //Debug.Log("Start entire");
+    //while (!effectLoadTask.IsCompleted)
+    //{
+
+    //}
+    //}
     void Update()
     {
-        currentState.Update(this);
+        //Debug.Log(isloaded);
+        //Debug.Log(frameEffectPrefab[3].name);
+        if (isEffectLoaded)
+        {
+            currentState.Update(this);
+        }
     }                                                                                              ////  処理区終了  ////
     void SetSetActive(bool flag, GameObject obj)    //  SetActiveを設定する                        ////  以下関数区  ////
     {
@@ -176,9 +195,13 @@ internal class RocketEffect : MonoBehaviour
     }
     async void Initialize()
     {
+        /*  for debug-----------------------  */
+        //effectLoadTask = RocketEffectLoad();
+        //await effectLoadTask;
         await RocketEffectLoad();
         rocket = GameObject.Find("Cylinder").GetComponent<Transform>();
         smokeGradient = new Gradient();
+
         smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.4f) };
         timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 
@@ -335,6 +358,7 @@ internal class RocketEffect : MonoBehaviour
     }
     async Task RocketEffectLoad()    //  ロケットエフェクトのロード
     {
+        Debug.Log("TaskEntire");
         Task[] loadTasks;
 
         AsyncOperationHandle<GameObject>[] loadHandles;
@@ -378,6 +402,7 @@ internal class RocketEffect : MonoBehaviour
                 smokeEffectPrefab = loadHandles[loadHandleArrayNo].Result;
             }
         }
+        isEffectLoaded = true;
     }
 }
                                                                                                    ////  以下コード保存場所  ////

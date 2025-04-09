@@ -10,6 +10,7 @@ public class Test : MonoBehaviour
     public GameObject a;
     GameObject parent;
     public GameObject P1;
+    int njj = 0;
     async void Start()
     {
        await RocketEffectLoad();
@@ -26,7 +27,8 @@ public class Test : MonoBehaviour
             {
                 parent = P1;
             }
-            GameObject b = Instantiate(a, parent.transform);
+            GameObject b = Instantiate(frameEffectPrefab[njj], parent.transform);
+            njj++;
         }
     }
     async Task RocketEffectLoad()    //  ロケットエフェクトのロード
@@ -38,7 +40,7 @@ public class Test : MonoBehaviour
         const int numOfFrameEffect = 4;
         const int numOfSmokeEffect = 1;
         int loadHandleArrayNo;
-        string[] frameEffectNames = { "FirstRocketFrame", "SecondRocketFrame", "ThridRocketFrame", "LastRocketFrame" };
+        string[] frameEffectNames = { "FirstRocketFrame", "SecondRocketFrame", "ThirdRocketFrame", "LastRocketFrame" };
         string smokeEffectName;
 
         loadTasks = new Task[numOfFrameEffect + numOfSmokeEffect];

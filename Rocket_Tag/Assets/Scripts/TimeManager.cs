@@ -17,18 +17,18 @@ public class TimeManager : MonoBehaviourPunCallbacks
     float initialTime = 100;
 
     float posessingTime = 0;
-    float secToExplode  = 0;
+    float secToExplode = 0;
 
-    float[] decreaseValue  = { 1.0f, 3.0f, 6.0f };
+    float[] decreaseValue = { 1.0f, 3.0f, 6.0f };
     float[] decreaseUpTime = { 10, 20, 30 };
-    float[] stageUpTime = {100, 70, 30, 7};
+    float[] stageUpTime = { 100, 70, 30, 7 };
 
     float floatStartTime = 2.2f;
     public bool isTimeStart = false;
 
     public PhotonView timerView;
     [SerializeField] TextMeshProUGUI rocketCountText;
-    RocketEffect rocketEffect;
+    [SerializeField] RocketEffect rocketEffect;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
