@@ -41,8 +41,9 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
 
                 targetPhotonView.RPC("SetHasRocket", RpcTarget.All, !otherPlayer.hasRocket);
                 targetPhotonView.RPC("SetIsStun", RpcTarget.All, true);
-                //    ロケットを取得
+                //    ロケットe\エフェクトを生成
                 rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+                rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
             }
         }
     }
