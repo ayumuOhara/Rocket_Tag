@@ -21,7 +21,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
 
     float[] decreaseValue = { 1.0f, 3.0f, 6.0f };
     float[] decreaseUpTime = { 10, 20, 30 };
-    float[] stageUpTime = { 100, 70, 30, 7 };
+    float[] stageUpTime = { 100, 70, 30, 7 };    //  ‚P’iŠK–Ú‚É‚È‚éƒ^ƒCƒ~ƒ“ƒO‚à•\Œ»‚µ‚Ä‚¢‚é
 
     float floatStartTime = 2.2f;
     public bool isTimeStart = false;
@@ -46,7 +46,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
         {
             CountDown();
             CheckForLevelUp();
-            Debug.Log($"yŠÔ‚ª0•bˆÈ‰º‚©zF{IsLimitOver()}");
+            //Debug.Log($"yŠÔ‚ª0•bˆÈ‰º‚©zF{IsLimitOver()}");
         }        
     }
 
