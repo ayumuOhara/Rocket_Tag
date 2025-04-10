@@ -17,7 +17,8 @@ internal class FirstStage : EffectState   //  ロケット1段階目
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);  //  一段階目のエフェクト生成
+        Debug.Log("FFFFFFFF");
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -35,8 +36,8 @@ internal class SecondStage : EffectState    //  ロケット2段階目
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        Debug.Log(1);
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
+        Debug.Log("SSSSSSSSSS");
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);  //  2段階目のエフェクト生成
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -54,8 +55,8 @@ internal class ThirdStage : EffectState    //  ロケット3段階目
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        Debug.Log(2);
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);    //  最終段階のエフェクト生成
+        Debug.Log("TTTTTTTTTTT");
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);    //  3段階目のエフェクト生成
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -73,6 +74,7 @@ internal class LastStage : EffectState    //  ロケット最終段階
 {
     public void Enter(RocketEffect rocketEffect)
     {
+        Debug.Log("LLLLLLLL");
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);    //  最終段階のエフェクト生成
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_SMOKE);    //  煙を取得
     }
@@ -182,6 +184,7 @@ internal class RocketEffect : MonoBehaviour
         {
             currentState.Update(this);
         }
+        //Debug.Log(rocketStage);    //  for debug-----------------------------------
     }                                                                                              ////  処理区終了  ////
     void SetSetActive(bool flag, GameObject obj)    //  SetActiveを設定する                        ////  以下関数区  ////
     {
@@ -199,6 +202,7 @@ internal class RocketEffect : MonoBehaviour
         /*  for debug-----------------------  */
         //effectLoadTask = RocketEffectLoad();
         //await effectLoadTask;
+        rocketStage = 0;
         await RocketEffectLoad();
         rocket = GameObject.Find("Cylinder").GetComponent<Transform>();
         smokeGradient = new Gradient();
@@ -211,10 +215,10 @@ internal class RocketEffect : MonoBehaviour
         frameEffectOffset = new Vector3(0, -0.6f, 0.5f);
         smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
 
-        rocketStage = 0;
         smokeDelTime = 12;
 
-        if(IsNull_Variable(rocket, false, rocketNotFound))    //  msg for debug-----------------------
+
+        if (IsNull_Variable(rocket, false, rocketNotFound))    //  msg for debug-----------------------
         {
             Debug.Log(rocketIsAssginedThis);    //  msg for debug-----------------
             rocket = this.transform;
@@ -240,6 +244,7 @@ internal class RocketEffect : MonoBehaviour
         {
             case RocketEffectProcces.GENERATE_FRAMES:
                 {
+                    //Debug.Log(rocketStage);    //  for debug-------------------------
                     GenerateEffect((int)EffectNo.FRAME, frameEffectPrefab[rocketStage], rocket, frameEffectOffset);
                     rocketStage = rocketStage != 3 ? ++rocketStage : 0;
                     break;
