@@ -4,9 +4,26 @@ using UnityEngine.SceneManagement;
 
 public class OptionManager : MonoBehaviour
 {
-    [SerializeField] GameObject optionPanel;
+    public static OptionManager Instance;
 
-     void Update()
+    [SerializeField] GameObject optionPanel;
+    [SerializeField] GameObject optionButton;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);  // シーンをまたいでも破棄しない
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        else
+        {
+            Destroy(gameObject);  // 既に存在する場合、重複を避けるために自分自身を破棄
+        }
+    }
+
+    void Update()
     {
         //オプション画面の表示切り替え
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -34,8 +51,27 @@ public class OptionManager : MonoBehaviour
     public void HideOptionPanel()
     {
         optionPanel.SetActive(false);
-        Cursor.visible = false;      //マウスカーソルを非表示
     }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log(1);
+        //ロビーシーンでのみ表示する
+        if (scene.name == "Lobby")
+        {
+            optionButton.SetActive(true);
+        }
+        else
+        {
+            optionButton.SetActive(false);
+        }
+    }
+
     //ゲーム終了
     public void QuitGame()
     {
