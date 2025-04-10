@@ -60,9 +60,8 @@ public class OptionManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log(1);
-        //ロビーシーンでのみ表示する
-        if (scene.name == "Lobby")
+        //オプションボタンの表示
+        if (scene.name == "Lobby" || scene.name == "Locker")
         {
             optionButton.SetActive(true);
         }
