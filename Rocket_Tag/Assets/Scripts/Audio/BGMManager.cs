@@ -7,6 +7,7 @@ public class BGMManager : MonoBehaviour
     [SerializeField] private AudioSource bgmAudioSource;
     [SerializeField] private List<AudioClip> bgmClips;
     [SerializeField] private Slider bgmSlider;
+    [SerializeField] private BGMSetting bgmSetting;
 
     private BGMType currentBGM;
 
@@ -14,14 +15,19 @@ public class BGMManager : MonoBehaviour
     {
         if(bgmSlider != null)
         {
-            bgmSlider.value = bgmAudioSource.volume;
+            bgmSlider.value = bgmSetting.volume;
             bgmSlider.onValueChanged.AddListener(OnVolumeChenged);
         }
     }
 
+    private void Update()
+    {
+        bgmAudioSource.volume = bgmSetting.volume;
+    }
+
     void OnVolumeChenged(float value)
     {
-        bgmAudioSource.volume = value; 
+        bgmSetting.volume = value; 
     }
 
     // EnumÇ…ÇÊÇÈBGMä«óù

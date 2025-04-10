@@ -2559,6 +2559,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 458010892}
+  - {fileID: 939971324}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &160271469
@@ -3549,6 +3550,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 630c0ca0cb0b2b74daa0a5f33495e5b4, type: 3}
   - {fileID: 8300000, guid: c87f81d969443ba4a98e73b20a4a57f0, type: 3}
   seSlider: {fileID: 65807534}
+  seSetting: {fileID: 11400000, guid: 15510d726025df449836fc9500f3d77b, type: 2}
 --- !u!1 &189934300
 GameObject:
   m_ObjectHideFlags: 0
@@ -13542,6 +13544,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1574908121}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &939971322
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 939971324}
+  - component: {fileID: 939971325}
+  m_Layer: 0
+  m_Name: SensitivityUIController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &939971324
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939971322}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 752.74005, y: 260.66858, z: 233.17986}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 146810558}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &939971325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939971322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b71bc4305ba604aa489a261a96a3ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnSpeedSlider: {fileID: 1751723559}
+  turnSpeedSetting: {fileID: 11400000, guid: e7020a719d0d0f0419c7f1c8c80b3f50, type: 2}
 --- !u!1 &942766488
 GameObject:
   m_ObjectHideFlags: 0
@@ -24990,6 +25038,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ff7e3d8c80a31504fa09a7ac29d1c69a, type: 3}
   - {fileID: 8300000, guid: 090234cd99501604097212061686f723, type: 3}
   bgmSlider: {fileID: 1871232440}
+  bgmSetting: {fileID: 11400000, guid: 93ea6402107c87b43836cbcf9d5f5888, type: 2}
 --- !u!114 &1797508055
 MonoBehaviour:
   m_ObjectHideFlags: 0

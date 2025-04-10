@@ -19,7 +19,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Quaternion vRotation;                // カメラの垂直回転(見下ろし回転)
     [SerializeField] public  Quaternion hRotation;                // カメラの水平回転
     [SerializeField] private float turnSpeed = 2.5f;              // 回転速度
-    [SerializeField] private Slider turnSpeedSlider;              // スライダーの参照
+    [SerializeField] private TurnSpeedSetting turnSpeedSetting;   // ScriptableObjectの参照
     [SerializeField] private Vector3 velocity;                    // 移動方向
     private float moveSpeed = 30.0f;                              // 移動速度
     private float aimMoveSpeed = 2.0f;                              // 移動速度
@@ -51,18 +51,12 @@ public class CameraController : MonoBehaviour
 
         // マウスカーソルを画面内の範囲のみ動かせるようにする
         Cursor.lockState = CursorLockMode.Confined;
-
-        //スライダーの初期化をturnSpeedに合わせる
-        if(turnSpeedSlider != null)
-        {
-            turnSpeedSlider.value = turnSpeed;
-            turnSpeedSlider.onValueChanged.AddListener(OnTurnSpeedChanged);
-        }
     }
 
     void Update()
     {
         CursorVisible();
+        turnSpeed = turnSpeedSetting.turnSpeed;
 
         if (isShaking == false)
         {

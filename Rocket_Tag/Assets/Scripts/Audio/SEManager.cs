@@ -7,18 +7,27 @@ public class SEManager : MonoBehaviour
     [SerializeField] private AudioSource seAudioSource;
     [SerializeField] private List<AudioClip> seClips;
     [SerializeField] private Slider seSlider;
+    [SerializeField] private SESetting seSetting;
 
     private void Start()
     {
-        seSlider.value = seAudioSource.volume;
-        seSlider.onValueChanged.AddListener(OnVolumeChanged);
+        if (seSlider != null)
+        {
+            seSlider.value = seSetting.volume;
+            seSlider.onValueChanged.AddListener(OnVolumeChenged);
+        }
     }
 
-    void OnVolumeChanged(float value)
+    private void Update()
     {
-        seAudioSource.volume = value;
+        seAudioSource.volume = seSetting.volume;
     }
-    
+
+    void OnVolumeChenged(float value)
+    {
+        seSetting.volume = value;
+    }
+
     // EnumÇ…ÇÊÇÈSEä«óù
     public enum SEType
     {
