@@ -175,6 +175,7 @@ internal class RocketEffect : MonoBehaviour
     //}
     void Update()
     {
+        /*  for debug------------------------------------------*/
         //Debug.Log(isloaded);
         //Debug.Log(frameEffectPrefab[3].name);
         if (isEffectLoaded)

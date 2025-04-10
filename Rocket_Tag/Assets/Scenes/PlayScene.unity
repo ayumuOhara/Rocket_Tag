@@ -1904,6 +1904,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: dd8b0c99df3c4a64cb984d9c2004f9d3, type: 3}
   - {fileID: 8300000, guid: 630c0ca0cb0b2b74daa0a5f33495e5b4, type: 3}
   - {fileID: 8300000, guid: c87f81d969443ba4a98e73b20a4a57f0, type: 3}
+  seSlider: {fileID: 0}
 --- !u!82 &270642822
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6153,6 +6154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   optionPanel: {fileID: 113109191}
+  optionButton: {fileID: 0}
 --- !u!1001 &881583939
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13382,6 +13384,7 @@ MonoBehaviour:
   isTimeStart: 1
   timerView: {fileID: 1888650127}
   rocketCountText: {fileID: 774146084}
+  rocketEffect: {fileID: 188355716}
 --- !u!114 &1888650127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14240,6 +14243,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fa8d02a52d2c4f54aadadf4efaf0f198, type: 3}
   - {fileID: 8300000, guid: ff7e3d8c80a31504fa09a7ac29d1c69a, type: 3}
   - {fileID: 8300000, guid: 090234cd99501604097212061686f723, type: 3}
+  bgmSlider: {fileID: 0}
 --- !u!82 &2035747998
 AudioSource:
   m_ObjectHideFlags: 0
