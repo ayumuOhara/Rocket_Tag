@@ -20,11 +20,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7c90d446b76c5844eb294159b7bf1d31
-    m_Address: Star
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aff2fc3c7481bbe49a9e0c0a07f6362a
     m_Address: Bear
     m_ReadOnly: 0
@@ -42,6 +37,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4aa6d139f9f48447b13ca0e86f658f8
     m_Address: RedCap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f242e7ceaea00904584a979afff1f25f
+    m_Address: Star
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
