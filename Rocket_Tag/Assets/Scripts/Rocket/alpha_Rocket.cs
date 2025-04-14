@@ -13,8 +13,16 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     GameManager gameManager;
     TimeManager timeManager;
     UILogManager uiLogManager;
+    RocketEffect rocketEffect;
     [SerializeField] GameObject player;
     [SerializeField] Rigidbody playerRb;
+
+    void OnEnable()
+    {
+        rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
+    }
 
     void Start()
     {
