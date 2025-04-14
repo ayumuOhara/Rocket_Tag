@@ -1,12 +1,34 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class BGMManager : MonoBehaviour
 {
     [SerializeField] private AudioSource bgmAudioSource;
     [SerializeField] private List<AudioClip> bgmClips;
+    [SerializeField] private Slider bgmSlider;
+    [SerializeField] private BGMSetting bgmSetting;
 
     private BGMType currentBGM;
+
+    private void Start()
+    {
+        if(bgmSlider != null)
+        {
+            bgmSlider.value = bgmSetting.volume;
+            bgmSlider.onValueChanged.AddListener(OnVolumeChenged);
+        }
+    }
+
+    private void Update()
+    {
+        bgmAudioSource.volume = bgmSetting.volume;
+    }
+
+    void OnVolumeChenged(float value)
+    {
+        bgmSetting.volume = value; 
+    }
 
     // EnumÇ…ÇÊÇÈBGMä«óù
     public enum BGMType

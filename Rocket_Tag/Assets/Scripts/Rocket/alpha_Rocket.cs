@@ -7,6 +7,7 @@ using UnityEngine;
 public class Alpha_Rocket : MonoBehaviourPunCallbacks
 {
     float explodeRiseSpeed = 20f;
+    float riseSpdAcceleration = 1.002f;
     bool isExploding = false;
 
     GameManager gameManager;
@@ -35,7 +36,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             StartCoroutine(Explosion());
         }
     }
-
     IEnumerator Explosion()
     {
         Debug.Log("ロケット爆発");
@@ -44,7 +44,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         while (time < 3.0f)
         {
             time += Time.deltaTime;
-            Floating(player, explodeRiseSpeed);
+            Floating(player, (explodeRiseSpeed *= riseSpdAcceleration));
             yield return null;
         }
         DropOut();

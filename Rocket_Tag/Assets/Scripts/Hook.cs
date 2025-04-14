@@ -1,4 +1,4 @@
-using UnityEngine;
+using UnityEngine;                                                                        ////  フックの挙動制御・生成スクリプト  ////
 using System.Threading.Tasks;
 using System;
 //using Unity.VisualScripting;
@@ -8,14 +8,12 @@ using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine.Rendering;
 using System.Linq.Expressions;
-////  フックの生成、挙動の作成をするスクリプト  ////
 internal interface HookState    //  フック状態インターフェース                            ////  以下State区  ////
 {
     void Enter(Hook arg);
     void Update(Hook arg);
     void Exit(Hook arg);
 }
-
 internal class NoAct : HookState    //  フック系統のアクションをしていない状態
 {
     public void Enter(Hook hook)
@@ -355,5 +353,9 @@ public class Hook : MonoBehaviour    //  フックスクリプト
     {
         chains.Clear();
         Destroy(hookEntity);
+    }
+    void GetHook()
+    {
+
     }
 }                                                                                         ////  関数区終了  ////

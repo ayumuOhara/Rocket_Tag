@@ -1,4 +1,4 @@
-using System.Linq.Expressions;
+using System.Linq.Expressions;                                                               ////  ロッカーのプレイヤースキン変更スクリプト  ////
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -83,18 +83,6 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
             SkinGenerate(skinLocation);
         }
     }
-    void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
-    {
-        //if (skinPrefab == null)
-        //{
-        //    skinPrefab[1] = Resources.Load<GameObject>("RedCap");
-        //    skinPrefab[2] = Resources.Load<GameObject>("StrawHat");
-        //    skinPrefab[3] = Resources.Load<GameObject>("Eringi");
-        //    skinPrefab[4] = Resources.Load<GameObject>("Freeza");
-        //    skinPrefab[5] = Resources.Load<GameObject>("Bear");
-        //    skinPrefab[6] = Resources.Load<GameObject>("Star");
-        //}
-    }
     void SkinGenerate(int skinLocation_)    //  スキンの生成
     {
         Destroy(skinEntity);
@@ -126,3 +114,15 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         PlayerPrefs.Save();
     }
 }
+//void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
+//{
+//    //if (skinPrefab == null)
+//    //{
+//    //    skinPrefab[1] = Resources.Load<GameObject>("RedCap");
+//    //    skinPrefab[2] = Resources.Load<GameObject>("StrawHat");
+//    //    skinPrefab[3] = Resources.Load<GameObject>("Eringi");
+//    //    skinPrefab[4] = Resources.Load<GameObject>("Freeza");
+//    //    skinPrefab[5] = Resources.Load<GameObject>("Bear");
+//    //    skinPrefab[6] = Resources.Load<GameObject>("Star");
+//    //}
+//}   

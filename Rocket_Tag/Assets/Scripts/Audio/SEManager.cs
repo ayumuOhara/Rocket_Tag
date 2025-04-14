@@ -1,10 +1,32 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class SEManager : MonoBehaviour
 {
     [SerializeField] private AudioSource seAudioSource;
     [SerializeField] private List<AudioClip> seClips;
+    [SerializeField] private Slider seSlider;
+    [SerializeField] private SESetting seSetting;
+
+    private void Start()
+    {
+        if (seSlider != null)
+        {
+            seSlider.value = seSetting.volume;
+            seSlider.onValueChanged.AddListener(OnVolumeChenged);
+        }
+    }
+
+    private void Update()
+    {
+        seAudioSource.volume = seSetting.volume;
+    }
+
+    void OnVolumeChenged(float value)
+    {
+        seSetting.volume = value;
+    }
 
     // EnumÇ…ÇÊÇÈSEä«óù
     public enum SEType
