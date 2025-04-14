@@ -133,7 +133,9 @@ internal class RocketEffect : MonoBehaviour
     TimeManager timeMgr;
 
     Vector3 frameEffectOffset;
+    Vector3[] frameEffectScale;
     Vector3 smokeDiffusion;
+    Vector3 smokeEffectScale;
 
     float smokeDelTime;
     int rocketStage;
@@ -213,7 +215,9 @@ internal class RocketEffect : MonoBehaviour
         ChangeState(new FirstStage());
 
         frameEffectOffset = new Vector3(0, 0, 0f);
+        frameEffectScale = new Vector3[] { new Vector3(1.21f, 1.21f, 1.21f), new Vector3(0.64f, 0.64f, 0.64f), new Vector3(0.56f, 0.61f, 0.5f), new Vector3(0.74f, 0.74f, 0.74f) };
         smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
+        smokeEffectScale = new Vector3(1, 1, 1);
 
         smokeDelTime = 12;
 
@@ -245,13 +249,13 @@ internal class RocketEffect : MonoBehaviour
             case RocketEffectProcces.GENERATE_FRAMES:
                 {
                     //Debug.Log(rocketStage);    //  for debug-------------------------
-                    GenerateEffect((int)EffectNo.FRAME, frameEffectPrefab[rocketStage], rocket, frameEffectOffset);
+                    GenerateEffect((int)EffectNo.FRAME, frameEffectPrefab[rocketStage], rocket, frameEffectOffset, frameEffectScale[rocketStage]);
                     rocketStage = rocketStage != 3 ? ++rocketStage : 0;
                     break;
                 }
             case RocketEffectProcces.GENERATE_SMOKE:
                 {
-                    GenerateEffect((int)EffectNo.SMOKE, smokeEffectPrefab, rocket, frameEffectOffset);
+                    GenerateEffect((int)EffectNo.SMOKE, smokeEffectPrefab, rocket, frameEffectOffset, smokeEffectScale);    //  offsetにframeEffectOffsetを使用
                     smokePS = smokeEntity.GetComponent<ParticleSystem>();
                     smokeMainModule = smokePS.main;
                     smokeMainModule.startColor = Color.white;
@@ -281,7 +285,7 @@ internal class RocketEffect : MonoBehaviour
             default: break;
         }
     }
-    void GenerateEffect(int effectNo, GameObject effect, Transform parent, Vector3 offset)    //  エフェクト生成
+    void GenerateEffect(int effectNo, GameObject effect, Transform parent, Vector3 offset, Vector3 scale)    //  エフェクト生成
     {
         switch (effectNo)
         {
@@ -293,6 +297,7 @@ internal class RocketEffect : MonoBehaviour
                     }
                     frameEffectEntity = Instantiate(effect, parent);
                     //frameEffectEntity.transform.localPosition += offset;    //  for debug------------------------
+                    frameEffectEntity.transform.localScale = scale;
                     break;
                 }
             case 1:
