@@ -287,6 +287,12 @@ internal class RocketEffect : MonoBehaviour
     }
     void GenerateEffect(int effectNo, GameObject effect, Transform parent, Vector3 offset, Vector3 scale)    //  エフェクト生成
     {
+        Debug.Log(effectNo);
+        Debug.Log(effect);
+        Debug.Log(parent);
+        Debug.Log(offset);
+        Debug.Log(scale);
+        
         switch (effectNo)
         {
             case 0:
@@ -414,6 +420,7 @@ internal class RocketEffect : MonoBehaviour
             }
         }
         isEffectLoaded = true;
+        Debug.Log("load is completed");
     }
 }
                                                                                                    ////  以下コード保存場所  ////
