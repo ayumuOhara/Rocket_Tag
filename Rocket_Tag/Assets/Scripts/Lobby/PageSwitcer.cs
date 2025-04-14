@@ -160,7 +160,7 @@ public class PageSwitcher : MonoBehaviour
         else if(currentSection == thirdSection)//チュートリアルテキスト（３ページ目）
         {
             statusText.text =
-                "マウスを動かすと視点が変わり、\nALTキーを押すとマウスカーソルが出てきて\n設定を開いたりできるぞ。\n"//ここに入力
+                "マウスを動かすと視点が変わり、\nALTキーを押すとマウスカーソルが出てきて設定を開いたりできるぞ。\n"//ここに入力
                 ;
         }
         else if (currentSection == fourSection)//チュートリアルテキスト（４ページ目）
@@ -172,7 +172,7 @@ public class PageSwitcher : MonoBehaviour
         else if (currentSection == fiveSection)//チュートリアルテキスト（５ページ目）
         {
             statusText.text =
-                "マップ内では、定期的にイベントが発生。\nプレイヤーにランダムな効果を与える。\n何が起こるかは君次第‼\n"//ここに入力
+                "マップ内では、定期的にイベントが発生しプレイヤーにランダムな効果を与える。\n何が起こるかは君次第‼\n"//ここに入力
                 ;
         }
         else
