@@ -125,7 +125,7 @@ internal class RocketEffect : MonoBehaviour
     GameObject frameEffectEntity;
     GameObject smokeEffectPrefab;
     GameObject smokeEntity;
-    Transform rocket;
+    [SerializeField] Transform rocket;
     ParticleSystem smokePS;
     ParticleSystem.MainModule smokeMainModule;
     ParticleSystem.ColorOverLifetimeModule smokeColorOverLifeTime;
