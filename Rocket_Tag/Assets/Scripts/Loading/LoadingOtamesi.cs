@@ -42,21 +42,21 @@ public class LoadingOtamesi : MonoBehaviour
 
         if (MyObject == Bot2)
         {
-            if (timer >= 1.0f)
+            if (timer >= 1.9f)
             {
                 move = true;
             }
         }
         else if (MyObject == Bot3)
         {
-            if (timer >= 2.8f)
+            if (timer >= 2.5f)
             {
                 move = true;
             }
         }
         else if (MyObject == Bot4)
         {
-            if (timer >= 3.8f)
+            if (timer >= 3.4f)
             {
                 move = true;
             }
