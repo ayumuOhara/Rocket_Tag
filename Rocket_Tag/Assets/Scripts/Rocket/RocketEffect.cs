@@ -6,6 +6,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using static RocketEffect;
+using UnityEngine.UIElements;
 
 internal interface EffectState                                                                     ////  以下State区  ////
 {
@@ -249,6 +251,11 @@ internal class RocketEffect : MonoBehaviour
             case RocketEffectProcces.GENERATE_FRAMES:
                 {
                     //Debug.Log(rocketStage);    //  for debug-------------------------
+                    Debug.Log((int)EffectNo.FRAME);
+                    Debug.Log(frameEffectPrefab[rocketStage].name);
+                    Debug.Log(rocket);
+                    Debug.Log(frameEffectOffset);
+                    Debug.Log(frameEffectScale[rocketStage]);
                     GenerateEffect((int)EffectNo.FRAME, frameEffectPrefab[rocketStage], rocket, frameEffectOffset, frameEffectScale[rocketStage]);
                     rocketStage = rocketStage != 3 ? ++rocketStage : 0;
                     break;
@@ -287,11 +294,7 @@ internal class RocketEffect : MonoBehaviour
     }
     void GenerateEffect(int effectNo, GameObject effect, Transform parent, Vector3 offset, Vector3 scale)    //  エフェクト生成
     {
-        Debug.Log(effectNo);
-        Debug.Log(effect);
-        Debug.Log(parent);
-        Debug.Log(offset);
-        Debug.Log(scale);
+
         
         switch (effectNo)
         {
