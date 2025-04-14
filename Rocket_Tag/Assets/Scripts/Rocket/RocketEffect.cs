@@ -261,7 +261,7 @@ internal class RocketEffect : MonoBehaviour
             case RocketEffectProcces.SEARCH_ROCKET:
                 {
                     rocket = null;
-                    rocket = GameObject.Find("Rocket(Clone)").GetComponent<Transform>();
+                    rocket = GameObject.Find("Rocket").GetComponent<Transform>();
                     if (IsNull_Variable(rocket, false, rocketNotFound))    //  msg for debug-------------------
                     {
                         Debug.Log(rocketIsAssginedThis);    //  msg for debug--------------------
