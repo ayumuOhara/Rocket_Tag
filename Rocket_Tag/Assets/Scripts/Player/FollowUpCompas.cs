@@ -5,6 +5,9 @@ public class FollowUpCompas : MonoBehaviour
     
     public Transform[] playersTF;
     Transform bombPlayerTF;
+
+    const int numOfPlayer = 4;
+
     void Start()
     {
         
@@ -13,17 +16,25 @@ public class FollowUpCompas : MonoBehaviour
     {
         
     }
-    //Transform GetCloserPlayer()
+    //Transform GetCloserPlayer()    //  最も近いプレイヤーのトランスフォームを取得する
     //{
     //    Transform tmpTransform;
-        
-    //    for(int numOfPlayer = 4; numOfPlayer == 0; numOfPlayer--)
+
+    //    tmpTransform = playersTF[]
+
+    //    for (int arrayNum = numOfPlayer; arrayNum == 0; arrayNum--)
     //    {
-    //     //playersTF.   
+    //        if (playersTF[numOfPlayer] != bombPlayerTF)
+    //        {
+    //            if ()
+    //            {
+
+    //            }
+    //        }
     //    }
-    //   // return
+    //    // return
     //}
-    void GetLineDis()
+    void GetLineDis()    //  二点間の直線の長さを求める
     {
 
     }

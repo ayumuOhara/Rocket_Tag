@@ -164,6 +164,7 @@ internal class RocketEffect : MonoBehaviour
         //{
         //    Initialize();    //  èâä˙âª
         //}
+
         Initialize();
     }
     //void OnDisable()
@@ -206,7 +207,13 @@ internal class RocketEffect : MonoBehaviour
         /*  for debug-----------------------  */
         //effectLoadTask = RocketEffectLoad();
         //await effectLoadTask;
+        frameEffectOffset = new Vector3(0, 0, 0f);
+        frameEffectScale = new Vector3[] { new Vector3(1.21f, 1.21f, 1.21f), new Vector3(0.64f, 0.64f, 0.64f), new Vector3(0.56f, 0.61f, 0.5f), new Vector3(0.74f, 0.74f, 0.74f) };
+        smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
+        smokeEffectScale = new Vector3(1, 1, 1);
+
         rocketStage = 0;
+
         await RocketEffectLoad();
         rocket = GameObject.Find("Cylinder").GetComponent<Transform>();
         smokeGradient = new Gradient();
@@ -215,11 +222,6 @@ internal class RocketEffect : MonoBehaviour
         timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 
         ChangeState(new FirstStage());
-
-        frameEffectOffset = new Vector3(0, 0, 0f);
-        frameEffectScale = new Vector3[] { new Vector3(1.21f, 1.21f, 1.21f), new Vector3(0.64f, 0.64f, 0.64f), new Vector3(0.56f, 0.61f, 0.5f), new Vector3(0.74f, 0.74f, 0.74f) };
-        smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
-        smokeEffectScale = new Vector3(1, 1, 1);
 
         smokeDelTime = 12;
 
@@ -256,6 +258,7 @@ internal class RocketEffect : MonoBehaviour
                     Debug.Log(rocket);
                     Debug.Log(frameEffectOffset);
                     Debug.Log(frameEffectScale[rocketStage]);
+
                     GenerateEffect((int)EffectNo.FRAME, frameEffectPrefab[rocketStage], rocket, frameEffectOffset, frameEffectScale[rocketStage]);
                     rocketStage = rocketStage != 3 ? ++rocketStage : 0;
                     break;
