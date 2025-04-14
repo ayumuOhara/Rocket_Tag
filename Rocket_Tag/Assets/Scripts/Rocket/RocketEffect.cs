@@ -215,6 +215,7 @@ internal class RocketEffect : MonoBehaviour
         rocketStage = 0;
 
         await RocketEffectLoad();
+
         rocket = GameObject.Find("Cylinder").GetComponent<Transform>();
         smokeGradient = new Gradient();
 
