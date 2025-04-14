@@ -182,7 +182,7 @@ Transform:
   m_GameObject: {fileID: 6038123}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 5.69, y: -0.6, z: -6.46}
+  m_LocalPosition: {x: 8.5, y: -0.6, z: -6.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -221,7 +221,7 @@ MonoBehaviour:
   Bot3: {fileID: 1159577066}
   Bot4: {fileID: 911228177}
   MyObject: {fileID: 6038123}
-  speed: 1
+  speed: 2
 --- !u!1 &8034330
 GameObject:
   m_ObjectHideFlags: 0
@@ -3334,7 +3334,7 @@ Transform:
   m_GameObject: {fileID: 644799001}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 7.98, y: -0.6, z: -6.46}
+  m_LocalPosition: {x: 8.5, y: -0.6, z: -6.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3373,7 +3373,7 @@ MonoBehaviour:
   Bot3: {fileID: 1159577066}
   Bot4: {fileID: 911228177}
   MyObject: {fileID: 644799001}
-  speed: 1
+  speed: 2
 --- !u!1 &654660675
 GameObject:
   m_ObjectHideFlags: 0
@@ -4590,7 +4590,7 @@ Transform:
   m_GameObject: {fileID: 911228177}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 12.57, y: -0.6, z: -6.46}
+  m_LocalPosition: {x: 8.5, y: -0.6, z: -6.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4643,7 +4643,7 @@ MonoBehaviour:
   Bot3: {fileID: 1159577066}
   Bot4: {fileID: 911228177}
   MyObject: {fileID: 911228177}
-  speed: 1
+  speed: 2
 --- !u!1 &939947647
 GameObject:
   m_ObjectHideFlags: 0
@@ -5319,7 +5319,7 @@ Transform:
   m_GameObject: {fileID: 1159577066}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 11.21, y: -0.6, z: -6.46}
+  m_LocalPosition: {x: 8.5, y: -0.6, z: -6.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5358,7 +5358,7 @@ MonoBehaviour:
   Bot3: {fileID: 1159577066}
   Bot4: {fileID: 911228177}
   MyObject: {fileID: 1159577066}
-  speed: 1
+  speed: 2
 --- !u!1 &1188165303
 GameObject:
   m_ObjectHideFlags: 0
