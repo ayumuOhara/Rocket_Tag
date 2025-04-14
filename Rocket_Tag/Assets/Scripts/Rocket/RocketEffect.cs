@@ -212,7 +212,7 @@ internal class RocketEffect : MonoBehaviour
 
         ChangeState(new FirstStage());
 
-        frameEffectOffset = new Vector3(0, -0.6f, 0.5f);
+        frameEffectOffset = new Vector3(0, 0, 0f);
         smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
 
         smokeDelTime = 12;
@@ -292,7 +292,7 @@ internal class RocketEffect : MonoBehaviour
                         Destroy(frameEffectEntity);
                     }
                     frameEffectEntity = Instantiate(effect, parent);
-                    frameEffectEntity.transform.localPosition += offset;
+                    //frameEffectEntity.transform.localPosition += offset;    //  for debug------------------------
                     break;
                 }
             case 1:
