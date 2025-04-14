@@ -12,7 +12,7 @@ public class LoadingOtamesi : MonoBehaviour
 
     Animator animator;
 
-    public float speed = 0.1f;
+    public float speed = 2.0f;
 
     float timer = 0.0f;
 
@@ -34,15 +34,6 @@ public class LoadingOtamesi : MonoBehaviour
         {
             SCharacter();
         }
-
-        if (MyObject == Bot4)
-        {
-            animator.SetBool("RunTagger", true);
-        }
-        else
-        {
-            animator.SetBool("RunRunner", true);
-        }
     }
 
     public void SCharacter()
@@ -51,7 +42,7 @@ public class LoadingOtamesi : MonoBehaviour
 
         if (MyObject == Bot2)
         {
-            if (timer >= 1.7f)
+            if (timer >= 1.0f)
             {
                 move = true;
             }
@@ -65,7 +56,7 @@ public class LoadingOtamesi : MonoBehaviour
         }
         else if (MyObject == Bot4)
         {
-            if (timer >= 60.0f)
+            if (timer >= 3.8f)
             {
                 move = true;
             }
@@ -79,9 +70,18 @@ public class LoadingOtamesi : MonoBehaviour
     {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
-        if (transform.position.x <= -8)
+        if (transform.position.x <= -9)
         {
-            transform.position = new Vector3(7f, -0.6f, -6.5f);
+            transform.position = new Vector3(9f, -0.6f, -6.5f);
+        }
+
+        if (MyObject == Bot4)
+        {
+            animator.SetBool("RunTagger", true);
+        }
+        else
+        {
+            animator.SetBool("RunRunner", true);
         }
     }
 }
