@@ -19,9 +19,9 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void OnEnable()
     {
-        rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
+        //rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
+        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
     }
 
     void Start()
