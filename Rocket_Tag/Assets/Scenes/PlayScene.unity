@@ -5510,7 +5510,6 @@ GameObject:
   - component: {fileID: 846908939}
   - component: {fileID: 846908938}
   - component: {fileID: 846908941}
-  - component: {fileID: 846908942}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5591,20 +5590,6 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   rankText: {fileID: 1782522368}
   playerRank: 0
---- !u!114 &846908942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 846908937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7740ed4b0bdcf924ea914df40413f988, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  optionPanel: {fileID: 0}
-  optionButton: {fileID: 0}
 --- !u!1001 &881583939
 PrefabInstance:
   m_ObjectHideFlags: 0
