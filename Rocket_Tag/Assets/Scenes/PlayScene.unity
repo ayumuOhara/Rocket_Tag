@@ -1018,6 +1018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef2489e6bbb497142956196320163519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rocket: {fileID: 0}
 --- !u!4 &188355717
 Transform:
   m_ObjectHideFlags: 0
@@ -1856,6 +1857,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 630c0ca0cb0b2b74daa0a5f33495e5b4, type: 3}
   - {fileID: 8300000, guid: c87f81d969443ba4a98e73b20a4a57f0, type: 3}
   seSlider: {fileID: 0}
+  seSetting: {fileID: 0}
 --- !u!82 &270642822
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4364,7 +4366,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &584877052
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5061,7 +5063,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &774146083
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8965,7 +8967,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -600, y: 206.04999}
+  m_AnchoredPosition: {x: -600, y: 307}
   m_SizeDelta: {x: 650, y: 412.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1373069369
@@ -12593,6 +12595,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ff7e3d8c80a31504fa09a7ac29d1c69a, type: 3}
   - {fileID: 8300000, guid: 090234cd99501604097212061686f723, type: 3}
   bgmSlider: {fileID: 0}
+  bgmSetting: {fileID: 0}
 --- !u!82 &2035747998
 AudioSource:
   m_ObjectHideFlags: 0
