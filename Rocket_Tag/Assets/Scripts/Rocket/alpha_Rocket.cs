@@ -73,17 +73,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     {
         Debug.Log("脱落処理開始");
 
-        //SetPlayerBool spb = this.player.GetComponent<SetPlayerBool>();
-        //if (spb.isDead)
-        //{
-        //    Debug.Log("プレイヤーが脱落しているので処理を停止");
-        //    return;
-        //}
-        //else
-        //{
-        //    Debug.Log("プレイヤーが脱落していないので処理を続行");
-        //}
-
         PhotonView photonView = this.player.GetComponent<PhotonView>();
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
 
@@ -101,6 +90,8 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             gameManager.ChooseRocketPlayer();
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
         }
+
+        Destroy(gameObject);
     }
 
 }

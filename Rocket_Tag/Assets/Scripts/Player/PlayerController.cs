@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             playerMovement = GetComponent<PlayerMovement>();
             playerRocketAction = GetComponent<PlayerRocketAction>();
             setPlayerBool = GetComponent<SetPlayerBool>();
+            skillManager = GetComponent<SkillManager>();
             Debug.Log("setPlayerBool : " + setPlayerBool);
             observeDistance = GetComponent<ObserveDistance>();
             setPlayerBool.SetPlayerCondition();
