@@ -53,23 +53,20 @@ public class SkillManager : MonoBehaviourPunCallbacks
     // 設定されているスキル使用
     public void UseSkill()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (finishSkill == true)
         {
-            if (finishSkill == true)
+            Debug.Log($"【{skillData.skillName}】を使用");
+
+            switch (skillData.skillId)
             {
-                Debug.Log($"【{skillData.skillName}】を使用");
-
-                switch (skillData.skillId)
-                {
-                    //case 101: break;
-                    case 102: photonView.RPC("PutStickyZone", RpcTarget.All); break;
-                    //case 103: DangerousGift();                            break;
-                    //case 104: SmashPunch(); break;
-                    case 105: StartCoroutine(Dash());                         break;
-                }
-
-                //SendSkillData();
+                //case 101: break;
+                case 102: photonView.RPC("PutStickyZone", RpcTarget.All); break;
+                //case 103: DangerousGift();                            break;
+                //case 104: SmashPunch(); break;
+                case 105: StartCoroutine(Dash()); break;
             }
+
+            //SendSkillData();
         }
     }
 
