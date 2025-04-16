@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;                                                                          ////  プレイヤーを指し示すコンパスの管理script  ////
 
 public class FollowUpCompas : MonoBehaviour
@@ -14,22 +15,18 @@ public class FollowUpCompas : MonoBehaviour
     }
     void Update()
     {
-        
+
     }
     //Transform GetCloserPlayer()    //  最も近いプレイヤーのトランスフォームを取得する
     //{
-    //    Transform tmpTransform;
+    //    float tmpLineDis;
 
-    //    tmpTransform = playersTF[]
+    //    tmpLineDis = Vector3.Distance(playersTF[numOfPlayer]. position,bombPlayerTF.position);
 
     //    for (int arrayNum = numOfPlayer; arrayNum == 0; arrayNum--)
     //    {
     //        if (playersTF[numOfPlayer] != bombPlayerTF)
     //        {
-    //            if ()
-    //            {
-
-    //            }
     //        }
     //    }
     //    // return

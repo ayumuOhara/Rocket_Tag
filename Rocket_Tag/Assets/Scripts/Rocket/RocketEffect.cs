@@ -275,6 +275,7 @@ internal class RocketEffect : MonoBehaviour
                 }
             case RocketEffectProcces.SEARCH_ROCKET:
                 {
+                    Debug.Log("SERACH_ROCKET entered");
                     rocket = null;
                     rocket = GameObject.Find("Rocket").GetComponent<Transform>();
                     if (IsNull_Variable(rocket, false, rocketNotFound))    //  msg for debug-------------------
@@ -286,6 +287,7 @@ internal class RocketEffect : MonoBehaviour
                     {
                         ChangeState(new FirstStage());
                     }
+                    Debug.Log("SERACH_ROCKET exsited" + rocket);
                     break;
                 }
             case RocketEffectProcces.SMOKE_DIFFUSION:
