@@ -254,11 +254,6 @@ internal class RocketEffect : MonoBehaviour
             case RocketEffectProcces.GENERATE_FRAMES:
                 {
                     //Debug.Log(rocketStage);    //  for debug-------------------------
-                    Debug.Log((int)EffectNo.FRAME);
-                    Debug.Log(frameEffectPrefab[rocketStage].name);
-                    Debug.Log(rocket);
-                    Debug.Log(frameEffectOffset);
-                    Debug.Log(frameEffectScale[rocketStage]);
 
                     GenerateEffect((int)EffectNo.FRAME, frameEffectPrefab[rocketStage], rocket, frameEffectOffset, frameEffectScale[rocketStage]);
                     rocketStage = rocketStage != 3 ? ++rocketStage : 0;
