@@ -854,6 +854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a40c7760834dbf4e8cd0dd40e535dd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rocketEffect: {fileID: 0}
   player: {fileID: 7666606126202363588}
   playerRb: {fileID: 2753298400814805652}
 --- !u!136 &6689842577889514490
@@ -1787,6 +1788,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resultUI: {fileID: 0}
   playerMovement: {fileID: 2759492702019797386}
+  rocketEffect: {fileID: 0}
   timeManager: {fileID: 0}
   playerRankManager: {fileID: 0}
   rocketObj: {fileID: 4281978814399217487}
