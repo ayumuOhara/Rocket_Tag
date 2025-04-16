@@ -13,7 +13,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     GameManager gameManager;
     TimeManager timeManager;
     UILogManager uiLogManager;
-    RocketEffect rocketEffect;
+    [SerializeField] RocketEffect rocketEffect;
     [SerializeField] GameObject player;
     [SerializeField] Rigidbody playerRb;
 
@@ -90,7 +90,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             gameManager.ChooseRocketPlayer();
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
         }
-
+        rocketEffect._IsDestoroyRocket = true;
         Destroy(gameObject);
     }
 
