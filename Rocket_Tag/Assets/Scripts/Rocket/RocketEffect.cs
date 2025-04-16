@@ -305,13 +305,17 @@ internal class RocketEffect : MonoBehaviour
         {
             case 0:
                 {
+                    Vector3 fixScale;
+
+                    fixScale = new Vector3(1 / parent.localScale.x, 1 / parent.localScale.y, 1 / parent.localScale.z);
+
                     if (!IsNull_Variable(frameEffectEntity, false, ""))
                     {
                         Destroy(frameEffectEntity);
                     }
                     frameEffectEntity = Instantiate(effect, parent);
                     //frameEffectEntity.transform.localPosition += offset;    //  for debug------------------------
-                    frameEffectEntity.transform.localScale = scale;
+                    frameEffectEntity.transform.localScale = Vector3.Scale(frameEffectEntity.transform.localScale, fixScale);
                     break;
                 }
             case 1:
