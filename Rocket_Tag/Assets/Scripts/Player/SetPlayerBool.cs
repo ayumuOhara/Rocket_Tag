@@ -2,13 +2,14 @@ using Photon.Pun;
 using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject resultUI;
 
     [SerializeField] PlayerMovement playerMovement;
-    //RocketEffect rocketEffect;
+    [SerializeField] RocketEffect rocketEffect;
     public TimeManager timeManager;
     //public ResultScreen resultScreen;
     public PlayerRankManager playerRankManager;
@@ -25,6 +26,10 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         //resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
         resultUI = GameObject.Find("ResultUI");
+        if(SceneManager.GetActiveScene().name == "PlayScene")
+        {
+            rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
+        }
     }
 
     private void Start()
@@ -86,6 +91,8 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         {
             rocketObj.SetActive(true);
             Debug.Log("ÉçÉPÉbÉgÇéÛÇØéÊÇËÇ‹Ç∑");
+            rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+            rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
         }
         else
         {
