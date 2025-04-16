@@ -126,7 +126,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     // ダッシュスキル
     IEnumerator Dash()
     {
-        float boostValue = 1.3f;     // ダッシュの加速度
+        float boostValue = 1.5f;     // ダッシュの加速度
         float dashLimit = 3.0f;      // ダッシュの効果時間
 
         finishSkill = false;
