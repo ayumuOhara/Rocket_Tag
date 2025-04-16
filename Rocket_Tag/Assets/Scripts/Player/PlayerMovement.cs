@@ -9,8 +9,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     SkillManager skillManager;
 
     [SerializeField] private Vector3 movingVelocity;             // 移動方向
-    [SerializeField] private float moveSpeed = 20.0f;            // 移動速度
-    [SerializeField] private float defaultMoveSpeed = 20.0f;     // 通常の移動速度
+    [SerializeField] private float moveSpeed = 10.0f;            // 移動速度
+    [SerializeField] private float defaultMoveSpeed = 10.0f;     // 通常の移動速度
     [SerializeField] private float applySpeed = 0.2f;            // 回転の適用速度
     [SerializeField] private float jumpForce = 20.0f;            // ジャンプ力
     private bool isGround = false;                               // 接地判定
@@ -185,10 +185,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             }
         }
 
-        if(isDash && collision.gameObject.CompareTag("Player"))
-        {
-            skillManager.KnockBackTarget(collision.gameObject);
-        }
+        //if(isDash && collision.gameObject.CompareTag("Player"))
+        //{
+        //    skillManager.KnockBackTarget(collision.gameObject);
+        //}
     }
 
     // タッチされたときに停止

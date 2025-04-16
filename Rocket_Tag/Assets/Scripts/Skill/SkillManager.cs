@@ -46,7 +46,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         skillIcon   = GameObject.Find("SKillIcon").GetComponent<Image>();
 
-        skillIdx = 0;
+        skillIdx = 4;
         SetSkill(skillDataBase.SkillData[skillIdx]);
     }
 
@@ -61,14 +61,14 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
                 switch (skillData.skillId)
                 {
-                    case 101: break;
+                    //case 101: break;
                     case 102: photonView.RPC("PutStickyZone", RpcTarget.All); break;
-                    case 103: /*DangerousGift();*/                            break;
-                    case 104: SmashPunch();                                   break;
+                    //case 103: DangerousGift();                            break;
+                    //case 104: SmashPunch(); break;
                     case 105: StartCoroutine(Dash());                         break;
                 }
 
-                SendSkillData();
+                //SendSkillData();
             }
         }
     }
@@ -83,48 +83,48 @@ public class SkillManager : MonoBehaviourPunCallbacks
     }
 
     // プレイヤーにロケットを配布
-    void DangerousGift()
-    {
-        int playerCnt = gameManager.GetPlayerList().Count;
+    //void DangerousGift()
+    //{
+    //    int playerCnt = gameManager.GetPlayerList().Count;
 
-        int minCnt = 1;
-        int maxCnt = playerCnt > 3 ? 3 : playerCnt;
-        int rocketCnt = Random.Range(minCnt, maxCnt);
+    //    int minCnt = 1;
+    //    int maxCnt = playerCnt > 3 ? 3 : playerCnt;
+    //    int rocketCnt = Random.Range(minCnt, maxCnt);
 
-        for(int i = 0; i < rocketCnt; i++)
-        {
-            gameManager.ChooseRocketPlayer();
-        }
-    }
+    //    for(int i = 0; i < rocketCnt; i++)
+    //    {
+    //        gameManager.ChooseRocketPlayer();
+    //    }
+    //}
 
-    // スマッシュパンチ
-    void SmashPunch()
-    {
-        GameObject target = observeDistance.GetTargetDistance();
+    //// スマッシュパンチ
+    //void SmashPunch()
+    //{
+    //    GameObject target = observeDistance.GetTargetDistance();
 
-        if (target == null) return; // ターゲットがいない場合は処理しない
+    //    if (target == null) return; // ターゲットがいない場合は処理しない
 
-        // プレイヤーをターゲットの方向へ向ける
-        transform.LookAt(target.transform.position);
-        KnockBackTarget(target);
-    }
+    //    // プレイヤーをターゲットの方向へ向ける
+    //    transform.LookAt(target.transform.position);
+    //    KnockBackTarget(target);
+    //}
 
-    // 対象を吹っ飛ばす
-    public void KnockBackTarget(GameObject target)
-    {
-        PhotonView targetView = target.GetComponent<PhotonView>();
-        targetView.RPC("SetIsStun", RpcTarget.All, true);
+    //// 対象を吹っ飛ばす
+    //public void KnockBackTarget(GameObject target)
+    //{
+    //    PhotonView targetView = target.GetComponent<PhotonView>();
+    //    targetView.RPC("SetIsStun", RpcTarget.All, true);
 
-        Rigidbody targetRb = target.GetComponent<Rigidbody>();
-        if (targetRb != null)
-        {
-            Vector3 knockbackDirection = (target.transform.position - transform.position).normalized;
-            float knockbackForce = 130f;
+    //    Rigidbody targetRb = target.GetComponent<Rigidbody>();
+    //    if (targetRb != null)
+    //    {
+    //        Vector3 knockbackDirection = (target.transform.position - transform.position).normalized;
+    //        float knockbackForce = 130f;
 
-            // 直接 velocity に適用して即座に動かす
-            targetRb.linearVelocity = knockbackDirection * knockbackForce;
-        }
-    }
+    //        // 直接 velocity に適用して即座に動かす
+    //        targetRb.linearVelocity = knockbackDirection * knockbackForce;
+    //    }
+    //}
 
     // ダッシュスキル
     IEnumerator Dash()
