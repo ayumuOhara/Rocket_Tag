@@ -143,6 +143,7 @@ internal class RocketEffect : MonoBehaviour
     int rocketStage;
     bool didFalsed;    //  ロケット生成にタイミングを合わせるためのフラグ
     bool isEffectLoaded;
+    bool isDestoroyRocket;
     const string rocketNotFound = "Error:Rocket Not Found";    //  msg for debug--------------
     const string rocketIsAssginedThis = "Rocket variable is assigned [this.transform]";
     const string couldntGetTimemgr = "Error:Couldn't Get timeMgr";    //  msg for debug---------------------
@@ -154,6 +155,8 @@ internal class RocketEffect : MonoBehaviour
     { get { return rocketStage; } }                                                               ////  宣言区終了  ////
     internal bool _DidFalsed
     { get { return didFalsed; } }
+    internal bool _IsDestoroyRocket
+    { set { isDestoroyRocket = value; } }
 
     void OnEnable()                                                                                ////  以下処理区  ////
     {
@@ -225,6 +228,7 @@ internal class RocketEffect : MonoBehaviour
         ChangeState(new FirstStage());
 
         smokeDelTime = 12;
+        isDestoroyRocket = false;
 
 
         if (IsNull_Variable(rocket, false, rocketNotFound))    //  msg for debug-----------------------
@@ -330,7 +334,10 @@ internal class RocketEffect : MonoBehaviour
         {
             Debug.Log("TimeOut");    //  msg for debug----------------
             Destroy(smokeEntity.gameObject);
-            ChangeState(new PrepareRocket());
+            if (isDestoroyRocket)
+            {
+                ChangeState(new PrepareRocket());
+                isDestoroyRocket = false;            }
         }
     }
     bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)    //  変数のヌルチェック、危険性があった場合強制クラッシュ
