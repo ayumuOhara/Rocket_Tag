@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI infoText;          // playerCntTextの説明文
     [SerializeField] GameObject readyButton;            // 準備完了ボタン
     //[SerializeField] GameObject rocketEffect;           // ロケットのエフェクト管理オブジェクト
+    [SerializeField] RocketEffect rocketEffect;           // ロケットエフェクトのインスタンス
     private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
     private bool isGameStarted = false;                 // ゲームが開始されたかどうかのフラグ
     private Player currentRocketHolder;                 // 現在のロケット保持者
@@ -123,6 +124,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.Log("プレイヤーにロケットを渡しました");
             currentRocketHolder = targetPhotonView.Owner;
             targetPhotonView.RPC("SetHasRocket", RpcTarget.All, true);
+            rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);    //  ロケット取得
+            rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);    //  ロケット炎生成
         }
         else
         {
