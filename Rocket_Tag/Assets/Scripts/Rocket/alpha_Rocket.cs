@@ -92,7 +92,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
         }
         rocketEffect._IsDestoroyRocket = true;
-        Destroy(gameObject);
+        this.gameObject.SetActive(false);
     }
 
 }
