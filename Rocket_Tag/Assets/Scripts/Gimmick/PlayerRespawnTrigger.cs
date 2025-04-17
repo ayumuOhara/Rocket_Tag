@@ -6,6 +6,7 @@ public class PlayerRespawnTrigger : MonoBehaviour
     [SerializeField] private string stageTag = "Stage"; // ステージのタグ
     [SerializeField] private float searchRadius = 10f; // ステージ検索範囲
 
+
     
     private void OnTriggerEnter(Collider other)
     {
@@ -18,6 +19,13 @@ public class PlayerRespawnTrigger : MonoBehaviour
                 Vector3 respawnPosition = nearestStage.position + Vector3.up * 1.5f; // ステージの上にリスポーン
                 other.transform.position = respawnPosition;
                 Debug.Log("プレイヤーが近くのステージにリスポーンしました");
+                // Rigidbodyの慣性をリセット
+                Rigidbody rb = other.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                }
             }
             else
             {
