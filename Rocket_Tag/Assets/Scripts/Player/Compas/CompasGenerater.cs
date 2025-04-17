@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -30,6 +31,7 @@ public class CompasGenerater : MonoBehaviour
         Destroy(compasEntity);
         compasEntity = Instantiate(compasPrefab, player);
     }
+
     async Task LoadCompas()    //  コンパスロード
     {
         AsyncOperationHandle<GameObject> LoadHandle;
