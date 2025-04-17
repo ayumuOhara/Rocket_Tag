@@ -3,23 +3,30 @@ using UnityEngine;                                                              
 
 public class FollowUpCompas : MonoBehaviour
 {
-    
     public Transform[] playersTF;
     public Transform bombPlayerTF;
-
+    GameManager gameManager;
+    
     const int numOfPlayer = 4;
 
     void Start()
     {
-        //bombPlayerTF = this.gameObject.GetComponent<Transform>();
+        Initialize();
     }
     void Update()
     {
-        //this.gameObject.transform.LookAt(GetCloserPlayer());
         Quaternion tmpAngle = Quaternion.LookRotation(GetCloserPlayer() - bombPlayerTF.position);
+        Quaternion tmpAngle1;
         tmpAngle.x /= 36;
-        this.gameObject.transform.rotation = Quaternion.Lerp(bombPlayerTF.rotation, tmpAngle, 3f * Time.deltaTime);
-        //this.gameObject.transform.LookAt(GetCloserObj());
+        this.gameObject.transform.rotation = Quaternion.Lerp(bombPlayerTF.rotation, tmpAngle, 2f * Time.deltaTime);
+        //tmpAngle1 = this.gameObject.transform.rotation;
+        //tmpAngle1.x /= 36;
+    }
+    void Initialize()    //  初期化
+    {
+        bombPlayerTF = this.transform.root;
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
     }
     Vector3 GetCloserPlayer()    //  最も近いプレイヤーのトランスフォームを取得する
     {
@@ -32,7 +39,6 @@ public class FollowUpCompas : MonoBehaviour
 
         for (int arrayNum = numOfPlayer - 2; arrayNum != -1; arrayNum--)
         {
-
             tmpLineDis = Vector3.Distance(playersTF[arrayNum].position, bombPlayerTF.position);
             if (minLineDis > tmpLineDis)
             {
@@ -62,23 +68,4 @@ public class FollowUpCompas : MonoBehaviour
         }
         return playersTF[closestObjNo].position;
     }
-    //Transform GetCloserPlayer()    //  最も近いプレイヤーのトランスフォームを取得する
-    //{
-    //    float tmpLineDis;
-
-    //    tmpLineDis = Vector3.Distance(playersTF[numOfPlayer]. position,bombPlayerTF.position);
-
-    //    for (int arrayNum = numOfPlayer; arrayNum == 0; arrayNum--)
-    //    {
-    //        if (playersTF[numOfPlayer] != bombPlayerTF)
-    //        {
-    //        }
-    //    }
-    //    // return
-    //}
-    void GetLineDis()    //  二点間の直線の長さを求める
-    {
-
-    }
-
 }
