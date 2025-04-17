@@ -25,6 +25,7 @@ public class PlayerRespawnTrigger : MonoBehaviour
                 {
                     rb.linearVelocity = Vector3.zero;
                     rb.angularVelocity = Vector3.zero;
+                    Debug.Log("プレイヤーの慣性をリセットしました。");
                 }
             }
             else
