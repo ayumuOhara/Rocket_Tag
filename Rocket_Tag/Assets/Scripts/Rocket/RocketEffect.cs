@@ -210,7 +210,7 @@ internal class RocketEffect : MonoBehaviour
         /*  for debug-----------------------  */
         //effectLoadTask = RocketEffectLoad();
         //await effectLoadTask;
-        frameEffectOffset = new Vector3(0, 0, 0f);
+        frameEffectOffset = new Vector3(-0.39f, -2.85f, 0.74f);
         frameEffectScale = new Vector3[] { new Vector3(1.21f, 1.21f, 1.21f), new Vector3(0.64f, 0.64f, 0.64f), new Vector3(0.56f, 0.61f, 0.5f), new Vector3(0.74f, 0.74f, 0.74f) };
         smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
         smokeEffectScale = new Vector3(1, 1, 1);
@@ -314,7 +314,7 @@ internal class RocketEffect : MonoBehaviour
                         Destroy(frameEffectEntity);
                     }
                     frameEffectEntity = Instantiate(effect, parent);
-                    //frameEffectEntity.transform.localPosition += offset;    //  for debug------------------------
+                    frameEffectEntity.transform.localPosition += offset;
                     frameEffectEntity.transform.localScale = Vector3.Scale(frameEffectEntity.transform.localScale, fixScale);
                     break;
                 }
