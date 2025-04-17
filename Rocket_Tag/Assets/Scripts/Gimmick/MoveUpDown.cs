@@ -1,15 +1,15 @@
 using UnityEngine;
+using Photon.Pun;
 
-public class MoveUpDown : MonoBehaviour
+public class MoveUpDown : MonoBehaviourPun
 {
     [Header("移動設定")]
-    public float moveRange = 2f;              // 上下移動範囲
-    public float moveSpeed = 2f;              // 移動速度
-    public float stopDurationTop = 1f;        // 最高点での停止時間
-    public float stopDurationBottom = 0.5f;   // 最低点での停止時間
+    public float moveRange = 2f;
+    public float moveSpeed = 2f;
+    public float stopDurationTop = 1f;
+    public float stopDurationBottom = 0.5f;
 
     private Vector3 startPosition;
-
     private enum MoveState { MovingUp, MovingDown, Stopping }
     private MoveState currentState = MoveState.MovingUp;
 
@@ -21,6 +21,14 @@ public class MoveUpDown : MonoBehaviour
     }
 
     void Update()
+    {
+        if (photonView.IsMine) // 自分のプレイヤーだけが動作ロジックを持つ
+        {
+            UpdateMovementLogic();
+        }
+    }
+
+    void UpdateMovementLogic()
     {
         Vector3 pos = transform.position;
 
