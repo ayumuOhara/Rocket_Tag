@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Hook
   m_GUID: 30b8260cc1db99d438a5fba0ea64b9bf
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 70f0b50e02028b547a2fed6739f76f00
+    m_Address: FakeHook
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 00bb6419600732146a204053851d83b5, type: 2}
   m_SchemaSet:
