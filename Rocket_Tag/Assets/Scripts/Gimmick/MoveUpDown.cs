@@ -12,6 +12,7 @@ public class MoveUpDown : MonoBehaviourPun, IPunObservable
 
     private Vector3 startPosition;
     private float stopTimer = 0f;
+
     private enum MoveState { MovingUp, MovingDown, Stopping }
     private MoveState currentState = MoveState.MovingUp;
 
@@ -25,13 +26,13 @@ public class MoveUpDown : MonoBehaviourPun, IPunObservable
 
     void FixedUpdate()
     {
-        if (photonView.IsMine)
+        if (PhotonNetwork.IsMasterClient)
         {
             UpdateMovementLogic();
         }
         else
         {
-            // 他プレイヤーの位置をスムーズに補間
+            // 補間してスムーズに表示
             transform.position = Vector3.Lerp(transform.position, networkPosition, Time.deltaTime * 10f);
         }
     }
@@ -76,17 +77,15 @@ public class MoveUpDown : MonoBehaviourPun, IPunObservable
         transform.position = pos;
     }
 
-    // Photon同期
+    // Photonの同期処理
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
-            // 自分のオブジェクトの位置を送信
             stream.SendNext(transform.position);
         }
         else
         {
-            // 他人のオブジェクトの位置を受信
             networkPosition = (Vector3)stream.ReceiveNext();
         }
     }
