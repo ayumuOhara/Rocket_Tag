@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class PlayerRespawnTrigger : MonoBehaviour
 {
-    [SerializeField] private string playerTag = "Player"; // ƒvƒŒƒCƒ„[‚Ìƒ^ƒO
-    [SerializeField] private string stageTag = "Stage"; // ƒXƒe[ƒW‚Ìƒ^ƒO
-    [SerializeField] private float searchRadius = 10f; // ƒXƒe[ƒWŒŸõ”ÍˆÍ
+    [SerializeField] private string playerTag = "Player"; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¿ã‚°
+    [SerializeField] private string stageTag = "Stage"; // ã‚¹ãƒ†ãƒ¼ã‚¸ã®ã‚¿ã‚°
+    [SerializeField] private float searchRadius = 10f; // ã‚¹ãƒ†ãƒ¼ã‚¸æ¤œç´¢ç¯„å›²
 
 
     
@@ -16,21 +16,23 @@ public class PlayerRespawnTrigger : MonoBehaviour
             Transform nearestStage = FindNearestStage(other.transform.position);
             if (nearestStage != null)
             {
-                Vector3 respawnPosition = nearestStage.position + Vector3.up * 1.5f; // ƒXƒe[ƒW‚Ìã‚ÉƒŠƒXƒ|[ƒ“
+                Vector3 respawnPosition = nearestStage.position + Vector3.up * 1.5f; // ã‚¹ãƒ†ãƒ¼ã‚¸ã®ä¸Šã«ãƒªã‚¹ãƒãƒ¼ãƒ³
                 other.transform.position = respawnPosition;
-                Debug.Log("ƒvƒŒƒCƒ„[‚ª‹ß‚­‚ÌƒXƒe[ƒW‚ÉƒŠƒXƒ|[ƒ“‚µ‚Ü‚µ‚½");
-                // Rigidbody‚ÌŠµ«‚ğƒŠƒZƒbƒg
+                Debug.Log("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒè¿‘ãã®ã‚¹ãƒ†ãƒ¼ã‚¸ã«ãƒªã‚¹ãƒãƒ¼ãƒ³ã—ã¾ã—ãŸ");
+
+                // Rigidbodyã®æ…£æ€§ã‚’ãƒªã‚»ãƒƒãƒˆ
                 Rigidbody rb = other.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
                     rb.linearVelocity = Vector3.zero;
                     rb.angularVelocity = Vector3.zero;
-                    Debug.Log("ƒvƒŒƒCƒ„[‚ÌŠµ«‚ğƒŠƒZƒbƒg‚µ‚Ü‚µ‚½B");
+                    Debug.Log("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ…£æ€§ã‚’ãƒªã‚»ãƒƒãƒˆã—ã¾ã—ãŸã€‚");
                 }
+
             }
             else
             {
-                Debug.LogWarning("‹ß‚­‚ÉƒXƒe[ƒW‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñI");
+                Debug.LogWarning("è¿‘ãã«ã‚¹ãƒ†ãƒ¼ã‚¸ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ï¼");
             }
         }
     }
