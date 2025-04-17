@@ -1,7 +1,8 @@
-using UnityEngine;
 using Photon.Pun;
+using UnityEngine;
 
-public class MoveUpDown : MonoBehaviourPun
+[RequireComponent(typeof(PhotonView))]
+public class MoveUpDown : MonoBehaviourPun, IPunObservable
 {
     [Header("移動設定")]
     public float moveRange = 2f;
@@ -10,25 +11,32 @@ public class MoveUpDown : MonoBehaviourPun
     public float stopDurationBottom = 0.5f;
 
     private Vector3 startPosition;
+    private float stopTimer = 0f;
     private enum MoveState { MovingUp, MovingDown, Stopping }
     private MoveState currentState = MoveState.MovingUp;
 
-    private float stopTimer = 0f;
+    private Vector3 networkPosition;
 
     void Start()
     {
         startPosition = transform.position;
+        networkPosition = transform.position;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (photonView.IsMine) // 自分のプレイヤーだけが動作ロジックを持つ
+        if (photonView.IsMine)
         {
             UpdateMovementLogic();
         }
+        else
+        {
+            // 他プレイヤーの位置をスムーズに補間
+            transform.position = Vector3.Lerp(transform.position, networkPosition, Time.deltaTime * 10f);
+        }
     }
 
-    void UpdateMovementLogic()
+    private void UpdateMovementLogic()
     {
         Vector3 pos = transform.position;
 
@@ -66,5 +74,20 @@ public class MoveUpDown : MonoBehaviourPun
         }
 
         transform.position = pos;
+    }
+
+    // Photon同期
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // 自分のオブジェクトの位置を送信
+            stream.SendNext(transform.position);
+        }
+        else
+        {
+            // 他人のオブジェクトの位置を受信
+            networkPosition = (Vector3)stream.ReceiveNext();
+        }
     }
 }
