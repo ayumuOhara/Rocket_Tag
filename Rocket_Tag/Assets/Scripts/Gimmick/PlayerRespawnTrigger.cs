@@ -18,6 +18,7 @@ public class PlayerRespawnTrigger : MonoBehaviour
                 Vector3 respawnPosition = nearestStage.position + Vector3.up * 1.5f; // ステージの上にリスポーン
                 other.transform.position = respawnPosition;
                 Debug.Log("プレイヤーが近くのステージにリスポーンしました");
+
             }
             else
             {
