@@ -18,7 +18,7 @@ public class FollowUpCompas : MonoBehaviour
         Quaternion tmpAngle = Quaternion.LookRotation(GetCloserPlayer() - bombPlayerTF.position);
         Quaternion tmpAngle1;
         tmpAngle.x /= 36;
-        this.gameObject.transform.rotation = Quaternion.Lerp(bombPlayerTF.rotation, tmpAngle, 2f * Time.deltaTime);
+        this.gameObject.transform.rotation = Quaternion.Lerp(bombPlayerTF.rotation, tmpAngle, 50f * Time.deltaTime);
         //tmpAngle1 = this.gameObject.transform.rotation;
         //tmpAngle1.x /= 36;
     }
