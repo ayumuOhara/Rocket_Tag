@@ -52,12 +52,12 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         skinPrefab = SkinGenerater._SkinPrefab;
         headTF     = GameObject.Find("Head"      ).GetComponent<Transform>();
         undress    = GameObject.Find("Undress"   ).GetComponent<Button>();
-        redCap     = GameObject.Find("RedCap"    ).GetComponent<Button>();
-        strawHat   = GameObject.Find("StrawHat"  ).GetComponent<Button>();
-        eringi     = GameObject.Find("Eringi"    ).GetComponent<Button>();
-        freeza     = GameObject.Find("Freeza"    ).GetComponent<Button>();
-        bear       = GameObject.Find("Bear"      ).GetComponent<Button>();
-        star       = GameObject.Find("Star"      ).GetComponent<Button>();
+        redCap = GameObject.Find("RedCap"    ).GetComponent<Button>();
+        strawHat = GameObject.Find("StrawHat"  ).GetComponent<Button>();
+        eringi = GameObject.Find("Eringi"    ).GetComponent<Button>();
+        freeza = GameObject.Find("Freeza"    ).GetComponent<Button>();
+        bear = GameObject.Find("Bear"      ).GetComponent<Button>();
+        star = GameObject.Find("Star"      ).GetComponent<Button>();
         SetSkinNoByButton();    //  ボタン反応追加
 
         tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", 0);

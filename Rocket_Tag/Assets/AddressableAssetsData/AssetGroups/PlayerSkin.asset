@@ -15,11 +15,6 @@ MonoBehaviour:
   m_GroupName: PlayerSkin
   m_GUID: f7bd5e203fd8b3141849db93df95168c
   m_SerializeEntries:
-  - m_GUID: 70f0b50e02028b547a2fed6739f76f00
-    m_Address: FakeHook
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aff2fc3c7481bbe49a9e0c0a07f6362a
     m_Address: Bear
     m_ReadOnly: 0
