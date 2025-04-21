@@ -38,6 +38,11 @@ public class FollowUpCompas : MonoBehaviour
         bombPlayerTF = this.transform.root;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
+        Debug.Log(playersTF.Length + "show playersTF");
+        for(int i = 0; i < 4; i++)
+        {
+            Debug.Log(playersTF[i]);
+        }
     }
     Vector3 GetCloserPlayer()    //  最も近いプレイヤーのトランスフォームを取得する
     {
