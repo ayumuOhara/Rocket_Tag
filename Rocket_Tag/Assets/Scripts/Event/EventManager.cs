@@ -8,9 +8,10 @@ public class EventManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameManager gameManager;
     [SerializeField] UILogManager uiLogManager;
+    [SerializeField] EnoguEvent enoguEvent;
     [SerializeField] private EventData eventData;          // EventDataの参照
     [SerializeField] private SkillDataBase skillDataBase;  // SkillDataの参照
-    [SerializeField] GameObject blindEffect;               // 目つぶしイベント用UI
+    //[SerializeField] GameObject blindEffect;               // 目つぶしイベント用UI
 
     private void Update()
     {
@@ -103,18 +104,17 @@ public class EventManager : MonoBehaviourPunCallbacks
     IEnumerator BlindEvent()
     {
         float eventTime = 10.0f;
-        photonView.RPC("BlindEffect", RpcTarget.All, true);
+        enoguEvent.PaintOpen();
         yield return new WaitForSeconds(eventTime);
-        photonView.RPC("BlindEffect", RpcTarget.All, false);
-
+        enoguEvent.PaintClose();
         yield break;
     }
 
-    [PunRPC]
+    /*[PunRPC]
     void BlindEffect(bool isBlind)
     {
         blindEffect.SetActive(isBlind);
-    }
+    }*/
 
     // エリアイベント
     IEnumerator BombAreaEvent()
