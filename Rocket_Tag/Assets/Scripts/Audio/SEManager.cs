@@ -42,7 +42,10 @@ public class SEManager : MonoBehaviour
         Collision_Dash_2,  // ぶつかりダッシュ衝突時の音
         Sticky_Zone,   // ねばねばゾーン展開時の音
         Pull_Hook_1,   // 引き寄せフック投擲時の音
-        Pull_Hook_2    // 引き寄せフック引き寄せる時の音
+        Pull_Hook_2,   // 引き寄せフック引き寄せる時の音
+        Event_warp,    // 位置入れ替えの効果音
+        Event_ink,　　 // インクが画面に飛び散る効果音
+        Page　　　　　 // ページをめくる効果音
     }
 
     // SE再生メソッド
