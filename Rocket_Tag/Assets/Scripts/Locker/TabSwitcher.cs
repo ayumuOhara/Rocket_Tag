@@ -22,11 +22,13 @@ public class TabSwitcher : MonoBehaviour
     {
         skillSection.SetActive(true);
         costumeSection.SetActive(false);
+        AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
     }
 
     private void ShowCostumeSection()
     {
         skillSection.SetActive(false);
         costumeSection.SetActive(true);
+        AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
     }
 }

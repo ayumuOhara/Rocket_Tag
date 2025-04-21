@@ -51,7 +51,10 @@ public class OptionManager : MonoBehaviour
     public void HideOptionPanel()
     {
         optionPanel.SetActive(false);
-        Cursor.visible = false;       //マウスカーソルを非表示
+        if(SceneManager.GetActiveScene().name == "PlayScene")
+        {
+            Cursor.visible = false;       //マウスカーソルを非表示
+        }
     }
 
     private void OnDestroy()

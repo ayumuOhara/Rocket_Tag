@@ -10,6 +10,7 @@ public class TutorialManager : MonoBehaviour
     public void ShowTutorialPanel()
     {
         tutorialPanel.SetActive(true);
+        AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
     }
 
     //チュートリアル画面を非表示

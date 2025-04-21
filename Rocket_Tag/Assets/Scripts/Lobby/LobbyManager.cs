@@ -7,29 +7,13 @@ public class LobbyManager : MonoBehaviour
     public void LoadGameScene()
     {
         SceneManager.LoadScene("Test_Shiromoto"); // ゲーム画面のシーン名
-    }
-
-    // ショップ画面への遷移
-    public void LoadShopScene()
-    {
-        SceneManager.LoadScene(""); // ショップ画面のシーン名
-    }
-
-    // チュートリアル画面への遷移
-    public void LoadTutorialScene()
-    {
-        SceneManager.LoadScene(""); // チュートリアル画面のシーン名
-    }
-
-    // タイトル画面への遷移
-    public void LoadTitleScene()
-    {
-        SceneManager.LoadScene("Title"); // タイトル画面のシーン名
+        AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
     }
 
     // ロッカー画面への遷移
     public void LoadLockerScene()
     {
         SceneManager.LoadScene("Locker"); // ロッカー画面のシーン名
+        AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
     }
 }

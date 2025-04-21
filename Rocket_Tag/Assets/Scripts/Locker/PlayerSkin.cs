@@ -76,6 +76,7 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     }
     void ChangeSkin(int clickSkinNo, int skinLocation)    //  スキン番号変更
     {
+        AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
         if (tmpSkinNo != clickSkinNo)
         {
             tmpSkinNo = clickSkinNo;
