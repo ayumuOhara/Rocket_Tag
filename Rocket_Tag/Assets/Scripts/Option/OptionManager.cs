@@ -51,6 +51,7 @@ public class OptionManager : MonoBehaviour
     public void HideOptionPanel()
     {
         optionPanel.SetActive(false);
+        Cursor.visible = false;       //マウスカーソルを非表示
     }
 
     private void OnDestroy()
