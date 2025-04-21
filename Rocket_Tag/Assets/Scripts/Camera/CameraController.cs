@@ -57,11 +57,6 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
-        {
-            CursorVisible();
-        }
-
         turnSpeed = turnSpeedSetting.turnSpeed;
 
         if (isShaking == false)
@@ -77,13 +72,6 @@ public class CameraController : MonoBehaviour
                 TrackingTarget();
             }
         }       
-    }
-
-    bool isVisible = true;
-
-    void CursorVisible()
-    {
-        Cursor.visible = !isVisible;
     }
 
     // ƒJƒƒ‰‚Ì‰ñ“]‚Ì§Œä
