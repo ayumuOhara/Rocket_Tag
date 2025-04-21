@@ -9,8 +9,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     SkillManager skillManager;
 
     [SerializeField] private Vector3 movingVelocity;             // 移動方向
-    [SerializeField] private float moveSpeed = 10.0f;            // 移動速度
-    [SerializeField] private float defaultMoveSpeed = 10.0f;     // 通常の移動速度
+    [SerializeField] private float moveSpeed = 7.5f;            // 移動速度
+    [SerializeField] private float defaultMoveSpeed = 7.5f;     // 通常の移動速度
     [SerializeField] private float applySpeed = 0.2f;            // 回転の適用速度
     [SerializeField] private float jumpForce = 20.0f;            // ジャンプ力
     private bool isGround = false;                               // 接地判定
@@ -68,7 +68,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // 斜め移動が速くならないようにする
         movingDirection.Normalize();
 
-        movingVelocity = movingDirection * moveSpeed;
+        if(setPlayerBool.hasRocket)
+        {
+            movingVelocity = movingDirection * moveSpeed * 1.25f;
+        }
+        else
+        {
+            movingVelocity = movingDirection * moveSpeed;
+        }
     }
 
     // 取得したベクトルの方向に移動&回転させる+ジャンプ処理
