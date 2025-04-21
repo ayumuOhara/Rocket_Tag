@@ -7,6 +7,7 @@ public class FollowUpCompas : MonoBehaviour
 {
     public Transform[] playersTF;
     public Transform bombPlayerTF;
+
     GameManager gameManager;
     List<Material> compasMaterials;
 
@@ -50,10 +51,10 @@ public class FollowUpCompas : MonoBehaviour
         float minLineDis;
         int closestPlayerNo = playersTF.Length;
 
-        minLineDis = 2000;
+        minLineDis = 2;
         //tmpLineDis = Vector3.Distance(playersTF[closestPlayerNo].position, bombPlayerTF.position);
 
-        for (int arrayNum = playersTF.Length; arrayNum != -1; arrayNum--)
+        for (int arrayNum = playersTF.Length - 1; arrayNum != -1; arrayNum--)
         {
             if (playersTF[arrayNum] != bombPlayerTF)
             {
