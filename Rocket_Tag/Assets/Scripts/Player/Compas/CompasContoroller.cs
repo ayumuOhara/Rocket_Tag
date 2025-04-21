@@ -22,7 +22,7 @@ public class FollowUpCompas : MonoBehaviour
         //    }
         //}
 
-        //StartCoroutine(FadeOut())
+        //StartCoroutine(FadeOut());
         Initialize();
     }
     void Update()
@@ -39,6 +39,8 @@ public class FollowUpCompas : MonoBehaviour
         bombPlayerTF = this.transform.root;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
+        compasMaterials = new List<Material>();
+
         Debug.Log(playersTF.Length + "show playersTF");
         for(int i = 0; i < 4; i++)
         {
@@ -49,7 +51,7 @@ public class FollowUpCompas : MonoBehaviour
     {
         float tmpLineDis;
         float minLineDis;
-        int closestPlayerNo = playersTF.Length;
+        int closestPlayerNo = playersTF.Length - 1;
 
         minLineDis = 2;
         //tmpLineDis = Vector3.Distance(playersTF[closestPlayerNo].position, bombPlayerTF.position);
@@ -61,6 +63,7 @@ public class FollowUpCompas : MonoBehaviour
                 tmpLineDis = Vector3.Distance(playersTF[arrayNum].position, bombPlayerTF.position);
                 if (minLineDis > tmpLineDis)
                 {
+                    Debug.Log("Closest is chagned");
                     minLineDis = tmpLineDis;
                     closestPlayerNo = arrayNum;
                 }
