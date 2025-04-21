@@ -95,12 +95,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         isGameStarted = true;
         timeManager.isTimeStart = true;
         readyButton.SetActive(false);
+        StartCoroutine(CheckSurvivorCount());
 
         if (PhotonNetwork.IsMasterClient)
         {
             ChooseRocketPlayer();
             StartCoroutine(eventManager.TriggerRandomEvent());
-            StartCoroutine(CheckSurvivorCount());
         }
     }
 
