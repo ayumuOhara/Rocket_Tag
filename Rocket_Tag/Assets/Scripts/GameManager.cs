@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -147,7 +148,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
                 PhotonNetwork.Disconnect();
-                PhotonNetwork.LoadLevel("Result");
+                SceneManager.LoadScene("Result");
                 yield break;
             }
             yield return null;
