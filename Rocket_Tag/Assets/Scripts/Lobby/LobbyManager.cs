@@ -14,6 +14,6 @@ public class LobbyManager : MonoBehaviour
     public void LoadLockerScene()
     {
         SceneManager.LoadScene("Locker"); // ロッカー画面のシーン名
-        AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
+        //AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
     }
 }
