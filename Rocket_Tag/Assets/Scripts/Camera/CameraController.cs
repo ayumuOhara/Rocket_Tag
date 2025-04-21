@@ -52,7 +52,7 @@ public class CameraController : MonoBehaviour
         // マウスカーソルを画面内の範囲のみ動かせるようにする
         Cursor.lockState = CursorLockMode.Confined;
 
-        Cursor.visible = true;
+        Cursor.visible = false;
     }
 
     void Update()
