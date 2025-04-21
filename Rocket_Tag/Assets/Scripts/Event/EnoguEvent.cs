@@ -13,6 +13,7 @@ public class EnoguEvent : MonoBehaviourPun
     {
         Positioning();
         photonView.RPC("BlindEffect", RpcTarget.All, true);
+        Debug.Log("•\Ž¦");
     }
 
     public void PaintClose()
@@ -20,6 +21,7 @@ public class EnoguEvent : MonoBehaviourPun
         photonView.RPC("enogu4_1", RpcTarget.All, false);
         photonView.RPC("enogu4_2", RpcTarget.All, false);
         photonView.RPC("BlindEffect", RpcTarget.All, false);
+        Debug.Log("”ñ•\Ž¦");
     }
 
     public void Positioning()
