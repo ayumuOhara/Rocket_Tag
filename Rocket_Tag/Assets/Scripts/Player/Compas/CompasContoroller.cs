@@ -57,7 +57,7 @@ public class FollowUpCompas : MonoBehaviour
         //    }
         //}
 
-        isFadeIn = true;
+        //isFadeIn = true;
 
         Debug.Log(playersTF.Length + "show playersTF");
         for (int i = 0; i < 4; i++)
@@ -91,47 +91,47 @@ public class FollowUpCompas : MonoBehaviour
         Debug.Log(minLineDis);
         return playersTF[closestPlayerNo].position;
     }
-    IEnumerator Fading(GameObject obj, bool fadeIn)    //  フェードアウト
-    {
-        float FadingTime;
+    //IEnumerator Fading(GameObject obj, bool fadeIn)    //  フェードアウト
+    //{
+    //    float FadingTime;
 
-        FadingTime = 0.7f;
-        if (isFadeIn)
-        {
-            for (float elapsed = 0; elapsed < FadingTime; elapsed += Time.deltaTime)
-            {
-                float alpha = Mathf.Lerp(0f, 1f, elapsed / FadingTime);
-                {
-                    foreach (Material mat in compasMaterials)
-                    {
-                        Color color = mat.color;
-                        color.a = alpha;
-                        mat.color = color;
-                    }
-                }
-                yield return null;
-            }
-        }
-        else
-        {
-            if (isFadeIn)
-            {
-                for (float elapsed = 0; elapsed < FadingTime; elapsed += Time.deltaTime)
-                {
-                    float alpha = Mathf.Lerp(0f, 1f, elapsed / FadingTime);
-                    {
-                        foreach (Material mat in compasMaterials)
-                        {
-                            Color color = mat.color;
-                            color.a = alpha;
-                            mat.color = color;
-                        }
-                    }
-                    yield return null;
-                }
-            }
-        }
-    }
+    //    FadingTime = 0.7f;
+    //    //if (isFadeIn)
+    //    //{
+    //    //    for (float elapsed = 0; elapsed < FadingTime; elapsed += Time.deltaTime)
+    //    //    {
+    //    //        float alpha = Mathf.Lerp(0f, 1f, elapsed / FadingTime);
+    //    //        {
+    //    //            foreach (Material mat in compasMaterials)
+    //    //            {
+    //    //                Color color = mat.color;
+    //    //                color.a = alpha;
+    //    //                mat.color = color;
+    //    //            }
+    //    //        }
+    //    //        yield return null;
+    //    //    }
+    //    //}
+    //    //else
+    //    //{
+    //    //    //if (isFadeIn)
+    //    //    {
+    //    //        for (float elapsed = 0; elapsed < FadingTime; elapsed += Time.deltaTime)
+    //    //        {
+    //    //            float alpha = Mathf.Lerp(0f, 1f, elapsed / FadingTime);
+    //    //            {
+    //    //                foreach (Material mat in compasMaterials)
+    //    //                {
+    //    //                    Color color = mat.color;
+    //    //                    color.a = alpha;
+    //    //                    mat.color = color;
+    //    //                }
+    //    //            }
+    //    //            yield return null;
+    //    //        }
+    //    //    }
+    //    //}
+    //}
     Vector3 GetCloserObj(Vector3 axis, Vector3[] objArray)    //  最も近いオブジェクトのポジションを取得する
     {
         float tmpLineDis;
