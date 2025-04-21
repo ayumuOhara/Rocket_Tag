@@ -1,8 +1,6 @@
-using Photon.Pun;
 using UnityEngine;
 
-[RequireComponent(typeof(PhotonView))]
-public class MoveUpDown : MonoBehaviourPun, IPunObservable
+public class MoveUpDown : MonoBehaviour
 {
     [Header("移動設定")]
     public float moveRange = 2f;
@@ -16,25 +14,14 @@ public class MoveUpDown : MonoBehaviourPun, IPunObservable
     private enum MoveState { MovingUp, MovingDown, Stopping }
     private MoveState currentState = MoveState.MovingUp;
 
-    private Vector3 networkPosition;
-
     void Start()
     {
         startPosition = transform.position;
-        networkPosition = transform.position;
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            UpdateMovementLogic();
-        }
-        else
-        {
-            // 補間してスムーズに表示
-            transform.position = Vector3.Lerp(transform.position, networkPosition, Time.deltaTime * 10f);
-        }
+        UpdateMovementLogic();
     }
 
     private void UpdateMovementLogic()
@@ -75,18 +62,5 @@ public class MoveUpDown : MonoBehaviourPun, IPunObservable
         }
 
         transform.position = pos;
-    }
-
-    // Photonの同期処理
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(transform.position);
-        }
-        else
-        {
-            networkPosition = (Vector3)stream.ReceiveNext();
-        }
     }
 }
