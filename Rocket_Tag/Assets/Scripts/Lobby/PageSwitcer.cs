@@ -28,6 +28,7 @@ public class PageSwitcher : MonoBehaviour
 
     public void GoForwardSection()
     {
+        AudioManager.Instance.PlaySE(SEManager.SEType.Page); //ボタンクリック音
         if (currentSection == firstSection)
         {
             ShowSecondSection();
@@ -48,6 +49,7 @@ public class PageSwitcher : MonoBehaviour
 
     public void GoBackSection()
     {
+        AudioManager.Instance.PlaySE(SEManager.SEType.Page); //ボタンクリック音
         if (currentSection == secondSection)
         {
             ShowFirstSection();
