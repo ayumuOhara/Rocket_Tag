@@ -19,23 +19,19 @@ public class FollowUpCompas : MonoBehaviour
     }
     void OnEnable()
     {
-        foreach (Renderer rend in GetComponentsInChildren<Renderer>())
-        {
-            foreach (Material mat in rend.materials)
-            {
-                SetupMaterialWithFadeMode(mat);
-                compasMaterials.Add(mat);
-            }
-        }
+        Fading(compas, isFadeIn);
         isFadeIn = false;
     }
     void Start()
     {
-        StartCoroutine(Fading(compas));
         Initialize();
     }
     void Update()
     {
+        if(!transform.parent.Find("Rocket").gameObject.activeSelf)
+        {
+            Fading(compas, isFadeIn);
+        }
         Quaternion tmpAngle = Quaternion.LookRotation(GetCloserPlayer() - bombPlayerTF.position);
         //Quaternion tmpAngle1;
         tmpAngle.x /= 36;
@@ -49,6 +45,15 @@ public class FollowUpCompas : MonoBehaviour
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
         compasMaterials = new List<Material>();
+
+        foreach (Renderer rend in GetComponentsInChildren<Renderer>())
+        {
+            foreach (Material mat in rend.materials)
+            {
+                SetupMaterialWithFadeMode(mat);
+                compasMaterials.Add(mat);
+            }
+        }
 
         isFadeIn = true;
 
@@ -84,7 +89,7 @@ public class FollowUpCompas : MonoBehaviour
         Debug.Log(minLineDis);
         return playersTF[closestPlayerNo].position;
     }
-    IEnumerator Fading(GameObject obj)    //  フェードアウト
+    IEnumerator Fading(GameObject obj, bool fadeIn)    //  フェードアウト
     {
         float FadingTime;
 
