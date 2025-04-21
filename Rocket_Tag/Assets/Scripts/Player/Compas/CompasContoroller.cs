@@ -7,22 +7,31 @@ public class FollowUpCompas : MonoBehaviour
 {
     public Transform[] playersTF;
     public Transform bombPlayerTF;
-
+    GameObject compas;
     GameManager gameManager;
     List<Material> compasMaterials;
 
+    bool isFadeIn;
+
+    void Awake()
+    {
+        Initialize();
+    }
+    void OnEnable()
+    {
+        foreach (Renderer rend in GetComponentsInChildren<Renderer>())
+        {
+            foreach (Material mat in rend.materials)
+            {
+                SetupMaterialWithFadeMode(mat);
+                compasMaterials.Add(mat);
+            }
+        }
+        isFadeIn = false;
+    }
     void Start()
     {
-        //foreach (Renderer rend in GetComponentInChildren<Renderer>())
-        //{
-        //    foreach (Material mat in rend.materials)
-        //    {
-        //        SetupMaterialWithFadeMode(mat);
-        //        compasMaterials.Add(mat);
-        //    }
-        //}
-
-        //StartCoroutine(FadeOut());
+        StartCoroutine(Fading(compas));
         Initialize();
     }
     void Update()
@@ -41,11 +50,14 @@ public class FollowUpCompas : MonoBehaviour
         playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
         compasMaterials = new List<Material>();
 
+        isFadeIn = true;
+
         Debug.Log(playersTF.Length + "show playersTF");
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             Debug.Log(playersTF[i]);
         }
+        compas = this.gameObject;
     }
     Vector3 GetCloserPlayer()    //  最も近いプレイヤーのトランスフォームを取得する
     {
@@ -72,25 +84,47 @@ public class FollowUpCompas : MonoBehaviour
         Debug.Log(minLineDis);
         return playersTF[closestPlayerNo].position;
     }
-    //IEnumerator FadeOut(GameObject obj)    //  フェードアウト
-    //{
-    //    float FadingTime;
+    IEnumerator Fading(GameObject obj)    //  フェードアウト
+    {
+        float FadingTime;
 
-    //    FadingTime = 0.7f;
-
-    //    for (float elapsed = 0; elapsed < FadingTime; elapsed += Time.deltaTime)
-    //    {
-    //        float alpha = Mathf.Lerp(0f, 1f, elapsed / FadingTime);
-    //        {
-    //            foreach (Material mat in compasMaterials)
-    //            {
-    //                Color color = mat.color;
-    //                color.a = alpha;
-    //                mat.color = color;
-    //            }
-    //        }
-    //    }
-    //}
+        FadingTime = 0.7f;
+        if (isFadeIn)
+        {
+            for (float elapsed = 0; elapsed < FadingTime; elapsed += Time.deltaTime)
+            {
+                float alpha = Mathf.Lerp(0f, 1f, elapsed / FadingTime);
+                {
+                    foreach (Material mat in compasMaterials)
+                    {
+                        Color color = mat.color;
+                        color.a = alpha;
+                        mat.color = color;
+                    }
+                }
+                yield return null;
+            }
+        }
+        else
+        {
+            if (isFadeIn)
+            {
+                for (float elapsed = 0; elapsed < FadingTime; elapsed += Time.deltaTime)
+                {
+                    float alpha = Mathf.Lerp(0f, 1f, elapsed / FadingTime);
+                    {
+                        foreach (Material mat in compasMaterials)
+                        {
+                            Color color = mat.color;
+                            color.a = alpha;
+                            mat.color = color;
+                        }
+                    }
+                    yield return null;
+                }
+            }
+        }
+    }
     Vector3 GetCloserObj(Vector3 axis, Vector3[] objArray)    //  最も近いオブジェクトのポジションを取得する
     {
         float tmpLineDis;

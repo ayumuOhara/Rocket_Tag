@@ -1729,8 +1729,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movingVelocity: {x: 0, y: 0, z: 0}
-  moveSpeed: 10
-  defaultMoveSpeed: 10
+  moveSpeed: 7.5
+  defaultMoveSpeed: 7.5
   applySpeed: 0.2
   jumpForce: 0
   refCamera: {fileID: 0}
