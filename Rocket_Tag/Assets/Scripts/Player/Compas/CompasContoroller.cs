@@ -11,15 +11,15 @@ public class FollowUpCompas : MonoBehaviour
     GameManager gameManager;
     List<Material> compasMaterials;
 
-    bool isFadeIn;
+    bool isLoaded;
 
-    void Awake()
-    {
-        Initialize();
-    }
     void OnEnable()
     {
-        //Fading(compas, isFadeIn);    //  for debug-----------------
+        if (!isLoaded)
+        {
+            Initialize();
+        }
+            //Fading(compas, isFadeIn);    //  for debug-----------------
         //isFadeIn = false;    //  for debug-----------------
     }
     void Start()
