@@ -6730,6 +6730,7 @@ GameObject:
   - component: {fileID: 428479659}
   - component: {fileID: 428479658}
   - component: {fileID: 428479657}
+  - component: {fileID: 428479661}
   m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Ground
@@ -6766,6 +6767,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveRange: 1.2
   moveSpeed: 1.5
+  stopDurationTop: 1
+  stopDurationBottom: 0.5
 --- !u!65 &428479658
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6840,6 +6843,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 428479655}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &428479661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 428479655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 6
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &432753093
 GameObject:
   m_ObjectHideFlags: 0
@@ -15130,6 +15155,7 @@ GameObject:
   - component: {fileID: 1064092012}
   - component: {fileID: 1064092011}
   - component: {fileID: 1064092010}
+  - component: {fileID: 1064092014}
   m_Layer: 0
   m_Name: Cube (4)
   m_TagString: Ground
@@ -15166,6 +15192,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveRange: 1.2
   moveSpeed: 1.5
+  stopDurationTop: 1
+  stopDurationBottom: 0.5
 --- !u!65 &1064092011
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15240,6 +15268,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1064092008}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1064092014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064092008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 5
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1068792685
 GameObject:
   m_ObjectHideFlags: 0
@@ -26547,6 +26597,7 @@ GameObject:
   - component: {fileID: 1860694359}
   - component: {fileID: 1860694358}
   - component: {fileID: 1860694357}
+  - component: {fileID: 1860694361}
   m_Layer: 0
   m_Name: Cube (3)
   m_TagString: Ground
@@ -26583,6 +26634,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveRange: 1.2
   moveSpeed: 1.5
+  stopDurationTop: 1
+  stopDurationBottom: 0.5
 --- !u!65 &1860694358
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -26657,6 +26710,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1860694355}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1860694361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860694355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 4
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1871232438
 GameObject:
   m_ObjectHideFlags: 0
@@ -29003,6 +29078,7 @@ GameObject:
   - component: {fileID: 2047435051}
   - component: {fileID: 2047435050}
   - component: {fileID: 2047435049}
+  - component: {fileID: 2047435053}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Ground
@@ -29039,6 +29115,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveRange: 1.2
   moveSpeed: 1.5
+  stopDurationTop: 1
+  stopDurationBottom: 0.5
 --- !u!65 &2047435050
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29113,6 +29191,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2047435047}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2047435053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2047435047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 3
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2060067207
 GameObject:
   m_ObjectHideFlags: 0
