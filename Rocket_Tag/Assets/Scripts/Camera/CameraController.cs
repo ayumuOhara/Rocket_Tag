@@ -55,7 +55,11 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        CursorVisible();
+        if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
+        {
+            CursorVisible();
+        }
+
         turnSpeed = turnSpeedSetting.turnSpeed;
 
         if (isShaking == false)
@@ -73,17 +77,11 @@ public class CameraController : MonoBehaviour
         }       
     }
 
+    bool isVisible = true;
+
     void CursorVisible()
     {
-        if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
-        {
-            Cursor.visible = true;
-        }
-        else
-        {
-            Cursor.visible = false;
-        }
-
+        Cursor.visible = !isVisible;
     }
 
     // ÉJÉÅÉâÇÃâÒì]ÇÃêßå‰
