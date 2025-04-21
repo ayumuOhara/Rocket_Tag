@@ -146,11 +146,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (playerCount <= 1)
             {
                 Debug.Log("¶‘¶l”‚ª‚Pl‚É‚È‚Á‚½‚Ì‚ÅƒQ[ƒ€‚ðI—¹‚µ‚Ü‚·");
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    PhotonNetwork.Disconnect();
-                    PhotonNetwork.LoadLevel("Result");
-                }
+                PhotonNetwork.Disconnect();
+                PhotonNetwork.LoadLevel("Result");
                 yield break;
             }
             yield return null;
