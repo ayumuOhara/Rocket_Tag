@@ -59,6 +59,7 @@ MonoBehaviour:
   - IsTimeStart
   - Enogu4_1
   - Enogu4_2
+  - DoPaintOpen
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
