@@ -14,10 +14,7 @@ public class EventManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
-        {
-            StartCoroutine(TriggerRandomEvent());
-        }
+
     }
 
     // ランダムにイベントを選択するメソッド

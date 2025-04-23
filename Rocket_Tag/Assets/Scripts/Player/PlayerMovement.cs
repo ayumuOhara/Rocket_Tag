@@ -22,6 +22,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [SerializeField] PhysicsMaterial defaultFriction;       // 通常状態の摩擦
     [SerializeField] PhysicsMaterial noneFriction;          // 方向キー入力中の摩擦
 
+    [SerializeField] private float acceleration = 30f;  // 加速度
+    [SerializeField] private float deceleration = 25f;  // 減速度
+    private Vector3 currentVelocity = Vector3.zero;     // 実際に使う現在の移動速度
+
     float stunTime = 3.0f;                                  // スタン時間
     bool isDash = false;                                    // ダッシュ中か
 
@@ -81,49 +85,40 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     // 取得したベクトルの方向に移動&回転させる+ジャンプ処理
     public void PlayerMove()
     {
-        if(setPlayerBool != null)
+        if (setPlayerBool != null && setPlayerBool.isStun)
         {
-            if (setPlayerBool.isStun)
-            {
-                rb.linearVelocity = Vector3.zero;
-                return;
-            }
+            rb.linearVelocity = Vector3.zero;
+            return;
         }
 
         RunAnimation();
         HandleFootstepSE();
 
-        // いずれかの方向に移動している場合
-        if (movingVelocity.magnitude > 0)
+        // カメラ方向を反映
+        Vector3 cameraForward = refCamera.transform.forward;
+        cameraForward.y = 0;
+        cameraForward.Normalize();
+        Vector3 cameraRight = refCamera.transform.right;
+        Vector3 adjustedVelocity = cameraForward * movingVelocity.z + cameraRight * movingVelocity.x;
+
+        // 加速または減速
+        if (adjustedVelocity.magnitude > 0.1f)
         {
             _collider.material = noneFriction;
+            currentVelocity = Vector3.MoveTowards(currentVelocity, adjustedVelocity, acceleration * Time.deltaTime);
 
-            // カメラの前方向をXZ平面に投影
-            Vector3 cameraForward = refCamera.transform.forward;
-            cameraForward.y = 0;
-            cameraForward.Normalize();
-
-            // カメラの右方向を取得
-            Vector3 cameraRight = refCamera.transform.right;
-
-            // カメラ基準で移動方向を再計算
-            Vector3 adjustedVelocity = cameraForward * movingVelocity.z + cameraRight * movingVelocity.x;
-
-            // プレイヤーの回転(transform.rotation)の更新
-            if (adjustedVelocity.magnitude > 0)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(adjustedVelocity);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, applySpeed);
-            }
-
-            // プレイヤーの位置の更新
-            rb.linearVelocity = new Vector3(adjustedVelocity.x, rb.linearVelocity.y, adjustedVelocity.z);
+            Quaternion targetRotation = Quaternion.LookRotation(currentVelocity);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, applySpeed);
         }
         else
         {
-            _collider.material = defaultFriction; 
+            _collider.material = defaultFriction;
+            currentVelocity = Vector3.MoveTowards(currentVelocity, Vector3.zero, deceleration * Time.deltaTime);
         }
+
+        rb.linearVelocity = new Vector3(currentVelocity.x, rb.linearVelocity.y, currentVelocity.z);
     }
+
 
     void RunAnimation()
     {
