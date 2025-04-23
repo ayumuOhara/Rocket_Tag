@@ -11,9 +11,15 @@ public class EnoguEvent : MonoBehaviourPun
     [SerializeField] GameObject enogu4_2;               // 目つぶしイベント用UI
     public void PaintOpen()
     {
-        Positioning();
+        photonView.RPC("DoPaintOpen", RpcTarget.All);
         photonView.RPC("BlindEffect", RpcTarget.All, true);
         Debug.Log("表示");
+    }
+
+    [PunRPC]
+    void DoPaintOpen()
+    {
+        Positioning();
     }
 
     public void PaintClose()
