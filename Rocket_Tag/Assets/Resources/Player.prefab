@@ -1729,8 +1729,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movingVelocity: {x: 0, y: 0, z: 0}
-  moveSpeed: 7.5
-  defaultMoveSpeed: 7.5
+  moveSpeed: 10
+  defaultMoveSpeed: 10
   applySpeed: 0.2
   jumpForce: 0
   refCamera: {fileID: 0}
@@ -1738,6 +1738,8 @@ MonoBehaviour:
   _collider: {fileID: 978622442078488288}
   defaultFriction: {fileID: 13400000, guid: 589ed37f35df18b45854d74953f6f0d1, type: 2}
   noneFriction: {fileID: 13400000, guid: 53f982d06c3a94445b8a7c7f541b9c91, type: 2}
+  acceleration: 30
+  deceleration: 25
   footstepAudioSource: {fileID: -7464231355686350232}
 --- !u!114 &9086714697225009793
 MonoBehaviour:
