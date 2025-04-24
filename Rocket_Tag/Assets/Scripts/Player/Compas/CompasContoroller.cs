@@ -35,17 +35,11 @@ public class FollowUpCompas : MonoBehaviour
         trackSpd = 11f;
         xRotCap = 36;
         isLoaded = true;
-
-        Debug.Log(playersTF.Length + "show playersTF");
-        for (int i = 0; i < 4; i++)
-        {
-            Debug.Log(playersTF[i]);
-        }
     }
     void ChangeRot(Transform watcher,Transform changedObj, Vector3 target, float trackSpd, int xRotCap)    //  オブジェクトをターゲットの方向に向ける
     {
         Quaternion tmpAngle = Quaternion.LookRotation(target - watcher.position);
-        tmpAngle.x /= xRotCap;
+        tmpAngle.x /= 360;
         changedObj.rotation = Quaternion.Lerp(changedObj.rotation, tmpAngle, trackSpd * Time.deltaTime);
     }
     Vector3 GetCloserObj(Vector3 axis, Vector3[] poss)    //  最も近いプレイヤーのトランスフォームを取得する
