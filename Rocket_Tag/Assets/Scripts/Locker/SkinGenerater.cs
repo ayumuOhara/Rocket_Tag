@@ -96,6 +96,20 @@ async void Initialize()     //  初期化                                          
         int tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", -1);
         int tmpSkinLocation = PlayerPrefs.GetInt("PlayerSkinLocation", -1);
 
+        if (playerSkinPrefab[tmpSkinNo] == null)
+        {
+            Debug.LogError($"スキンプレハブ[{tmpSkinNo}]がnullです");
+        }
+        var headTransform = playerTF_.Find("root/Hip/Spine/Head");
+        if (headTransform == null)
+        {
+            Debug.LogError($"プレイヤーのTransformに Head が存在しません: {playerTF_.name}");
+        }
+        if (playerTF_ == null)
+        {
+            Debug.LogError("SkinGenerate に渡された Transform が null です");
+        }
+
         if (IsUnexpectedValue(new int[] {tmpSkinNo, tmpSkinLocation }, new int[] {-1, -1}))
         {
             tmpSkinNo = 0;
