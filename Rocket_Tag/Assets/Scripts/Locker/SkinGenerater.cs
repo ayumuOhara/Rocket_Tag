@@ -113,7 +113,7 @@ async void Initialize()     //  初期化                                          
                         // 他プレイヤーにスキン情報を送信
                         if (photonView.IsMine)
                         {
-                            photonView.RPC("RPC_SyncSkin", RpcTarget.OthersBuffered, tmpSkinNo, tmpSkinLocation);
+                            StartCoroutine(DelayedSyncSkin(tmpSkinNo, tmpSkinLocation));
                         }
 
                         break;
@@ -121,6 +121,13 @@ async void Initialize()     //  初期化                                          
             }
         }
     }
+
+    IEnumerator DelayedSyncSkin(int skinNo, int skinLocation)
+    {
+        yield return new WaitForSeconds(0.1f); // 1フレームでもOKな場合もある
+        photonView.RPC("RPC_SyncSkin", RpcTarget.OthersBuffered, skinNo, skinLocation);
+    }
+
     [PunRPC]
     void RPC_SyncSkin(int skinNo, int skinLocation)
     {
@@ -141,6 +148,7 @@ async void Initialize()     //  初期化                                          
             Instantiate(SkinGenerater._SkinPrefab[skinNo], targetParent);
         }
     }
+
     bool IsUnexpectedValue(int[] value, int[] unExpectedValue)    //  値チェック
     {
         for (int arrayNo = value.Length - 1; arrayNo >= 0; --arrayNo)
