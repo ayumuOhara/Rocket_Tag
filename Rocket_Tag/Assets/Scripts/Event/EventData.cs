@@ -20,10 +20,8 @@ public class EventData : ScriptableObject
     public enum EventType
     {
         BLIND,
-        BOMB_AREA,
         CHANGE_POS,
         RANDOM_SPEED,
-        RANDOM_SKILL,
     }
 
     // Dictionary ‚ğ‰Šú‰»‚·‚é

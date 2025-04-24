@@ -61,6 +61,8 @@ MonoBehaviour:
   - Enogu4_2
   - DoPaintOpen
   - RPC_SyncSkin
+  - <TriggerRandomEvent>g__ChangePos|11_3
+  - <TriggerRandomEvent>g__ChangePos|11_4
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
