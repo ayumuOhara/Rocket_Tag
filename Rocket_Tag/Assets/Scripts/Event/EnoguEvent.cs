@@ -12,26 +12,21 @@ public class EnoguEvent : MonoBehaviourPun
     public void PaintOpen()
     {
         photonView.RPC("DoPaintOpen", RpcTarget.All);
-        photonView.RPC("BlindEffect", RpcTarget.All, true);
+        BlindEffect(true);
         Debug.Log("•\Ž¦");
     }
 
     [PunRPC]
     void DoPaintOpen()
     {
-        SetPlayerBool setPlayerBool = GetComponent<SetPlayerBool>();
-
-        if (setPlayerBool != null && !setPlayerBool.isDead)
-        {
             Positioning();
-        }
     }
 
     public void PaintClose()
     {
         photonView.RPC("Enogu4_1", RpcTarget.All, false);
         photonView.RPC("Enogu4_2", RpcTarget.All, false);
-        photonView.RPC("BlindEffect", RpcTarget.All, false);
+        BlindEffect(false);
         Debug.Log("”ñ•\Ž¦");
     }
 
