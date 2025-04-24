@@ -3,18 +3,32 @@ using Photon.Realtime;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using TMPro;
 
 public class EventManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameManager gameManager;
     [SerializeField] UILogManager uiLogManager;
     [SerializeField] EnoguEvent enoguEvent;
+    [SerializeField] GameObject eventTextObj;
+    [SerializeField] TextMeshProUGUI eventText;
     [SerializeField] private EventData eventData;          // EventDataの参照
     [SerializeField] private SkillDataBase skillDataBase;  // SkillDataの参照
 
+    [SerializeField] float time = 0;
+    [SerializeField] float triggerTime = 20.0f;
+
+    private void Start()
+    {
+        eventTextObj.SetActive(false);
+    }
+
     private void Update()
     {
-
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(TriggerRandomEvent());
+        }
     }
 
     // ランダムにイベントを選択するメソッド
@@ -22,175 +36,189 @@ public class EventManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("イベント抽選開始");
 
-        while(true)
+        while (true)
         {
-            yield return new WaitForSeconds(20.0f);
-
-            int totalPercent = 0;
-
-            // イベントの確率の合計を計算
-            foreach (var eventSetting in eventData.EventSettings)
+            if (time > triggerTime)
             {
-                totalPercent += eventSetting.eventPercent;
-            }
+                int totalPercent = 0;
 
-            // ランダムな数を生成（0からtotalPercentの間）
-            int randomValue = Random.Range(0, totalPercent);
-
-            int eventPer = 0;
-
-            // 確率に基づいてランダムにイベントを選択
-            foreach (var eventSetting in eventData.EventSettings)
-            {
-                eventPer += eventSetting.eventPercent;
-
-                // ランダムな値が現在のイベントの範囲内に収まった場合、そのイベントを選択
-                if (randomValue < eventPer)
+                // イベントの確率の合計を計算
+                foreach (var eventSetting in eventData.EventSettings)
                 {
-                    HandleEvent(eventSetting.EVENT_TYPE);
-                    break;
+                    totalPercent += eventSetting.eventPercent;
                 }
+
+                // ランダムな数を生成（0からtotalPercentの間）
+                int randomValue = Random.Range(0, totalPercent);
+
+                int eventPer = 0;
+
+                // 確率に基づいてランダムにイベントを選択
+                foreach (var eventSetting in eventData.EventSettings)
+                {
+                    eventPer += eventSetting.eventPercent;
+
+                    // ランダムな値が現在のイベントの範囲内に収まった場合、そのイベントを選択
+                    if (randomValue < eventPer)
+                    {
+                        HandleEvent(eventSetting.EVENT_TYPE);
+                        break;
+                    }
+                }
+                time = 0;
+                yield return new WaitForSeconds(1);
             }
-        }        
-    }
+            else
+            {
+                time++;
+                
+                if (time >= triggerTime - 3.0 && triggerTime - time >= 0)
+                {
+                    eventTextObj.SetActive(true);
+                    eventText.text = $"イベント発生まで{triggerTime - time}";
+                }
 
-    // イベントを処理するメソッド
-    void HandleEvent(EventData.EventType EVENT_TYPE)
-    {
-        // イベントごとの処理を記述
-        switch (EVENT_TYPE)
-        {
-            case EventData.EventType.BLIND:
-                Debug.Log("目隠しイベント開始");
-                StartCoroutine(BlindEvent());
-                uiLogManager.AddLog("メカクシ", UILogManager.LogType.Event);
-                break;
-
-            case EventData.EventType.BOMB_AREA:
-                Debug.Log("エリアイベント開始");
-                StartCoroutine(BombAreaEvent());
-                uiLogManager.AddLog("エリア", UILogManager.LogType.Event);
-                break;
-
-            case EventData.EventType.CHANGE_POS:
-                Debug.Log("位置入れ替えイベント開始");
-                photonView.RPC("ChangePos", RpcTarget.All);
-                uiLogManager.AddLog("位置入れ替え", UILogManager.LogType.Event);
-                break;
-
-            case EventData.EventType.RANDOM_SPEED:
-                Debug.Log("速度変化イベント開始");
-                StartCoroutine(RandomSpeedEvent());
-                uiLogManager.AddLog("速度変化", UILogManager.LogType.Event);
-                break;
-
-            case EventData.EventType.RANDOM_SKILL:
-                Debug.Log("スキル変化イベント開始");
-                StartCoroutine(RandomSkillEvent());
-                uiLogManager.AddLog("スキルチェンジ", UILogManager.LogType.Event);
-                break;
-
-            default:
-                Debug.Log("存在しません");
-                break;
-        }
-    }
-
-    // 目つぶしイベント
-    IEnumerator BlindEvent()
-    {
-        float eventTime = 10.0f;
-        enoguEvent.PaintOpen();
-        yield return new WaitForSeconds(eventTime);
-        enoguEvent.PaintClose();
-        yield break;
-    }
-
-    // エリアイベント
-    IEnumerator BombAreaEvent()
-    {
-        yield break;
-    }
-
-    // プレイヤーの位置入れ替えイベント    
-    [PunRPC]
-    void ChangePos()
-    {
-        List<GameObject> playerList = gameManager.GetPlayerList();
-        List<Vector3> playerPos = new List<Vector3>();
-        AudioManager.Instance.PlaySE(SEManager.SEType.Event_warp); //ワープSE
-
-        // 現在のプレイヤーの座標を保存
-        foreach (GameObject player in playerList)
-        {
-            playerPos.Add(player.transform.position);
+                yield return new WaitForSeconds(1);
+            }
         }
 
-        // プレイヤーの座標をシャッフル
-        for (int i = 0; i < playerPos.Count; i++)
+        // イベントを処理するメソッド
+        void HandleEvent(EventData.EventType EVENT_TYPE)
         {
-            int rnd = Random.Range(0, playerPos.Count);
-            (playerPos[i], playerPos[rnd]) = (playerPos[rnd], playerPos[i]); // C# のタプルスワップ
+            eventTextObj.SetActive(true);
+            // イベントごとの処理を記述
+            switch (EVENT_TYPE)
+            {
+                case EventData.EventType.BLIND:
+                    Debug.Log("目隠しイベント開始");
+                    eventText.text = $"画面がインクで見えない！";
+                    StartCoroutine(BlindEvent());
+                    uiLogManager.AddLog("メカクシ", UILogManager.LogType.Event);
+                    break;
+
+                case EventData.EventType.CHANGE_POS:
+                    Debug.Log("位置入れ替えイベント開始");
+                    eventText.text = $"プレイヤーの\n位置が入れ替わった！";
+                    photonView.RPC("ChangePos", RpcTarget.All);
+                    uiLogManager.AddLog("位置入れ替え", UILogManager.LogType.Event);
+                    break;
+
+                case EventData.EventType.RANDOM_SPEED:
+                    Debug.Log("速度変化イベント開始");
+                    eventText.text = $"プレイヤーの\n運動能力が変化した";
+                    StartCoroutine(RandomSpeedEvent());
+                    uiLogManager.AddLog("速度変化", UILogManager.LogType.Event);
+                    break;
+
+                default:
+                    Debug.Log("存在しません");
+                    break;
+            }
+
+            StartCoroutine(TextOnDisplay(EVENT_TYPE));
         }
 
-        // 新しい座標をプレイヤーに適用
-        for (int i = 0; i < playerList.Count; i++)
+        IEnumerator TextOnDisplay(EventData.EventType EVENT_TYPE)
         {
-            playerList[i].transform.position = playerPos[i];
-        }
-    }
-        
-    // 移動速度変化イベント
-    IEnumerator RandomSpeedEvent()
-    {
-        float eventTime = 15.0f;
-        List<GameObject> playerList = gameManager.GetPlayerList();
-        ChangeSpeed(playerList);
-        yield return new WaitForSeconds(eventTime);
-        ResetSpeed(playerList);
+            eventTextObj.SetActive(true);
+            // イベントごとの処理を記述
+            switch (EVENT_TYPE)
+            {
+                case EventData.EventType.BLIND:
+                    Debug.Log("目隠しイベント開始");
+                    eventText.text = $"画面がイベントで見えない！";
+                    break;
 
-        yield break;
-    }
+                case EventData.EventType.CHANGE_POS:
+                    Debug.Log("位置入れ替えイベント開始");
+                    eventText.text = $"プレイヤーの\n位置が入れ替わった！";
+                    break;
 
-    // ランダムに移動速度を変化
-    void ChangeSpeed(List<GameObject> playerList)
-    {
-        int minSpeed = 10;
-        int maxSpeed = 30;
+                case EventData.EventType.RANDOM_SPEED:
+                    Debug.Log("速度変化イベント開始");
+                    eventText.text = $"プレイヤーの\n運動能力が変化した";
+                    break;
 
-        foreach (GameObject player in playerList)
-        {
-            PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
-            int rndSpeed = Random.Range(minSpeed, maxSpeed);
-            playerMovement.SetMoveSpeed(rndSpeed);
-        }
-    }
-
-    // 移動速度を元に戻す
-    void ResetSpeed(List<GameObject> playerList)
-    {
-        foreach (GameObject player in playerList)
-        {
-            PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
-            playerMovement.SetMoveSpeed(playerMovement.GetDefaultMoveSpeed());
-        }
-    }
-
-    // スキルランダム配布イベント
-    IEnumerator RandomSkillEvent()
-    {
-        List<GameObject> playerList = gameManager.GetPlayerList();
-
-        foreach (GameObject player in playerList)
-        {
-            SkillManager skillManager = player.gameObject.GetComponent<SkillManager>();
-            int rnd = Random.Range(0, skillDataBase.SkillData.Count);
-
-            SkillData giveSkill = skillDataBase.SkillData[rnd];
-            skillManager.SetSkill(giveSkill);
+                default:
+                    Debug.Log("存在しません");
+                    break;
+            }
+            yield return new WaitForSeconds(5.0f);
+            eventTextObj.SetActive(false);
         }
 
-        playerList.Clear();
-        yield break;
+        // 目つぶしイベント
+        IEnumerator BlindEvent()
+        {
+            float eventTime = 10.0f;
+            enoguEvent.PaintOpen();
+            yield return new WaitForSeconds(eventTime);
+            enoguEvent.PaintClose();
+            yield break;
+        }
+
+        // プレイヤーの位置入れ替えイベント    
+        [PunRPC]
+        void ChangePos()
+        {
+            List<GameObject> playerList = gameManager.GetPlayerList();
+            List<Vector3> playerPos = new List<Vector3>();
+            AudioManager.Instance.PlaySE(SEManager.SEType.Event_warp); //ワープSE
+
+            // 現在のプレイヤーの座標を保存
+            foreach (GameObject player in playerList)
+            {
+                playerPos.Add(player.transform.position);
+            }
+
+            // プレイヤーの座標をシャッフル
+            for (int i = 0; i < playerPos.Count; i++)
+            {
+                int rnd = Random.Range(0, playerPos.Count);
+                (playerPos[i], playerPos[rnd]) = (playerPos[rnd], playerPos[i]); // C# のタプルスワップ
+            }
+
+            // 新しい座標をプレイヤーに適用
+            for (int i = 0; i < playerList.Count; i++)
+            {
+                playerList[i].transform.position = playerPos[i];
+            }
+        }
+
+        // 移動速度変化イベント
+        IEnumerator RandomSpeedEvent()
+        {
+            float eventTime = 15.0f;
+            List<GameObject> playerList = gameManager.GetPlayerList();
+            ChangeSpeed(playerList);
+            yield return new WaitForSeconds(eventTime);
+            ResetSpeed(playerList);
+
+            yield break;
+        }
+
+        // ランダムに移動速度を変化
+        void ChangeSpeed(List<GameObject> playerList)
+        {
+            int minSpeed = 10;
+            int maxSpeed = 30;
+
+            foreach (GameObject player in playerList)
+            {
+                PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+                int rndSpeed = Random.Range(minSpeed, maxSpeed);
+                playerMovement.SetMoveSpeed(rndSpeed);
+            }
+        }
+
+        // 移動速度を元に戻す
+        void ResetSpeed(List<GameObject> playerList)
+        {
+            foreach (GameObject player in playerList)
+            {
+                PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+                playerMovement.SetMoveSpeed(playerMovement.GetDefaultMoveSpeed());
+            }
+        }
     }
 }
