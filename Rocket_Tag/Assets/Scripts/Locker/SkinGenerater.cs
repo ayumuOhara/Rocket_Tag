@@ -113,7 +113,7 @@ async void Initialize()     //  初期化                                          
                         // 他プレイヤーにスキン情報を送信
                         if (photonView.IsMine)
                         {
-                            photonView.RPC("RPC_SyncSkin", RpcTarget.OthersBuffered, tmpSkinNo, tmpSkinLocation);
+                            StartCoroutine(DelayedSyncSkin(tmpSkinNo, tmpSkinLocation));
                         }
 
                         break;
@@ -121,21 +121,31 @@ async void Initialize()     //  初期化                                          
             }
         }
     }
-    [PunRPC]
-    public void RPC_SyncSkin(int skinNo)
-    {
-        Debug.Log("RPC_SyncSkin 呼ばれた。skinNo: " + skinNo);
 
-        // スキンの適用処理
-        if (skinNo >= 0 && skinNo < playerSkinPrefab.Length)
+    IEnumerator DelayedSyncSkin(int skinNo, int skinLocation)
+    {
+        yield return new WaitForSeconds(0.1f); // 1フレームでもOKな場合もある
+        photonView.RPC("RPC_SyncSkin", RpcTarget.OthersBuffered, skinNo, skinLocation);
+    }
+
+    [PunRPC]
+    void RPC_SyncSkin(int skinNo, int skinLocation)
+    {
+        if (skinNo == 0) return;
+
+        Transform targetParent = null;
+
+        switch (skinLocation)
         {
-            // スキンを適用する処理
-            playerSkinPrefab[skinNo].SetActive(true); // 例: スキンをアクティブにする
-            Debug.Log("スキンが同期されました");
+            case 0:
+                targetParent = transform.Find("root/Hip/Spine/Head");
+                break;
+                // 必要なら他の部位も追加
         }
-        else
+
+        if (targetParent != null && SkinGenerater._SkinPrefab != null && skinNo < SkinGenerater._SkinPrefab.Length)
         {
-            Debug.LogError("無効なスキン番号: " + skinNo);
+            Instantiate(SkinGenerater._SkinPrefab[skinNo], targetParent);
         }
     }
 
