@@ -4,6 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class ReturnToLobby : MonoBehaviourPunCallbacks
 {
+    private void Start()
+    {
+        AudioManager.Instance.PlaySE(SEManager.SEType.Win); //ƒŠƒUƒ‹ƒgSE
+    }
     public void GoToLobby()
     {
         Cursor.visible = true;
