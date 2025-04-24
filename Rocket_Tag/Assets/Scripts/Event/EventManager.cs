@@ -11,7 +11,6 @@ public class EventManager : MonoBehaviourPunCallbacks
     [SerializeField] EnoguEvent enoguEvent;
     [SerializeField] private EventData eventData;          // EventDataの参照
     [SerializeField] private SkillDataBase skillDataBase;  // SkillDataの参照
-    //[SerializeField] GameObject blindEffect;               // 目つぶしイベント用UI
 
     private void Update()
     {
@@ -106,12 +105,6 @@ public class EventManager : MonoBehaviourPunCallbacks
         enoguEvent.PaintClose();
         yield break;
     }
-
-    /*[PunRPC]
-    void BlindEffect(bool isBlind)
-    {
-        blindEffect.SetActive(isBlind);
-    }*/
 
     // エリアイベント
     IEnumerator BombAreaEvent()
