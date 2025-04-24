@@ -4,41 +4,57 @@ using UnityEngine;
 
 public class EnoguEvent : MonoBehaviourPun
 {
+    [SerializeField] GameObject paintUIGroup;               // 目つぶしイベント用UI
     [SerializeField] GameObject blindEffect;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu1;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu3;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_1;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_2;               // 目つぶしイベント用UI
-    public void PaintOpen()
+    [SerializeField] SetPlayerBool setPlayerBool;
+    private bool alreadyHidden = false;
+
+    void Start()
+    {
+        setPlayerBool = GetComponent<SetPlayerBool>();
+    }
+
+    void Update()
+    {
+        if (!alreadyHidden && setPlayerBool != null && setPlayerBool.isDead && photonView.IsMine)
+        {
+            if (paintUIGroup != null)
+            {
+                paintUIGroup.SetActive(false);
+                alreadyHidden = true; // 一度だけ実行
+            }
+        }
+    }
+
+        public void PaintOpen()
     {
         photonView.RPC("DoPaintOpen", RpcTarget.All);
-        BlindEffect(true);
+        photonView.RPC("BlindEffect", RpcTarget.All, true);
         Debug.Log("表示");
     }
 
     [PunRPC]
     void DoPaintOpen()
     {
-            Positioning();
+        Positioning();
     }
 
     public void PaintClose()
     {
         photonView.RPC("Enogu4_1", RpcTarget.All, false);
         photonView.RPC("Enogu4_2", RpcTarget.All, false);
-        BlindEffect(false);
+        photonView.RPC("BlindEffect", RpcTarget.All, false);
         Debug.Log("非表示");
     }
 
     [PunRPC]
     void BlindEffect(bool isBlind)
     {
-        SetPlayerBool setPlayerBool = GetComponent<SetPlayerBool>();
-
-        if (setPlayerBool != null && !setPlayerBool.isDead)
-        {
-                blindEffect.SetActive(isBlind);
-        }
+        blindEffect.SetActive(isBlind);
     }
 
     [PunRPC]
