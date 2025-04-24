@@ -96,20 +96,6 @@ async void Initialize()     //  初期化                                          
         int tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", -1);
         int tmpSkinLocation = PlayerPrefs.GetInt("PlayerSkinLocation", -1);
 
-        if (playerSkinPrefab[tmpSkinNo] == null)
-        {
-            Debug.LogError($"スキンプレハブ[{tmpSkinNo}]がnullです");
-        }
-        var headTransform = playerTF_.Find("root/Hip/Spine/Head");
-        if (headTransform == null)
-        {
-            Debug.LogError($"プレイヤーのTransformに Head が存在しません: {playerTF_.name}");
-        }
-        if (playerTF_ == null)
-        {
-            Debug.LogError("SkinGenerate に渡された Transform が null です");
-        }
-
         if (IsUnexpectedValue(new int[] {tmpSkinNo, tmpSkinLocation }, new int[] {-1, -1}))
         {
             tmpSkinNo = 0;
@@ -136,25 +122,23 @@ async void Initialize()     //  初期化                                          
         }
     }
     [PunRPC]
-    void RPC_SyncSkin(int skinNo, int skinLocation)
+    public void RPC_SyncSkin(int skinNo)
     {
-        if (skinNo == 0) return;
+        Debug.Log("RPC_SyncSkin 呼ばれた。skinNo: " + skinNo);
 
-        Transform targetParent = null;
-
-        switch (skinLocation)
+        // スキンの適用処理
+        if (skinNo >= 0 && skinNo < playerSkinPrefab.Length)
         {
-            case 0:
-                targetParent = transform.Find("root/Hip/Spine/Head");
-                break;
-                // 必要なら他の部位も追加
+            // スキンを適用する処理
+            playerSkinPrefab[skinNo].SetActive(true); // 例: スキンをアクティブにする
+            Debug.Log("スキンが同期されました");
         }
-
-        if (targetParent != null && SkinGenerater._SkinPrefab != null && skinNo < SkinGenerater._SkinPrefab.Length)
+        else
         {
-            Instantiate(SkinGenerater._SkinPrefab[skinNo], targetParent);
+            Debug.LogError("無効なスキン番号: " + skinNo);
         }
     }
+
     bool IsUnexpectedValue(int[] value, int[] unExpectedValue)    //  値チェック
     {
         for (int arrayNo = value.Length - 1; arrayNo >= 0; --arrayNo)
