@@ -15,13 +15,20 @@ public class EnoguEvent : MonoBehaviourPun
 
     void Start()
     {
-        setPlayerBool = GetComponent<SetPlayerBool>();
     }
 
     void Update()
     {
+        if (setPlayerBool != null)
+        {
+            Debug.Log("isDead: " + setPlayerBool.isDead + " | IsMine: " + photonView.IsMine);
+        }
+
         if (!alreadyHidden && setPlayerBool != null && setPlayerBool.isDead && photonView.IsMine)
         {
+
+            Debug.Log("isDead: " + (setPlayerBool != null ? setPlayerBool.isDead.ToString() : "null"));
+
             if (paintUIGroup != null)
             {
                 paintUIGroup.SetActive(false);
