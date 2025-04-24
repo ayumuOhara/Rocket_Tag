@@ -19,11 +19,6 @@ public class EnoguEvent : MonoBehaviourPun
 
     void Update()
     {
-        if (setPlayerBool != null)
-        {
-            Debug.Log("isDead: " + setPlayerBool.isDead + " | IsMine: " + photonView.IsMine);
-        }
-
         if (!alreadyHidden && setPlayerBool != null && setPlayerBool.isDead && photonView.IsMine)
         {
 
