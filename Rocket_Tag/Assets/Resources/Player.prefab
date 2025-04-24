@@ -1795,6 +1795,7 @@ MonoBehaviour:
   timeManager: {fileID: 0}
   playerRankManager: {fileID: 0}
   rocketObj: {fileID: 4281978814399217487}
+  compas: {fileID: 4004026971265611817}
   hasRocket: 0
   isDead: 0
   isStun: 0
@@ -2484,5 +2485,10 @@ PrefabInstance:
 --- !u!4 &391628557134648917 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7784297586545406650, guid: 0f8785c2eabede046b55675a48764ce0, type: 3}
+  m_PrefabInstance: {fileID: 7595383926639617263}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4004026971265611817 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6843518841030335686, guid: 0f8785c2eabede046b55675a48764ce0, type: 3}
   m_PrefabInstance: {fileID: 7595383926639617263}
   m_PrefabAsset: {fileID: 0}

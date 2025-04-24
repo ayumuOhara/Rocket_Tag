@@ -60,6 +60,7 @@ MonoBehaviour:
   - Enogu4_1
   - Enogu4_2
   - DoPaintOpen
+  - RPC_SyncSkin
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

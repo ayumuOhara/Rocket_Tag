@@ -15,6 +15,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     public PlayerRankManager playerRankManager;
 
     [SerializeField] GameObject rocketObj;  // ロケット
+    [SerializeField] GameObject compas;
 
     [SerializeField] public bool hasRocket; // ロケットを所持しているか
     [SerializeField] public bool isDead;    // 死亡判定
@@ -90,6 +91,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         if (hasRocket)
         {
             rocketObj.SetActive(true);
+            compas.SetActive(true);
             Debug.Log("ロケットを受け取ります");
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
@@ -97,6 +99,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         else
         {
             rocketObj.SetActive(false);
+            compas.SetActive(false);
         }
 
         if (timeManager != null)
