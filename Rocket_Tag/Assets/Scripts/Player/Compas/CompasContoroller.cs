@@ -39,7 +39,7 @@ public class FollowUpCompas : MonoBehaviour
     void ChangeRot(Transform watcher,Transform changedObj, Vector3 target, float trackSpd, int xRotCap)    //  オブジェクトをターゲットの方向に向ける
     {
         Quaternion tmpAngle = Quaternion.LookRotation(target - watcher.position);
-        tmpAngle.x /= 360;
+        tmpAngle.x *= 0;
         changedObj.rotation = Quaternion.Lerp(changedObj.rotation, tmpAngle, trackSpd * Time.deltaTime);
     }
     Vector3 GetCloserObj(Vector3 axis, Vector3[] poss)    //  最も近いプレイヤーのトランスフォームを取得する
