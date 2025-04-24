@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;                                                                              ////  スキン生成スクリプト  ////
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
-public class SkinGenerater : MonoBehaviour
+public class SkinGenerater : MonoBehaviourPunCallbacks
 {
     /*  スキンの種類等はPlayerSkin.csにenumで宣言してあります  */                          ////  以下宣言区  ////
     internal enum SkinGenerateProcces    //  スキンジェネレート内の処理一覧
@@ -108,9 +109,36 @@ async void Initialize()     //  初期化                                          
                 case 0:
                     {
                         skinEntityHead = Instantiate(playerSkinPrefab[tmpSkinNo], playerTF_.Find("root/Hip/Spine/Head"));
+
+                        // 他プレイヤーにスキン情報を送信
+                        if (photonView.IsMine)
+                        {
+                            photonView.RPC("RPC_SyncSkin", RpcTarget.OthersBuffered, tmpSkinNo, tmpSkinLocation);
+                        }
+
                         break;
                     }
             }
+        }
+    }
+    [PunRPC]
+    void RPC_SyncSkin(int skinNo, int skinLocation)
+    {
+        if (skinNo == 0) return;
+
+        Transform targetParent = null;
+
+        switch (skinLocation)
+        {
+            case 0:
+                targetParent = transform.Find("root/Hip/Spine/Head");
+                break;
+                // 必要なら他の部位も追加
+        }
+
+        if (targetParent != null && SkinGenerater._SkinPrefab != null && skinNo < SkinGenerater._SkinPrefab.Length)
+        {
+            Instantiate(SkinGenerater._SkinPrefab[skinNo], targetParent);
         }
     }
     bool IsUnexpectedValue(int[] value, int[] unExpectedValue)    //  値チェック
