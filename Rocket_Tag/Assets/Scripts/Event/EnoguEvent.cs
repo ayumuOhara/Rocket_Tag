@@ -19,7 +19,12 @@ public class EnoguEvent : MonoBehaviourPun
     [PunRPC]
     void DoPaintOpen()
     {
-        Positioning();
+        SetPlayerBool setPlayerBool = GetComponent<SetPlayerBool>();
+
+        if (setPlayerBool != null && !setPlayerBool.isDead)
+        {
+            Positioning();
+        }
     }
 
     public void PaintClose()
@@ -33,7 +38,12 @@ public class EnoguEvent : MonoBehaviourPun
     [PunRPC]
     void BlindEffect(bool isBlind)
     {
-        blindEffect.SetActive(isBlind);
+        SetPlayerBool setPlayerBool = GetComponent<SetPlayerBool>();
+
+        if (setPlayerBool != null && !setPlayerBool.isDead)
+        {
+                blindEffect.SetActive(isBlind);
+        }
     }
 
     [PunRPC]
