@@ -40,6 +40,7 @@ public class FollowUpCompas : MonoBehaviour
     {
         Quaternion tmpAngle = Quaternion.LookRotation(target - watcher.position);
         tmpAngle.x *= 0;
+        tmpAngle.z *= 0;
         changedObj.rotation = Quaternion.Lerp(changedObj.rotation, tmpAngle, trackSpd * Time.deltaTime);
     }
     Vector3 GetCloserObj(Vector3 axis, Vector3[] poss)    //  最も近いプレイヤーのトランスフォームを取得する
