@@ -9,6 +9,7 @@ public class FollowUpCompas : MonoBehaviour
 {
     public Transform[] playersTF;
     public Transform bombPlayerTF;
+    Transform compas;
     GameManager gameManager;
 
     float trackSpd;
@@ -22,13 +23,14 @@ public class FollowUpCompas : MonoBehaviour
     void Update()
     {
         Vector3[] tmpPlayerPos = playersTF.Select(tf => tf.position).ToArray();
-        ChangeRot(bombPlayerTF, GetCloserObj(bombPlayerTF.position, tmpPlayerPos), trackSpd, xRotCap);
+        ChangeRot(bombPlayerTF, compas, GetCloserObj(bombPlayerTF.position, tmpPlayerPos), trackSpd, xRotCap);
     }                                                                                       ////  処理区終了  ////
     void Initialize()    //  初期化
     {
         bombPlayerTF = this.transform.root;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
+        compas = this.transform;
 
         trackSpd = 11f;
         xRotCap = 36;
@@ -40,11 +42,11 @@ public class FollowUpCompas : MonoBehaviour
             Debug.Log(playersTF[i]);
         }
     }
-    void ChangeRot(Transform watcher, Vector3 target, float trackSpd, int xRotCap)    //  オブジェクトをターゲットの方向に向ける
+    void ChangeRot(Transform watcher,Transform changedObj, Vector3 target, float trackSpd, int xRotCap)    //  オブジェクトをターゲットの方向に向ける
     {
         Quaternion tmpAngle = Quaternion.LookRotation(target - watcher.position);
         tmpAngle.x /= xRotCap;
-        watcher.rotation = Quaternion.Lerp(watcher.rotation, tmpAngle, trackSpd * Time.deltaTime);
+        changedObj.rotation = Quaternion.Lerp(changedObj.rotation, tmpAngle, trackSpd * Time.deltaTime);
     }
     Vector3 GetCloserObj(Vector3 axis, Vector3[] poss)    //  最も近いプレイヤーのトランスフォームを取得する
     {
