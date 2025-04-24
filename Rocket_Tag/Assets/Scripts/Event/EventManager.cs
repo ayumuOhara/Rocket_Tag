@@ -125,6 +125,7 @@ public class EventManager : MonoBehaviourPunCallbacks
     {
         List<GameObject> playerList = gameManager.GetPlayerList();
         List<Vector3> playerPos = new List<Vector3>();
+        AudioManager.Instance.PlaySE(SEManager.SEType.Event_warp); //ワープSE
 
         // 現在のプレイヤーの座標を保存
         foreach (GameObject player in playerList)
