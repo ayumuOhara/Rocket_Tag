@@ -6385,7 +6385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48e4d777fb90604ab912dad0bfb2afb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paintUIGroup: {fileID: 0}
+  paintUIGroup: {fileID: 1785020350}
   blindEffect: {fileID: 1266833214}
   enogu1: {fileID: 527226071}
   enogu3: {fileID: 517522746}
