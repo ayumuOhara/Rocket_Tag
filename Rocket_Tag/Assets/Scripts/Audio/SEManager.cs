@@ -38,7 +38,8 @@ public class SEManager : MonoBehaviour
         Collision_Dash_1,  // ぶつかりダッシュ使用時の音
         Event_warp,    // 位置入れ替えの効果音
         Event_ink,　　 // インクが画面に飛び散る効果音
-        Page　　　　　 // ページをめくる効果音
+        Page,　　　　　// ページをめくる効果音
+        win            // 勝利画面の音
     }
 
     // SE再生メソッド
