@@ -26,9 +26,9 @@ public class FollowUpCompas : MonoBehaviour
     }                                                                                       ////  ˆ—‹æI—¹  ////
     void Initialize()    //  ‰Šú‰»
     {
-        //bombPlayerTF = this.transform.root;
-        //gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        //playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
+        bombPlayerTF = this.transform.root;
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
 
         trackSpd = 11f;
         xRotCap = 36;
