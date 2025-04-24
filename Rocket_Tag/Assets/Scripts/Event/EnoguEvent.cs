@@ -15,15 +15,29 @@ public class EnoguEvent : MonoBehaviourPun
 
     void Start()
     {
+        if (photonView.IsMine)
+        {
+            if (setPlayerBool == null)
+            {
+                setPlayerBool = GetComponentInChildren<SetPlayerBool>();
+            }
+
+            if (setPlayerBool == null)
+            {
+                setPlayerBool = FindObjectOfType<SetPlayerBool>();
+            }
+
+            if (setPlayerBool == null)
+            {
+                Debug.LogWarning("SetPlayerBool Ç™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩÅI");
+            }
+        }
     }
 
     void Update()
     {
         if (!alreadyHidden && setPlayerBool != null && setPlayerBool.isDead && photonView.IsMine)
         {
-
-            Debug.Log("isDead: " + (setPlayerBool != null ? setPlayerBool.isDead.ToString() : "null"));
-
             if (paintUIGroup != null)
             {
                 paintUIGroup.SetActive(false);
