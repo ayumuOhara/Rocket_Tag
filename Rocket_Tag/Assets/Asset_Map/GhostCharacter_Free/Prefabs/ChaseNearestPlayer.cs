@@ -4,7 +4,7 @@ using UnityEngine;
 public class ChaseNearestPlayer : MonoBehaviour
 {
     public float moveSpeed = 3f;
-    public float detectionRadius = 20f;
+    public float detectionRadius = 25f;
 
     private Transform targetPlayer;
 
