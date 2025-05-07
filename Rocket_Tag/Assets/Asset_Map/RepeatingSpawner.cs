@@ -13,15 +13,44 @@ public class RepeatingSpawner : MonoBehaviour
     private GameObject currentInstance;
     private bool isWaiting = false;
 
+    //private void Start()
+    //{
+    //    StartCoroutine(SpawnCycle());
+    //}
+
+    //private IEnumerator SpawnCycle()
+    //{
+    //    yield return new WaitForSeconds(spawnDelay);
+
+    //    while (true)
+    //    {
+    //        SpawnObject();
+    //        yield return new WaitForSeconds(activeDuration);
+
+    //        if (currentInstance != null)
+    //        {
+    //            Destroy(currentInstance);
+    //            currentInstance = null;
+    //        }
+
+    //        isWaiting = true;
+    //        yield return new WaitForSeconds(respawnDelay);
+    //        isWaiting = false;
+    //    }
+    //}
     private void Start()
     {
-        StartCoroutine(SpawnCycle());
+        StartCoroutine(InitialSpawnCycle());
+    }
+
+    private IEnumerator InitialSpawnCycle()
+    {
+        yield return new WaitForSeconds(spawnDelay);
+        StartCoroutine(SpawnCycle()); // 通常ループに切り替える
     }
 
     private IEnumerator SpawnCycle()
     {
-        yield return new WaitForSeconds(spawnDelay);
-
         while (true)
         {
             SpawnObject();
@@ -39,17 +68,33 @@ public class RepeatingSpawner : MonoBehaviour
         }
     }
 
+
+    //private void SpawnObject()
+    //{
+    //    currentInstance = Instantiate(prefabToSpawn, transform.position, transform.rotation);
+
+    //    // DestroyAndKnockbackにSpawner参照を渡す
+    //    var destroyScript = currentInstance.GetComponent<DestroyAndKnockback>();
+    //    if (destroyScript != null)
+    //    {
+    //        destroyScript.SetSpawner(this);
+    //    }
+    //}
+
     private void SpawnObject()
     {
+        if (currentInstance != null) return; // ← すでに出現中なら何もしない
+
         currentInstance = Instantiate(prefabToSpawn, transform.position, transform.rotation);
 
-        // DestroyAndKnockbackにSpawner参照を渡す
+        // DestroyAndKnockback に Spawner を渡す
         var destroyScript = currentInstance.GetComponent<DestroyAndKnockback>();
         if (destroyScript != null)
         {
             destroyScript.SetSpawner(this);
         }
     }
+
 
     // プレイヤーに当たって即消されたとき呼ばれる
     public void OnPrefabDestroyedEarly()
@@ -61,11 +106,20 @@ public class RepeatingSpawner : MonoBehaviour
         StartCoroutine(RespawnAfterDelay());
     }
 
+    //private IEnumerator RespawnAfterDelay()
+    //{
+    //    isWaiting = true;
+    //    yield return new WaitForSeconds(respawnDelay);
+    //    isWaiting = false;
+    //    StartCoroutine(SpawnCycle());
+    //}
     private IEnumerator RespawnAfterDelay()
     {
         isWaiting = true;
         yield return new WaitForSeconds(respawnDelay);
         isWaiting = false;
-        StartCoroutine(SpawnCycle());
+        SpawnObject(); // ← ここで即再スポーン
+        StartCoroutine(SpawnCycle()); // ← ループ開始
     }
+
 }
