@@ -81,7 +81,10 @@ public class EnoguEvent : MonoBehaviourPun
         int rnd_1 = Random.Range(1,5);
         bool rand = Random.value > 0.5;
 
-        if(rnd_1 == 1)
+        enogu4_1.SetActive(false);
+        enogu4_2.SetActive(false);
+
+        if (rnd_1 == 1)
         {
             rect = enogu1.GetComponent<RectTransform>();
             rect.anchoredPosition = new Vector2(
