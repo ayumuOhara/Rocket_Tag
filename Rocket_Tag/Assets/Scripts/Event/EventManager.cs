@@ -115,9 +115,10 @@ public class EventManager : MonoBehaviourPunCallbacks
                     break;
             }
 
-            StartCoroutine(TextOnDisplay(EVENT_TYPE));
+            photonView.RPC("TextOnDisplay", RpcTarget.All, EVENT_TYPE);
         }
 
+        [PunRPC]
         IEnumerator TextOnDisplay(EventData.EventType EVENT_TYPE)
         {
             eventTextObj.SetActive(true);
