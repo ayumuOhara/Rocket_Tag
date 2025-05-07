@@ -115,14 +115,20 @@ public class EventManager : MonoBehaviourPunCallbacks
                     break;
             }
 
-            photonView.RPC("TextOnDisplay", RpcTarget.All, EVENT_TYPE);
+            StartCoroutine(TextOnDisplay(EVENT_TYPE));
         }
 
-        [PunRPC]
         IEnumerator TextOnDisplay(EventData.EventType EVENT_TYPE)
         {
             eventTextObj.SetActive(true);
-            // イベントごとの処理を記述
+            photonView.RPC("TextOn",RpcTarget.All,EVENT_TYPE);
+            yield return new WaitForSeconds(5.0f);
+            eventTextObj.SetActive(false);
+        }
+
+        [PunRPC]
+        void TextOn(EventData.EventType EVENT_TYPE)
+        {
             switch (EVENT_TYPE)
             {
                 case EventData.EventType.BLIND:
@@ -144,8 +150,6 @@ public class EventManager : MonoBehaviourPunCallbacks
                     Debug.Log("存在しません");
                     break;
             }
-            yield return new WaitForSeconds(5.0f);
-            eventTextObj.SetActive(false);
         }
 
         // 目つぶしイベント
