@@ -25084,6 +25084,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fa8d02a52d2c4f54aadadf4efaf0f198, type: 3}
   - {fileID: 8300000, guid: ff7e3d8c80a31504fa09a7ac29d1c69a, type: 3}
   - {fileID: 8300000, guid: 090234cd99501604097212061686f723, type: 3}
+  - {fileID: 8300000, guid: b07331bbf189c434584b53a817f70cd0, type: 3}
   bgmSlider: {fileID: 1871232440}
   bgmSetting: {fileID: 11400000, guid: 93ea6402107c87b43836cbcf9d5f5888, type: 2}
 --- !u!114 &1797508055

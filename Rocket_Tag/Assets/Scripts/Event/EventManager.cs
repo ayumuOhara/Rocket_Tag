@@ -81,149 +81,145 @@ public class EventManager : MonoBehaviourPunCallbacks
                 yield return new WaitForSeconds(1);
             }
         }
+    }
 
-        // イベントを処理するメソッド
-        void HandleEvent(EventData.EventType EVENT_TYPE)
+    // イベントを処理するメソッド
+    void HandleEvent(EventData.EventType EVENT_TYPE)
+    {
+        eventTextObj.SetActive(true);
+        // イベントごとの処理を記述
+        switch (EVENT_TYPE)
         {
-            eventTextObj.SetActive(true);
-            // イベントごとの処理を記述
-            switch (EVENT_TYPE)
-            {
-                case EventData.EventType.BLIND:
-                    Debug.Log("目隠しイベント開始");
-                    eventText.text = $"画面がインクで見えない！";
-                    StartCoroutine(BlindEvent());
-                    uiLogManager.AddLog("メカクシ", UILogManager.LogType.Event);
-                    break;
+            case EventData.EventType.BLIND:
+                Debug.Log("目隠しイベント開始");
+                eventText.text = $"画面がインクで見えない！";
+                StartCoroutine(BlindEvent());
+                uiLogManager.AddLog("メカクシ", UILogManager.LogType.Event);
+                break;
 
-                case EventData.EventType.CHANGE_POS:
-                    Debug.Log("位置入れ替えイベント開始");
-                    eventText.text = $"プレイヤーの\n位置が入れ替わった！";
-                    photonView.RPC("ChangePos", RpcTarget.All);
-                    uiLogManager.AddLog("位置入れ替え", UILogManager.LogType.Event);
-                    break;
+            case EventData.EventType.CHANGE_POS:
+                Debug.Log("位置入れ替えイベント開始");
+                eventText.text = $"プレイヤーの\n位置が入れ替わった！";
+                photonView.RPC("ChangePos", RpcTarget.All);
+                uiLogManager.AddLog("位置入れ替え", UILogManager.LogType.Event);
+                break;
 
-                case EventData.EventType.RANDOM_SPEED:
-                    Debug.Log("速度変化イベント開始");
-                    eventText.text = $"プレイヤーの\n運動能力が変化した";
-                    StartCoroutine(RandomSpeedEvent());
-                    uiLogManager.AddLog("速度変化", UILogManager.LogType.Event);
-                    break;
+            case EventData.EventType.RANDOM_SPEED:
+                Debug.Log("速度変化イベント開始");
+                eventText.text = $"プレイヤーの\n運動能力が変化した";
+                StartCoroutine(RandomSpeedEvent());
+                uiLogManager.AddLog("速度変化", UILogManager.LogType.Event);
+                break;
 
-                default:
-                    Debug.Log("存在しません");
-                    break;
-            }
-
-            StartCoroutine(TextOnDisplay(EVENT_TYPE));
+            default:
+                Debug.Log("存在しません");
+                break;
         }
 
-        IEnumerator TextOnDisplay(EventData.EventType EVENT_TYPE)
+        photonView.RPC("TextOnDisplay",RpcTarget.All,EVENT_TYPE);
+    }
+
+    [PunRPC]
+    public IEnumerator TextOnDisplay(EventData.EventType EVENT_TYPE)
+    {
+        eventTextObj.SetActive(true);
+        switch (EVENT_TYPE)
         {
-            eventTextObj.SetActive(true);
-            photonView.RPC("TextOn",RpcTarget.All,EVENT_TYPE);
-            yield return new WaitForSeconds(5.0f);
-            eventTextObj.SetActive(false);
+            case EventData.EventType.BLIND:
+                Debug.Log("目隠しイベント開始");
+                eventText.text = $"画面がイベントで見えない！";
+                break;
+
+            case EventData.EventType.CHANGE_POS:
+                Debug.Log("位置入れ替えイベント開始");
+                eventText.text = $"プレイヤーの\n位置が入れ替わった！";
+                break;
+
+            case EventData.EventType.RANDOM_SPEED:
+                Debug.Log("速度変化イベント開始");
+                eventText.text = $"プレイヤーの\n運動能力が変化した";
+                break;
+
+            default:
+                Debug.Log("存在しません");
+                break;
+        }
+        yield return new WaitForSeconds(5.0f);
+        eventTextObj.SetActive(false);
+    }
+
+    // 目つぶしイベント
+    IEnumerator BlindEvent()
+    {
+        AudioManager.Instance.PlaySE(SEManager.SEType.Event_ink); //インクSE
+        float eventTime = 10.0f;
+        enoguEvent.PaintOpen();
+        yield return new WaitForSeconds(eventTime);
+        enoguEvent.PaintClose();
+        yield break;
+    }
+
+    // プレイヤーの位置入れ替えイベント    
+    [PunRPC]
+    void ChangePos()
+    {
+        List<GameObject> playerList = gameManager.GetPlayerList();
+        List<Vector3> playerPos = new List<Vector3>();
+        AudioManager.Instance.PlaySE(SEManager.SEType.Event_warp); //ワープSE
+
+        // 現在のプレイヤーの座標を保存
+        foreach (GameObject player in playerList)
+        {
+            playerPos.Add(player.transform.position);
         }
 
-        [PunRPC]
-        void TextOn(EventData.EventType EVENT_TYPE)
+        // プレイヤーの座標をシャッフル
+        for (int i = 0; i < playerPos.Count; i++)
         {
-            switch (EVENT_TYPE)
-            {
-                case EventData.EventType.BLIND:
-                    Debug.Log("目隠しイベント開始");
-                    eventText.text = $"画面がイベントで見えない！";
-                    break;
-
-                case EventData.EventType.CHANGE_POS:
-                    Debug.Log("位置入れ替えイベント開始");
-                    eventText.text = $"プレイヤーの\n位置が入れ替わった！";
-                    break;
-
-                case EventData.EventType.RANDOM_SPEED:
-                    Debug.Log("速度変化イベント開始");
-                    eventText.text = $"プレイヤーの\n運動能力が変化した";
-                    break;
-
-                default:
-                    Debug.Log("存在しません");
-                    break;
-            }
+            int rnd = Random.Range(0, playerPos.Count);
+            (playerPos[i], playerPos[rnd]) = (playerPos[rnd], playerPos[i]); // C# のタプルスワップ
         }
 
-        // 目つぶしイベント
-        IEnumerator BlindEvent()
+        // 新しい座標をプレイヤーに適用
+        for (int i = 0; i < playerList.Count; i++)
         {
-            float eventTime = 10.0f;
-            enoguEvent.PaintOpen();
-            yield return new WaitForSeconds(eventTime);
-            enoguEvent.PaintClose();
-            yield break;
+            playerList[i].transform.position = playerPos[i];
         }
+    }
 
-        // プレイヤーの位置入れ替えイベント    
-        [PunRPC]
-        void ChangePos()
+    // 移動速度変化イベント
+    IEnumerator RandomSpeedEvent()
+    {
+        float eventTime = 15.0f;
+        List<GameObject> playerList = gameManager.GetPlayerList();
+        ChangeSpeed(playerList);
+        yield return new WaitForSeconds(eventTime);
+        ResetSpeed(playerList);
+
+        yield break;
+    }
+
+    // ランダムに移動速度を変化
+    void ChangeSpeed(List<GameObject> playerList)
+    {
+        int minSpeed = 10;
+        int maxSpeed = 30;
+
+        foreach (GameObject player in playerList)
         {
-            List<GameObject> playerList = gameManager.GetPlayerList();
-            List<Vector3> playerPos = new List<Vector3>();
-            AudioManager.Instance.PlaySE(SEManager.SEType.Event_warp); //ワープSE
-
-            // 現在のプレイヤーの座標を保存
-            foreach (GameObject player in playerList)
-            {
-                playerPos.Add(player.transform.position);
-            }
-
-            // プレイヤーの座標をシャッフル
-            for (int i = 0; i < playerPos.Count; i++)
-            {
-                int rnd = Random.Range(0, playerPos.Count);
-                (playerPos[i], playerPos[rnd]) = (playerPos[rnd], playerPos[i]); // C# のタプルスワップ
-            }
-
-            // 新しい座標をプレイヤーに適用
-            for (int i = 0; i < playerList.Count; i++)
-            {
-                playerList[i].transform.position = playerPos[i];
-            }
+            PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+            int rndSpeed = Random.Range(minSpeed, maxSpeed);
+            playerMovement.SetMoveSpeed(rndSpeed);
         }
+    }
 
-        // 移動速度変化イベント
-        IEnumerator RandomSpeedEvent()
+    // 移動速度を元に戻す
+    void ResetSpeed(List<GameObject> playerList)
+    {
+        foreach (GameObject player in playerList)
         {
-            float eventTime = 15.0f;
-            List<GameObject> playerList = gameManager.GetPlayerList();
-            ChangeSpeed(playerList);
-            yield return new WaitForSeconds(eventTime);
-            ResetSpeed(playerList);
-
-            yield break;
-        }
-
-        // ランダムに移動速度を変化
-        void ChangeSpeed(List<GameObject> playerList)
-        {
-            int minSpeed = 10;
-            int maxSpeed = 30;
-
-            foreach (GameObject player in playerList)
-            {
-                PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
-                int rndSpeed = Random.Range(minSpeed, maxSpeed);
-                playerMovement.SetMoveSpeed(rndSpeed);
-            }
-        }
-
-        // 移動速度を元に戻す
-        void ResetSpeed(List<GameObject> playerList)
-        {
-            foreach (GameObject player in playerList)
-            {
-                PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
-                playerMovement.SetMoveSpeed(playerMovement.GetDefaultMoveSpeed());
-            }
+            PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+            playerMovement.SetMoveSpeed(playerMovement.GetDefaultMoveSpeed());
         }
     }
 }

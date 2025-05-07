@@ -40,6 +40,9 @@ public class BGMController : MonoBehaviour
             case "PlayScene":
                 bgmManager.PlayBGM(BGMManager.BGMType.BGM_3);
                 break;
+            case "Result":
+                bgmManager.PlayBGM(BGMManager.BGMType.BGM_4);
+                break;
         }
     }
 }
