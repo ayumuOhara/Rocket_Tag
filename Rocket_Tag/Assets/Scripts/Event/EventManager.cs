@@ -151,6 +151,7 @@ public class EventManager : MonoBehaviourPunCallbacks
     // 目つぶしイベント
     IEnumerator BlindEvent()
     {
+        AudioManager.Instance.PlaySE(SEManager.SEType.Event_ink); //インクSE
         float eventTime = 10.0f;
         enoguEvent.PaintOpen();
         yield return new WaitForSeconds(eventTime);
