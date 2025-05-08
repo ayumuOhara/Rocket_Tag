@@ -142,7 +142,7 @@ public class PlayerRespawnTrigger : MonoBehaviour
     private IEnumerator TemporarilySlowPlayer(PlayerMovement player, float duration)
     {
         float originalSpeed = player.GetDefaultMoveSpeed();
-        player.SetMoveSpeed(originalSpeed * 0.5f);
+        player.SetMoveSpeed(originalSpeed * 0.3f);
 
         yield return new WaitForSeconds(duration);
 
