@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             ChooseRocketPlayer();
             StartCoroutine(eventManager.TriggerRandomEvent());
+            StartCoroutine(CheckOverTime());
         }
     }
 
@@ -150,6 +151,18 @@ public class GameManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.Disconnect();
                 SceneManager.LoadScene("Result");
                 yield break;
+            }
+            yield return null;
+        }
+    }
+
+    IEnumerator CheckOverTime()
+    {
+        while (true)
+        {
+            if(timeManager.rocketTime < -30.0f)
+            {
+                ChooseRocketPlayer();
             }
             yield return null;
         }

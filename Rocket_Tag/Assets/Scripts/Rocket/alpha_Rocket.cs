@@ -31,9 +31,11 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         uiLogManager = GameObject.Find("UILogManager").GetComponent<UILogManager>();
 
-        Debug.Log($"gameManager：{gameManager}");
-        Debug.Log($"timeManager：{timeManager}");
-        Debug.Log($"uiLogManager：{uiLogManager}");
+        //Debug.Log($"gameManager：{gameManager}");
+        //Debug.Log($"timeManager：{timeManager}");
+        //Debug.Log($"uiLogManager：{uiLogManager}");
+
+        StartCoroutine(CheckOverTime());
     }
 
     void Update()
@@ -47,7 +49,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
     }
     IEnumerator Explosion()
     {
-        Debug.Log("ロケット爆発");
+        //Debug.Log("ロケット爆発");
         float time = 0;
 
         while (time < 3.0f)
@@ -62,7 +64,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void Floating(GameObject floated, float floatSpeed)
     {
-        Debug.Log($"floated確認：{floated}");
+        //Debug.Log($"floated確認：{floated}");
 
         playerRb.useGravity = false;
         Collider collider = player.GetComponent<CapsuleCollider>();
@@ -72,7 +74,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void DropOut()
     {
-        Debug.Log("脱落処理開始");
+        //Debug.Log("脱落処理開始");
 
         PhotonView photonView = this.player.GetComponent<PhotonView>();
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
@@ -84,9 +86,9 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
             uiLogManager.AddLog("player", UILogManager.LogType.Dead);
 
-            Debug.Log("ロケットを配る");
+            //Debug.Log("ロケットを配る");
             photonView.RPC("SetPlayerDead", RpcTarget.All, true);
-            Debug.Log("ロケットを所持しているプレイヤーを脱落");
+            //Debug.Log("ロケットを所持しているプレイヤーを脱落");
 
             gameManager.ChooseRocketPlayer();
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
@@ -95,4 +97,23 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         this.gameObject.SetActive(false);
     }
 
+    IEnumerator CheckOverTime()
+    {
+        SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
+
+        while (true)
+        {
+            if (timeManager.rocketTime < -30.0f)
+            {
+                if (spb.hasRocket && spb.isDead!)
+                {
+                    PhotonView photon = player.GetComponent<PhotonView>();
+                    photon.RPC("SetPlayerDead", RpcTarget.All, true);
+                }
+
+                this.gameObject.SetActive(false);
+            }            
+            yield return null;
+        }
+    }
 }
