@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 
 public class EventEffect : MonoBehaviour                    ////  イベントのエフェクトを扱うスクリプト  ////
 {
-    internal enum EffectNo
+    internal enum EventEffectNo
     {
         TELEPORT_SMOKE,
     }
 
     GameObject teleportSmokePrefab;
     GameObject teleportSmokeEntity;
+    public Transform a;
     ParticleSystem[] teleportSmokeSystem;
 
     const int numOfPlayers = 4;
@@ -26,6 +27,13 @@ public class EventEffect : MonoBehaviour                    ////  イベントのエフ
         LoadEffect();
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
         isGeneratedSmoke = false;
+    }
+    private void Update()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            GenerateEffect((int)EventEffectNo.TELEPORT_SMOKE, a, 0);
+        }
     }
     async Task LoadEffect()    //  エフェクトロード
     {
@@ -55,6 +63,8 @@ public class EventEffect : MonoBehaviour                    ////  イベントのエフ
     }
     internal void GenerateEffect(int EffectNo, Transform players, int playerIndex)    //  エフェクト生成(ラッパー関数)
     {
+        Debug.Log("TPエフェクト生成突入");
+        Debug.Log("TPエフェクト" + teleportSmokePrefab.name);
         switch (EffectNo)
         {
             case 0:
@@ -69,7 +79,12 @@ public class EventEffect : MonoBehaviour                    ////  イベントのエフ
                         teleportSmokeEntity = Instantiate(teleportSmokePrefab);
                         teleportSmokeEntity.transform.position = players.position;
                         teleportSmokeSystem[playerIndex] = teleportSmokeEntity.GetComponent<ParticleSystem>();
+                        isGeneratedSmoke = true;
                     }
+                    break;
+                }
+            default:
+                {
                     break;
                 }
         }
