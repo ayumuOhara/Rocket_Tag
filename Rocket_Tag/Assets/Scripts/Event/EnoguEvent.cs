@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnoguEvent : MonoBehaviourPun
@@ -10,67 +11,27 @@ public class EnoguEvent : MonoBehaviourPun
     [SerializeField] GameObject enogu3;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_1;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_2;               // 目つぶしイベント用UI
-    [SerializeField] SetPlayerBool setPlayerBool;
+
+    SetPlayerBool setPlayerBool;                  // bool値を管理するクラス
     private bool alreadyHidden = false;
 
-    void Start()
+    public void PaintOpen(List<GameObject> playerList)
     {
-        if (photonView.IsMine)
+        foreach (GameObject player in playerList)
         {
-            if (setPlayerBool == null)
-            {
-                setPlayerBool = GetComponentInChildren<SetPlayerBool>();
-            }
-
-            if (setPlayerBool == null)
-            {
-                setPlayerBool = FindObjectOfType<SetPlayerBool>();
-            }
-
-            if (setPlayerBool == null)
-            {
-                Debug.LogWarning("SetPlayerBool が見つかりませんでした！");
-            }
+            Positioning();
+            blindEffect.SetActive(true);
         }
     }
 
-    void Update()
+    public void PaintClose(List<GameObject> playerList)
     {
-        if (!alreadyHidden && setPlayerBool != null && setPlayerBool.isDead && photonView.IsMine)
+        foreach (GameObject player in playerList)
         {
-            if (paintUIGroup != null)
-            {
-                paintUIGroup.SetActive(false);
-                alreadyHidden = true; // 一度だけ実行
-            }
+            enogu4_1.SetActive(false);
+            enogu4_2.SetActive(false);
+            blindEffect.SetActive(false);
         }
-    }
-
-        public void PaintOpen()
-    {
-        photonView.RPC("DoPaintOpen", RpcTarget.All);
-        photonView.RPC("BlindEffect", RpcTarget.All, true);
-        Debug.Log("表示");
-    }
-
-    [PunRPC]
-    void DoPaintOpen()
-    {
-        Positioning();
-    }
-
-    public void PaintClose()
-    {
-        enogu4_1.SetActive(false);
-        enogu4_2.SetActive(false);
-        photonView.RPC("BlindEffect", RpcTarget.All, false);
-        Debug.Log("非表示");
-    }
-
-    [PunRPC]
-    void BlindEffect(bool isBlind)
-    {
-        blindEffect.SetActive(isBlind);
     }
 
     public void Positioning()
