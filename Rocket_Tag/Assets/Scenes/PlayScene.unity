@@ -6292,7 +6292,6 @@ GameObject:
   - component: {fileID: 804079631}
   - component: {fileID: 804079632}
   - component: {fileID: 804079634}
-  - component: {fileID: 804079635}
   m_Layer: 0
   m_Name: EventManager
   m_TagString: Untagged
@@ -6317,7 +6316,6 @@ MonoBehaviour:
   enoguEvent: {fileID: 804079634}
   eventTextObj: {fileID: 658329895}
   eventText: {fileID: 658329897}
-  eventEffect: {fileID: 804079635}
   eventData: {fileID: 11400000, guid: 9df4d57e7f9eabf40b37ca7278b11efd, type: 2}
   skillDataBase: {fileID: 11400000, guid: ed8d1036479547b4fab7294aaf68ed13, type: 2}
   time: 0
@@ -6377,18 +6375,6 @@ MonoBehaviour:
   enogu3: {fileID: 517522746}
   enogu4_1: {fileID: 104557870}
   enogu4_2: {fileID: 779045566}
---- !u!114 &804079635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 804079630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 428e3c8ab51173e49b9371bf778da641, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &809808319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6545,8 +6531,8 @@ MonoBehaviour:
   playerCntText: {fileID: 411568704}
   infoText: {fileID: 1087369349}
   readyButton: {fileID: 1789526386}
-  eventTextObj: {fileID: 0}
-  eventText: {fileID: 0}
+  eventTextObj: {fileID: 658329895}
+  eventText: {fileID: 658329897}
 --- !u!4 &846908940
 Transform:
   m_ObjectHideFlags: 0
@@ -7942,7 +7928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seAudioSource: {fileID: 1064153361}
-  fuseAudioSource: {fileID: 0}
+  fuseAudioSource: {fileID: 981063128}
   seClips:
   - {fileID: 8300000, guid: 83b3841ed493d51438bf9b5350688f48, type: 3}
   - {fileID: 8300000, guid: de664fbd31d105d42950d0a8b12a9928, type: 3}
