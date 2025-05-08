@@ -28,46 +28,49 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Player currentRocketHolder;                 // 現在のロケット保持者
     private List<GameObject> cachedPlayerList = new List<GameObject>(); // プレイヤーリストのキャッシュ
 
-    float waitTime = 60.0f;
+    int waitTime = 60;
 
     void Start()
     {
         if (PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(WaitPlayersReady());
+            photonView.RPC("WaitTimer", RpcTarget.All);
         }
-    }
-
-    [PunRPC]
-    void StartTextOnDisplay(bool isON)
-    {
-        if(isON)
-        {
-            eventTextObj.SetActive(true);
-        }
-        else
-        {
-            eventTextObj.SetActive(false);
-        }
-
-        eventText.text = "60秒後に強制的にゲームを開始します";
     }
 
     IEnumerator WaitPlayersReady()
     {
-        float time = 0;
-        photonView.RPC("StartTextOnDisplay", RpcTarget.All, true);
-
         while (true)
-        {            
-            time += Time.deltaTime;
-
+        {
             int readyCount = GetReadyPlayerCount();
             photonView.RPC("PlayerCntText", RpcTarget.All, readyCount, "準備完了");
 
-            if (CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted || time > waitTime)
+            if (CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
             {
-                photonView.RPC("StartTextOnDisplay", RpcTarget.All, false);
+                photonView.RPC(nameof(StartGame), RpcTarget.All);
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    [PunRPC]
+    IEnumerator WaitTimer()
+    {
+        float time = 0;
+        eventTextObj.SetActive(true);
+
+        while (true)
+        {
+            time += Time.deltaTime;
+            waitTime -= (int)time;
+
+            eventText.text = $"{waitTime}秒後に強制的にゲームを開始します";
+
+            if (waitTime <= 0)
+            {
                 photonView.RPC(nameof(StartGame), RpcTarget.All);
                 yield break;
             }
