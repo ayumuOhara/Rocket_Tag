@@ -108,7 +108,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
         }
         
         posessingTime += Time.deltaTime;
-        rocketCountText.text = $"{rocketTime.ToString("F1")} sec";
+        //rocketCountText.text = $"{rocketTime.ToString("F1")} sec";
     }
 
     public bool IsFloatTime()    //  è„è∏äJénéûä‘Ç©îªíf
