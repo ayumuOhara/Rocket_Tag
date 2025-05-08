@@ -13,6 +13,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     public TimeManager timeManager;
     //public ResultScreen resultScreen;
     public PlayerRankManager playerRankManager;
+    public SEManager seManager;
 
     [SerializeField] GameObject rocketObj;  // ロケット
     [SerializeField] GameObject compas;
@@ -26,6 +27,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         //resultScreen = GameObject.Find("GameManager").GetComponent<ResultScreen>();
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
+        seManager = GameObject.Find("SE_Audio").GetComponent<SEManager>();
         resultUI = GameObject.Find("ResultUI");
         if(SceneManager.GetActiveScene().name == "PlayScene")
         {
@@ -37,6 +39,18 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     {       
         if (resultUI != null)
             resultUI.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (hasRocket)
+        {
+            seManager.PlayFuseSE();
+        }
+        if(!hasRocket)
+        {
+            seManager.StopFuseSE();
+        }
     }
 
     // プレイヤーの状態の初期化
@@ -111,5 +125,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             Debug.Log("timeManagerがnullです");
         }
         //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+
     }
 }
