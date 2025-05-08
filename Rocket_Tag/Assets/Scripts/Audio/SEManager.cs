@@ -63,6 +63,8 @@ public class SEManager : MonoBehaviour
             Debug.LogWarning("指定されたインデックスに該当するSEがありません");
         }
     }
+
+    //導火線SEの管理
     public void HandleFuseSE(bool hasRocket)
     {
         if (hasRocket)

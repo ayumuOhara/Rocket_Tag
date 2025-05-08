@@ -66,6 +66,7 @@ MonoBehaviour:
   - <TriggerRandomEvent>g__TextOnDisplay|11_1
   - 
   - TextOnDisplay
+  - StartTextOnDisplay
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1
