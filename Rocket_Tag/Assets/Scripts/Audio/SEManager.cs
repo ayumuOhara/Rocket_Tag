@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class SEManager : MonoBehaviour
 {
     [SerializeField] private AudioSource seAudioSource;
+    [SerializeField] private AudioSource fuseAudioSource;
     [SerializeField] private List<AudioClip> seClips;
     [SerializeField] private Slider seSlider;
     [SerializeField] private SESetting seSetting;
@@ -21,6 +22,7 @@ public class SEManager : MonoBehaviour
     private void Update()
     {
         seAudioSource.volume = seSetting.volume;
+        fuseAudioSource.volume = seSetting.volume;
     }
 
     void OnVolumeChenged(float value)
@@ -59,6 +61,25 @@ public class SEManager : MonoBehaviour
         else
         {
             Debug.LogWarning("指定されたインデックスに該当するSEがありません");
+        }
+    }
+
+    //導火線SEの管理
+    public void HandleFuseSE(bool hasRocket)
+    {
+        if (hasRocket)
+        {
+            if(!fuseAudioSource.isPlaying)
+            {
+                fuseAudioSource.Play();
+            }
+        }
+        else
+        {
+            if(fuseAudioSource.isPlaying)
+            {
+                fuseAudioSource.Stop();
+            }
         }
     }
 }

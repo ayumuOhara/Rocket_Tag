@@ -103,7 +103,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
         while (true)
         {
-            if (timeManager.rocketTime < -30.0f)
+            if (timeManager.rocketTime < -20.0f)
             {
                 if (spb.hasRocket && spb.isDead!)
                 {

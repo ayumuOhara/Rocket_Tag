@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public PlayerController playerController;
     public SetPlayerBool setPlayerBool;
+
     [SerializeField] EventManager eventManager;
     [SerializeField] TimeManager timeManager;
     [SerializeField] InstantiatePlayer instantiatePlayer;
@@ -17,6 +18,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
     [SerializeField] TextMeshProUGUI infoText;          // playerCntTextの説明文
     [SerializeField] GameObject readyButton;            // 準備完了ボタン
+    [SerializeField] GameObject eventTextObj;
+    [SerializeField] TextMeshProUGUI eventText;
+
     //[SerializeField] GameObject rocketEffect;           // ロケットのエフェクト管理オブジェクト
     //[SerializeField] RocketEffect rocketEffect;           // ロケットエフェクトのインスタンス    for debug--------------------------
     private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
@@ -24,11 +28,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Player currentRocketHolder;                 // 現在のロケット保持者
     private List<GameObject> cachedPlayerList = new List<GameObject>(); // プレイヤーリストのキャッシュ
 
+    int waitTime = 60;
+
     void Start()
     {
         if (PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(WaitPlayersReady());
+            photonView.RPC("WaitTimer", RpcTarget.All);
         }
     }
 
@@ -40,6 +47,29 @@ public class GameManager : MonoBehaviourPunCallbacks
             photonView.RPC("PlayerCntText", RpcTarget.All, readyCount, "準備完了");
 
             if (CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
+            {
+                photonView.RPC(nameof(StartGame), RpcTarget.All);
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    [PunRPC]
+    IEnumerator WaitTimer()
+    {
+        float time = 0;
+        eventTextObj.SetActive(true);
+
+        while (true)
+        {
+            time += Time.deltaTime;
+            waitTime -= (int)time;
+
+            eventText.text = $"{waitTime}秒後に強制的にゲームを開始します";
+
+            if (waitTime <= 0)
             {
                 photonView.RPC(nameof(StartGame), RpcTarget.All);
                 yield break;
@@ -160,8 +190,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         while (true)
         {
-            if(timeManager.rocketTime < -30.0f)
+            if(timeManager.rocketTime < -20.0f)
             {
+                timeManager.ResetRocketCount();
                 ChooseRocketPlayer();
             }
             yield return null;
