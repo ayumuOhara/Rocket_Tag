@@ -7,7 +7,7 @@ public class SkillCoolTime : MonoBehaviour
 
     [SerializeField] Image cooldownMask;  // クール用
     public bool SkillCool = true;
-    float SkillCT = 5.0f;
+    float SkillCT = 10.0f;
 
     public IEnumerator CoolTime()//クールタイム
     {
