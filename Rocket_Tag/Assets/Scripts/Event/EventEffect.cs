@@ -71,6 +71,7 @@ public class EventEffect : MonoBehaviour                    ////  イベントのエフ
                 {
                     if (isGeneratedSmoke)
                     {
+                        Debug.Log(teleportSmokeSystem);
                         teleportSmokeSystem[playerIndex].Clear();
                         teleportSmokeSystem[playerIndex].Play();
                     }
@@ -80,6 +81,7 @@ public class EventEffect : MonoBehaviour                    ////  イベントのエフ
                         teleportSmokeEntity.transform.position = players.position;
                         teleportSmokeSystem[playerIndex] = teleportSmokeEntity.GetComponent<ParticleSystem>();
                         isGeneratedSmoke = true;
+                        Debug.Log(teleportSmokeSystem);
                     }
                     break;
                 }
