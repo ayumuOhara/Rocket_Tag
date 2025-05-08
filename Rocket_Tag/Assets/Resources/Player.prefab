@@ -1795,6 +1795,7 @@ MonoBehaviour:
   rocketEffect: {fileID: 0}
   timeManager: {fileID: 0}
   playerRankManager: {fileID: 0}
+  seManager: {fileID: 0}
   rocketObj: {fileID: 4281978814399217487}
   compas: {fileID: 6325109500986367907}
   hasRocket: 0
