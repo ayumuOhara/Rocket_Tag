@@ -10,43 +10,20 @@ public class EnoguEvent : MonoBehaviourPun
     [SerializeField] GameObject enogu3;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_1;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_2;               // 目つぶしイベント用UI
-    [SerializeField] SetPlayerBool setPlayerBool;
+
+    SetPlayerBool setPlayerBool;                  // bool値を管理するクラス
     private bool alreadyHidden = false;
 
     void Start()
     {
         if (photonView.IsMine)
         {
-            if (setPlayerBool == null)
-            {
-                setPlayerBool = GetComponentInChildren<SetPlayerBool>();
-            }
-
-            if (setPlayerBool == null)
-            {
-                setPlayerBool = FindObjectOfType<SetPlayerBool>();
-            }
-
-            if (setPlayerBool == null)
-            {
-                Debug.LogWarning("SetPlayerBool が見つかりませんでした！");
-            }
+            setPlayerBool = GetComponent<SetPlayerBool>();
         }
     }
 
-    void Update()
-    {
-        if (!alreadyHidden && setPlayerBool != null && setPlayerBool.isDead && photonView.IsMine)
-        {
-            if (paintUIGroup != null)
-            {
-                paintUIGroup.SetActive(false);
-                alreadyHidden = true; // 一度だけ実行
-            }
-        }
-    }
 
-        public void PaintOpen()
+    public void PaintOpen()
     {
         photonView.RPC("DoPaintOpen", RpcTarget.All);
         photonView.RPC("BlindEffect", RpcTarget.All, true);
@@ -56,7 +33,10 @@ public class EnoguEvent : MonoBehaviourPun
     [PunRPC]
     void DoPaintOpen()
     {
-        Positioning();
+        if (photonView.IsMine && setPlayerBool.isDead == false)
+        {
+            Positioning();
+        }
     }
 
     public void PaintClose()
@@ -70,7 +50,10 @@ public class EnoguEvent : MonoBehaviourPun
     [PunRPC]
     void BlindEffect(bool isBlind)
     {
-        blindEffect.SetActive(isBlind);
+        if (photonView.IsMine && setPlayerBool.isDead == false)
+        {
+            blindEffect.SetActive(isBlind);
+        }
     }
 
     public void Positioning()
