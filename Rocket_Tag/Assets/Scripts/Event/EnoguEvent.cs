@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnoguEvent : MonoBehaviourPun
@@ -14,45 +15,22 @@ public class EnoguEvent : MonoBehaviourPun
     SetPlayerBool setPlayerBool;                  // bool値を管理するクラス
     private bool alreadyHidden = false;
 
-    void Start()
+    public void PaintOpen(List<GameObject> playerList)
     {
-        if (photonView.IsMine)
-        {
-            setPlayerBool = GetComponent<SetPlayerBool>();
-        }
-    }
-
-
-    public void PaintOpen()
-    {
-        photonView.RPC("DoPaintOpen", RpcTarget.All);
-        photonView.RPC("BlindEffect", RpcTarget.All, true);
-        Debug.Log("表示");
-    }
-
-    [PunRPC]
-    void DoPaintOpen()
-    {
-        if (photonView.IsMine && setPlayerBool.isDead == false)
+        foreach (GameObject player in playerList)
         {
             Positioning();
+            blindEffect.SetActive(true);
         }
     }
 
-    public void PaintClose()
+    public void PaintClose(List<GameObject> playerList)
     {
-        enogu4_1.SetActive(false);
-        enogu4_2.SetActive(false);
-        photonView.RPC("BlindEffect", RpcTarget.All, false);
-        Debug.Log("非表示");
-    }
-
-    [PunRPC]
-    void BlindEffect(bool isBlind)
-    {
-        if (photonView.IsMine && setPlayerBool.isDead == false)
+        foreach (GameObject player in playerList)
         {
-            blindEffect.SetActive(isBlind);
+            enogu4_1.SetActive(false);
+            enogu4_2.SetActive(false);
+            blindEffect.SetActive(false);
         }
     }
 
