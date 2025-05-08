@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public PlayerController playerController;
     public SetPlayerBool setPlayerBool;
+
     [SerializeField] EventManager eventManager;
     [SerializeField] TimeManager timeManager;
     [SerializeField] InstantiatePlayer instantiatePlayer;
@@ -17,12 +18,17 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
     [SerializeField] TextMeshProUGUI infoText;          // playerCntTextの説明文
     [SerializeField] GameObject readyButton;            // 準備完了ボタン
+    [SerializeField] GameObject eventTextObj;
+    [SerializeField] TextMeshProUGUI eventText;
+
     //[SerializeField] GameObject rocketEffect;           // ロケットのエフェクト管理オブジェクト
     //[SerializeField] RocketEffect rocketEffect;           // ロケットエフェクトのインスタンス    for debug--------------------------
     private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
     private bool isGameStarted = false;                 // ゲームが開始されたかどうかのフラグ
     private Player currentRocketHolder;                 // 現在のロケット保持者
     private List<GameObject> cachedPlayerList = new List<GameObject>(); // プレイヤーリストのキャッシュ
+
+    float waitTime = 60.0f;
 
     void Start()
     {
@@ -32,15 +38,36 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
+    void StartTextOnDisplay(bool isON)
+    {
+        if(isON)
+        {
+            eventTextObj.SetActive(true);
+        }
+        else
+        {
+            eventTextObj.SetActive(false);
+        }
+
+        eventText.text = "60秒後に強制的にゲームを開始します";
+    }
+
     IEnumerator WaitPlayersReady()
     {
+        float time = 0;
+        photonView.RPC("StartTextOnDisplay", RpcTarget.All, true);
+
         while (true)
-        {
+        {            
+            time += Time.deltaTime;
+
             int readyCount = GetReadyPlayerCount();
             photonView.RPC("PlayerCntText", RpcTarget.All, readyCount, "準備完了");
 
-            if (CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
+            if (CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted || time > waitTime)
             {
+                photonView.RPC("StartTextOnDisplay", RpcTarget.All, false);
                 photonView.RPC(nameof(StartGame), RpcTarget.All);
                 yield break;
             }
