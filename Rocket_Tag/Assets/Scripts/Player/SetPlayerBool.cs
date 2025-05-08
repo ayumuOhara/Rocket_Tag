@@ -43,7 +43,14 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        seManager.HandleFuseSE(hasRocket);
+        if (hasRocket)
+        {
+            seManager.PlayFuseSE();
+        }
+        if(!hasRocket)
+        {
+            seManager.StopFuseSE();
+        }
     }
 
     // ƒvƒŒƒCƒ„[‚Ìó‘Ô‚Ì‰Šú‰»
