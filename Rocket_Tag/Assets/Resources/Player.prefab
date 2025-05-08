@@ -1765,6 +1765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820cc424280cfe84bb7d0a22d8205e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillCoolTime: {fileID: 0}
   skillDataBase: {fileID: 11400000, guid: ed8d1036479547b4fab7294aaf68ed13, type: 2}
   skillData:
     skillId: 0

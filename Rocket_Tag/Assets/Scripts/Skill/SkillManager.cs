@@ -9,6 +9,8 @@ using static UnityEngine.GraphicsBuffer;
 
 public class SkillManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] SkillCoolTime skillCoolTime;
+
     [SerializeField] SkillDataBase skillDataBase;
     [SerializeField] public SkillData skillData;
     public int skillIdx;
@@ -48,6 +50,11 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
         skillIdx = 4;
         SetSkill(skillDataBase.SkillData[skillIdx]);
+
+        if (skillCoolTime == null)
+        {
+            skillCoolTime = FindObjectOfType<SkillCoolTime>();
+        }
     }
 
     // 設定されているスキル使用
@@ -55,18 +62,25 @@ public class SkillManager : MonoBehaviourPunCallbacks
     {
         if (finishSkill == true)
         {
-            Debug.Log($"【{skillData.skillName}】を使用");
-
-            switch (skillData.skillId)
+            if (skillCoolTime.SkillCool == true)//クールタイム
             {
-                //case 101: break;
-                case 102: photonView.RPC("PutStickyZone", RpcTarget.All); break;
-                //case 103: DangerousGift();                            break;
-                //case 104: SmashPunch(); break;
-                case 105: StartCoroutine(Dash()); break;
-            }
+                skillCoolTime.SkillCool = false;
 
-            //SendSkillData();
+                Debug.Log($"【{skillData.skillName}】を使用");
+
+                switch (skillData.skillId)
+                {
+                    //case 101: break;
+                    case 102: photonView.RPC("PutStickyZone", RpcTarget.All); break;
+                    //case 103: DangerousGift();                            break;
+                    //case 104: SmashPunch(); break;
+                    case 105: StartCoroutine(Dash()); break;
+                }
+
+                //SendSkillData();
+
+                StartCoroutine(skillCoolTime.CoolTime());//クールタイム
+            }
         }
     }
 
