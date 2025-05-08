@@ -160,8 +160,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         while (true)
         {
-            if(timeManager.rocketTime < -30.0f)
+            if(timeManager.rocketTime < -20.0f)
             {
+                timeManager.ResetRocketCount();
                 ChooseRocketPlayer();
             }
             yield return null;
