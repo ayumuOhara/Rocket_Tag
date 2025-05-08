@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: EventEffect
+  m_EditorClassIdentifier: 
+  m_GroupName: EventEffect
+  m_GUID: 09ce18259a520914e9fb287f31fe3d58
+  m_SerializeEntries:
+  - m_GUID: 3217b570b11b257469c5461f0457e5d4
+    m_Address: TeleportSmoke
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 00bb6419600732146a204053851d83b5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 79f00bd878802fa40870e1a0cbb8b788, type: 2}
+    - {fileID: 11400000, guid: 042e626a47571654aa72b22de516e5f0, type: 2}

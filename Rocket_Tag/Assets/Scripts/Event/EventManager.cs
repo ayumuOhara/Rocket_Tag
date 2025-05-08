@@ -1,9 +1,13 @@
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using System.Collections.Generic;
 using System.Collections;
 using TMPro;
+using System.Threading.Tasks;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using Photon.Chat.Demo;
 
 public class EventManager : MonoBehaviourPunCallbacks
 {
@@ -12,9 +16,9 @@ public class EventManager : MonoBehaviourPunCallbacks
     [SerializeField] EnoguEvent enoguEvent;
     [SerializeField] GameObject eventTextObj;
     [SerializeField] TextMeshProUGUI eventText;
+    [SerializeField] EventEffect eventEffect;
     [SerializeField] private EventData eventData;          // EventDataの参照
     [SerializeField] private SkillDataBase skillDataBase;  // SkillDataの参照
-
     [SerializeField] float time = 0;
     [SerializeField] float triggerTime = 20.0f;
 
@@ -184,6 +188,7 @@ public class EventManager : MonoBehaviourPunCallbacks
         // 新しい座標をプレイヤーに適用
         for (int i = 0; i < playerList.Count; i++)
         {
+            eventEffect.GenerateEffect((int)EventEffect.EffectNo.TELEPORT_SMOKE, playerList[i].transform, i);    //  エフェクト生成
             playerList[i].transform.position = playerPos[i];
         }
     }

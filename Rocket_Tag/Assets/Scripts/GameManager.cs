@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             if (waitTime <= 0)
             {
+                eventTextObj.SetActive(false);
                 photonView.RPC(nameof(StartGame), RpcTarget.All);
                 yield break;
             }
