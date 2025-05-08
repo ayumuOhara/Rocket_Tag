@@ -3607,7 +3607,7 @@ MonoBehaviour:
   m_text: ' 0 / 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
-  m_sharedMaterial: {fileID: 5045735705979843012, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
+  m_sharedMaterial: {fileID: 7211171604057284572, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6243,6 +6243,7 @@ GameObject:
   - component: {fileID: 804079631}
   - component: {fileID: 804079632}
   - component: {fileID: 804079634}
+  - component: {fileID: 804079635}
   m_Layer: 0
   m_Name: EventManager
   m_TagString: Untagged
@@ -6267,8 +6268,11 @@ MonoBehaviour:
   enoguEvent: {fileID: 804079634}
   eventTextObj: {fileID: 658329895}
   eventText: {fileID: 658329897}
+  eventEffect: {fileID: 804079635}
   eventData: {fileID: 11400000, guid: 9df4d57e7f9eabf40b37ca7278b11efd, type: 2}
   skillDataBase: {fileID: 11400000, guid: ed8d1036479547b4fab7294aaf68ed13, type: 2}
+  time: 0
+  triggerTime: 20
 --- !u!114 &804079632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6325,6 +6329,18 @@ MonoBehaviour:
   enogu4_1: {fileID: 104557870}
   enogu4_2: {fileID: 779045566}
   setPlayerBool: {fileID: 0}
+--- !u!114 &804079635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 804079630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 428e3c8ab51173e49b9371bf778da641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &809808319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7876,7 +7892,7 @@ MonoBehaviour:
   m_text: "\u6E96\u5099\u5B8C\u4E86 /  \u53C2\u52A0\u4EBA\u6570"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
-  m_sharedMaterial: {fileID: 5045735705979843012, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
+  m_sharedMaterial: {fileID: 7211171604057284572, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -8558,6 +8574,7 @@ MonoBehaviour:
   playerTag: Player
   stageTag: Stage
   searchRadius: 100
+  slowDuration: 3
 --- !u!65 &1224124587
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9795,7 +9812,7 @@ MonoBehaviour:
   m_text: "\u6E96\u5099\u5B8C\u4E86"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
-  m_sharedMaterial: {fileID: 5045735705979843012, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
+  m_sharedMaterial: {fileID: 7211171604057284572, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11410,7 +11427,7 @@ MonoBehaviour:
   m_text: "\u9000\u51FA"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
-  m_sharedMaterial: {fileID: 5045735705979843012, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
+  m_sharedMaterial: {fileID: 7211171604057284572, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12055,7 +12072,7 @@ MonoBehaviour:
   m_text: New Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
-  m_sharedMaterial: {fileID: 5045735705979843012, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
+  m_sharedMaterial: {fileID: 7211171604057284572, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
