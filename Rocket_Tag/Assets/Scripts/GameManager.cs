@@ -99,7 +99,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void StartGame()
     {
+        if (isGameStarted) return;
+
         Debug.Log("ƒQ[ƒ€‚ğŠJn‚µ‚Ü‚·");
+        isGameStarted = true;
         timeManager.isTimeStart = true;
         StartCoroutine(CheckSurvivorCount());
 
