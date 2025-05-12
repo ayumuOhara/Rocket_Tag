@@ -114,10 +114,6 @@ public class PlayerRespawnTrigger : MonoBehaviour
                 other.transform.position = respawnPosition;
                 Debug.Log("プレイヤーが近くのステージにリスポーンしました");
 
-                if (skillCoolTime.SkillCool == true)
-                {
-                    StartCoroutine(skillCoolTime.CoolTime(SCL));//スキルを三秒間使用不可能にする。
-                }
 
                 //Rigidbody rb = other.GetComponent<Rigidbody>();
                 //if (rb != null)
@@ -138,6 +134,10 @@ public class PlayerRespawnTrigger : MonoBehaviour
                 PlayerMovement movement = other.GetComponent<PlayerMovement>();
                 if (movement != null)
                 {
+                    if (skillCoolTime.SkillCool == true)
+                    {
+                        StartCoroutine(skillCoolTime.CoolTime(SCL));//スキルを三秒間使用不可能にする。
+                    }
                     StartCoroutine(TemporarilySlowPlayer(movement, slowDuration));
                 }
             }
