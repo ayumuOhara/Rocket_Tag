@@ -18,6 +18,9 @@ public class EventEffect : MonoBehaviour                    ////  イベントのエフ
     const int numOfPlayers = 4;
     bool isGeneratedSmoke;
 
+    internal bool _IsGeneratedSmoke
+    { set { isGeneratedSmoke = value; } }
+
     void Start()                                            ////  以下処理区  ////
     {
         Initialize();    //  初期化
