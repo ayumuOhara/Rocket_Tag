@@ -75,6 +75,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  ÉC
                     if (isGeneratedSmoke)
                     {
                         Debug.Log(teleportSmokeSystem);
+                        teleportSmokeSystem[playerIndex].transform.position = players;
                         teleportSmokeSystem[playerIndex].Clear();
                         teleportSmokeSystem[playerIndex].Play();
                     }

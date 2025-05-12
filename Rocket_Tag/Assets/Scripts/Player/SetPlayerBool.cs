@@ -29,14 +29,14 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
         seManager = GameObject.Find("SE_Audio").GetComponent<SEManager>();
         resultUI = GameObject.Find("ResultUI");
-        if(SceneManager.GetActiveScene().name == "PlayScene")
+        if (SceneManager.GetActiveScene().name == "PlayScene")
         {
             rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
         }
     }
 
     private void Start()
-    {       
+    {
         if (resultUI != null)
             resultUI.SetActive(false);
     }
@@ -78,7 +78,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     public void SetIsStun(bool newIsStun)
     {
         isStun = newIsStun;
-        if(isStun)
+        if (isStun)
         {
             StartCoroutine(playerMovement.StunPlayer());
         }
@@ -98,13 +98,21 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             Debug.Log("ÉçÉPÉbÉgÇéÛÇØéÊÇËÇ‹Ç∑");
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
-            seManager.PlayFuseSE();
+
+            if (photonView.IsMine && SceneManager.GetActiveScene().name == "PlayScene")
+            {
+                seManager.PlayFuseSE();
+            }
         }
         else
         {
             rocketObj.SetActive(false);
             compas.SetActive(false);
-            seManager.StopFuseSE();
+
+            if (photonView.IsMine)
+            {
+                seManager.StopFuseSE();
+            }
         }
 
         if (timeManager != null)
