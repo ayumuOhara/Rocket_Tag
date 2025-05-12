@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventSettings:
   - EVENT_TYPE: 0
-    eventPercent: 15
+    eventPercent: 0
   - EVENT_TYPE: 1
-    eventPercent: 55
+    eventPercent: 100
   - EVENT_TYPE: 2
-    eventPercent: 30
+    eventPercent: 0

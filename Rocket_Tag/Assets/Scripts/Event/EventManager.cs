@@ -191,7 +191,8 @@ public class EventManager : MonoBehaviourPunCallbacks
             Debug.Log(playerList[i]);
             photonView.RPC("GenerateEffect", RpcTarget.All, (int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform.position, i);
             //eventEffect.GenerateEffect((int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform, i);    //  エフェクト生成
-            playerList[i].transform.position = playerPos[i];
+            playerList[i].gameObject.transform.position = playerPos[i];
+            playerPos.Remove(playerPos[i]);
         }
         eventEffect._IsGeneratedSmoke = true;
     }
