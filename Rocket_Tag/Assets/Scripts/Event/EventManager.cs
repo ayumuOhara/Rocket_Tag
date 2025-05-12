@@ -186,7 +186,7 @@ public class EventManager : MonoBehaviourPunCallbacks
         }
 
         // 新しい座標をプレイヤーに適用
-        for (int i = 0; i < playerList.Count; i++)
+        for (int i = 0; playerList.Count <= 0;)
         {
             Debug.Log(playerList[i]);
             photonView.RPC("GenerateEffect", RpcTarget.All, (int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform.position, i);
