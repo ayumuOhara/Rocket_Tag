@@ -63,10 +63,11 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     }
 
     [PunRPC]
-    internal void GenerateEffect(int EffectNo, Transform players, int playerIndex)    //  エフェクト生成(ラッパー関数)
+    internal void GenerateEffect(int EffectNo, Vector3 players, int playerIndex)    //  エフェクト生成(ラッパー関数)
     {
         Debug.Log("TPエフェクト生成突入");
         Debug.Log("TPエフェクト" + teleportSmokePrefab.name);
+
         switch (EffectNo)
         {
             case 0:
@@ -80,7 +81,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
                     else
                     {
                         teleportSmokeEntity = Instantiate(teleportSmokePrefab);
-                        teleportSmokeEntity.transform.position = players.position;
+                        teleportSmokeEntity.transform.position = players;
                         teleportSmokeSystem[playerIndex] = teleportSmokeEntity.GetComponent<ParticleSystem>();
                         Debug.Log(teleportSmokeSystem);
                     }

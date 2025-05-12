@@ -189,7 +189,7 @@ public class EventManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < playerList.Count; i++)
         {
             Debug.Log(playerList[i]);
-            photonView.RPC("GenerateEffect", RpcTarget.All, (int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform, i);
+            photonView.RPC("GenerateEffect", RpcTarget.All, (int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform.position, i);
             //eventEffect.GenerateEffect((int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform, i);    //  エフェクト生成
             playerList[i].transform.position = playerPos[i];
         }
