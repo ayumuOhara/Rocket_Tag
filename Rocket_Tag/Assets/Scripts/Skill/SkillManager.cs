@@ -147,7 +147,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
         finishSkill = false;
 
-        float speed = playerMovement.GetMoveSpeed();
+        float speed = playerMovement.GetDefaultMoveSpeed();
         playerMovement.SetMoveSpeed(speed * boostValue);
 
         yield return new WaitForSeconds(dashLimit);
