@@ -15,7 +15,7 @@ MonoBehaviour:
   m_GroupName: EventEffect
   m_GUID: 09ce18259a520914e9fb287f31fe3d58
   m_SerializeEntries:
-  - m_GUID: 3217b570b11b257469c5461f0457e5d4
+  - m_GUID: a7a8514c8ab44014ca98f670aaa5b05d
     m_Address: TeleportSmoke
     m_ReadOnly: 0
     m_SerializedLabels: []

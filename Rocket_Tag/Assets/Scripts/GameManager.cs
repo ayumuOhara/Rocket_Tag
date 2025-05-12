@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Player currentRocketHolder;                 // 現在のロケット保持者
     private List<GameObject> cachedPlayerList = new List<GameObject>(); // プレイヤーリストのキャッシュ
 
-    int waitTime = 60;
+    int waitTime = 30;
 
     void Start()
     {
@@ -59,13 +59,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     IEnumerator WaitTimer()
     {
-        float time = 0;
+        waitTime = 30;
         eventTextObj.SetActive(true);
 
         while (true)
         {
-            time += Time.deltaTime;
-            waitTime -= (int)time;
+            waitTime--;
 
             eventText.text = $"{waitTime}秒後に強制的にゲームを開始します";
 
@@ -76,7 +75,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 yield break;
             }
 
-            yield return null;
+            yield return new WaitForSeconds(1);
         }
     }
 

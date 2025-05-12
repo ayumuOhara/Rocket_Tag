@@ -65,21 +65,18 @@ public class SEManager : MonoBehaviour
     }
 
     //ì±âŒê¸SEÇÃä«óù
-    public void HandleFuseSE(bool hasRocket)
+    public void PlayFuseSE()
     {
-        if (hasRocket)
+        if (!fuseAudioSource.isPlaying)
         {
-            if(!fuseAudioSource.isPlaying)
-            {
-                fuseAudioSource.Play();
-            }
+            fuseAudioSource.Play();
         }
-        else
+    }
+    public void StopFuseSE()
+    {
+        if (fuseAudioSource.isPlaying)
         {
-            if(fuseAudioSource.isPlaying)
-            {
-                fuseAudioSource.Stop();
-            }
+            fuseAudioSource.Stop();
         }
     }
 }
