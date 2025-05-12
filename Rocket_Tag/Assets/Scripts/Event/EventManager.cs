@@ -188,8 +188,9 @@ public class EventManager : MonoBehaviourPunCallbacks
         // 新しい座標をプレイヤーに適用
         for (int i = 0; i < playerList.Count; i++)
         {
-            Debug.Log(playerList[i])
-;            eventEffect.GenerateEffect((int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform, i);    //  エフェクト生成
+            Debug.Log(playerList[i]);
+            photonView.RPC("GenerateEffect", RpcTarget.All, (int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform, i);
+            //eventEffect.GenerateEffect((int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform, i);    //  エフェクト生成
             playerList[i].transform.position = playerPos[i];
         }
         eventEffect._IsGeneratedSmoke = true;
