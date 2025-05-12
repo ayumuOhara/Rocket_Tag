@@ -156,11 +156,11 @@ public class EventManager : MonoBehaviourPunCallbacks
     IEnumerator BlindEvent()
     {
         AudioManager.Instance.PlaySE(SEManager.SEType.Event_ink); //ƒCƒ“ƒNSE
-        List<GameObject> playerList = gameManager.GetPlayerList();
+        //List<GameObject> playerList = gameManager.GetPlayerList();
         float eventTime = 10.0f;
-        enoguEvent.PaintOpen(playerList);
+        enoguEvent.PaintOpen();
         yield return new WaitForSeconds(eventTime);
-        enoguEvent.PaintClose(playerList);
+        enoguEvent.PaintClose();
         yield break;
     }
 
