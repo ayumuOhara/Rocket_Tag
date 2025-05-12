@@ -39,23 +39,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    IEnumerator WaitPlayersReady()
-    {
-        while (true)
-        {
-            int readyCount = GetReadyPlayerCount();
-            photonView.RPC("PlayerCntText", RpcTarget.All, readyCount, "準備完了");
-
-            if (CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
-            {
-                photonView.RPC(nameof(StartGame), RpcTarget.All);
-                yield break;
-            }
-
-            yield return null;
-        }
-    }
-
     [PunRPC]
     IEnumerator WaitTimer()
     {
@@ -66,7 +49,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             waitTime--;
 
-            eventText.text = $"{waitTime}秒後に強制的にゲームを開始します";
+            eventText.text = $"{waitTime}秒後にゲームを開始します";
 
             if (waitTime <= 0)
             {
