@@ -54,6 +54,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     public void SetPlayerDead(bool newIsDead)
     {
         isDead = newIsDead;
+        seManager.StopFuseSE();
 
         if (isDead && photonView.IsMine)
         {
