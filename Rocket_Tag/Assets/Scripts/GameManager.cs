@@ -68,44 +68,39 @@ public class GameManager : MonoBehaviourPunCallbacks
         return currentCnt >= JOIN_CNT_MIN;
     }
 
-    bool CheckAllPlayersReady()
-    {
-        Player[] players = PhotonNetwork.PlayerList;
-        foreach (var player in players)
-        {
-            if (!player.CustomProperties.ContainsKey("IsReady") || !(bool)player.CustomProperties["IsReady"])
-            {
-                Debug.Log($"プレイヤー {player.NickName} がまだ準備完了していません");
-                return false;
-            }
-        }
-        return true;
-    }
+    //bool CheckAllPlayersReady()
+    //{
+    //    Player[] players = PhotonNetwork.PlayerList;
+    //    foreach (var player in players)
+    //    {
+    //        if (!player.CustomProperties.ContainsKey("IsReady") || !(bool)player.CustomProperties["IsReady"])
+    //        {
+    //            Debug.Log($"プレイヤー {player.NickName} がまだ準備完了していません");
+    //            return false;
+    //        }
+    //    }
+    //    return true;
+    //}
 
-    int GetReadyPlayerCount()
-    {
-        Player[] players = PhotonNetwork.PlayerList;
-        int readyCount = 0;
+    //int GetReadyPlayerCount()
+    //{
+    //    Player[] players = PhotonNetwork.PlayerList;
+    //    int readyCount = 0;
 
-        foreach (var player in players)
-        {
-            if (player.CustomProperties.ContainsKey("IsReady") && (bool)player.CustomProperties["IsReady"])
-            {
-                readyCount++;
-            }
-        }
-        return readyCount;
-    }
+    //    foreach (var player in players)
+    //    {
+    //        if (player.CustomProperties.ContainsKey("IsReady") && (bool)player.CustomProperties["IsReady"])
+    //        {
+    //            readyCount++;
+    //        }
+    //    }
+    //    return readyCount;
+    //}
 
     [PunRPC]
     void StartGame()
     {
-        //rocketEffect.SetActive(true);
-
-        if (isGameStarted) return;
-
-        Debug.Log("プレイヤーが揃ったのでゲームを開始します");
-        isGameStarted = true;
+        Debug.Log("ゲームを開始します");
         timeManager.isTimeStart = true;
         readyButton.SetActive(false);
         StartCoroutine(CheckSurvivorCount());
