@@ -2,8 +2,9 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Threading.Tasks;
+using Photon.Pun;
 
-public class EventEffect : MonoBehaviour                    ////  イベントのエフェクトを扱うスクリプト  ////
+public class EventEffect : MonoBehaviourPunCallbacks                    ////  イベントのエフェクトを扱うスクリプト  ////
 {
     internal enum EventEffectNo                             ////  以下宣言区  ////
     {
@@ -56,6 +57,8 @@ public class EventEffect : MonoBehaviour                    ////  イベントのエフ
             teleportSmokePrefab = loadHandle[loadHandleArrayNo].Result;
         }
     }
+
+    [PunRPC]
     internal void GenerateEffect(int EffectNo, Transform players, int playerIndex)    //  エフェクト生成(ラッパー関数)
     {
         Debug.Log("TPエフェクト生成突入");
