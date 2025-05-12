@@ -101,22 +101,22 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
 
             if (photonView.IsMine)
             {
-                AudioManager.Instance.PlaySE(SEManager.SEType.Rocket_Set);
+                //AudioManager.Instance.PlaySE(SEManager.SEType.Rocket_Set);
 
-                if (SceneManager.GetActiveScene().name == "PlayScene")
-                {
-                    seManager.PlayFuseSE();
-                }
+                //if (SceneManager.GetActiveScene().name == "PlayScene")
+                //{
+                //    seManager.PlayFuseSE();
+                //}
             }
             else
             {
                 rocketObj.SetActive(false);
                 compas.SetActive(false);
 
-                if (photonView.IsMine)
-                {
-                    seManager.StopFuseSE();
-                }
+                //if (photonView.IsMine)
+                //{
+                //    seManager.StopFuseSE();
+                //}
             }
 
             if (timeManager != null)
