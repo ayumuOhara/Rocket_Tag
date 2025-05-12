@@ -4,14 +4,14 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Threading.Tasks;
 using Photon.Pun;
 
-public class EventEffect : MonoBehaviourPunCallbacks                    ////  イベントのエフェクトを扱うスクリプト  ////
+public class EventEffect : MonoBehaviourPunCallbacks                    ////  イベントのエフェクトを扱うスクリプト(視界妨害を除く)  ////
 {
     internal enum EventEffectNo                             ////  以下宣言区  ////
     {
         TELEPORT_SMOKE,
     }
 
-    GameObject teleportSmokePrefab;
+    static GameObject teleportSmokePrefab;
     GameObject teleportSmokeEntity;
     ParticleSystem[] teleportSmokeSystem;
 
@@ -27,7 +27,10 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     }
     async void Initialize()    //  初期化関数
     {
-        LoadEffect();
+        if (teleportSmokePrefab == null)
+        {
+            LoadEffect();
+        }
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
         isGeneratedSmoke = false;
     }
@@ -46,6 +49,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
         loadHandle = new AsyncOperationHandle<GameObject>[numOfEffect];
 
         loadHandleArrayNo = 0;
+
         for (; loadHandleArrayNo < numOfEffect; loadHandleArrayNo++)
         {
             loadHandle[loadHandleArrayNo] = Addressables.LoadAssetAsync<GameObject>(smokeEffectNames[loadHandleArrayNo]);
