@@ -28,6 +28,8 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
     public bool finishSkill = true;
 
+    float SkillCT = 10.0f;//スキルのクールタイム
+
     // スキルを設定
     public void SetSkill(SkillData newSkillData)
     {
@@ -79,7 +81,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
                 //SendSkillData();
 
-                StartCoroutine(skillCoolTime.CoolTime());//クールタイム
+                StartCoroutine(skillCoolTime.CoolTime(SkillCT));//クールタイム
             }
         }
     }
