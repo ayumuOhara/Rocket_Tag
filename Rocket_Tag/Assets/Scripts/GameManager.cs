@@ -34,7 +34,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            StartCoroutine(WaitPlayersReady());
             photonView.RPC("WaitTimer", RpcTarget.All);
         }
     }
