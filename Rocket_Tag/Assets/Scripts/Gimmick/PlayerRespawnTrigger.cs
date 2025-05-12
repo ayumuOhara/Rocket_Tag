@@ -80,28 +80,6 @@ public class PlayerRespawnTrigger : MonoBehaviour
     [SerializeField] private float searchRadius = 10f; // ステージ検索範囲
     [SerializeField] private float slowDuration = 3f;  // 遅くする時間（秒）
 
-    [SerializeField] SkillCoolTime skillCoolTime;
-    float SCL = 3.0f;
-
-    void Start()
-    {
-        if (skillCoolTime == null)
-        {
-            skillCoolTime = GetComponentInChildren<SkillCoolTime>();
-        }
-        if (skillCoolTime == null)
-        {
-            skillCoolTime = FindObjectOfType<SkillCoolTime>();
-        }
-        if (skillCoolTime == null)
-        {
-            Debug.Log("skillCoolTimeが見つからない");
-        }
-        else
-        {
-            Debug.Log("skillCoolTime発見");
-        }
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -134,10 +112,6 @@ public class PlayerRespawnTrigger : MonoBehaviour
                 PlayerMovement movement = other.GetComponent<PlayerMovement>();
                 if (movement != null)
                 {
-                    if (skillCoolTime.SkillCool == true)
-                    {
-                        StartCoroutine(skillCoolTime.CoolTime(SCL));//スキルを三秒間使用不可能にする。
-                    }
                     StartCoroutine(TemporarilySlowPlayer(movement, slowDuration));
                 }
             }
