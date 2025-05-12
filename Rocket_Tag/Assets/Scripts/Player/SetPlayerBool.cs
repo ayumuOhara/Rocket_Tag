@@ -99,31 +99,36 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
 
-            if (photonView.IsMine && SceneManager.GetActiveScene().name == "PlayScene")
-            {
-                seManager.PlayFuseSE();
-            }
-        }
-        else
-        {
-            rocketObj.SetActive(false);
-            compas.SetActive(false);
-
             if (photonView.IsMine)
             {
-                seManager.StopFuseSE();
+                AudioManager.Instance.PlaySE(SEManager.SEType.Rocket_Set);
+
+                if (SceneManager.GetActiveScene().name == "PlayScene")
+                {
+                    seManager.PlayFuseSE();
+                }
             }
-        }
+            else
+            {
+                rocketObj.SetActive(false);
+                compas.SetActive(false);
 
-        if (timeManager != null)
-        {
-            timeManager.ResetAcceleration();
-        }
-        else
-        {
-            Debug.Log("timeManager‚ªnull‚Å‚·");
-        }
-        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+                if (photonView.IsMine)
+                {
+                    seManager.StopFuseSE();
+                }
+            }
 
+            if (timeManager != null)
+            {
+                timeManager.ResetAcceleration();
+            }
+            else
+            {
+                Debug.Log("timeManager‚ªnull‚Å‚·");
+            }
+            //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+
+        }
     }
 }
