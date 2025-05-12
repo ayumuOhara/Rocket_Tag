@@ -29,10 +29,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
         seManager = GameObject.Find("SE_Audio").GetComponent<SEManager>();
         resultUI = GameObject.Find("ResultUI");
-        if (SceneManager.GetActiveScene().name == "PlayScene")
-        {
-            rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
-        }
+        rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
     }
 
     private void Start()
