@@ -41,18 +41,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             resultUI.SetActive(false);
     }
 
-    private void Update()
-    {
-        if (hasRocket)
-        {
-            seManager.PlayFuseSE();
-        }
-        if(!hasRocket)
-        {
-            seManager.StopFuseSE();
-        }
-    }
-
     // プレイヤーの状態の初期化
     public void SetPlayerCondition()
     {
@@ -109,11 +97,13 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             Debug.Log("ロケットを受け取ります");
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
+            seManager.PlayFuseSE();
         }
         else
         {
             rocketObj.SetActive(false);
             compas.SetActive(false);
+            seManager.StopFuseSE();
         }
 
         if (timeManager != null)
