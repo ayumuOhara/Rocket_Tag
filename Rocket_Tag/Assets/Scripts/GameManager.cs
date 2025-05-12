@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] PlayerReady playerReady;
     [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
     [SerializeField] TextMeshProUGUI infoText;          // playerCntTextの説明文
-    [SerializeField] GameObject readyButton;            // 準備完了ボタン
     [SerializeField] GameObject eventTextObj;
     [SerializeField] TextMeshProUGUI eventText;
 
@@ -41,6 +40,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     IEnumerator WaitTimer()
     {
+        photonView.RPC("PlayerCntText", RpcTarget.All, GetPlayerList().Count, "参加人数");
         waitTime = 30;
         eventTextObj.SetActive(true);
 
@@ -101,7 +101,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("ゲームを開始します");
         timeManager.isTimeStart = true;
-        readyButton.SetActive(false);
         StartCoroutine(CheckSurvivorCount());
 
         if (PhotonNetwork.IsMasterClient)
