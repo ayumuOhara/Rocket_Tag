@@ -192,6 +192,7 @@ public class EventManager : MonoBehaviourPunCallbacks
 ;            eventEffect.GenerateEffect((int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform, i);    //  エフェクト生成
             playerList[i].transform.position = playerPos[i];
         }
+        eventEffect._IsGeneratedSmoke = true;
     }
 
     // 移動速度変化イベント
