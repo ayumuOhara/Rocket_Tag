@@ -166,6 +166,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     }
     void GenerateTeleportSmoke()    //  テレポートスモーク生成
     {
+        Players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();
         for (int i = 0; i < numOfPlayers; i++)
         {
             if (Players[i].gameObject.activeSelf)
