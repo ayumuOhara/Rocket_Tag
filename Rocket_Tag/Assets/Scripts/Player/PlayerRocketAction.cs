@@ -23,7 +23,7 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
     {
         // 近くのプレイヤーにロケットを渡す
         GameObject target = observeDistance.GetTargetDistance();
-        AudioManager.Instance.PlaySE(SEManager.SEType.Rocket_Set);
+        //AudioManager.Instance.PlaySE(SEManager.SEType.Rocket_Set);
 
         if (target == null) return;
 
