@@ -105,16 +105,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
                     seManager.PlayFuseSE();
                 }
             }
-            else
-            {
-                rocketObj.SetActive(false);
-                compas.SetActive(false);
-
-                if (photonView.IsMine)
-                {
-                    seManager.StopFuseSE();
-                }
-            }
+            
 
             if (timeManager != null)
             {
@@ -126,6 +117,16 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             }
             //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
 
+        }
+        else
+        {
+            rocketObj.SetActive(false);
+            compas.SetActive(false);
+
+            if (photonView.IsMine)
+            {
+                seManager.StopFuseSE();
+            }
         }
     }
 }
