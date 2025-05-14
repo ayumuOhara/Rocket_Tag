@@ -1,21 +1,26 @@
 using UnityEngine;
+using Photon.Pun;
 
-public class RandomMapSpawner : MonoBehaviour
+public class RandomMapSpawner : MonoBehaviourPunCallbacks
 {
     [Header("マップのプレハブを登録")]
-    public GameObject[] mapPrefabs; // 複数のマッププレハブ
+    public GameObject[] mapPrefabs;
 
     [Header("スポーン位置")]
-    public Transform spawnPoint;    // 生成する位置
+    public Transform spawnPoint;
 
     private GameObject currentMap;
 
     void Start()
     {
-        SpawnRandomMap();
+        // Master Client のみマップを生成
+        if (PhotonNetwork.IsMasterClient)
+        {
+            SpawnRandomMap();
+        }
     }
 
-    public void SpawnRandomMap()
+    void SpawnRandomMap()
     {
         if (mapPrefabs.Length == 0 || spawnPoint == null)
         {
@@ -23,17 +28,16 @@ public class RandomMapSpawner : MonoBehaviour
             return;
         }
 
-        // すでに生成されているマップがある場合は削除
-        if (currentMap != null)
-        {
-            Destroy(currentMap);
-        }
-
-        // ランダムに1つ選んで生成
         int randomIndex = Random.Range(0, mapPrefabs.Length);
         GameObject selectedMap = mapPrefabs[randomIndex];
 
-        currentMap = Instantiate(selectedMap, spawnPoint.position, spawnPoint.rotation);
-        Debug.Log($"マップ「{selectedMap.name}」が生成されました。");
+        // ネットワーク上にマップを生成（全員に反映）
+        currentMap = PhotonNetwork.InstantiateRoomObject(
+            selectedMap.name,
+            spawnPoint.position,
+            spawnPoint.rotation
+        );
+
+        Debug.Log($"[MasterClient] マップ「{selectedMap.name}」を生成しました。");
     }
 }
