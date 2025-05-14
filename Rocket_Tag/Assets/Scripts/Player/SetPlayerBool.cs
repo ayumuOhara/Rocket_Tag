@@ -14,6 +14,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     //public ResultScreen resultScreen;
     public PlayerRankManager playerRankManager;
     public SEManager seManager;
+    private bool hasPlayedRocketSetSE = false;
 
     [SerializeField] GameObject rocketObj;  // ロケット
     [SerializeField] GameObject compas;
@@ -96,16 +97,16 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
 
-            if (photonView.IsMine)
+            if (photonView.IsMine && SceneManager.GetActiveScene().name == "PlayScene")
             {
-                AudioManager.Instance.PlaySE(SEManager.SEType.Rocket_Set);
+                seManager.PlayFuseSE();
 
-                if (SceneManager.GetActiveScene().name == "PlayScene")
+                if (!hasPlayedRocketSetSE)
                 {
-                    seManager.PlayFuseSE();
+                    AudioManager.Instance.PlaySE(SEManager.SEType.Rocket_Set);
+                    hasPlayedRocketSetSE = true;
                 }
             }
-            
 
             if (timeManager != null)
             {
@@ -126,6 +127,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             if (photonView.IsMine)
             {
                 seManager.StopFuseSE();
+                hasPlayedRocketSetSE =　false;
             }
         }
     }
