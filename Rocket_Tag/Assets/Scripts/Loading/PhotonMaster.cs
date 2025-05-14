@@ -92,7 +92,8 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
             if (PhotonNetwork.CurrentRoom.PlayerCount == MAX_PLAYER_PER_ROOM)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
-                PhotonNetwork.LoadLevel("PlayScene");
+                //PhotonNetwork.LoadLevel("PlayScene");
+                PhotonNetwork.LoadLevel("Test_Map_2");
             }
         }
     }
