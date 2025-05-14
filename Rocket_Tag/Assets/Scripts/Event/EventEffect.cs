@@ -36,6 +36,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  ÉC
         {
             LoadEffect();
         }
+        EffectMapSet();
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
         gameMgr = GameObject.Find("GameManager").GetComponent<GameManager>();
         Players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();
