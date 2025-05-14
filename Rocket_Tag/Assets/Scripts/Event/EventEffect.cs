@@ -3,6 +3,8 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Threading.Tasks;
 using Photon.Pun;
+using System.Collections.Generic;
+using System;
 
 public class EventEffect : MonoBehaviourPunCallbacks                    ////  イベントのエフェクトを扱うスクリプト(視界妨害を除く)  ////
 {
@@ -13,11 +15,14 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
 
     static GameObject teleportSmokePrefab;
     GameObject teleportSmokeEntity;
+    Transform[] Players;
     ParticleSystem[] teleportSmokeSystem;
+    GameManager gameMgr;
+    Dictionary<EventEffectNo, Action> effectmap;
 
     const int numOfPlayers = 4;
     bool isGeneratedSmoke;
-
+    
     internal bool _IsGeneratedSmoke
     { set { isGeneratedSmoke = value; } }                   ////  宣言区終了  ////
 
@@ -32,7 +37,16 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
             LoadEffect();
         }
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
+        gameMgr = GameObject.Find("GameManager").GetComponent<GameManager>();
+        Players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();
+        
         isGeneratedSmoke = false;
+    }
+    void EffectMapSet()    //  エフェクトマップをセッティング
+    {
+        effectmap = new Dictionary<EventEffectNo, Action> {
+            { EventEffectNo.TELEPORT_SMOKE, HandleTeleportSmoke}
+        };
     }
     async Task LoadEffect()    //  エフェクトロード
     {
@@ -61,7 +75,10 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
             teleportSmokePrefab = loadHandle[loadHandleArrayNo].Result;
         }
     }
-
+    void CallEffectProcces(EventEffectNo eventEffectNo)    //  エフェクト処理呼び出し
+    {
+        effectmap[eventEffectNo]();
+    }
     [PunRPC]
     internal void GenerateEffect(int EffectNo, Vector3 players, int playerIndex)    //  エフェクト生成(ラッパー関数)
     {
@@ -94,4 +111,71 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
                 }
         }
     }
+    [PunRPC]
+    internal void PlayEventEffect(int EffectNo)    //  イベントエフェクトのラッパー関数
+    {
+        switch (EffectNo)
+        {
+            case 0:
+                {
+                    if (isGeneratedSmoke)
+                    {
+                        Debug.Log(teleportSmokeSystem);
+
+                    }
+                    else
+                    {
+
+                        Debug.Log(teleportSmokeSystem);
+                    }
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+        }
+    }
+    void HandleTeleportSmoke()    //  テレポート時の煙の制御
+    {
+        if(isGeneratedSmoke)
+        {
+            for (int i = 0; i < numOfPlayers; i++)
+            {
+                if (Players[i].gameObject.activeSelf)
+                {
+                    ReplayEffect(teleportSmokeSystem[i], Players[i].position);
+                }
+            }
+        }
+        else
+        {
+            GenerateTeleportSmoke();
+            isGeneratedSmoke = true;
+        }
+    }
+    void ReplayEffect(ParticleSystem effect, Vector3 playPos)    //  エフェクト再再生                       ////  コード保存場所  ////
+    {
+        effect.transform.position = playPos;
+        effect.Clear();
+        effect.Play();
+    }
+    void GenerateTeleportSmoke()    //  テレポートスモーク生成
+    {
+        for (int i = 0; i < numOfPlayers; i++)
+        {
+            if (Players[i].gameObject.activeSelf)
+            {
+                teleportSmokeEntity = Instantiate(teleportSmokePrefab);
+                teleportSmokeEntity.transform.position = Players[i].position;
+                teleportSmokeSystem[i] = teleportSmokeEntity.GetComponent<ParticleSystem>();
+            }
+        }
+    }
 }
+// void ReplayEffect(ParticleSystem effect, Vector3 playPos)    //  エフェクト再再生                       ////  コード保存場所  ////
+//    {
+//    effect.transform.position = playPos;
+//    effect.Clear();
+//    effect.Play();
+//}
