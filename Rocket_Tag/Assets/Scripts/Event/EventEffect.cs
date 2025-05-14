@@ -75,6 +75,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
             teleportSmokePrefab = loadHandle[loadHandleArrayNo].Result;
         }
     }
+    [PunRPC]
     void CallEffectProcces(EventEffectNo eventEffectNo)    //  エフェクト処理呼び出し
     {
         effectmap[eventEffectNo]();
