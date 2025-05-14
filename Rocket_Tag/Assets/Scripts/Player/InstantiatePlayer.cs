@@ -65,7 +65,6 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
 
         //debuger.SetComponents(player);
         skinGanarater.SkinGenerateWrapper(SkinGenerater.SkinGenerateProcces.IN_GAME_GENERATE);
-        eventEffect._Players = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
         // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
         gameManager.playerController = player.GetComponent<PlayerController>();
         gameManager.setPlayerBool = player.GetComponent<SetPlayerBool>();
