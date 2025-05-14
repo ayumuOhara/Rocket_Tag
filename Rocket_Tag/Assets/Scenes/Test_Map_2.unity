@@ -1540,7 +1540,8 @@ MonoBehaviour:
   playerReady: {fileID: 990521921}
   playerCntText: {fileID: 1233542447}
   infoText: {fileID: 1283869530}
-  readyButton: {fileID: 990521918}
+  eventTextObj: {fileID: 0}
+  eventText: {fileID: 0}
 --- !u!114 &741400292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1742,7 +1743,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &990521919
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2782,7 +2783,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48e4d777fb90604ab912dad0bfb2afb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paintUIGroup: {fileID: 1066376210}
   blindEffect: {fileID: 598945020}
   enogu1: {fileID: 1412241013}
   enogu3: {fileID: 72612120}
@@ -2828,6 +2828,7 @@ MonoBehaviour:
   enoguEvent: {fileID: 1239251593}
   eventTextObj: {fileID: 1260614054}
   eventText: {fileID: 1260614056}
+  eventEffect: {fileID: 0}
   eventData: {fileID: 11400000, guid: 9df4d57e7f9eabf40b37ca7278b11efd, type: 2}
   skillDataBase: {fileID: 11400000, guid: ed8d1036479547b4fab7294aaf68ed13, type: 2}
   time: 0
