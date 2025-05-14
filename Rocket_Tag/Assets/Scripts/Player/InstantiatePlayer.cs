@@ -8,6 +8,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
 {
     [SerializeField] Debuger debuger;
     [SerializeField] SkinGenerater skinGanarater;
+    [SerializeField] EventEffect effect;
     [SerializeField] GameObject playerCamera;
     [SerializeField] GameObject waitCamera;
     [SerializeField] GameManager gameManager;
@@ -64,6 +65,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
 
         //debuger.SetComponents(player);
         skinGanarater.SkinGenerateWrapper(SkinGenerater.SkinGenerateProcces.IN_GAME_GENERATE);
+        effect._Players = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
         // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
         gameManager.playerController = player.GetComponent<PlayerController>();
         gameManager.setPlayerBool = player.GetComponent<SetPlayerBool>();
