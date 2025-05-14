@@ -25,6 +25,8 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     
     internal bool _IsGeneratedSmoke
     { set { isGeneratedSmoke = value; } }                   ////  宣言区終了  ////
+    internal Transform[] _Players
+    { set { Players = value; } }                   ////  宣言区終了  ////
 
     void Start()                                            ////  以下処理区  ////
     {
@@ -34,13 +36,13 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     {
         if (teleportSmokePrefab == null)
         {
-            LoadEffect();
+            await LoadEffect();
         }
         EffectMapSet();
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
         gameMgr = GameObject.Find("GameManager").GetComponent<GameManager>();
-        Players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();
-        
+        //Players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();    fordebug-------------------------
+
         isGeneratedSmoke = false;
     }
     void EffectMapSet()    //  エフェクトマップをセッティング
