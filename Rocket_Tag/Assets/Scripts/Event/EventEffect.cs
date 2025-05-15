@@ -163,7 +163,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     }
     void AssignPlyaersTF()    //  プレイヤーのトランスフォームを取得
     {
-        if (players == null && players.Length > 4)
+        if (players == null || players.Length > 4)
         {
             players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();
         }
