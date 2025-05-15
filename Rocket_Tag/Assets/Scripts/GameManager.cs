@@ -188,6 +188,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     IEnumerator CheckRocketCnt()
     {
+        Debug.Log("コルーチンを開始します");
+
         while (true)
         {
             List<GameObject> players = GetPlayerList();

@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [SerializeField] private float deceleration = 25f;  // 減速度
     private Vector3 currentVelocity = Vector3.zero;     // 実際に使う現在の移動速度
 
-    float stunTime = 3.0f;                                  // スタン時間
+    float stunTime = 1.5f;                                  // スタン時間
     bool isDash = false;                                    // ダッシュ中か
 
     Animator animator;
