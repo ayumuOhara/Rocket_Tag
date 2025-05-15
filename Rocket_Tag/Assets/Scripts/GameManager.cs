@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] PlayerReady playerReady;
     [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
     [SerializeField] TextMeshProUGUI infoText;          // playerCntTextの説明文
-    [SerializeField] GameObject readyButton;            // 準備完了ボタン
     [SerializeField] GameObject eventTextObj;
     [SerializeField] TextMeshProUGUI eventText;
 
@@ -25,6 +24,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     //[SerializeField] RocketEffect rocketEffect;           // ロケットエフェクトのインスタンス    for debug--------------------------
     private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
     private bool isGameStarted = false;                 // ゲームが開始されたかどうかのフラグ
+    private bool hasPlayedCountdownSE = false;          // カウントダウンSEが再生されたかどうかの判定
     private Player currentRocketHolder;                 // 現在のロケット保持者
     private List<GameObject> cachedPlayerList = new List<GameObject>(); // プレイヤーリストのキャッシュ
 
@@ -34,31 +34,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            StartCoroutine(WaitPlayersReady());
             photonView.RPC("WaitTimer", RpcTarget.All);
-        }
-    }
-
-    IEnumerator WaitPlayersReady()
-    {
-        while (true)
-        {
-            int readyCount = GetReadyPlayerCount();
-            photonView.RPC("PlayerCntText", RpcTarget.All, readyCount, "準備完了");
-
-            if (CheckJoinedPlayer() && CheckAllPlayersReady() && !isGameStarted)
-            {
-                photonView.RPC(nameof(StartGame), RpcTarget.All);
-                yield break;
-            }
-
-            yield return null;
         }
     }
 
     [PunRPC]
     IEnumerator WaitTimer()
     {
+        photonView.RPC("PlayerCntText", RpcTarget.All, GetPlayerList().Count, "参加人数");
         waitTime = 30;
         eventTextObj.SetActive(true);
 
@@ -66,7 +49,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             waitTime--;
 
-            eventText.text = $"{waitTime}秒後に強制的にゲームを開始します";
+            eventText.text = $"{waitTime}秒後にゲームを開始します";
+
+            if(waitTime <= 3 && !hasPlayedCountdownSE)
+            {
+                AudioManager.Instance.PlaySE(SEManager.SEType.Countdown);
+                hasPlayedCountdownSE = true;
+            }
 
             if (waitTime <= 0)
             {
@@ -85,46 +74,43 @@ public class GameManager : MonoBehaviourPunCallbacks
         return currentCnt >= JOIN_CNT_MIN;
     }
 
-    bool CheckAllPlayersReady()
-    {
-        Player[] players = PhotonNetwork.PlayerList;
-        foreach (var player in players)
-        {
-            if (!player.CustomProperties.ContainsKey("IsReady") || !(bool)player.CustomProperties["IsReady"])
-            {
-                Debug.Log($"プレイヤー {player.NickName} がまだ準備完了していません");
-                return false;
-            }
-        }
-        return true;
-    }
+    //bool CheckAllPlayersReady()
+    //{
+    //    Player[] players = PhotonNetwork.PlayerList;
+    //    foreach (var player in players)
+    //    {
+    //        if (!player.CustomProperties.ContainsKey("IsReady") || !(bool)player.CustomProperties["IsReady"])
+    //        {
+    //            Debug.Log($"プレイヤー {player.NickName} がまだ準備完了していません");
+    //            return false;
+    //        }
+    //    }
+    //    return true;
+    //}
 
-    int GetReadyPlayerCount()
-    {
-        Player[] players = PhotonNetwork.PlayerList;
-        int readyCount = 0;
+    //int GetReadyPlayerCount()
+    //{
+    //    Player[] players = PhotonNetwork.PlayerList;
+    //    int readyCount = 0;
 
-        foreach (var player in players)
-        {
-            if (player.CustomProperties.ContainsKey("IsReady") && (bool)player.CustomProperties["IsReady"])
-            {
-                readyCount++;
-            }
-        }
-        return readyCount;
-    }
+    //    foreach (var player in players)
+    //    {
+    //        if (player.CustomProperties.ContainsKey("IsReady") && (bool)player.CustomProperties["IsReady"])
+    //        {
+    //            readyCount++;
+    //        }
+    //    }
+    //    return readyCount;
+    //}
 
     [PunRPC]
     void StartGame()
     {
-        //rocketEffect.SetActive(true);
-
         if (isGameStarted) return;
 
-        Debug.Log("プレイヤーが揃ったのでゲームを開始します");
+        Debug.Log("ゲームを開始します");
         isGameStarted = true;
         timeManager.isTimeStart = true;
-        readyButton.SetActive(false);
         StartCoroutine(CheckSurvivorCount());
 
         if (PhotonNetwork.IsMasterClient)
@@ -132,6 +118,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             ChooseRocketPlayer();
             StartCoroutine(eventManager.TriggerRandomEvent());
             StartCoroutine(CheckOverTime());
+            StartCoroutine(CheckRocketCnt());
         }
     }
 
@@ -196,6 +183,34 @@ public class GameManager : MonoBehaviourPunCallbacks
                 ChooseRocketPlayer();
             }
             yield return null;
+        }
+    }
+
+    IEnumerator CheckRocketCnt()
+    {
+        while (true)
+        {
+            List<GameObject> players = GetPlayerList();
+            int rocketCnt = 0;
+            for(int i = 0; i < players.Count; i++)
+            {
+                SetPlayerBool spb = players[i].GetComponent<SetPlayerBool>();
+                if(spb.hasRocket)
+                {
+                    rocketCnt++;
+                }
+            }
+
+            if(rocketCnt != 1)
+            {
+                for(int i = 0;i < players.Count;i++)
+                {
+                    PhotonView photon = players[i].GetComponent<PhotonView>();
+                    photon.RPC("SetHasRocket", RpcTarget.All, false);
+                }
+
+                ChooseRocketPlayer();
+            }
         }
     }
 

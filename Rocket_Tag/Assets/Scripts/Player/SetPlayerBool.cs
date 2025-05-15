@@ -14,6 +14,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     //public ResultScreen resultScreen;
     public PlayerRankManager playerRankManager;
     public SEManager seManager;
+    private bool hasPlayedRocketSetSE = false;
 
     [SerializeField] GameObject rocketObj;  // ロケット
     [SerializeField] GameObject compas;
@@ -29,28 +30,13 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         playerRankManager = GameObject.Find("GameManager").GetComponent<PlayerRankManager>();
         seManager = GameObject.Find("SE_Audio").GetComponent<SEManager>();
         resultUI = GameObject.Find("ResultUI");
-        if(SceneManager.GetActiveScene().name == "PlayScene")
-        {
-            rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
-        }
+        rocketEffect = GameObject.Find("RocketEffect").GetComponent<RocketEffect>();
     }
 
     private void Start()
-    {       
+    {
         if (resultUI != null)
             resultUI.SetActive(false);
-    }
-
-    private void Update()
-    {
-        if (hasRocket)
-        {
-            seManager.PlayFuseSE();
-        }
-        if(!hasRocket)
-        {
-            seManager.StopFuseSE();
-        }
     }
 
     // プレイヤーの状態の初期化
@@ -66,6 +52,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     public void SetPlayerDead(bool newIsDead)
     {
         isDead = newIsDead;
+        seManager.StopFuseSE();
 
         if (isDead && photonView.IsMine)
         {
@@ -89,7 +76,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     public void SetIsStun(bool newIsStun)
     {
         isStun = newIsStun;
-        if(isStun)
+        if (isStun)
         {
             StartCoroutine(playerMovement.StunPlayer());
         }
@@ -109,22 +96,39 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             Debug.Log("ロケットを受け取ります");
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
             rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
+
+            if (photonView.IsMine && SceneManager.GetActiveScene().name == "PlayScene")
+            {
+                seManager.PlayFuseSE();
+
+                if (!hasPlayedRocketSetSE)
+                {
+                    AudioManager.Instance.PlaySE(SEManager.SEType.Rocket_Set);
+                    hasPlayedRocketSetSE = true;
+                }
+            }
+
+            if (timeManager != null)
+            {
+                timeManager.ResetAcceleration();
+            }
+            else
+            {
+                Debug.Log("timeManagerがnullです");
+            }
+            //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+
         }
         else
         {
             rocketObj.SetActive(false);
             compas.SetActive(false);
-        }
 
-        if (timeManager != null)
-        {
-            timeManager.ResetAcceleration();
+            if (photonView.IsMine)
+            {
+                seManager.StopFuseSE();
+                hasPlayedRocketSetSE =　false;
+            }
         }
-        else
-        {
-            Debug.Log("timeManagerがnullです");
-        }
-        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
-
     }
 }

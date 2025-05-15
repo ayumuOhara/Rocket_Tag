@@ -8,6 +8,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
 {
     [SerializeField] Debuger debuger;
     [SerializeField] SkinGenerater skinGanarater;
+    [SerializeField] EventEffect eventEffect;
     [SerializeField] GameObject playerCamera;
     [SerializeField] GameObject waitCamera;
     [SerializeField] GameManager gameManager;

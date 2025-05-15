@@ -80,6 +80,7 @@ public class PlayerRespawnTrigger : MonoBehaviour
     [SerializeField] private float searchRadius = 10f; // ステージ検索範囲
     [SerializeField] private float slowDuration = 3f;  // 遅くする時間（秒）
 
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(playerTag))
@@ -90,6 +91,7 @@ public class PlayerRespawnTrigger : MonoBehaviour
                 Vector3 respawnPosition = nearestStage.position + Vector3.up * 1.5f;
                 other.transform.position = respawnPosition;
                 Debug.Log("プレイヤーが近くのステージにリスポーンしました");
+
 
                 //Rigidbody rb = other.GetComponent<Rigidbody>();
                 //if (rb != null)

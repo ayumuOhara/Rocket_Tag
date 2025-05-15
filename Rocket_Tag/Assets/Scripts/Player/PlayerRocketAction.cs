@@ -36,6 +36,7 @@ public class PlayerRocketAction : MonoBehaviourPunCallbacks
             PhotonView targetPhotonView = target.GetComponent<PhotonView>();
             if (targetPhotonView != null)
             {
+                AudioManager.Instance.PlaySE(SEManager.SEType.Rocket_Set);
                 //string playerName = PhotonNetwork.NickName;
                 uiLogManager.AddLog("player", UILogManager.LogType.ChangeTagger);
 

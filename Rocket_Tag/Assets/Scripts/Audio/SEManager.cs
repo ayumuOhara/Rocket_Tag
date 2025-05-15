@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class SEManager : MonoBehaviour
 {
@@ -23,6 +25,10 @@ public class SEManager : MonoBehaviour
     {
         seAudioSource.volume = seSetting.volume;
         fuseAudioSource.volume = seSetting.volume;
+        if (SceneManager.GetActiveScene().name != "PlayScene")
+        {
+            StopFuseSE();
+        }
     }
 
     void OnVolumeChenged(float value)
@@ -42,6 +48,7 @@ public class SEManager : MonoBehaviour
         Event_ink,　　 // インクが画面に飛び散る効果音
         Page,　　　　　// ページをめくる効果音
         Win,           // リザルト遷移時の効果音
+        Countdown,     // ゲーム開始時のカウントダウン
     }
 
     // SE再生メソッド

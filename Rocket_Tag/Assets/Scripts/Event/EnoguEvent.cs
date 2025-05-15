@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,33 +6,51 @@ using UnityEngine;
 
 public class EnoguEvent : MonoBehaviourPun
 {
-    [SerializeField] GameObject paintUIGroup;               // 目つぶしイベント用UI
     [SerializeField] GameObject blindEffect;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu1;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu3;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_1;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_2;               // 目つぶしイベント用UI
+    [SerializeField] SetPlayerBool setPlayerBool;
 
-    SetPlayerBool setPlayerBool;                  // bool値を管理するクラス
-    private bool alreadyHidden = false;
 
-    public void PaintOpen(List<GameObject> playerList)
+    void Start()
     {
-        foreach (GameObject player in playerList)
+        if (photonView.IsMine)
         {
-            Positioning();
-            blindEffect.SetActive(true);
+            if (setPlayerBool == null)
+            {
+                setPlayerBool = GetComponentInChildren<SetPlayerBool>();
+            }
+            if (setPlayerBool == null)
+            {
+                setPlayerBool = FindObjectOfType<SetPlayerBool>();
+            }
         }
     }
 
-    public void PaintClose(List<GameObject> playerList)
+
+    public void PaintOpen()
     {
-        foreach (GameObject player in playerList)
-        {
-            enogu4_1.SetActive(false);
-            enogu4_2.SetActive(false);
-            blindEffect.SetActive(false);
-        }
+        Debug.Log("受け取り");
+        photonView.RPC("BlindEffect", RpcTarget.All, true);
+        photonView.RPC("positioning", RpcTarget.All);
+    }
+    [PunRPC]
+    void positioning()
+    {
+        Positioning();
+    }
+    public void PaintClose()
+    {
+        photonView.RPC("BlindEffect", RpcTarget.All, false);
+    }
+    [PunRPC]
+    void BlindEffect(bool isBool)
+    {
+        enogu4_1.SetActive(isBool);
+        enogu4_2.SetActive(isBool);
+        blindEffect.SetActive(isBool);
     }
 
     public void Positioning()

@@ -156,11 +156,11 @@ public class EventManager : MonoBehaviourPunCallbacks
     IEnumerator BlindEvent()
     {
         AudioManager.Instance.PlaySE(SEManager.SEType.Event_ink); //インクSE
-        List<GameObject> playerList = gameManager.GetPlayerList();
+        //List<GameObject> playerList = gameManager.GetPlayerList();
         float eventTime = 10.0f;
-        enoguEvent.PaintOpen(playerList);
+        enoguEvent.PaintOpen();
         yield return new WaitForSeconds(eventTime);
-        enoguEvent.PaintClose(playerList);
+        enoguEvent.PaintClose();
         yield break;
     }
 
@@ -185,13 +185,15 @@ public class EventManager : MonoBehaviourPunCallbacks
             (playerPos[i], playerPos[rnd]) = (playerPos[rnd], playerPos[i]); // C# のタプルスワップ
         }
 
+        photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectNo.TELEPORT_SMOKE);    //  テレポートエフェクト生成
+
         // 新しい座標をプレイヤーに適用
         for (int i = 0; i < playerList.Count; i++)
         {
             Debug.Log(playerList[i]);
-            photonView.RPC("GenerateEffect", RpcTarget.All, (int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform, i);
+            //photonView.RPC("GenerateEffect", RpcTarget.All, (int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform.position, i);
             //eventEffect.GenerateEffect((int)EventEffect.EventEffectNo.TELEPORT_SMOKE, playerList[i].transform, i);    //  エフェクト生成
-            playerList[i].transform.position = playerPos[i];
+            playerList[i].gameObject.transform.position = playerPos[i];
         }
         eventEffect._IsGeneratedSmoke = true;
     }
