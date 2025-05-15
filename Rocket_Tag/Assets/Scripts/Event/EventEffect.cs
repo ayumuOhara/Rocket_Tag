@@ -22,11 +22,9 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     }
 
     Dictionary<EventEffectProcces, Action> effectProccesMap;
-    Dictionary<EffectName, String> effectNameMap;
-    Dictionary<EffectName, GameObject> loadedEffects;
-    static GameObject teleportSmokePrefab;
+    [SerializeField] Dictionary<EffectName, String> effectNameMap;
+    [SerializeField] Dictionary<EffectName, GameObject> loadedEffects;
     GameObject teleportSmokeEntity;
-    GameObject[] spdChangeAuraPrefab;
     GameObject spdChagneAuraEntity;
     Transform[] players;
     ParticleSystem[] teleportSmokeSystem;
@@ -62,10 +60,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     async void Initialize()    //  初期化関数
     {
         SetDictionary();
-        if (teleportSmokePrefab == null)
-        {
-            await LoadEffect();
-        }
+        await LoadEffect();
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
         spdChagneAuraSystem = new ParticleSystem[SpdChangeAuraValue];
         gameMgr = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -113,6 +108,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
                 }
                 else
                 {
+                    Debug.Log("失敗エフェクト");
                     loadedEffects[kvp.Key] = loadHandle.Result;
                     //Debug.Log----------------------------------
                 }
@@ -166,7 +162,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
         {
             if (players[playerIndex].gameObject.activeSelf)
             {
-                teleportSmokeEntity = Instantiate(teleportSmokePrefab);
+                teleportSmokeEntity = Instantiate(loadedEffects[EffectName.TELEPORT_SMOKE]);
                 teleportSmokeEntity.transform.position = players[playerIndex].position;
                 teleportSmokeSystem[playerIndex] = teleportSmokeEntity.GetComponent<ParticleSystem>();
             }
