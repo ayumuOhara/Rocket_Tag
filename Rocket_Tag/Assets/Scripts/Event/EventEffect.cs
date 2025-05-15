@@ -53,7 +53,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     }
     private void Update()
     {
-        if(Input.GetMouseButton(0))
+        if(Input.GetKeyDown(KeyCode.M))
         {
             debug = Instantiate(loadedEffects[EffectName.SPD_UP_AURA], debug.transform);
             Debug.Log(loadedEffects[EffectName.SPD_UP_AURA].name);
@@ -106,13 +106,14 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
             loadHandle = Addressables.LoadAssetAsync<GameObject>(kvp.Value);
             loadTask.Add(loadHandle.Task.ContinueWith(t =>
             {
+                Debug.Log("バリュー" + kvp.Value);
                 if (loadHandle.Status == AsyncOperationStatus.Succeeded)
                 {
                     loadedEffects[kvp.Key] = loadHandle.Result;
                 }
                 else
                 {
-                    Debug.Log("ロードしっぱ");
+                    loadedEffects[kvp.Key] = loadHandle.Result;
                     //Debug.Log----------------------------------
                 }
             }));
