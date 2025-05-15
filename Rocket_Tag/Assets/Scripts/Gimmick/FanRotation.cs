@@ -1,30 +1,28 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class FanRotation : MonoBehaviour
 {
-    // U‚èq‰^“®‚Ì’†SŠp“x (‰ŠúŠp“x)
     public float centerAngle = 0f;
-
-    // U‚è• (‰•œ‚·‚éÅ‘åŠp“x)
     public float swingAngle = 45f;
-
-    // U‚èq‚Ì‘¬“x
     public float swingSpeed = 2f;
-
-    // Y²‚Ì‰ñ“] (Inspector‚Åİ’è‰Â”\)
     public float rotationY = 0f;
 
     private float time;
+    private Rigidbody rb;
 
-    void Update()
+    void Start()
     {
-        // ŠÔ‚ğg‚Á‚ÄƒXƒ€[ƒY‚ÈU‚èq‰^“®‚ğŒvZ
-        time += Time.deltaTime * swingSpeed;
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true; // ‰ñ“]‚¾‚¯è“®‚Å§Œä
+    }
 
-        // U‚èq‚ÌŠp“x‚ğŒvZ (sin”g‚Å‰•œ‰^“®)
+    void FixedUpdate()
+    {
+        time += Time.fixedDeltaTime * swingSpeed;
         float angle = centerAngle + Mathf.Sin(time) * swingAngle;
 
-        // ŒvZ‚³‚ê‚½Šp“x‚ğ“K—p (Y²‚Ì‰ñ“]‚ğInspector‚Å’²®‰Â”\‚É‚·‚é)
-        transform.localRotation = Quaternion.Euler(0, rotationY, angle);
+        Quaternion targetRotation = Quaternion.Euler(0, rotationY, angle);
+        rb.MoveRotation(targetRotation);
     }
 }
