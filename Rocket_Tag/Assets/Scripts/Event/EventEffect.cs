@@ -104,6 +104,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
 
         foreach(KeyValuePair<EffectName, String> kvp in effectNameMap)
         {
+            Debug.Log("ロード突入");
             loadHandle = Addressables.LoadAssetAsync<GameObject>(kvp.Value);
             loadTask.Add(loadHandle.Task.ContinueWith(t =>
             {
@@ -113,11 +114,13 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
                 }
                 else
                 {
+                    Debug.Log("ロードしっぱ");
                     //Debug.Log----------------------------------
                 }
             }));
         }
         await Task.WhenAll(loadTask);
+        Debug.Log("ロード終了");
     }
     [PunRPC]
     void CallEffectProcces(EventEffectProcces eventEffectNo)    //  エフェクト処理呼び出し
