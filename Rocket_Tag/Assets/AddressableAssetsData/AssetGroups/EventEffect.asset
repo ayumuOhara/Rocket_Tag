@@ -15,8 +15,18 @@ MonoBehaviour:
   m_GroupName: EventEffect
   m_GUID: 09ce18259a520914e9fb287f31fe3d58
   m_SerializeEntries:
+  - m_GUID: 023468d773e57614ea565ba32d84b8b3
+    m_Address: SpdDownAura
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a7a8514c8ab44014ca98f670aaa5b05d
     m_Address: TeleportSmoke
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ebdbdc34373113d4ca8f6037a8511be0
+    m_Address: SpdUpAura
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

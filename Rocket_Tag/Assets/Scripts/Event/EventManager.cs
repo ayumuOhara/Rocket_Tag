@@ -185,7 +185,7 @@ public class EventManager : MonoBehaviourPunCallbacks
             (playerPos[i], playerPos[rnd]) = (playerPos[rnd], playerPos[i]); // C# のタプルスワップ
         }
 
-        photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectNo.TELEPORT_SMOKE);    //  テレポートエフェクト生成
+        photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcces.TELEPORT_SMOKE);    //  テレポートエフェクト生成
 
         // 新しい座標をプレイヤーに適用
         for (int i = 0; i < playerList.Count; i++)
@@ -222,6 +222,7 @@ public class EventManager : MonoBehaviourPunCallbacks
             int rndSpeed = Random.Range(minSpeed, maxSpeed);
             playerMovement.SetMoveSpeed(rndSpeed);
         }
+        photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcces.MOVE_SPD_AURA);    //  テレポートエフェクト生成
     }
 
     // 移動速度を元に戻す
@@ -232,5 +233,6 @@ public class EventManager : MonoBehaviourPunCallbacks
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
             playerMovement.SetMoveSpeed(playerMovement.GetDefaultMoveSpeed());
         }
+        photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcces.STOP_SPD_AURA);    //  テレポートエフェクト停止
     }
 }
