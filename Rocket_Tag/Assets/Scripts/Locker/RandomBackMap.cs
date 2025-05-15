@@ -9,6 +9,10 @@ public class RandomBackMap : MonoBehaviour
 
     void Start()
     {
+        Map1.SetActive(false);
+        Map2.SetActive(false);
+        Map3.SetActive(false);
+
         int rnd = Random.Range(0, 3);
 
         if (rnd == 0)
@@ -23,12 +27,5 @@ public class RandomBackMap : MonoBehaviour
         {
             Map3.SetActive(true);
         }
-    }
-
-    public void OneClick()
-    {
-        Map1.SetActive(false);
-        Map2.SetActive(false);
-        Map3.SetActive(false);
     }
 }
