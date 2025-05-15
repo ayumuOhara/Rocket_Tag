@@ -2,24 +2,19 @@ using UnityEngine;
 
 public class HammerBound : MonoBehaviour
 {
-    // はじく力の大きさ
-    public float bounceForce = 5f;
+    public float bounceForce = 20f;  // 吹っ飛ばす力
 
     private void OnTriggerEnter(Collider other)
     {
-        // 衝突したオブジェクトがRigidbodyを持っているか確認
-        Rigidbody otherRigidbody = other.attachedRigidbody;
-        if (otherRigidbody != null)
+        // プレイヤーのノックバック処理を取得
+        var knockback = other.GetComponent<PlayerKnockback>();
+        if (knockback != null)
         {
-            // 衝突位置から自分の中心へのベクトルを計算
-            Vector3 bounceDirection = other.transform.position - transform.position;
+            // ハンマー → プレイヤー方向のベクトル
+            Vector3 direction = (other.transform.position - transform.position).normalized;
+            direction.y = 0.5f; // 少し上向きに調整
 
-            // 水平方向のみに制限
-            bounceDirection.y = 1f;
-            bounceDirection.Normalize(); // 正規化して方向ベクトルを作成
-
-            // 水平方向に力を適用
-            otherRigidbody.AddForce(bounceDirection * bounceForce, ForceMode.Impulse);
+            knockback.KnockBack(direction, bounceForce);
         }
     }
 }
