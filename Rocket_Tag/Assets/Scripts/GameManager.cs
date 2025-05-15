@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     //[SerializeField] RocketEffect rocketEffect;           // ロケットエフェクトのインスタンス    for debug--------------------------
     private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
     private bool isGameStarted = false;                 // ゲームが開始されたかどうかのフラグ
+    private bool hasPlayedCountdownSE = false;          // カウントダウンSEが再生されたかどうかの判定
     private Player currentRocketHolder;                 // 現在のロケット保持者
     private List<GameObject> cachedPlayerList = new List<GameObject>(); // プレイヤーリストのキャッシュ
 
@@ -49,6 +50,12 @@ public class GameManager : MonoBehaviourPunCallbacks
             waitTime--;
 
             eventText.text = $"{waitTime}秒後にゲームを開始します";
+
+            if(waitTime <= 3 && !hasPlayedCountdownSE)
+            {
+                AudioManager.Instance.PlaySE(SEManager.SEType.Countdown);
+                hasPlayedCountdownSE = true;
+            }
 
             if (waitTime <= 0)
             {
@@ -111,6 +118,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             ChooseRocketPlayer();
             StartCoroutine(eventManager.TriggerRandomEvent());
             StartCoroutine(CheckOverTime());
+            StartCoroutine(CheckRocketCnt());
         }
     }
 
@@ -175,6 +183,34 @@ public class GameManager : MonoBehaviourPunCallbacks
                 ChooseRocketPlayer();
             }
             yield return null;
+        }
+    }
+
+    IEnumerator CheckRocketCnt()
+    {
+        while (true)
+        {
+            List<GameObject> players = GetPlayerList();
+            int rocketCnt = 0;
+            for(int i = 0; i < players.Count; i++)
+            {
+                SetPlayerBool spb = players[i].GetComponent<SetPlayerBool>();
+                if(spb.hasRocket)
+                {
+                    rocketCnt++;
+                }
+            }
+
+            if(rocketCnt != 1)
+            {
+                for(int i = 0;i < players.Count;i++)
+                {
+                    PhotonView photon = players[i].GetComponent<PhotonView>();
+                    photon.RPC("SetHasRocket", RpcTarget.All, false);
+                }
+
+                ChooseRocketPlayer();
+            }
         }
     }
 

@@ -4759,6 +4759,22 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: a62115898d098d644a887d80691fb0c1, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20ce8869f125ef249a72fd6e1de4b0b5, type: 2}
+    - target: {fileID: -7511558181221131132, guid: a62115898d098d644a887d80691fb0c1, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f3e86446d1e68ae43b1dc2e04cc41a25, type: 2}
+    - target: {fileID: -7511558181221131132, guid: a62115898d098d644a887d80691fb0c1, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0eabcecbcf5a29442838605b5c2b9ed8, type: 2}
+    - target: {fileID: -7511558181221131132, guid: a62115898d098d644a887d80691fb0c1, type: 3}
+      propertyPath: 'm_Materials.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0eabcecbcf5a29442838605b5c2b9ed8, type: 2}
     - target: {fileID: 919132149155446097, guid: a62115898d098d644a887d80691fb0c1, type: 3}
       propertyPath: m_Name
       value: "\u30ED\u30B1\u30C3\u30C8\u672C\u4F53"
@@ -7435,7 +7451,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 7a5837fc9e6943f438c9b5ab9675b95f, type: 3}
     m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
@@ -7641,7 +7657,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 7a5837fc9e6943f438c9b5ab9675b95f, type: 3}
     m_FontSize: 90
     m_FontStyle: 0
     m_BestFit: 0
