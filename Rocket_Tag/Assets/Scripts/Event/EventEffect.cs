@@ -8,25 +8,43 @@ using System;
 
 public class EventEffect : MonoBehaviourPunCallbacks                    ////  イベントのエフェクトを扱うスクリプト(視界妨害を除く)  ////
 {
-    internal enum EventEffectNo                             ////  以下宣言区  ////
+    internal enum EventEffectProcces                             ////  以下宣言区  ////
     {
         TELEPORT_SMOKE,
+        MOVE_SPD_AURA,
+        STOP_SPD_AURA
+    }
+    internal enum EffectName
+    {
+        TELEPORT_SMOKE,
+        SPD_UP_AURA,
+        SPD_DOWN_AURA,
     }
 
+    Dictionary<EventEffectProcces, Action> effectProccesMap;
+    Dictionary<EffectName, String> effectNameMap;
+    Dictionary<EffectName, GameObject> loadedEffects;
     static GameObject teleportSmokePrefab;
     GameObject teleportSmokeEntity;
-    Transform[] Players;
+    GameObject[] spdChangeAuraPrefab;
+    GameObject spdChagneAuraEntity;
+    Transform[] players;
     ParticleSystem[] teleportSmokeSystem;
+    ParticleSystem[] spdChagneAuraSystem;
     GameManager gameMgr;
-    Dictionary<EventEffectNo, Action> effectmap;
+    PlayerMovement[] playerMovement;
+
 
     const int numOfPlayers = 4;
+    const int SpdChangeAuraValue = 2;
+    int defaultPlayerMoveSpd;
     bool isGeneratedSmoke;
+    bool isGeneratedSpdAura;
     
     internal bool _IsGeneratedSmoke
     { set { isGeneratedSmoke = value; } }                   ////  宣言区終了  ////
     internal Transform[] _Players
-    { set { Players = value; } }                   ////  宣言区終了  ////
+    { set { players = value; } }                   ////  宣言区終了  ////
 
     void Start()                                            ////  以下処理区  ////
     {
@@ -34,121 +52,79 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     }
     async void Initialize()    //  初期化関数
     {
+        SetDictionary();
         if (teleportSmokePrefab == null)
         {
             await LoadEffect();
         }
-        EffectMapSet();
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
+        spdChagneAuraSystem = new ParticleSystem[SpdChangeAuraValue];
         gameMgr = GameObject.Find("GameManager").GetComponent<GameManager>();
-        //Players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();    fordebug-------------------------
 
         isGeneratedSmoke = false;
+        isGeneratedSpdAura = false;
     }
-    void EffectMapSet()    //  エフェクトマップをセッティング
+    void SetDictionary()    //  辞書型変数をセッティング
     {
-        effectmap = new Dictionary<EventEffectNo, Action> {
-            { EventEffectNo.TELEPORT_SMOKE, HandleTeleportSmoke}
+        effectProccesMap = new Dictionary<EventEffectProcces, Action>
+        {
+            { EventEffectProcces.TELEPORT_SMOKE, HandleTeleportSmoke},
+            { EventEffectProcces.MOVE_SPD_AURA, ApplySpdBuffEffect},
+            { EventEffectProcces.STOP_SPD_AURA, StopSpdChangeAura}
         };
+        effectNameMap = new Dictionary<EffectName, String>()
+        {
+            {EffectName.TELEPORT_SMOKE, "TeleportSmoke" },
+            {EffectName.SPD_UP_AURA, "SpdUpAura" },
+            {EffectName.SPD_DOWN_AURA, "SpdDownAura" }
+        };
+        loadedEffects = new Dictionary<EffectName, GameObject>();
     }
     async Task LoadEffect()    //  エフェクトロード
     {
-        Task[] loadTask;
+        List<Task> loadTask;
 
-        AsyncOperationHandle<GameObject>[] loadHandle;
+        AsyncOperationHandle<GameObject> loadHandle;
 
-        const int numOfEffect = 1;
+        const int numOfEffect = 3;
         int loadHandleArrayNo;
-        string[] smokeEffectNames = { "TeleportSmoke" };
 
-        loadTask = new Task[numOfEffect];
-
-        loadHandle = new AsyncOperationHandle<GameObject>[numOfEffect];
+        loadTask = new List<Task>();
 
         loadHandleArrayNo = 0;
 
-        for (; loadHandleArrayNo < numOfEffect; loadHandleArrayNo++)
+        foreach(KeyValuePair<EffectName, String> kvp in effectNameMap)
         {
-            loadHandle[loadHandleArrayNo] = Addressables.LoadAssetAsync<GameObject>(smokeEffectNames[loadHandleArrayNo]);
-            loadTask[loadHandleArrayNo] = loadHandle[loadHandleArrayNo].Task;
+            loadHandle = Addressables.LoadAssetAsync<GameObject>(kvp.Value);
+            loadTask.Add(loadHandle.Task.ContinueWith(t =>
+            {
+                if (loadHandle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    loadedEffects[kvp.Key] = loadHandle.Result;
+                }
+                else
+                {
+                    //Debug.Log----------------------------------
+                }
+            }));
         }
         await Task.WhenAll(loadTask);
-        for (loadHandleArrayNo = 0; loadHandleArrayNo < numOfEffect; loadHandleArrayNo++)
-        {
-            teleportSmokePrefab = loadHandle[loadHandleArrayNo].Result;
-        }
     }
     [PunRPC]
-    void CallEffectProcces(EventEffectNo eventEffectNo)    //  エフェクト処理呼び出し
+    void CallEffectProcces(EventEffectProcces eventEffectNo)    //  エフェクト処理呼び出し
     {
-        effectmap[eventEffectNo]();
+        effectProccesMap[eventEffectNo]();
     }
-    [PunRPC]
-    internal void GenerateEffect(int EffectNo, Vector3 players, int playerIndex)    //  エフェクト生成(ラッパー関数)
-    {
-        Debug.Log("TPエフェクト生成突入");
-        Debug.Log("TPエフェクト" + teleportSmokePrefab.name);
 
-        switch (EffectNo)
-        {
-            case 0:
-                {
-                    if (isGeneratedSmoke)
-                    {
-                        Debug.Log(teleportSmokeSystem);
-                        teleportSmokeSystem[playerIndex].transform.position = players;
-                        teleportSmokeSystem[playerIndex].Clear();
-                        teleportSmokeSystem[playerIndex].Play();
-                    }
-                    else
-                    {
-                        teleportSmokeEntity = Instantiate(teleportSmokePrefab);
-                        teleportSmokeEntity.transform.position = players;
-                        teleportSmokeSystem[playerIndex] = teleportSmokeEntity.GetComponent<ParticleSystem>();
-                        Debug.Log(teleportSmokeSystem);
-                    }
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
-        }
-    }
-    [PunRPC]
-    internal void PlayEventEffect(int EffectNo)    //  イベントエフェクトのラッパー関数
-    {
-        switch (EffectNo)
-        {
-            case 0:
-                {
-                    if (isGeneratedSmoke)
-                    {
-                        Debug.Log(teleportSmokeSystem);
-
-                    }
-                    else
-                    {
-
-                        Debug.Log(teleportSmokeSystem);
-                    }
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
-        }
-    }
     void HandleTeleportSmoke()    //  テレポート時の煙の制御
     {
         if(isGeneratedSmoke)
         {
             for (int i = 0; i < numOfPlayers; i++)
             {
-                if (Players[i].gameObject.activeSelf)
+                if (players[i].gameObject.activeSelf)
                 {
-                    ReplayEffect(teleportSmokeSystem[i], Players[i].position);
+                    ReplayEffect(teleportSmokeSystem[i], players[i].position);
                 }
             }
         }
@@ -158,22 +134,89 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
             isGeneratedSmoke = true;
         }
     }
-    void ReplayEffect(ParticleSystem effect, Vector3 playPos)    //  エフェクト再再生                       ////  コード保存場所  ////
+    void ReplayEffect(ParticleSystem effect, Vector3 replayPos)    //  エフェクト再再生                       ////  コード保存場所  ////
     {
-        effect.transform.position = playPos;
+        if (effect.transform.parent == null)
+        {
+            effect.transform.position = replayPos;
+        }
+        else
+        {
+            effect.transform.localPosition = replayPos;
+        }
         effect.Clear();
         effect.Play();
     }
     void GenerateTeleportSmoke()    //  テレポートスモーク生成
     {
-        Players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();
-        for (int i = 0; i < numOfPlayers; i++)
+        AssignPlyaersTF();
+
+        for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
         {
-            if (Players[i].gameObject.activeSelf)
+            if (players[playerIndex].gameObject.activeSelf)
             {
                 teleportSmokeEntity = Instantiate(teleportSmokePrefab);
-                teleportSmokeEntity.transform.position = Players[i].position;
-                teleportSmokeSystem[i] = teleportSmokeEntity.GetComponent<ParticleSystem>();
+                teleportSmokeEntity.transform.position = players[playerIndex].position;
+                teleportSmokeSystem[playerIndex] = teleportSmokeEntity.GetComponent<ParticleSystem>();
+            }
+        }
+    }
+    void AssignPlyaersTF()    //  プレイヤーのトランスフォームを取得
+    {
+        if (players == null && players.Length > 4)
+        {
+            players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();
+        }
+    }
+    void GetPlayersSpd()    //  プレイヤーの移動速度取得
+    {
+        AssignPlyaersTF();
+
+        if (playerMovement == null && playerMovement.Length > 4)
+        {
+            playerMovement = new PlayerMovement[numOfPlayers];
+            for (int playerIndex = 0; playerIndex > numOfPlayers; playerIndex++)
+            {
+                playerMovement[playerIndex] = players[playerIndex].GetComponent<PlayerMovement>();
+            }
+        }
+    }
+    void ApplySpdBuffEffect()    //  運動能力変化エフェクト制御
+    {
+        AssignPlyaersTF();
+        if (!isGeneratedSpdAura)
+        {
+            for (int playerIndex = 0; playerIndex > numOfPlayers; playerIndex++)
+            {
+                if (playerMovement[playerIndex].GetMoveSpeed() > defaultPlayerMoveSpd)
+                {
+                    spdChagneAuraEntity = Instantiate(loadedEffects[EffectName.SPD_UP_AURA], players[playerIndex]);
+                    spdChagneAuraSystem[playerIndex] = spdChagneAuraEntity.GetComponent<ParticleSystem>();
+                }
+                else if (playerMovement[playerIndex].GetMoveSpeed() < defaultPlayerMoveSpd)
+                {
+                    spdChagneAuraEntity = Instantiate(loadedEffects[EffectName.SPD_DOWN_AURA], players[playerIndex]);
+                    spdChagneAuraSystem[playerIndex] = spdChagneAuraEntity.GetComponent<ParticleSystem>();
+                }
+            }
+            isGeneratedSpdAura = true;
+        }
+        else
+        {
+            for (int playerIndex = 0; playerIndex > numOfPlayers; playerIndex++)
+            {
+                ReplayEffect(spdChagneAuraSystem[playerIndex], Vector3.zero);
+
+            }
+        }
+    }
+    void StopSpdChangeAura()    //  エフェクトを非表示にする
+    {
+        foreach (ParticleSystem p in spdChagneAuraSystem)
+        {
+            if (p != null)
+            {
+                p.Stop();
             }
         }
     }
@@ -183,4 +226,61 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
 //    effect.transform.position = playPos;
 //    effect.Clear();
 //    effect.Play();
+//}
+//[PunRPC]
+//internal void PlayEventEffect(int EffectNo)    //  イベントエフェクトのラッパー関数
+//{
+//    switch (EffectNo)
+//    {
+//        case 0:
+//            {
+//                if (isGeneratedSmoke)
+//                {
+//                    Debug.Log(teleportSmokeSystem);
+
+//                }
+//                else
+//                {
+
+//                    Debug.Log(teleportSmokeSystem);
+//                }
+//                break;
+//            }
+//        default:
+//            {
+//                break;
+//            }
+//    }
+//}
+//[PunRPC]
+//internal void GenerateEffect(int EffectNo, Vector3 players, int playerIndex)    //  エフェクト生成(ラッパー関数)
+//{
+//    Debug.Log("TPエフェクト生成突入");
+//    Debug.Log("TPエフェクト" + teleportSmokePrefab.name);
+
+//    switch (EffectNo)
+//    {
+//        case 0:
+//            {
+//                if (isGeneratedSmoke)
+//                {
+//                    Debug.Log(teleportSmokeSystem);
+//                    teleportSmokeSystem[playerIndex].transform.position = players;
+//                    teleportSmokeSystem[playerIndex].Clear();
+//                    teleportSmokeSystem[playerIndex].Play();
+//                }
+//                else
+//                {
+//                    teleportSmokeEntity = Instantiate(teleportSmokePrefab);
+//                    teleportSmokeEntity.transform.position = players;
+//                    teleportSmokeSystem[playerIndex] = teleportSmokeEntity.GetComponent<ParticleSystem>();
+//                    Debug.Log(teleportSmokeSystem);
+//                }
+//                break;
+//            }
+//        default:
+//            {
+//                break;
+//            }
+//    }
 //}
