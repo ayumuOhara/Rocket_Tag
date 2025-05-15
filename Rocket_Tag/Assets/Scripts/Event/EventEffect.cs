@@ -96,11 +96,9 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  ÉC
         AsyncOperationHandle<GameObject> loadHandle;
 
         const int numOfEffect = 3;
-        int loadHandleArrayNo;
 
         loadTask = new List<Task>();
 
-        loadHandleArrayNo = 0;
 
         foreach(KeyValuePair<EffectName, String> kvp in effectNameMap)
         {
@@ -110,6 +108,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  ÉC
             {
                 if (loadHandle.Status == AsyncOperationStatus.Succeeded)
                 {
+                    Debug.Log(loadHandle.Result);
                     loadedEffects[kvp.Key] = loadHandle.Result;
                 }
                 else
