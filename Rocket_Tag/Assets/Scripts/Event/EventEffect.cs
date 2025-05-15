@@ -34,6 +34,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     GameManager gameMgr;
     PlayerMovement[] playerMovement;
 
+    public GameObject debug;
 
     const int numOfPlayers = 4;
     const int SpdChangeAuraValue = 2;
@@ -49,6 +50,14 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     void Start()                                            ////  以下処理区  ////
     {
         Initialize();    //  初期化
+    }
+    private void Update()
+    {
+        if(Input.GetMouseButton(0))
+        {
+            debug = Instantiate(loadedEffects[EffectName.SPD_UP_AURA], debug.transform);
+            Debug.Log(loadedEffects[EffectName.SPD_UP_AURA].name);
+        }
     }
     async void Initialize()    //  初期化関数
     {
@@ -183,11 +192,14 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     }
     void ApplySpdBuffEffect()    //  運動能力変化エフェクト制御
     {
+        Debug.Log("エフェクト関数突入");
         AssignPlyaersTF();
         if (!isGeneratedSpdAura)
         {
             for (int playerIndex = 0; playerIndex > numOfPlayers; playerIndex++)
             {
+                Debug.Log("エフェクト生成ループ突入");
+
                 if (playerMovement[playerIndex].GetMoveSpeed() > defaultPlayerMoveSpd)
                 {
                     spdChagneAuraEntity = Instantiate(loadedEffects[EffectName.SPD_UP_AURA], players[playerIndex]);
@@ -198,6 +210,8 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
                     spdChagneAuraEntity = Instantiate(loadedEffects[EffectName.SPD_DOWN_AURA], players[playerIndex]);
                     spdChagneAuraSystem[playerIndex] = spdChagneAuraEntity.GetComponent<ParticleSystem>();
                 }
+                Debug.Log("loaded" + loadedEffects[EffectName.SPD_UP_AURA].name);
+
             }
             isGeneratedSpdAura = true;
         }
