@@ -1,14 +1,14 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using System.Threading.Tasks;
-using Photon.Pun;
-using System.Collections.Generic;
 using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Photon.Pun;
 
 public class EventEffect : MonoBehaviourPunCallbacks                    ////  イベントのエフェクトを扱うスクリプト(視界妨害を除く)  ////
 {
-    internal enum EventEffectProcces                             ////  以下宣言区  ////
+    internal enum EventEffectProcces    //  イベントエフェクトを                             ////  以下宣言区  ////
     {
         TELEPORT_SMOKE,
         MOVE_SPD_AURA,
@@ -108,7 +108,6 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
             {
                 if (loadHandle.Status == AsyncOperationStatus.Succeeded)
                 {
-                    Debug.Log(loadHandle.Result);
                     loadedEffects[kvp.Key] = loadHandle.Result;
                 }
                 else
