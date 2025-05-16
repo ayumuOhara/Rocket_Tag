@@ -22,8 +22,8 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     }
 
     Dictionary<EventEffectProcces, Action> effectProccesMap;
-    [SerializeField] Dictionary<EffectName, String> effectNameMap;
-    [SerializeField] Dictionary<EffectName, GameObject> loadedEffects;
+    Dictionary<EffectName, String> effectNameMap;
+    Dictionary<EffectName, GameObject> loadedEffects;
     GameObject teleportSmokeEntity;
     GameObject spdChagneAuraEntity;
     Transform[] players;
@@ -31,8 +31,6 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     ParticleSystem[] spdChagneAuraSystem;
     GameManager gameMgr;
     PlayerMovement[] playerMovement;
-
-    public GameObject debug;
 
     const int numOfPlayers = 4;
     const int SpdChangeAuraValue = 2;
@@ -49,17 +47,10 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     {
         Initialize();    //  初期化
     }
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.M))
-        {
-            debug = Instantiate(loadedEffects[EffectName.SPD_UP_AURA], debug.transform);
-            Debug.Log(loadedEffects[EffectName.SPD_UP_AURA].name);
-        }
-    }
     async void Initialize()    //  初期化関数
     {
         SetDictionary();
+
         await LoadEffect();
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
         spdChagneAuraSystem = new ParticleSystem[SpdChangeAuraValue];
@@ -82,34 +73,48 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
             {EffectName.SPD_UP_AURA, "SpdUpAura" },
             {EffectName.SPD_DOWN_AURA, "SpdDownAura" }
         };
+        loadedEffects = new Dictionary<EffectName, GameObject>()
+        {
+            {EffectName.TELEPORT_SMOKE,null },
+            {EffectName.SPD_UP_AURA,   null },
+            {EffectName.SPD_DOWN_AURA, null }
+        };
         loadedEffects = new Dictionary<EffectName, GameObject>();
     }
     async Task LoadEffect()    //  エフェクトロード
     {
         List<Task> loadTask;
 
-        AsyncOperationHandle<GameObject> loadHandle;
-
-        const int numOfEffect = 3;
+        Dictionary<EffectName, AsyncOperationHandle<GameObject>> loadHandle = new Dictionary<EffectName, AsyncOperationHandle<GameObject>>
+        {
+            {EffectName.TELEPORT_SMOKE, default},
+            {EffectName.SPD_UP_AURA, default},
+            {EffectName.SPD_DOWN_AURA, default}
+        };
 
         loadTask = new List<Task>();
 
 
-        foreach(KeyValuePair<EffectName, String> kvp in effectNameMap)
+        foreach (KeyValuePair<EffectName, String> kvp in effectNameMap)
         {
+            KeyValuePair<EffectName, String> kvps = kvp;
             Debug.Log("ロード突入");
-            loadHandle = Addressables.LoadAssetAsync<GameObject>(kvp.Value);
-            loadTask.Add(loadHandle.Task.ContinueWith(t =>
+            loadHandle[kvp.Key] = Addressables.LoadAssetAsync<GameObject>(kvps.Value);
+            loadTask.Add(loadHandle[kvps.Key].Task.ContinueWith(t =>
             {
-                Debug.Log("バリュー" + kvp.Value);
-                if (loadHandle.Status == AsyncOperationStatus.Succeeded)
+                Debug.Log("バリュー" + kvps.Value);
+                Debug.Log(effectNameMap[kvps.Key]);
+                if (loadHandle[kvps.Key].Status == AsyncOperationStatus.Succeeded)
                 {
-                    loadedEffects[kvp.Key] = loadHandle.Result;
+                    Debug.Log(125);
+                    //loadedEffects.Add(kvp.Key,loadHandle.Result);
+                    //loadedEffects.Add(kvp.Key, kvp.Value) = loadHandle.Result;
+                    loadedEffects[kvps.Key] = loadHandle[kvps.Key].Result;
                 }
                 else
                 {
                     Debug.Log("失敗エフェクト");
-                    loadedEffects[kvp.Key] = loadHandle.Result;
+                    //loadedEffects[kvps.Key] = loadHandle.Result;
                     //Debug.Log----------------------------------
                 }
             }));
