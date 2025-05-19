@@ -175,7 +175,8 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     }
     void AssignPlyaersTF()    //  プレイヤーのトランスフォームを取得
     {
-        if (players == null || players.Length > 4)
+        // || players.Length > 4
+        if (players == null)
         {
             players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();
         }
@@ -183,8 +184,8 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     void GetPlayersMovement()    //  プレイヤームーブメントインスタンス取得
     {
         AssignPlyaersTF();
-
-        if (playerMovement == null && playerMovement.Length > 4)
+        // && playerMovement.Length > 4
+        if (playerMovement == null)
         {
             playerMovement = new PlayerMovement[numOfPlayers];
             for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
