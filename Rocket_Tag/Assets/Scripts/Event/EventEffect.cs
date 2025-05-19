@@ -217,6 +217,10 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  ÉC
                     spdChagneAuraSystem[playerIndex] = spdChagneAuraEntity.GetComponent<ParticleSystem>();
                     Debug.Log(spdChagneAuraSystem[playerIndex]);
                 }
+                else
+                {
+                    Debug.Log("spd Has not Changed");
+                }
                 Debug.Log("loaded" + loadedEffects[EffectName.SPD_UP_AURA].name);
 
             }
