@@ -219,7 +219,7 @@ public class EventManager : MonoBehaviourPunCallbacks
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
             int rndSpeed = Random.Range(minSpeed, maxSpeed);
             PhotonView photon = player.GetComponent<PhotonView>();
-            photon.RPC("SetMoveSpeed", RpcTarget.All, rndSpeed);
+            photon.RPC("SetMoveSpeed", RpcTarget.All, (float)rndSpeed);
         }
         photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcces.MOVE_SPD_AURA);    //  テレポートエフェクト生成
     }
