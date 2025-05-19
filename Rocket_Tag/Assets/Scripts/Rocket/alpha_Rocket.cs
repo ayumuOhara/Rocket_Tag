@@ -74,21 +74,20 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void DropOut()
     {
-        //Debug.Log("脱落処理開始");
+        Debug.Log("脱落処理開始");
 
         PhotonView photonView = this.player.GetComponent<PhotonView>();
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
 
         if (PhotonNetwork.IsMasterClient)
         {
+            //Debug.Log("死亡処理開始");
+
             timePhoton.RPC("IsTimeStart", RpcTarget.All, false);
             timeManager.ResetRocketCount();
 
             uiLogManager.AddLog("player", UILogManager.LogType.Dead);
-
-            //Debug.Log("ロケットを配る");
             photonView.RPC("SetPlayerDead", RpcTarget.All, true);
-            //Debug.Log("ロケットを所持しているプレイヤーを脱落");
 
             gameManager.ChooseRocketPlayer();
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);

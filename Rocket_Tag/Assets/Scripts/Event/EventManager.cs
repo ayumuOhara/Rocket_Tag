@@ -200,14 +200,15 @@ public class EventManager : MonoBehaviourPunCallbacks
     {
         float eventTime = 15.0f;
         List<GameObject> playerList = gameManager.GetPlayerList();
-        ChangeSpeed(playerList);
+        photonView.RPC("ChangeSpeed", RpcTarget.All, playerList);
         yield return new WaitForSeconds(eventTime);
-        ResetSpeed(playerList);
+        photonView.RPC("ResetSpeed", RpcTarget.All, playerList);
 
         yield break;
     }
 
     // ƒ‰ƒ“ƒ_ƒ€‚ÉˆÚ“®‘¬“x‚ð•Ï‰»
+    [PunRPC]
     void ChangeSpeed(List<GameObject> playerList)
     {
         int minSpeed = 10;
@@ -223,6 +224,7 @@ public class EventManager : MonoBehaviourPunCallbacks
     }
 
     // ˆÚ“®‘¬“x‚ðŒ³‚É–ß‚·
+    [PunRPC]
     void ResetSpeed(List<GameObject> playerList)
     {
         foreach (GameObject player in playerList)
