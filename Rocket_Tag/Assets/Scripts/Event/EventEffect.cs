@@ -34,7 +34,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
 
     const int numOfPlayers = 4;
     const int SpdChangeAuraValue = 2;
-    int defaultPlayerMoveSpd;
+    float defaultPlayerMoveSpd;
     bool isGeneratedSmoke;
     bool isGeneratedSpdAura;
     
@@ -191,6 +191,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
             {
                 playerMovement[playerIndex] = players[playerIndex].GetComponent<PlayerMovement>();
             }
+            defaultPlayerMoveSpd = playerMovement[0].GetDefaultMoveSpeed();
         }
     }
     void ApplySpdBuffEffect()    //  運動能力変化エフェクト制御
