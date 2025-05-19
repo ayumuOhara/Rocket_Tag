@@ -200,9 +200,9 @@ public class EventManager : MonoBehaviourPunCallbacks
     {
         float eventTime = 15.0f;
         List<GameObject> playerList = gameManager.GetPlayerList();
-        photonView.RPC("ChangeSpeed", RpcTarget.All, playerList);
+        ChangeSpeed(playerList);
         yield return new WaitForSeconds(eventTime);
-        photonView.RPC("ResetSpeed", RpcTarget.All, playerList);
+        ResetSpeed(playerList);
 
         yield break;
     }
@@ -218,7 +218,8 @@ public class EventManager : MonoBehaviourPunCallbacks
         {
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
             int rndSpeed = Random.Range(minSpeed, maxSpeed);
-            playerMovement.SetMoveSpeed(rndSpeed);
+            PhotonView photon = player.GetComponent<PhotonView>();
+            photon.RPC("SetMoveSpeed", RpcTarget.All, rndSpeed);
         }
         photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcces.MOVE_SPD_AURA);    //  テレポートエフェクト生成
     }
@@ -230,7 +231,8 @@ public class EventManager : MonoBehaviourPunCallbacks
         foreach (GameObject player in playerList)
         {
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
-            playerMovement.SetMoveSpeed(playerMovement.GetDefaultMoveSpeed());
+            PhotonView photon = player.GetComponent<PhotonView>();
+            photon.RPC("SetMoveSpeed", RpcTarget.All, playerMovement.GetDefaultMoveSpeed());
         }
         photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcces.STOP_SPD_AURA);    //  テレポートエフェクト停止
     }
