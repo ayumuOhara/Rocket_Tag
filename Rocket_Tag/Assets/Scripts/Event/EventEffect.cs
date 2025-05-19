@@ -180,7 +180,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
             players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();
         }
     }
-    void GetPlayersSpd()    //  プレイヤーの移動速度取得
+    void GetPlayersMovement()    //  プレイヤームーブメントインスタンス取得
     {
         AssignPlyaersTF();
 
@@ -197,7 +197,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     void ApplySpdBuffEffect()    //  運動能力変化エフェクト制御
     {
         Debug.Log("エフェクト関数突入");
-        AssignPlyaersTF();
+        GetPlayersMovement();
         if (!isGeneratedSpdAura)
         {
             for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
