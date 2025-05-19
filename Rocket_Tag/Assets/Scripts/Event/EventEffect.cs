@@ -1,14 +1,14 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using System.Threading.Tasks;
-using Photon.Pun;
-using System.Collections.Generic;
 using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Photon.Pun;
 
 public class EventEffect : MonoBehaviourPunCallbacks                    ////  イベントのエフェクトを扱うスクリプト(視界妨害を除く)  ////
 {
-    internal enum EventEffectProcces                             ////  以下宣言区  ////
+    internal enum EventEffectProcces    //  イベントエフェクトを                             ////  以下宣言区  ////
     {
         TELEPORT_SMOKE,
         MOVE_SPD_AURA,
@@ -24,9 +24,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     Dictionary<EventEffectProcces, Action> effectProccesMap;
     Dictionary<EffectName, String> effectNameMap;
     Dictionary<EffectName, GameObject> loadedEffects;
-    static GameObject teleportSmokePrefab;
     GameObject teleportSmokeEntity;
-    GameObject[] spdChangeAuraPrefab;
     GameObject spdChagneAuraEntity;
     Transform[] players;
     ParticleSystem[] teleportSmokeSystem;
@@ -34,10 +32,9 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     GameManager gameMgr;
     PlayerMovement[] playerMovement;
 
-
     const int numOfPlayers = 4;
     const int SpdChangeAuraValue = 2;
-    int defaultPlayerMoveSpd;
+    float defaultPlayerMoveSpd;
     bool isGeneratedSmoke;
     bool isGeneratedSpdAura;
     
@@ -53,12 +50,10 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     async void Initialize()    //  初期化関数
     {
         SetDictionary();
-        if (teleportSmokePrefab == null)
-        {
-            await LoadEffect();
-        }
+
+        await LoadEffect();
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
-        spdChagneAuraSystem = new ParticleSystem[SpdChangeAuraValue];
+        spdChagneAuraSystem = new ParticleSystem[numOfPlayers];
         gameMgr = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         isGeneratedSmoke = false;
@@ -78,37 +73,54 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
             {EffectName.SPD_UP_AURA, "SpdUpAura" },
             {EffectName.SPD_DOWN_AURA, "SpdDownAura" }
         };
+        loadedEffects = new Dictionary<EffectName, GameObject>()
+        {
+            {EffectName.TELEPORT_SMOKE,null },
+            {EffectName.SPD_UP_AURA,   null },
+            {EffectName.SPD_DOWN_AURA, null }
+        };
         loadedEffects = new Dictionary<EffectName, GameObject>();
     }
     async Task LoadEffect()    //  エフェクトロード
     {
         List<Task> loadTask;
 
-        AsyncOperationHandle<GameObject> loadHandle;
-
-        const int numOfEffect = 3;
-        int loadHandleArrayNo;
+        Dictionary<EffectName, AsyncOperationHandle<GameObject>> loadHandle = new Dictionary<EffectName, AsyncOperationHandle<GameObject>>
+        {
+            {EffectName.TELEPORT_SMOKE, default},
+            {EffectName.SPD_UP_AURA, default},
+            {EffectName.SPD_DOWN_AURA, default}
+        };
 
         loadTask = new List<Task>();
 
-        loadHandleArrayNo = 0;
 
-        foreach(KeyValuePair<EffectName, String> kvp in effectNameMap)
+        foreach (KeyValuePair<EffectName, String> kvp in effectNameMap)
         {
-            loadHandle = Addressables.LoadAssetAsync<GameObject>(kvp.Value);
-            loadTask.Add(loadHandle.Task.ContinueWith(t =>
+            KeyValuePair<EffectName, String> kvps = kvp;
+            Debug.Log("ロード突入");
+            loadHandle[kvp.Key] = Addressables.LoadAssetAsync<GameObject>(kvps.Value);
+            loadTask.Add(loadHandle[kvps.Key].Task.ContinueWith(t =>
             {
-                if (loadHandle.Status == AsyncOperationStatus.Succeeded)
+                Debug.Log("バリュー" + kvps.Value);
+                Debug.Log(effectNameMap[kvps.Key]);
+                if (loadHandle[kvps.Key].Status == AsyncOperationStatus.Succeeded)
                 {
-                    loadedEffects[kvp.Key] = loadHandle.Result;
+                    Debug.Log(125);
+                    //loadedEffects.Add(kvp.Key,loadHandle.Result);
+                    //loadedEffects.Add(kvp.Key, kvp.Value) = loadHandle.Result;
+                    loadedEffects[kvps.Key] = loadHandle[kvps.Key].Result;
                 }
                 else
                 {
+                    Debug.Log("失敗エフェクト");
+                    //loadedEffects[kvps.Key] = loadHandle.Result;
                     //Debug.Log----------------------------------
                 }
             }));
         }
         await Task.WhenAll(loadTask);
+        Debug.Log("ロード終了");
     }
     [PunRPC]
     void CallEffectProcces(EventEffectProcces eventEffectNo)    //  エフェクト処理呼び出し
@@ -155,7 +167,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
         {
             if (players[playerIndex].gameObject.activeSelf)
             {
-                teleportSmokeEntity = Instantiate(teleportSmokePrefab);
+                teleportSmokeEntity = Instantiate(loadedEffects[EffectName.TELEPORT_SMOKE]);
                 teleportSmokeEntity.transform.position = players[playerIndex].position;
                 teleportSmokeSystem[playerIndex] = teleportSmokeEntity.GetComponent<ParticleSystem>();
             }
@@ -163,50 +175,62 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     }
     void AssignPlyaersTF()    //  プレイヤーのトランスフォームを取得
     {
-        if (players == null && players.Length > 4)
+        // || players.Length > 4
+        if (players == null)
         {
             players = gameMgr.GetPlayerList().ConvertAll(x => x.transform).ToArray();
         }
     }
-    void GetPlayersSpd()    //  プレイヤーの移動速度取得
+    void GetPlayersMovement()    //  プレイヤームーブメントインスタンス取得
     {
         AssignPlyaersTF();
-
-        if (playerMovement == null && playerMovement.Length > 4)
+        // && playerMovement.Length > 4
+        if (playerMovement == null)
         {
             playerMovement = new PlayerMovement[numOfPlayers];
-            for (int playerIndex = 0; playerIndex > numOfPlayers; playerIndex++)
+            for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
             {
                 playerMovement[playerIndex] = players[playerIndex].GetComponent<PlayerMovement>();
             }
+            defaultPlayerMoveSpd = playerMovement[0].GetDefaultMoveSpeed();
         }
     }
     void ApplySpdBuffEffect()    //  運動能力変化エフェクト制御
     {
-        AssignPlyaersTF();
+        Debug.Log("エフェクト関数突入");
+        GetPlayersMovement();
         if (!isGeneratedSpdAura)
         {
-            for (int playerIndex = 0; playerIndex > numOfPlayers; playerIndex++)
+            for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
             {
+                Debug.Log("エフェクト生成ループ突入");
+
                 if (playerMovement[playerIndex].GetMoveSpeed() > defaultPlayerMoveSpd)
                 {
                     spdChagneAuraEntity = Instantiate(loadedEffects[EffectName.SPD_UP_AURA], players[playerIndex]);
                     spdChagneAuraSystem[playerIndex] = spdChagneAuraEntity.GetComponent<ParticleSystem>();
+                    Debug.Log(spdChagneAuraSystem[playerIndex]);
                 }
                 else if (playerMovement[playerIndex].GetMoveSpeed() < defaultPlayerMoveSpd)
                 {
                     spdChagneAuraEntity = Instantiate(loadedEffects[EffectName.SPD_DOWN_AURA], players[playerIndex]);
                     spdChagneAuraSystem[playerIndex] = spdChagneAuraEntity.GetComponent<ParticleSystem>();
+                    Debug.Log(spdChagneAuraSystem[playerIndex]);
                 }
+                else
+                {
+                    Debug.Log("spd Has not Changed");
+                }
+                Debug.Log("loaded" + loadedEffects[EffectName.SPD_UP_AURA].name);
+
             }
             isGeneratedSpdAura = true;
         }
         else
         {
-            for (int playerIndex = 0; playerIndex > numOfPlayers; playerIndex++)
+            for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
             {
                 ReplayEffect(spdChagneAuraSystem[playerIndex], Vector3.zero);
-
             }
         }
     }

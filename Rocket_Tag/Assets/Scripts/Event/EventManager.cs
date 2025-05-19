@@ -96,21 +96,18 @@ public class EventManager : MonoBehaviourPunCallbacks
         {
             case EventData.EventType.BLIND:
                 Debug.Log("目隠しイベント開始");
-                eventText.text = $"画面がインクで見えない！";
                 StartCoroutine(BlindEvent());
                 uiLogManager.AddLog("メカクシ", UILogManager.LogType.Event);
                 break;
 
             case EventData.EventType.CHANGE_POS:
                 Debug.Log("位置入れ替えイベント開始");
-                eventText.text = $"プレイヤーの\n位置が入れ替わった！";
                 photonView.RPC("ChangePos", RpcTarget.All);
                 uiLogManager.AddLog("位置入れ替え", UILogManager.LogType.Event);
                 break;
 
             case EventData.EventType.RANDOM_SPEED:
                 Debug.Log("速度変化イベント開始");
-                eventText.text = $"プレイヤーの\n運動能力が変化した";
                 StartCoroutine(RandomSpeedEvent());
                 uiLogManager.AddLog("速度変化", UILogManager.LogType.Event);
                 break;
@@ -131,7 +128,7 @@ public class EventManager : MonoBehaviourPunCallbacks
         {
             case EventData.EventType.BLIND:
                 Debug.Log("目隠しイベント開始");
-                eventText.text = $"画面がイベントで見えない！";
+                eventText.text = $"画面がインクで見えない！";
                 break;
 
             case EventData.EventType.CHANGE_POS:
