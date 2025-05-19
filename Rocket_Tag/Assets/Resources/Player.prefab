@@ -1797,7 +1797,7 @@ MonoBehaviour:
   playerRankManager: {fileID: 0}
   seManager: {fileID: 0}
   rocketObj: {fileID: 4281978814399217487}
-  compas: {fileID: 0}
+  compas: {fileID: 5506985809752246151}
   hasRocket: 0
   isDead: 0
   isStun: 0
