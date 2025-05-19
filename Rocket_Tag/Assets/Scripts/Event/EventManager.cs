@@ -78,13 +78,19 @@ public class EventManager : MonoBehaviourPunCallbacks
                 
                 if (time >= triggerTime - 3.0 && triggerTime - time >= 0)
                 {
-                    eventTextObj.SetActive(true);
-                    eventText.text = $"イベント発生まで{triggerTime - time}";
+                    photonView.RPC("CntDownText",RpcTarget.All, triggerTime - time);
                 }
 
                 yield return new WaitForSeconds(1);
             }
         }
+    }
+
+    [PunRPC]
+    void CntDownText(int time)
+    {
+        eventTextObj.SetActive(true);
+        eventText.text = $"イベント発生まで{time}";
     }
 
     // イベントを処理するメソッド
