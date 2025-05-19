@@ -164,6 +164,7 @@ public class EventManager : MonoBehaviourPunCallbacks
         enoguEvent.PaintOpen();
         yield return new WaitForSeconds(eventTime);
         enoguEvent.PaintClose();
+        eventEffect._AssignPlayerTF();
         yield break;
     }
 

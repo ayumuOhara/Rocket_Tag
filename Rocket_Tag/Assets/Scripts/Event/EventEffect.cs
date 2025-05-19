@@ -24,6 +24,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     Dictionary<EventEffectProcces, Action> effectProccesMap;
     Dictionary<EffectName, String> effectNameMap;
     Dictionary<EffectName, GameObject> loadedEffects;
+    Action assignPlayerTF;
     GameObject teleportSmokeEntity;
     GameObject spdChagneAuraEntity;
     Transform[] players;
@@ -38,6 +39,8 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
     bool isGeneratedSmoke;
     bool isGeneratedSpdAura;
     
+    internal Action _AssignPlayerTF
+    { get {return assignPlayerTF }}
     internal bool _IsGeneratedSmoke
     { set { isGeneratedSmoke = value; } }                   ////  宣言区終了  ////
     internal Transform[] _Players
@@ -52,6 +55,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
         SetDictionary();
 
         await LoadEffect();
+        getPlayerTF = AssignPlyaersTF;
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
         spdChagneAuraSystem = new ParticleSystem[numOfPlayers];
         gameMgr = GameObject.Find("GameManager").GetComponent<GameManager>();
