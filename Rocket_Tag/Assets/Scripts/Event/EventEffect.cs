@@ -40,7 +40,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  ÉC
     bool isGeneratedSpdAura;
     
     internal Action _AssignPlayerTF
-    { get {return assignPlayerTF }}
+    { get { return assignPlayerTF; }}
     internal bool _IsGeneratedSmoke
     { set { isGeneratedSmoke = value; } }                   ////  êÈåæãÊèIóπ  ////
     internal Transform[] _Players
@@ -55,7 +55,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  ÉC
         SetDictionary();
 
         await LoadEffect();
-        getPlayerTF = AssignPlyaersTF;
+        assignPlayerTF = AssignPlyaersTF;
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
         spdChagneAuraSystem = new ParticleSystem[numOfPlayers];
         gameMgr = GameObject.Find("GameManager").GetComponent<GameManager>();
