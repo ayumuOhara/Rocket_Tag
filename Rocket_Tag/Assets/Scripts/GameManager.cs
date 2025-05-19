@@ -166,7 +166,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
                 PhotonNetwork.Disconnect();
-                SceneManager.LoadScene("Result");
+                SceneFadeManager.Instance.LoadScene("Result", 0.1f, 0.2f);
                 yield break;
             }
             yield return null;

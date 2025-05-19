@@ -6,13 +6,14 @@ public class LobbyManager : MonoBehaviour
     // ゲーム画面への遷移
     public void LoadGameScene()
     {
-        SceneManager.LoadScene("Test_Shiromoto"); // ゲーム画面のシーン名
+        SceneFadeManager.Instance.LoadScene("Test_Shiromoto", 0.1f,0.2f);
         AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
     }
 
     // ロッカー画面への遷移
     public void LoadLockerScene()
     {
-        SceneManager.LoadScene("Locker"); // ロッカー画面のシーン名
+        SceneFadeManager.Instance.LoadScene("Locker", 0.1f, 0.2f);
+        AudioManager.Instance.PlaySE(SEManager.SEType.Button_Click); //ボタンクリック音
     }
 }
