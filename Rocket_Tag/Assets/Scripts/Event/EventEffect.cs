@@ -53,7 +53,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  ÉC
 
         await LoadEffect();
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
-        spdChagneAuraSystem = new ParticleSystem[SpdChangeAuraValue];
+        spdChagneAuraSystem = new ParticleSystem[numOfPlayers];
         gameMgr = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         isGeneratedSmoke = false;
@@ -209,11 +209,13 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  ÉC
                 {
                     spdChagneAuraEntity = Instantiate(loadedEffects[EffectName.SPD_UP_AURA], players[playerIndex]);
                     spdChagneAuraSystem[playerIndex] = spdChagneAuraEntity.GetComponent<ParticleSystem>();
+                    Debug.Log(spdChagneAuraSystem[playerIndex]);
                 }
                 else if (playerMovement[playerIndex].GetMoveSpeed() < defaultPlayerMoveSpd)
                 {
                     spdChagneAuraEntity = Instantiate(loadedEffects[EffectName.SPD_DOWN_AURA], players[playerIndex]);
                     spdChagneAuraSystem[playerIndex] = spdChagneAuraEntity.GetComponent<ParticleSystem>();
+                    Debug.Log(spdChagneAuraSystem[playerIndex]);
                 }
                 Debug.Log("loaded" + loadedEffects[EffectName.SPD_UP_AURA].name);
 
@@ -225,7 +227,6 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  ÉC
             for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
             {
                 ReplayEffect(spdChagneAuraSystem[playerIndex], Vector3.zero);
-
             }
         }
     }
