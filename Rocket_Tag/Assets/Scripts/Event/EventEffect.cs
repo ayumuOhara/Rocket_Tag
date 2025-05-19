@@ -187,7 +187,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
         if (playerMovement == null && playerMovement.Length > 4)
         {
             playerMovement = new PlayerMovement[numOfPlayers];
-            for (int playerIndex = 0; playerIndex > numOfPlayers; playerIndex++)
+            for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
             {
                 playerMovement[playerIndex] = players[playerIndex].GetComponent<PlayerMovement>();
             }
@@ -199,7 +199,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
         AssignPlyaersTF();
         if (!isGeneratedSpdAura)
         {
-            for (int playerIndex = 0; playerIndex > numOfPlayers; playerIndex++)
+            for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
             {
                 Debug.Log("エフェクト生成ループ突入");
 
@@ -220,7 +220,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                    ////  イ
         }
         else
         {
-            for (int playerIndex = 0; playerIndex > numOfPlayers; playerIndex++)
+            for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
             {
                 ReplayEffect(spdChagneAuraSystem[playerIndex], Vector3.zero);
 
