@@ -78,7 +78,9 @@ public class EventManager : MonoBehaviourPunCallbacks
                 
                 if (time >= triggerTime - 3.0 && triggerTime - time >= 0)
                 {
-                    photonView.RPC("CntDownText",RpcTarget.All, triggerTime - time);
+                    float cntTime = 0;
+                    cntTime = triggerTime - time;
+                    photonView.RPC("CntDownText",RpcTarget.All, cntTime);
                 }
 
                 yield return new WaitForSeconds(1);
@@ -87,7 +89,7 @@ public class EventManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    void CntDownText(int time)
+    void CntDownText(float time)
     {
         eventTextObj.SetActive(true);
         eventText.text = $"ÉCÉxÉìÉgî≠ê∂Ç‹Ç≈{time}";
