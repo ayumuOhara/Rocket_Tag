@@ -51,6 +51,11 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetPlayerDead(bool newIsDead)
     {
+        if(newIsDead)
+        {
+            Debug.Log("ƒvƒŒƒCƒ„[‚ª€–S‚µ‚½");
+        }
+
         isDead = newIsDead;
         seManager.StopFuseSE();
 
