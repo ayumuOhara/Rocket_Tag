@@ -189,11 +189,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     IEnumerator CheckRocketCnt()
     {
         Debug.Log("コルーチンを開始します");
+        int rocketCnt = 0;
 
         while (true)
         {
             List<GameObject> players = GetPlayerList();
-            int rocketCnt = 0;
+
+            Debug.Log("人数：" + GetPlayerList().Count);
+            rocketCnt = 0;
+
             for(int i = 0; i < players.Count; i++)
             {
                 SetPlayerBool spb = players[i].GetComponent<SetPlayerBool>();
@@ -202,6 +206,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                     rocketCnt++;
                 }
             }
+
+            Debug.Log("rocketCnt：" +  rocketCnt);
 
             if(rocketCnt != 1)
             {
