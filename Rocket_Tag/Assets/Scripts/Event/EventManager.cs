@@ -78,13 +78,21 @@ public class EventManager : MonoBehaviourPunCallbacks
                 
                 if (time >= triggerTime - 3.0 && triggerTime - time >= 0)
                 {
-                    eventTextObj.SetActive(true);
-                    eventText.text = $"イベント発生まで{triggerTime - time}";
+                    float cntTime = 0;
+                    cntTime = triggerTime - time;
+                    photonView.RPC("CntDownText",RpcTarget.All, cntTime);
                 }
 
                 yield return new WaitForSeconds(1);
             }
         }
+    }
+
+    [PunRPC]
+    void CntDownText(float time)
+    {
+        eventTextObj.SetActive(true);
+        eventText.text = $"イベント発生まで{time}";
     }
 
     // イベントを処理するメソッド
@@ -158,6 +166,7 @@ public class EventManager : MonoBehaviourPunCallbacks
         enoguEvent.PaintOpen();
         yield return new WaitForSeconds(eventTime);
         enoguEvent.PaintClose();
+        eventEffect._AssignPlayerTF();
         yield break;
     }
 
@@ -182,7 +191,7 @@ public class EventManager : MonoBehaviourPunCallbacks
             (playerPos[i], playerPos[rnd]) = (playerPos[rnd], playerPos[i]); // C# のタプルスワップ
         }
 
-        photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcces.TELEPORT_SMOKE);    //  テレポートエフェクト生成
+        photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcess.TELEPORT_SMOKE);    //  テレポートエフェクト生成
 
         // 新しい座標をプレイヤーに適用
         for (int i = 0; i < playerList.Count; i++)
@@ -208,6 +217,7 @@ public class EventManager : MonoBehaviourPunCallbacks
     }
 
     // ランダムに移動速度を変化
+    [PunRPC]
     void ChangeSpeed(List<GameObject> playerList)
     {
         int minSpeed = 10;
@@ -217,19 +227,22 @@ public class EventManager : MonoBehaviourPunCallbacks
         {
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
             int rndSpeed = Random.Range(minSpeed, maxSpeed);
-            playerMovement.SetMoveSpeed(rndSpeed);
+            PhotonView photon = player.GetComponent<PhotonView>();
+            photon.RPC("SetMoveSpeed", RpcTarget.All, (float)rndSpeed);
         }
-        photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcces.MOVE_SPD_AURA);    //  テレポートエフェクト生成
+        photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcess.MOVE_SPD_AURA);    //  テレポートエフェクト生成
     }
 
     // 移動速度を元に戻す
+    [PunRPC]
     void ResetSpeed(List<GameObject> playerList)
     {
         foreach (GameObject player in playerList)
         {
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
-            playerMovement.SetMoveSpeed(playerMovement.GetDefaultMoveSpeed());
+            PhotonView photon = player.GetComponent<PhotonView>();
+            photon.RPC("SetMoveSpeed", RpcTarget.All, playerMovement.GetDefaultMoveSpeed());
         }
-        photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcces.STOP_SPD_AURA);    //  テレポートエフェクト停止
+        photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcess.STOP_SPD_AURA);    //  テレポートエフェクト停止
     }
 }

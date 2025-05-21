@@ -45,6 +45,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
     public void SetMoveSpeed(float _moveSpeed)
     {
         moveSpeed = _moveSpeed;

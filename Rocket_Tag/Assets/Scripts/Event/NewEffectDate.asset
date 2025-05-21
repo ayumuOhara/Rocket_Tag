@@ -9,13 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 186eb2e23269b9949b012a3996e76718, type: 3}
-  m_Name: EventData
+  m_Script: {fileID: 11500000, guid: ca13c0d5a05722445b64375c557af40c, type: 3}
+  m_Name: NewEffectDate
   m_EditorClassIdentifier: 
-  eventSettings:
-  - EVENT_TYPE: 0
-    eventPercent: 20
-  - EVENT_TYPE: 1
-    eventPercent: 60
-  - EVENT_TYPE: 2
-    eventPercent: 20
+  effectPrefab: {fileID: 0}
+  effectName: 

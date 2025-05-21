@@ -117,8 +117,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             ChooseRocketPlayer();
             StartCoroutine(eventManager.TriggerRandomEvent());
-            StartCoroutine(CheckOverTime());
-            StartCoroutine(CheckRocketCnt());
+            //StartCoroutine(CheckOverTime());
+            //StartCoroutine(CheckRocketCnt());
         }
     }
 
@@ -189,11 +189,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     IEnumerator CheckRocketCnt()
     {
         Debug.Log("コルーチンを開始します");
+        int rocketCnt = 0;
 
         while (true)
         {
             List<GameObject> players = GetPlayerList();
-            int rocketCnt = 0;
+
+            Debug.Log("人数：" + GetPlayerList().Count);
+            rocketCnt = 0;
+
             for(int i = 0; i < players.Count; i++)
             {
                 SetPlayerBool spb = players[i].GetComponent<SetPlayerBool>();
@@ -203,8 +207,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
             }
 
+            Debug.Log("rocketCnt：" +  rocketCnt);
+
             if(rocketCnt != 1)
             {
+                Debug.Log("ロケットを再配布");
+
                 for(int i = 0;i < players.Count;i++)
                 {
                     PhotonView photon = players[i].GetComponent<PhotonView>();
