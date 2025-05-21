@@ -205,6 +205,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             if(rocketCnt != 1)
             {
+                Debug.Log("ロケットを再配布");
+
                 for(int i = 0;i < players.Count;i++)
                 {
                     PhotonView photon = players[i].GetComponent<PhotonView>();
