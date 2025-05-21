@@ -79,7 +79,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         PhotonView playerPhoton = this.player.GetComponent<PhotonView>();
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
 
-        if (playerPhoton.IsMine)
+        if (PhotonNetwork.IsMasterClient)
         {
             Debug.Log("死亡処理開始");
 
