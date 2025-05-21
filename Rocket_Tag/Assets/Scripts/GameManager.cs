@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             ChooseRocketPlayer();
             StartCoroutine(eventManager.TriggerRandomEvent());
-            StartCoroutine(CheckOverTime());
+            //StartCoroutine(CheckOverTime());
             //StartCoroutine(CheckRocketCnt());
         }
     }
