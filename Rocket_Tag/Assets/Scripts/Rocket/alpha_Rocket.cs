@@ -89,7 +89,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             uiLogManager.AddLog("player", UILogManager.LogType.Dead);
             playerPhoton.RPC("SetPlayerDead", RpcTarget.All, true);
 
-            gameManager.ChooseRocketPlayer();
+            //gameManager.ChooseRocketPlayer();
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
         }
         rocketEffect._IsDestoroyRocket = true;
