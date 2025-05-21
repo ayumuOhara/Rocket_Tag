@@ -106,11 +106,14 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             {
                 if (spb.hasRocket && spb.isDead!)
                 {
+                    Debug.Log("-20秒経過");
+
                     PhotonView photon = player.GetComponent<PhotonView>();
                     photon.RPC("SetPlayerDead", RpcTarget.All, true);
                 }
 
                 this.gameObject.SetActive(false);
+                yield break;
             }            
             yield return null;
         }
