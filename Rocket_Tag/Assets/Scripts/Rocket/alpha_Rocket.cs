@@ -34,8 +34,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         //Debug.Log($"gameManager：{gameManager}");
         //Debug.Log($"timeManager：{timeManager}");
         //Debug.Log($"uiLogManager：{uiLogManager}");
-
-        StartCoroutine(CheckOverTime());
     }
 
     void Update()
@@ -89,33 +87,10 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             uiLogManager.AddLog("player", UILogManager.LogType.Dead);
             playerPhoton.RPC("SetPlayerDead", RpcTarget.All, true);
 
-            //gameManager.ChooseRocketPlayer();
+            gameManager.ChooseRocketPlayer();
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
         }
         rocketEffect._IsDestoroyRocket = true;
         player.SetActive(false);
-    }
-
-    IEnumerator CheckOverTime()
-    {
-        SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
-
-        while (true)
-        {
-            if (timeManager.rocketTime < -20.0f)
-            {
-                if (spb.hasRocket && spb.isDead!)
-                {
-                    Debug.Log("-20秒経過");
-
-                    PhotonView photon = player.GetComponent<PhotonView>();
-                    photon.RPC("SetPlayerDead", RpcTarget.All, true);
-                }
-
-                this.gameObject.SetActive(false);
-                yield break;
-            }            
-            yield return null;
-        }
     }
 }
