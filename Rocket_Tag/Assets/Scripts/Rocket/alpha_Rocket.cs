@@ -93,7 +93,7 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
         }
         rocketEffect._IsDestoroyRocket = true;
-        this.gameObject.SetActive(false);
+        player.SetActive(false);
     }
 
     IEnumerator CheckOverTime()
