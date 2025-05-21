@@ -1568,7 +1568,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &804079631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1645,7 +1645,7 @@ MonoBehaviour:
   enogu3: {fileID: 517522746}
   enogu4_1: {fileID: 104557870}
   enogu4_2: {fileID: 779045566}
-  setPlayerBool: {fileID: 0}
+  gameManager: {fileID: 0}
 --- !u!114 &804079635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1658,7 +1658,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 428e3c8ab51173e49b9371bf778da641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: {fileID: 1576337748}
 --- !u!1 &846908937
 GameObject:
   m_ObjectHideFlags: 0
