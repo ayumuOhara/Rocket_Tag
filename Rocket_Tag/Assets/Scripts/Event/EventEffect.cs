@@ -53,6 +53,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
     async void Initialize()    //  èâä˙âªä÷êî
     {
         SetDictionary();
+        await LoadEffect();
         assignPlayerTF = AssignPlayersTF;
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
         spdChagneAuraSystem = new ParticleSystem[numOfPlayers];
