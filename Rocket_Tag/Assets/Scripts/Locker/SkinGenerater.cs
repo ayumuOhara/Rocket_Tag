@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;                                                                              ////  スキン生成スクリプト  ////
 using System.Collections;
 using System.Collections.Generic;
@@ -107,7 +108,18 @@ async void Initialize()     //  初期化                                          
             {
                 case 0:
                     {
-                        skinEntityHead = Instantiate(playerSkinPrefab[tmpSkinNo], playerTF_.Find("root/Hip/Spine/Head"));
+                        Transform head = playerTF_.Find("root/Hip/Spine/Head");
+
+                        GameObject skin = PhotonNetwork.Instantiate(
+                            playerSkinPrefab[tmpSkinNo].name,
+                            head.position,
+                            head.rotation
+                        );
+
+                        // 生成されたスキンを親に設定
+                        skin.transform.SetParent(head, worldPositionStays: true);
+
+                        //skinEntityHead = Instantiate(playerSkinPrefab[tmpSkinNo], playerTF_.Find("root/Hip/Spine/Head"));
                         break;
                     }
             }
