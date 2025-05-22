@@ -11,31 +11,9 @@ public class EnoguEvent : MonoBehaviourPun
     [SerializeField] GameObject enogu3;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_1;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_2;               // 目つぶしイベント用UI
-    [SerializeField] GameManager gameManager;
 
+    /*[SerializeField] GameManager gameManager;
 
-    void Start()
-    {
-        if (photonView.IsMine)
-        {
-            if (gameManager == null)
-            {
-                gameManager = GetComponentInChildren<GameManager>();
-                if (gameManager == null)
-                {
-                    Debug.Log("GetComponentInChildren");
-                }
-            }
-            if (gameManager == null)
-            {
-                gameManager = FindObjectOfType<GameManager>();
-                if (gameManager == null)
-                {
-                    Debug.Log("FindObjectOfType");
-                }
-            }
-        }
-    }
     public void PaintOpen()
     {
         Debug.Log("受け取り");
@@ -51,14 +29,13 @@ public class EnoguEvent : MonoBehaviourPun
                 pv.RPC("positioning", pv.Owner);
             }
         }
-    }
-
-    /*public void PaintOpen()全体付与成功例
+    }*/
+    public void PaintOpen()//全体付与成功例
     {
         Debug.Log("受け取り");
         photonView.RPC("BlindEffect", RpcTarget.All, true);
         photonView.RPC("positioning", RpcTarget.All);
-    }*/
+    }
 
     [PunRPC]
     void positioning()
