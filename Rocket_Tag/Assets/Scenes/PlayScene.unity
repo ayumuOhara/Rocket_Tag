@@ -1741,6 +1741,7 @@ MonoBehaviour:
   enogu3: {fileID: 517522746}
   enogu4_1: {fileID: 104557870}
   enogu4_2: {fileID: 779045566}
+  gameManager: {fileID: 846908939}
 --- !u!114 &804079635
 MonoBehaviour:
   m_ObjectHideFlags: 0
