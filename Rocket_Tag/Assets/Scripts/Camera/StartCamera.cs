@@ -19,6 +19,7 @@ public class StartCamera : MonoBehaviourPunCallbacks
         if(container != null)
         {
             splineAnimate.Container = container;
+            splineAnimate.Play();
         }
         else
         {
@@ -32,10 +33,10 @@ public class StartCamera : MonoBehaviourPunCallbacks
         if(splineAnimate != null && splineAnimate.NormalizedTime >= 1.0f)
         {
             isEndAnim = true;
-            PhotonView photonCam = gameManagerObj.GetComponent<PhotonView>();
+            PhotonView photonMana = gameManagerObj.GetComponent<PhotonView>();
             if (PhotonNetwork.IsMasterClient)
             {
-                photonCam.RPC("WaitTimer", RpcTarget.All);
+                photonMana.RPC("WaitTimer", RpcTarget.All);
             }
         }
     }
