@@ -11,8 +11,7 @@ public class StartCamera : MonoBehaviourPunCallbacks
 
     public bool isEndAnim = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Initialize()
     {
         splineAnimate = GetComponent<SplineAnimate>();
         container = FindObjectOfType<SplineContainer>();
