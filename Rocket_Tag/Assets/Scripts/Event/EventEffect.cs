@@ -52,8 +52,8 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
     void Start()                                                                                ////  以下処理区  ////
     {
         Initialize();    //  初期化
-    }
-    async void Initialize()    //  初期化関数
+    }                                                                                           ////  処理区終了  ////
+    async void Initialize()    //  初期化関数                                                   ////  以下関数区  ////
     {
         IGameMgrFactory factory = new RealGameMgrFactory();    //  先にファクトリーパターンを取得
 
@@ -147,7 +147,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
             Debug.LogWarning(teleportSmokeNotGenerate);
         }
     }
-    void ReplayEffect(ParticleSystem effect, Vector3 replayPos)    //  エフェクト再再生                       ////  コード保存場所  ////
+    void ReplayEffect(ParticleSystem effect, Vector3 replayPos)    //  エフェクト再再生
     {
         effect.Clear();
         if (effect.transform.parent == null)
@@ -253,9 +253,9 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
         {
             p?.Stop();
         }
-    }
+    }                                                                                           ////  関数区終了  ////
 }
-// void ReplayEffect(ParticleSystem effect, Vector3 playPos)    //  エフェクト再再生                       ////  コード保存場所  ////
+// void ReplayEffect(ParticleSystem effect, Vector3 playPos)    //  エフェクト再再生            ////  コード保存場所  ////
 //    {
 //    effect.transform.position = playPos;
 //    effect.Clear();
