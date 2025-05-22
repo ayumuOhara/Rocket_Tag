@@ -7,7 +7,7 @@ using Photon.Pun;
 
 public class CameraController : MonoBehaviour
 {
-    List<GameObject> playerObjList; 
+    List<GameObject> playerObjList = new List<GameObject>();
 
     Transform playerTransform;                                    // ’‹‘ÎÛƒvƒŒƒCƒ„[
     Transform playerRightHandTransform;
