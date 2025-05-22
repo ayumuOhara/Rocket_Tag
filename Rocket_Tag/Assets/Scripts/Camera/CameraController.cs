@@ -37,6 +37,7 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         playerObjList.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+        Debug.Log(playerObjList.Count);
 
         GameObject player = new GameObject();
         foreach(GameObject myPlayer in playerObjList)
@@ -47,7 +48,7 @@ public class CameraController : MonoBehaviour
                 player = myPlayer;
             }
         }
-
+        Debug.Log("é©ã@ÅF" + player);
         setPlayerBool = player.GetComponent<SetPlayerBool>();
         playerTransform = player.GetComponent<Transform>();
         playerRightHandTransform = GameObject.Find("RightHand").GetComponent<Transform>();
