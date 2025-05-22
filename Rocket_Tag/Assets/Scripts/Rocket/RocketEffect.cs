@@ -15,7 +15,7 @@ internal class FirstStage : IEffectState    //  ƒƒPƒbƒg1’iŠK–Ú
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);    //  1’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);    //  1’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -33,7 +33,7 @@ internal class SecondStage : IEffectState    //  ƒƒPƒbƒg2’iŠK–Ú
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);  //  2’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);  //  2’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -51,7 +51,7 @@ internal class ThirdStage : IEffectState    //  ƒƒPƒbƒg3’iŠK–Ú
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);    //  3’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);    //  3’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -69,12 +69,12 @@ internal class LastStage : IEffectState    //  ƒƒPƒbƒgÅI’iŠK
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);    //  ÅI’iŠK‚ÌƒGƒtƒFƒNƒg¶¬
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_SMOKE);    //  ‰Œ‚ğæ“¾
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);    //  ÅI’iŠK‚ÌƒGƒtƒFƒNƒg¶¬
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_SMOKE);    //  ‰Œ‚ğæ“¾
     }
     public void Update(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SMOKE_DIFFUSION);    //  ‰Œ‚ğŠgU
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.SMOKE_DIFFUSION);    //  ‰Œ‚ğŠgU
     }
     public void Exit(RocketEffect rocketEffect)
     {
@@ -89,7 +89,7 @@ internal class PrepareRocket : IEffectState    //  Ÿ‚ÌƒƒPƒbƒg‚ğ—pˆÓ‚µ‚Ä‚¢‚éó‘
     }
     public void Update(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.SEARCH_ROCKET);
     }
     public void Exit(RocketEffect rocketEffect)
     {
@@ -98,7 +98,7 @@ internal class PrepareRocket : IEffectState    //  Ÿ‚ÌƒƒPƒbƒg‚ğ—pˆÓ‚µ‚Ä‚¢‚éó‘
 }                                                                                                  ////  State‹æI—¹@@////
 internal class RocketEffect : MonoBehaviour
 {
-    internal enum RocketEffectProcces    //  ƒƒPƒbƒgƒGƒtƒFƒNƒg‚Ìˆ—ˆê——                          ////  ˆÈ‰ºéŒ¾‹æ  ////
+    internal enum RocketEffectProcce    //  ƒƒPƒbƒgƒGƒtƒFƒNƒg‚Ìˆ—ˆê——                          ////  ˆÈ‰ºéŒ¾‹æ  ////
     {
         GENERATE_FRAMES,
         GENERATE_SMOKE,
@@ -111,7 +111,8 @@ internal class RocketEffect : MonoBehaviour
         FIRST_ROCKET_FRAME,
         SECOND_ROCKET_FRAME,
         THIRD_ROCKET_FRAME,
-        LAST_ROCKET_FRAME
+        LAST_ROCKET_FRAME,
+        FRAME_SMOKE
     }
     internal enum EffectNo    //  ƒGƒtƒFƒNƒg‚Ìí—Ş
     {
@@ -120,8 +121,10 @@ internal class RocketEffect : MonoBehaviour
     }
 
     IEffectState currentState;
-    
-    //Dictionary<>
+
+    Dictionary<RocketEffectProcce, Action> rocketEffectProcess;
+    Dictionary<RocketEffectName, GameObject> loadedEffect;
+    Dictionary<RocketEffectName, string> effectNameMap;
     GameObject[] frameEffectPrefab;
     GameObject frameEffectEntity;
     GameObject smokeEffectPrefab;
@@ -241,6 +244,10 @@ internal class RocketEffect : MonoBehaviour
             return;
         }
     }
+    void SetDictionary()
+    {
+        //rocketEffectProcess[RocketEffectProcce.GENERATE_FRAMES, GenerateEffect]
+    }
     internal void ChangeState(IEffectState newState)    //  ó‘Ô‘JˆÚ
     {
         if (currentState != null)
@@ -250,11 +257,11 @@ internal class RocketEffect : MonoBehaviour
         currentState = newState;
         currentState.Enter(this);
     }
-    internal void RocketEffectWrapper(RocketEffectProcces rocketEffectProcces)   // ƒƒPƒbƒgƒGƒtƒFƒNƒg‚Ìƒ‰ƒbƒp[ŠÖ”
+    internal void RocketEffectWrapper(RocketEffectProcce rocketEffectProcces)   // ƒƒPƒbƒgƒGƒtƒFƒNƒg‚Ìƒ‰ƒbƒp[ŠÖ”
     {
         switch (rocketEffectProcces)
         {
-            case RocketEffectProcces.GENERATE_FRAMES:
+            case RocketEffectProcce.GENERATE_FRAMES:
                 {
                     //Debug.Log(rocketStage);    //  for debug-------------------------
 
@@ -262,7 +269,7 @@ internal class RocketEffect : MonoBehaviour
                     rocketStage = rocketStage != 3 ? ++rocketStage : 0;
                     break;
                 }
-            case RocketEffectProcces.GENERATE_SMOKE:
+            case RocketEffectProcce.GENERATE_SMOKE:
                 {
                     GenerateEffect((int)EffectNo.SMOKE, smokeEffectPrefab, rocket, frameEffectOffset, smokeEffectScale);    //  offset‚ÉframeEffectOffset‚ğg—p
                     smokePS = smokeEntity.GetComponent<ParticleSystem>();
@@ -271,7 +278,7 @@ internal class RocketEffect : MonoBehaviour
                     smokeColorOverLifeTime = smokePS.colorOverLifetime;
                     break;
                 }
-            case RocketEffectProcces.SEARCH_ROCKET:
+            case RocketEffectProcce.SEARCH_ROCKET:
                 {
                     Debug.Log("SERACH_ROCKET entered");
                     rocket = null;
@@ -288,7 +295,7 @@ internal class RocketEffect : MonoBehaviour
                     Debug.Log("SERACH_ROCKET exsited" + rocket);
                     break;
                 }
-            case RocketEffectProcces.SMOKE_DIFFUSION:
+            case RocketEffectProcce.SMOKE_DIFFUSION:
                 {
                     SmokeDiffusion();
                     break;
@@ -325,6 +332,10 @@ internal class RocketEffect : MonoBehaviour
                 }
             default: break;
         }
+    }
+    void GenerateFrame()
+    {
+
     }
     void SmokeDiffusion()    //  ‰Œ–‹ŠgUA‰Œ–‹‚ğƒfƒXƒgƒƒC‚µ‚½‚½‚çPrepareRocketState‚ÉˆÚ“®
     {
