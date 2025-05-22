@@ -1,30 +1,25 @@
-using System;
-using System.Threading;
+using System;                                                                                      ////  ロケットエフェクト生成・切り替え  ////
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Collections;                                                                          ////  ロケットエフェクト生成・切り替え  ////
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using static RocketEffect;
-using UnityEngine.UIElements;
 
-internal interface EffectState                                                                     ////  以下State区  ////
+internal interface IEffectState                                                                     ////  以下State区  ////
 {
     void Enter(RocketEffect arg);
     void Update(RocketEffect arg);
     void Exit(RocketEffect arg);
 }
-internal class FirstStage : EffectState   //  ロケット1段階目
+internal class FirstStage : IEffectState    //  ロケット1段階目
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);  //  一段階目のエフェクト生成
-        Debug.Log("FFFFFFFF");
+        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);    //  1段階目のエフェクト生成
     }
     public void Update(RocketEffect rocketEffect)
     {
-        if (rocketEffect._TimeMgr.IsStageUpTime())
+        if (rocketEffect.TimeMgr.IsStageUpTime())
         {
             rocketEffect.ChangeState(new SecondStage());
         }
@@ -34,16 +29,15 @@ internal class FirstStage : EffectState   //  ロケット1段階目
 
     }
 }
-internal class SecondStage : EffectState    //  ロケット2段階目
+internal class SecondStage : IEffectState    //  ロケット2段階目
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        Debug.Log("SSSSSSSSSS");
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);  //  2段階目のエフェクト生成
     }
     public void Update(RocketEffect rocketEffect)
     {
-        if (rocketEffect._TimeMgr.IsStageUpTime())
+        if (rocketEffect.TimeMgr.IsStageUpTime())
         {
             rocketEffect.ChangeState(new ThirdStage());
         }
@@ -53,16 +47,15 @@ internal class SecondStage : EffectState    //  ロケット2段階目
 
     }
 }
-internal class ThirdStage : EffectState    //  ロケット3段階目
+internal class ThirdStage : IEffectState    //  ロケット3段階目
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        Debug.Log("TTTTTTTTTTT");
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);    //  3段階目のエフェクト生成
     }
     public void Update(RocketEffect rocketEffect)
     {
-        if (rocketEffect._TimeMgr.IsStageUpTime())
+        if (rocketEffect.TimeMgr.IsStageUpTime())
         {
             rocketEffect.ChangeState(new LastStage());
         }
@@ -72,11 +65,10 @@ internal class ThirdStage : EffectState    //  ロケット3段階目
 
     }
 }
-internal class LastStage : EffectState    //  ロケット最終段階
+internal class LastStage : IEffectState    //  ロケット最終段階
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        Debug.Log("LLLLLLLL");
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);    //  最終段階のエフェクト生成
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_SMOKE);    //  煙を取得
     }
@@ -89,14 +81,14 @@ internal class LastStage : EffectState    //  ロケット最終段階
 
     }
 }
-internal class PrepareRocket : EffectState    //  次のロケットを用意している状態
+internal class PrepareRocket : IEffectState    //  次のロケットを用意している状態
 {
     public void Enter(RocketEffect rocketEffect)
     {
+
     }
     public void Update(RocketEffect rocketEffect)
     {
-        Debug.Log(123456789);
         rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
     }
     public void Exit(RocketEffect rocketEffect)
@@ -114,15 +106,22 @@ internal class RocketEffect : MonoBehaviour
         SMOKE_DIFFUSION,
         SEARCH_ROCKET,
     }
+    internal enum RocketEffectName
+    {
+        FIRST_ROCKET_FRAME,
+        SECOND_ROCKET_FRAME,
+        THIRD_ROCKET_FRAME,
+        LAST_ROCKET_FRAME
+    }
     internal enum EffectNo    //  エフェクトの種類
     {
         FRAME,
         SMOKE,
     }
 
-    EffectState currentState;
-
-    //Task effectLoadTask;    //  for debug--------------------------
+    IEffectState currentState;
+    
+    //Dictionary<>
     GameObject[] frameEffectPrefab;
     GameObject frameEffectEntity;
     GameObject smokeEffectPrefab;
@@ -149,7 +148,7 @@ internal class RocketEffect : MonoBehaviour
     const string couldntGetTimemgr = "Error:Couldn't Get timeMgr";    //  msg for debug---------------------
     const string scriptProssesFinish = "RocketEffect.cs's process is stop";    //  msg for debug------------------
 
-    internal TimeManager _TimeMgr
+    internal TimeManager TimeMgr
     { get { return timeMgr; } }
     internal int _RocketStage
     { get { return rocketStage; } }                                                               ////  宣言区終了  ////
@@ -242,7 +241,7 @@ internal class RocketEffect : MonoBehaviour
             return;
         }
     }
-    internal void ChangeState(EffectState newState)    //  状態遷移
+    internal void ChangeState(IEffectState newState)    //  状態遷移
     {
         if (currentState != null)
         {
