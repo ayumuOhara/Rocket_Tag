@@ -68,12 +68,18 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
         // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
         gameManager.playerController = player.GetComponent<PlayerController>();
         gameManager.setPlayerBool = player.GetComponent<SetPlayerBool>();
-
-        //inputPlayerName.SetActive(true);
-        playerCamera.SetActive(true);
-        waitCamera.SetActive(false);
     }
 #endif
+
+    void Update()
+    {
+        StartCamera startCamera = waitCamera.GetComponent<StartCamera>();
+        if(startCamera != null && startCamera.isEndAnim)
+        {
+            waitCamera.SetActive(false);
+            playerCamera.SetActive(true);
+        }
+    }
 
     // プレイヤーがルームから退出したとき
     public override void OnPlayerLeftRoom(Player otherPlayer)
