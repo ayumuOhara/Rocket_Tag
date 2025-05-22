@@ -20,7 +20,9 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
         SPD_UP_AURA,
         SPD_DOWN_AURA,
     }
-    
+
+    IGameMgrFactory Factory;
+
     Dictionary<EventEffectProcess, Action> effectProccesMap;
     Dictionary<EffectName, String> effectNameMap;
     Dictionary<EffectName, GameObject> loadedEffects;
@@ -32,8 +34,6 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
     ParticleSystem[] spdChagneAuraSystem;
     GameManager gameMgr;
     PlayerMovement[] playerMovement;
-
-    IGameMgrFactory Factory;
 
     const int numOfPlayers = 4;
     float defaultPlayerMoveSpd;
@@ -55,8 +55,8 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
     }                                                                                           ////  処理区終了  ////
     async void Initialize()    //  初期化関数                                                   ////  以下関数区  ////
     {
-        IGameMgrFactory factory = new RealGameMgrFactory();    //  先にファクトリーパターンを取得
-
+        IGameMgrFactory factory = new RealGameMgrFactory();
+        
         SetDictionary();
         await LoadEffect();
         assignPlayerTF = AssignPlayersTF;
@@ -213,6 +213,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
     }
     void GenerateSpdAura()    //  スピードを判定して速度エフェクトを出す
     {
+        isGeneratedAllSpdChangeAura = true;
         for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
         {
             if (playerMovement[playerIndex].GetMoveSpeed() > defaultPlayerMoveSpd)
@@ -238,19 +239,14 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
     }
     void StopSpdChangeAura()    //  エフェクトを非表示にする
     {
-        if(isGeneratedAllSpdChangeAura)
-        {
-            StopEffect(spdChagneAuraSystem);
-        }
-        else
-        {
-            isGeneratedAllSpdChangeAura = true;
-        }
+        Debug.Log("Stop Spd Change Method entire");
+        StopEffect(spdChagneAuraSystem);    //  改善余地あり
     }
     void StopEffect(ParticleSystem[] effect)    //  エフェクト一時停止
     {
         foreach(ParticleSystem p in effect)
         {
+            Debug.Log("Effect Stop loop entire");
             p?.Stop();
         }
     }                                                                                           ////  関数区終了  ////
