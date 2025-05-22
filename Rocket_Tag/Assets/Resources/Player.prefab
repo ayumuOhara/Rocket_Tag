@@ -1590,8 +1590,6 @@ GameObject:
   - component: {fileID: 2753298400814805652}
   - component: {fileID: 978622442078488288}
   - component: {fileID: 4077219752392889557}
-  - component: {fileID: 8878140799993682093}
-  - component: {fileID: -6979482437822852258}
   - component: {fileID: 1641661711016070242}
   - component: {fileID: -7464231355686350232}
   m_Layer: 0
@@ -1879,30 +1877,6 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   rankText: {fileID: 0}
   playerRank: 0
---- !u!114 &8878140799993682093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7666606126202363588}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64618873737ed8b4daa7fe50440d43bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-6979482437822852258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7666606126202363588}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb4c21bc364e8244c8d6d5a28c74df6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &1641661711016070242
 Animator:
   serializedVersion: 7

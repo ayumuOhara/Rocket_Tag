@@ -28,21 +28,18 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Player currentRocketHolder;                 // 現在のロケット保持者
     private List<GameObject> cachedPlayerList = new List<GameObject>(); // プレイヤーリストのキャッシュ
 
-    int waitTime = 30;
+    int waitTime = 10;
 
     void Start()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("WaitTimer", RpcTarget.All);
-        }
+        
     }
 
     [PunRPC]
     IEnumerator WaitTimer()
     {
         photonView.RPC("PlayerCntText", RpcTarget.All, GetPlayerList().Count, "参加人数");
-        waitTime = 30;
+        waitTime = 10;
         eventTextObj.SetActive(true);
 
         while (true)
@@ -166,7 +163,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
                 PhotonNetwork.Disconnect();
-                SceneManager.LoadScene("Result");
+                SceneFadeManager.Instance.LoadScene("Result", 0.2f, 0.3f);
                 yield break;
             }
             yield return null;

@@ -56,7 +56,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
             statusText.text = "ロビーに戻ります。";
         }
         PhotonNetwork.Disconnect();
-        SceneManager.LoadScene("Lobby"); // 戻りたいシーンに遷移
+        SceneFadeManager.Instance.LoadScene("Lobby", 0.2f, 0.3f);
     }
 
     //Photonのコールバック

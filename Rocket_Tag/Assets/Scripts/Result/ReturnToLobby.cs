@@ -12,6 +12,6 @@ public class ReturnToLobby : MonoBehaviourPunCallbacks
     {
         Cursor.visible = true;
         PhotonNetwork.Disconnect();
-        SceneManager.LoadScene("Lobby"); // ロビーのシーン名を指定
+        SceneFadeManager.Instance.LoadScene("Lobby", 0.2f, 0.2f);
     }
 }

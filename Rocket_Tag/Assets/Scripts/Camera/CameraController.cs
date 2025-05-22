@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Rendering;
+using NUnit.Framework;
+using Photon.Pun;
 
 public class CameraController : MonoBehaviour
 {
-    GameObject player;
+    List<GameObject> playerObjList = new List<GameObject>();
+
     Transform playerTransform;                                    // 注視対象プレイヤー
     Transform playerRightHandTransform;
     [SerializeField] private CameraController refCamera; 　       // カメラの水平回転を参照する用
@@ -33,7 +36,19 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        playerObjList.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+        Debug.Log(playerObjList.Count);
+
+        GameObject player = new GameObject();
+        foreach(GameObject myPlayer in playerObjList)
+        {
+            PhotonView playerPhoton = myPlayer.GetComponent<PhotonView>();
+            if (playerPhoton.IsMine)
+            {
+                player = myPlayer;
+            }
+        }
+        Debug.Log("自機：" + player);
         setPlayerBool = player.GetComponent<SetPlayerBool>();
         playerTransform = player.GetComponent<Transform>();
         playerRightHandTransform = GameObject.Find("RightHand").GetComponent<Transform>();
@@ -158,26 +173,6 @@ public class CameraController : MonoBehaviour
             transform.position = playerTransform.position + new Vector3(playerRightHandTransform.localPosition.x + 0.2f, playerRightHandTransform.localPosition.y + 0.8f, 0f) - transform.rotation * Vector3.forward * distance; 
         }
         
-    }
-
-    public IEnumerator Shake(float duration, float magnitude)
-    {
-        isShaking = true;
-
-        Vector3 originalPosition = transform.position;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            transform.position = originalPosition + Random.insideUnitSphere * magnitude;
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        Debug.Log("振動終了");
-        isShaking = false;
-        transform.position = originalPosition;
-        Debug.Log($"isShaking：{isShaking}");
-        yield break;
     }
 
     void OnTurnSpeedChanged(float value)

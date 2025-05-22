@@ -5,6 +5,8 @@ using ExitGames.Client.Photon;
 
 public class SeedBasedMapSpawner : MonoBehaviourPunCallbacks
 {
+    StartCamera startCamera;
+
     public GameObject[] mapPrefabs;
     public Transform spawnPoint;
 
@@ -53,5 +55,8 @@ public class SeedBasedMapSpawner : MonoBehaviourPunCallbacks
         Instantiate(selected, spawnPoint.position, spawnPoint.rotation);
         Debug.Log($"[同期済] マップ「{selected.name}」を生成しました。");
         mapSpawned = true;
+
+        startCamera = GameObject.Find("WaitCamera").GetComponent<StartCamera>();
+        startCamera.Initialize();
     }
 }
