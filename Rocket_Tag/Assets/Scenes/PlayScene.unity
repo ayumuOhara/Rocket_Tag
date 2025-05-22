@@ -1415,7 +1415,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &774146083
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1458,7 +1458,7 @@ MonoBehaviour:
   m_text: 100.0 sec
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
-  m_sharedMaterial: {fileID: 5045735705979843012, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
+  m_sharedMaterial: {fileID: 7211171604057284572, guid: 68df5bc3f9e722b4c8e1a25655b847f8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1702,7 +1702,7 @@ MonoBehaviour:
   enogu3: {fileID: 517522746}
   enogu4_1: {fileID: 104557870}
   enogu4_2: {fileID: 779045566}
-  setPlayerBool: {fileID: 0}
+  gameManager: {fileID: 0}
 --- !u!114 &804079635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3163,7 +3163,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1373069368
 RectTransform:
   m_ObjectHideFlags: 0

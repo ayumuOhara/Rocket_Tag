@@ -11,31 +11,55 @@ public class EnoguEvent : MonoBehaviourPun
     [SerializeField] GameObject enogu3;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_1;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_2;               // 目つぶしイベント用UI
-    [SerializeField] SetPlayerBool setPlayerBool;
+    [SerializeField] GameManager gameManager;
 
 
     void Start()
     {
         if (photonView.IsMine)
         {
-            if (setPlayerBool == null)
+            if (gameManager == null)
             {
-                setPlayerBool = GetComponentInChildren<SetPlayerBool>();
+                gameManager = GetComponentInChildren<GameManager>();
+                if (gameManager == null)
+                {
+                    Debug.Log("GetComponentInChildren");
+                }
             }
-            if (setPlayerBool == null)
+            if (gameManager == null)
             {
-                setPlayerBool = FindObjectOfType<SetPlayerBool>();
+                gameManager = FindObjectOfType<GameManager>();
+                if (gameManager == null)
+                {
+                    Debug.Log("FindObjectOfType");
+                }
+            }
+        }
+    }
+    public void PaintOpen()
+    {
+        Debug.Log("受け取り");
+
+        List<GameObject> alivePlayers = gameManager.GetPlayerList();
+
+        foreach (GameObject player in alivePlayers)
+        {
+            PhotonView pv = player.GetComponent<PhotonView>();
+            if (pv != null)
+            {
+                pv.RPC("BlindEffect", pv.Owner, true);
+                pv.RPC("positioning", pv.Owner);
             }
         }
     }
 
-
-    public void PaintOpen()
+    /*public void PaintOpen()全体付与成功例
     {
         Debug.Log("受け取り");
         photonView.RPC("BlindEffect", RpcTarget.All, true);
         photonView.RPC("positioning", RpcTarget.All);
-    }
+    }*/
+
     [PunRPC]
     void positioning()
     {

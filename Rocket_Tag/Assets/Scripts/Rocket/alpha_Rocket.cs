@@ -34,8 +34,6 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
         //Debug.Log($"gameManager：{gameManager}");
         //Debug.Log($"timeManager：{timeManager}");
         //Debug.Log($"uiLogManager：{uiLogManager}");
-
-        StartCoroutine(CheckOverTime());
     }
 
     void Update()
@@ -74,46 +72,25 @@ public class Alpha_Rocket : MonoBehaviourPunCallbacks
 
     void DropOut()
     {
-        //Debug.Log("脱落処理開始");
+        Debug.Log("脱落処理開始");
 
-        PhotonView photonView = this.player.GetComponent<PhotonView>();
+        PhotonView playerPhoton = this.player.GetComponent<PhotonView>();
         PhotonView timePhoton = GameObject.Find("TimeManager").GetComponent<PhotonView>();
 
         if (PhotonNetwork.IsMasterClient)
         {
+            Debug.Log("死亡処理開始");
+
             timePhoton.RPC("IsTimeStart", RpcTarget.All, false);
             timeManager.ResetRocketCount();
 
             uiLogManager.AddLog("player", UILogManager.LogType.Dead);
-
-            //Debug.Log("ロケットを配る");
-            photonView.RPC("SetPlayerDead", RpcTarget.All, true);
-            //Debug.Log("ロケットを所持しているプレイヤーを脱落");
+            playerPhoton.RPC("SetPlayerDead", RpcTarget.All, true);
 
             gameManager.ChooseRocketPlayer();
             timePhoton.RPC("IsTimeStart", RpcTarget.All, true);
         }
         rocketEffect._IsDestoroyRocket = true;
-        this.gameObject.SetActive(false);
-    }
-
-    IEnumerator CheckOverTime()
-    {
-        SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
-
-        while (true)
-        {
-            if (timeManager.rocketTime < -20.0f)
-            {
-                if (spb.hasRocket && spb.isDead!)
-                {
-                    PhotonView photon = player.GetComponent<PhotonView>();
-                    photon.RPC("SetPlayerDead", RpcTarget.All, true);
-                }
-
-                this.gameObject.SetActive(false);
-            }            
-            yield return null;
-        }
+        player.SetActive(false);
     }
 }
