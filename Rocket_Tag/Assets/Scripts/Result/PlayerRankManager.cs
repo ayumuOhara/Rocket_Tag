@@ -59,7 +59,7 @@ public class PlayerRankManager : MonoBehaviour
     public void LoadLobbyScene()
     {
         PhotonNetwork.Disconnect();
-        SceneFadeManager.Instance.LoadScene("Lobby", 0.1f, 0.2f);
+        SceneFadeManager.Instance.LoadScene("Lobby", 0.2f, 0.2f);
     }
 
 }
