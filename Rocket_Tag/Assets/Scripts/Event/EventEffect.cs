@@ -20,7 +20,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
         SPD_UP_AURA,
         SPD_DOWN_AURA,
     }
-
+    
     Dictionary<EventEffectProcess, Action> effectProccesMap;
     Dictionary<EffectName, String> effectNameMap;
     Dictionary<EffectName, GameObject> loadedEffects;
@@ -33,13 +33,16 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
     GameManager gameMgr;
     PlayerMovement[] playerMovement;
 
+    IGameMgrFactory Factory;
+
     const int numOfPlayers = 4;
     float defaultPlayerMoveSpd;
     bool isGeneratedSmoke;
     bool isGeneratedSpdAura;
-    bool cantLoadEffect;
-    string loadFailMsg = "Load is failed";
-    string spdChangingFailMsg = "Spd has not changed";
+    bool isGeneratedAllSpdChangeAura;
+    const string loadFailMsg = "Load is failed";
+    const string teleportSmokeNotGenerate = "Teleport smoke is not loading well";
+    const string spdChangingFailMsg = "Spd has not changed";
 
     internal Action _AssignPlayerTF
     { get { return assignPlayerTF; }}
@@ -52,12 +55,14 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
     }
     async void Initialize()    //  初期化関数
     {
+        IGameMgrFactory factory = new RealGameMgrFactory();    //  先にファクトリーパターンを取得
+
         SetDictionary();
         await LoadEffect();
         assignPlayerTF = AssignPlayersTF;
         teleportSmokeSystem = new ParticleSystem[numOfPlayers];
         spdChagneAuraSystem = new ParticleSystem[numOfPlayers];
-        gameMgr = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameMgr = factory.CreateGameMgr();
 
         isGeneratedSmoke = false;
         isGeneratedSpdAura = false;
@@ -109,8 +114,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
                 }
                 else
                 {
-                    Debug.Log(loadFailMsg);    //  デバッグ用--------------------------------------
-                    cantLoadEffect = true;
+                    Debug.LogWarning(loadFailMsg + kvps.Key);    //  デバッグ用--------------------------------------
                 }
             }));
         }
@@ -133,10 +137,14 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
                 }
             }
         }
-        else
+        else if(loadedEffects.TryGetValue(EffectName.TELEPORT_SMOKE, out GameObject TeleportSmoke) && TeleportSmoke != null)
         {
             GenerateTeleportSmoke();
             isGeneratedSmoke = true;
+        }
+        else
+        {
+            Debug.LogWarning(teleportSmokeNotGenerate);
         }
     }
     void ReplayEffect(ParticleSystem effect, Vector3 replayPos)    //  エフェクト再再生                       ////  コード保存場所  ////
@@ -177,14 +185,14 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
     {
         GetPlayersMovement();
 
-        if (isGeneratedSpdAura)
+        if (isGeneratedSpdAura && isGeneratedAllSpdChangeAura)
         {
             for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
             {
                 ReplayEffect(spdChagneAuraSystem[playerIndex], Vector3.zero);
             }
         }
-        else
+        else if(loadedEffects.TryGetValue(EffectName.TELEPORT_SMOKE, out GameObject TeleportSmoke) && TeleportSmoke != null)
         {
             GenerateSpdAura();
             isGeneratedSpdAura = true;
@@ -198,7 +206,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
             playerMovement = new PlayerMovement[numOfPlayers];
             for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
             {
-                playerMovement[playerIndex] = players[playerIndex].GetComponent<PlayerMovement>();
+                playerMovement[playerIndex] = players[playerIndex].GetComponent<PlayerMovement>();    //  改善の余地あり?
             }
             defaultPlayerMoveSpd = playerMovement[0].GetDefaultMoveSpeed();    //  プレイヤーのデフォルト移動速度取得 
         }
@@ -220,19 +228,30 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
             else
             {
                 Debug.Log(spdChangingFailMsg);    //  デバッグ用--------------------------------------
-                                                  //  エラーハンドリング追加---------------------------------------
+                isGeneratedAllSpdChangeAura = false;    //  エラーハンドリング追加---------------------------------------
             }
-            spdChagneAuraSystem[playerIndex] = spdChagneAuraEntity.GetComponent<ParticleSystem>();
+            if (isGeneratedAllSpdChangeAura)
+            {
+                spdChagneAuraSystem[playerIndex] = spdChagneAuraEntity.GetComponent<ParticleSystem>();
+            }
         }
     }
     void StopSpdChangeAura()    //  エフェクトを非表示にする
     {
-        foreach (ParticleSystem p in spdChagneAuraSystem)
+        if(isGeneratedAllSpdChangeAura)
         {
-            if (p != null)
-            {
-                p.Stop();
-            }
+            StopEffect(spdChagneAuraSystem);
+        }
+        else
+        {
+            isGeneratedAllSpdChangeAura = true;
+        }
+    }
+    void StopEffect(ParticleSystem[] effect)    //  エフェクト一時停止
+    {
+        foreach(ParticleSystem p in effect)
+        {
+            p?.Stop();
         }
     }
 }
