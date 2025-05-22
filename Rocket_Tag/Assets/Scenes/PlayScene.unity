@@ -591,6 +591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd1fad045af649e4cb662552cb8ee8fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManagerObj: {fileID: 0}
   isEndAnim: 0
 --- !u!1 &248619062
 GameObject:
@@ -1740,7 +1741,6 @@ MonoBehaviour:
   enogu3: {fileID: 517522746}
   enogu4_1: {fileID: 104557870}
   enogu4_2: {fileID: 779045566}
-  gameManager: {fileID: 0}
 --- !u!114 &804079635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3986,7 +3986,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapPrefabs:
   - {fileID: 7542247619924402807, guid: 0f3023ea1e0568d4ca8bbfbc7f05d1de, type: 3}
-  - {fileID: 7796018953007083276, guid: 2c12da63309384b42b07311fb43ba58a, type: 3}
   spawnPoint: {fileID: 1730321846}
 --- !u!1 &1768455695
 GameObject:
