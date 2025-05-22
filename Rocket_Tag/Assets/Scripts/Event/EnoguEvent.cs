@@ -25,8 +25,8 @@ public class EnoguEvent : MonoBehaviourPun
             PhotonView pv = player.GetComponent<PhotonView>();
             if (pv != null)
             {
-                pv.RPC("BlindEffect", pv.Owner, true);
-                pv.RPC("positioning", pv.Owner);
+                photonView.RPC("BlindEffect", pv.Owner, true);
+                photonView.RPC("positioning", pv.Owner);
             }
         }
     }*/
@@ -49,8 +49,8 @@ public class EnoguEvent : MonoBehaviourPun
     [PunRPC]
     void BlindEffect(bool isBool)
     {
-        enogu4_1.SetActive(isBool);
-        enogu4_2.SetActive(isBool);
+        enogu4_1.SetActive(false);
+        enogu4_2.SetActive(false);
         blindEffect.SetActive(isBool);
     }
 
