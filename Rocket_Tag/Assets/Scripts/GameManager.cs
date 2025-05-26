@@ -19,9 +19,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI infoText;          // playerCntTextの説明文
     [SerializeField] GameObject eventTextObj;
     [SerializeField] TextMeshProUGUI eventText;
+    [SerializeField] RocketEffect rocketEffect;           // ロケットエフェクトのインスタンス    for debug--------------------------
 
     //[SerializeField] GameObject rocketEffect;           // ロケットのエフェクト管理オブジェクト
-    //[SerializeField] RocketEffect rocketEffect;           // ロケットエフェクトのインスタンス    for debug--------------------------
     private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
     private bool isGameStarted = false;                 // ゲームが開始されたかどうかのフラグ
     private bool hasPlayedCountdownSE = false;          // カウントダウンSEが再生されたかどうかの判定
@@ -114,6 +114,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             ChooseRocketPlayer();
             StartCoroutine(eventManager.TriggerRandomEvent());
+            rocketEffect.Rocket = GameObject.Find("Rocekt").transform;
             //StartCoroutine(CheckOverTime());
             //StartCoroutine(CheckRocketCnt());
         }

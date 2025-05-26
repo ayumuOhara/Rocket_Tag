@@ -353,7 +353,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef2489e6bbb497142956196320163519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocket: {fileID: 0}
 --- !u!4 &188355717
 Transform:
   m_ObjectHideFlags: 0
@@ -1817,6 +1816,7 @@ MonoBehaviour:
   infoText: {fileID: 1087369349}
   eventTextObj: {fileID: 658329895}
   eventText: {fileID: 658329897}
+  rocketEffect: {fileID: 188355716}
 --- !u!4 &846908940
 Transform:
   m_ObjectHideFlags: 0
@@ -3924,6 +3924,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1650481732}
   m_CullTransparentMesh: 1
+--- !u!1 &1720847317
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1720847318}
+  m_Layer: 0
+  m_Name: Factory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1720847318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720847317}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.806046, y: 11.948408, z: 12.303418}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1730321844
 GameObject:
   m_ObjectHideFlags: 0
@@ -4671,3 +4702,4 @@ SceneRoots:
   - {fileID: 214332419}
   - {fileID: 1730321846}
   - {fileID: 463443002}
+  - {fileID: 1720847318}
