@@ -14,37 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: PlayerSkin
   m_GUID: f7bd5e203fd8b3141849db93df95168c
-  m_SerializeEntries:
-  - m_GUID: aff2fc3c7481bbe49a9e0c0a07f6362a
-    m_Address: Bear
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b3356faa1e6e13144a36154c73012aa8
-    m_Address: Freeza
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bf71dab401755c14c841c734aa6c50fa
-    m_Address: Eringi
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d4aa6d139f9f48447b13ca0e86f658f8
-    m_Address: RedCap
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f242e7ceaea00904584a979afff1f25f
-    m_Address: Star
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fd3f681b423f200498041e0692d14194
-    m_Address: StrawHat
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 00bb6419600732146a204053851d83b5, type: 2}
   m_SchemaSet:

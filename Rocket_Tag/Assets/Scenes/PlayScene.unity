@@ -353,7 +353,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef2489e6bbb497142956196320163519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocket: {fileID: 0}
 --- !u!4 &188355717
 Transform:
   m_ObjectHideFlags: 0
@@ -1843,12 +1842,14 @@ MonoBehaviour:
   eventManager: {fileID: 804079631}
   timeManager: {fileID: 1888650126}
   instantiatePlayer: {fileID: 897190058}
+  rankManager: {fileID: 0}
   playerReady: {fileID: 0}
   playerCntText: {fileID: 411568704}
   infoText: {fileID: 1087369349}
   eventTextObj: {fileID: 658329895}
   eventText: {fileID: 658329897}
   InGameUI: {fileID: 528731494}
+  rocketEffect: {fileID: 188355716}
 --- !u!4 &846908940
 Transform:
   m_ObjectHideFlags: 0
