@@ -1817,6 +1817,7 @@ MonoBehaviour:
   infoText: {fileID: 1087369349}
   eventTextObj: {fileID: 658329895}
   eventText: {fileID: 658329897}
+  InGameUI: {fileID: 528731494}
 --- !u!4 &846908940
 Transform:
   m_ObjectHideFlags: 0
