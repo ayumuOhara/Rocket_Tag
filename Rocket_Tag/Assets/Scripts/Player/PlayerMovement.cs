@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     float stunTime = 1.5f;                                  // スタン時間
     bool isDash = false;                                    // ダッシュ中か
+    bool isReverse = false;                                 // 操作反転中か
 
     Animator animator;
     [SerializeField] private AudioSource footstepAudioSource; // 足音用のAudioSource
@@ -69,6 +70,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
 
+        if(isReverse)
+        {
+            x *= -1;
+            z *= -1;
+        }
+        else
+        {
+            x *= 1;
+            z *= 1;
+        }
+        
         Vector3 movingDirection = new Vector3(x, 0, z);
         // 斜め移動が速くならないようにする
         movingDirection.Normalize();
@@ -201,6 +213,18 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         yield return new WaitForSeconds(stunTime);
         photonView.RPC("SetIsStun", RpcTarget.All, false);
+
+        yield break;
+    }
+
+    // 操作反転
+    public IEnumerator ReverseControll()
+    {
+        isReverse = true;
+
+        yield return new WaitForSeconds(stunTime);
+
+        isReverse = false;
 
         yield break;
     }
