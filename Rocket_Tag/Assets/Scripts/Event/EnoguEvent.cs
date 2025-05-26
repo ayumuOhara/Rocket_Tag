@@ -14,31 +14,21 @@ public class EnoguEvent : MonoBehaviourPun
 
     [SerializeField] GameManager gameManager;
 
-    public void PaintOpen()
+    public void PaintOpen()//成功例
     {
-        Debug.Log("受け取り");
-
         List<GameObject> alivePlayers = gameManager.GetPlayerList();
 
         foreach (GameObject player in alivePlayers)
         {
             AudioManager.Instance.PlaySE(SEManager.SEType.Event_ink); //インクSE
-            Debug.Log("発動しなきゃpvがnull");
             PhotonView pv = player.GetComponent<PhotonView>();
             if (pv != null)
             {
-                Debug.Log("絵の具発動");
                 photonView.RPC("BlindEffect", pv.Owner, true);
                 photonView.RPC("positioning", pv.Owner);
             }
         }
     }
-    /*public void PaintOpen()//全体付与成功例
-    {
-        Debug.Log("受け取り");
-        photonView.RPC("BlindEffect", RpcTarget.All, true);
-        photonView.RPC("positioning", RpcTarget.All);
-    }*/
 
     [PunRPC]
     void positioning()
