@@ -225,7 +225,6 @@ internal class RocketEffect : MonoBehaviour                                     
                 if (loadHandle[tmpKvp.Key].Status == AsyncOperationStatus.Succeeded)
                 {
                     loadedEffect[tmpKvp.Key] = loadHandle[tmpKvp.Key].Result;
-                    Debug.Log(loadedEffect[tmpKvp.Key]);
                 }
                 else
                 {
