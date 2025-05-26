@@ -3,17 +3,6 @@ using UnityEngine;
 public class StikcyZone : MonoBehaviour
 {
     bool onPlayer = false;
-    float time = 0;
-
-    private void Update()
-    {
-        time += Time.deltaTime;
-        Debug.Log(time);
-        if(time > 5.0f && !onPlayer)
-        {
-            Destroy(gameObject);
-        }
-    }
 
     private void OnTriggerStay(Collider other)
     {
