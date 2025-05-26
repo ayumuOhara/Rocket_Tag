@@ -97,12 +97,14 @@ internal class PrepareRocket : IEffectState    //  Ÿ‚ÌƒƒPƒbƒg‚ğ—pˆÓ‚µ‚Ä‚¢‚éó‘
     }
     public void Update(RocketEffect rocketEffect)
     {
-        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.SEARCH_ROCKET);
-        rocketEffect.CallRocketEffectProcess(RocketEffectProcess.SEARCH_ROCKET);
+        if(rocketEffect.IsFindNextRocket)
+        {
+            rocketEffect.ChangeState(new FirstStage());
+        }
     }
     public void Exit(RocketEffect rocketEffect)
     {
-
+        rocketEffect.IsFindNextRocket = false;
     }
 }                                                                                                  ////  State‹æI—¹@@////
 internal class RocketEffect : MonoBehaviour                                                        ////  ƒƒPƒbƒgƒGƒtƒFƒNƒg§Œä  ////
@@ -144,9 +146,9 @@ internal class RocketEffect : MonoBehaviour                                     
 
     float smokeDelTime;
     int rocketStage;
-    bool didFalsed;    //  ƒƒPƒbƒg¶¬‚Éƒ^ƒCƒ~ƒ“ƒO‚ğ‡‚í‚¹‚é‚½‚ß‚Ìƒtƒ‰ƒO
-    bool isEffectLoaded;
+    //bool didFalsed;    //  ƒƒPƒbƒg¶¬‚Éƒ^ƒCƒ~ƒ“ƒO‚ğ‡‚í‚¹‚é‚½‚ß‚Ìƒtƒ‰ƒO
     bool isInitialized;
+    bool isFindNextRocket;
     const string rocketNotFound = "Error:Rocket Not Found";    //  msg for debug--------------
     const string rocketIsAssginedThis = "Rocket variable is assigned [this.transform]";    //  msg for debug--------------
     const string couldntGetTimemgr = "Error:Couldn't Get timeMgr";    //  msg for debug---------------------
@@ -158,8 +160,9 @@ internal class RocketEffect : MonoBehaviour                                     
     { get { return timeMgr; } }
     internal int _RocketStage
     { get { return rocketStage; } }
-    internal bool _DidFalsed
-    { get { return didFalsed; } }                                              ////  éŒ¾‹æI—¹  ////
+    internal bool IsFindNextRocket
+    { get { return isFindNextRocket; } set { isFindNextRocket = value; } }                                                          ////  éŒ¾‹æI—¹  ////
+
 
     void Start()
     {
@@ -191,6 +194,7 @@ internal class RocketEffect : MonoBehaviour                                     
 
         smokeDelTime = 12;
         rocketStage = 0;
+        isFindNextRocket = false;
 
         await WaitTillNullTF(rocket);
         ChangeState(new FirstStage());
@@ -247,7 +251,6 @@ internal class RocketEffect : MonoBehaviour                                     
         {
             {RocketEffectProcess.GENERATE_PLUNK, GeneratePlume },
             {RocketEffectProcess.SMOKE_DIFFUSION, SmokeDiffusion},
-            {RocketEffectProcess.SEARCH_ROCKET, SearchRocket},
         };
         loadedEffect = new Dictionary<RocketEffectName, GameObject>
         {
@@ -269,12 +272,15 @@ internal class RocketEffect : MonoBehaviour                                     
     }
     internal void ChangeState(IEffectState newState)    //  ó‘Ô‘JˆÚ
     {
-        if (currentState != null)
+        if (rocket != null)
         {
-            currentState.Exit(this);
+            if (currentState != null)
+            {
+                currentState.Exit(this);
+            }
+            currentState = newState;
+            currentState.Enter(this);
         }
-        currentState = newState;
-        currentState.Enter(this);
     }
     internal void CallRocketEffectProcess(RocketEffectProcess process)    //  ŠÖ”ŒÄ‚Ño‚µ
     {
@@ -300,14 +306,6 @@ internal class RocketEffect : MonoBehaviour                                     
             Debug.Log("TimeOut");    //  msg for debug----------------
             Destroy(smokeEntity.gameObject);
             ChangeState(new PrepareRocket());
-        }
-    }
-    void SearchRocket()    //  ƒƒPƒbƒg‚ğ’Tõ‚µ‚Äæ“¾‚·‚é  
-    {
-        rocket = GameObject.Find("Rocket").GetComponent<Transform>();
-        if(currentState is PrepareRocket)
-        {
-            ChangeState(new FirstStage());
         }
     }
     bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)    //  •Ï”‚Ìƒkƒ‹ƒ`ƒFƒbƒNAŠëŒ¯«‚ª‚ ‚Á‚½ê‡‹­§ƒNƒ‰ƒbƒVƒ…
