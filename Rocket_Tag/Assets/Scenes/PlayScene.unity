@@ -1842,7 +1842,7 @@ MonoBehaviour:
   eventManager: {fileID: 804079631}
   timeManager: {fileID: 1888650126}
   instantiatePlayer: {fileID: 897190058}
-  rankManager: {fileID: 0}
+  rankManager: {fileID: 1419296573}
   playerReady: {fileID: 0}
   playerCntText: {fileID: 411568704}
   infoText: {fileID: 1087369349}
@@ -3390,6 +3390,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1419296572
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1419296574}
+  - component: {fileID: 1419296573}
+  m_Layer: 0
+  m_Name: RankManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1419296573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419296572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0ae76d2bdbbb454f8c13f815d6f05b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
+  rankText: {fileID: 0}
+  playerRank: 0
+--- !u!4 &1419296574
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419296572}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.8758193, y: 7.0202255, z: -7.106672}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1576337748
 GameObject:
   m_ObjectHideFlags: 0
@@ -4710,3 +4757,4 @@ SceneRoots:
   - {fileID: 1730321846}
   - {fileID: 237971095}
   - {fileID: 463443002}
+  - {fileID: 1419296574}
