@@ -7,8 +7,13 @@ public class SeedBasedMapSpawner : MonoBehaviourPunCallbacks
 {
     StartCamera startCamera;
 
+    [Header("マップのプレハブを登録")]
     public GameObject[] mapPrefabs;
     public Transform spawnPoint;
+
+    [Header("MapA用の追加オブジェクト")]
+    public GameObject specialObjectPrefab;
+    public Transform specialObjectSpawnPoint;
 
     const string ROOM_SEED_KEY = "RoomSeed";
     private bool mapSpawned = false;
@@ -56,7 +61,20 @@ public class SeedBasedMapSpawner : MonoBehaviourPunCallbacks
         Debug.Log($"[同期済] マップ「{selected.name}」を生成しました。");
         mapSpawned = true;
 
-        startCamera = GameObject.Find("WaitCamera").GetComponent<StartCamera>();
-        startCamera.Initialize();
+        // MapA の時だけ特定のオブジェクトを表示
+        if (selected.name.Contains("MapA") && specialObjectPrefab != null)
+        {
+            Vector3 spawnPos = specialObjectSpawnPoint != null ? specialObjectSpawnPoint.position : Vector3.zero;
+
+            // Y軸90度回転を適用
+            Quaternion rotation = Quaternion.Euler(0, 90, 0);
+
+            Instantiate(specialObjectPrefab, spawnPos, rotation);
+            Debug.Log("MapA 用の特別なオブジェクトをY軸90度回転で表示しました。");
+        }
+
+
+        startCamera = GameObject.Find("WaitCamera")?.GetComponent<StartCamera>();
+        startCamera?.Initialize();
     }
 }
