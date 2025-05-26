@@ -250,6 +250,14 @@ internal class RocketEffect : MonoBehaviour                                     
             {RocketEffectProcess.SMOKE_DIFFUSION, SmokeDiffusion},
             {RocketEffectProcess.SEARCH_ROCKET, SearchRocket},
         };
+        loadedEffect = new Dictionary<RocketEffectName, GameObject>
+        {
+            {RocketEffectName.FIRST_ROCKET_FRAME, null},
+            {RocketEffectName.SECOND_ROCKET_FRAME, null},
+            {RocketEffectName.THIRD_ROCKET_FRAME, null},
+            {RocketEffectName.LAST_ROCKET_FRAME, null},
+            {RocketEffectName.FRAME_SMOKE, null},
+        };
         effectNameMap = new Dictionary<RocketEffectName, string>
         {
             {RocketEffectName.FIRST_ROCKET_FRAME, "FirstRocketFrame" },
