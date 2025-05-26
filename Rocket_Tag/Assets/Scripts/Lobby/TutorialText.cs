@@ -24,4 +24,20 @@ public class TutorialText : MonoBehaviour
         twoMain.text = "マップ内では、定期的にイベントが発生。\r\nプレイヤーにランダムな効果を与える。\r\n何が起こるかは君次第‼";//ここに入力
         threeMain.text = "ルールは時間経過で鬼が死亡していく鬼ごっこ式バトルロワイヤル。\r\n相手に接触することで、鬼の印の\r\nロケットを擦り付けて生き延びよう。";//ここに入力
     }
+
+    public void NewText(Text mainText, int N)
+    {
+        if(N == 1)
+        {
+            mainText.text = "操作方法";//ここに入力
+        }
+        else if(N == 2)
+        {
+            mainText.text = "イベントについて";//ここに入力
+        }
+        else if(N == 3)
+        {
+            mainText.text = "このゲームについて";//ここに入力
+        }
+    }
 }
