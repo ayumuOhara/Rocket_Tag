@@ -11,6 +11,7 @@ public class PageSwitcher : MonoBehaviour
     [SerializeField] private Text pageText;
     [SerializeField] private Text MainText;
 
+    [SerializeField] private TutorialText tutorialText;
 
     private GameObject currentSection;
 
@@ -53,7 +54,7 @@ public class PageSwitcher : MonoBehaviour
     private void ShowFirstSection()
     {
         currentSection = firstSection; // 現在のセクションを更新
-        //NewText();
+        tutorialText.NewText(MainText, 1);
         pageText.text = "1/3";
 
         forwardButton.gameObject.SetActive(true); // 次へ進むボタンを表示
@@ -67,7 +68,7 @@ public class PageSwitcher : MonoBehaviour
     private void ShowSecondSection()
     {
         currentSection = secondSection; // 現在のセクションを更新
-        //NewText();
+        tutorialText.NewText(MainText, 2);
         pageText.text = "2/3";
 
         forwardButton.gameObject.SetActive(true); // 次へ進むボタンを表示
@@ -81,7 +82,7 @@ public class PageSwitcher : MonoBehaviour
     private void ShowThirdSection()
     {
         currentSection = thirdSection; // 現在のセクションを更新
-        //NewText();
+        tutorialText.NewText(MainText, 3);
         pageText.text = "3/3";
 
         forwardButton.gameObject.SetActive(false); // 次へ進むボタンを非表示
