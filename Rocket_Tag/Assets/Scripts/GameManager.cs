@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] EventManager eventManager;
     [SerializeField] TimeManager timeManager;
     [SerializeField] InstantiatePlayer instantiatePlayer;
+    [SerializeField] PlayerRankManager rankManager;
+
     [SerializeField] PlayerReady playerReady;
     [SerializeField] TextMeshProUGUI playerCntText;     // Ready完了しているプレイヤー数
     [SerializeField] TextMeshProUGUI infoText;          // playerCntTextの説明文
@@ -166,7 +168,15 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("生存人数が１人になったのでゲームを終了します");
                 PhotonNetwork.Disconnect();
-                SceneFadeManager.Instance.LoadScene("Result", 0.2f, 0.3f);
+                if(rankManager.playerRank == 1)
+                {
+                    SceneFadeManager.Instance.LoadScene("Result", 0.2f, 0.3f);
+                }
+                else
+                {
+                    SceneFadeManager.Instance.LoadScene("Lobby", 0.2f, 0.3f);
+                }
+
                 yield break;
             }
             yield return null;

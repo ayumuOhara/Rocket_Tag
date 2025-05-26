@@ -222,7 +222,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         isReverse = true;
 
-        yield return new WaitForSeconds(stunTime);
+        yield return new WaitForSeconds(3);
 
         isReverse = false;
 
