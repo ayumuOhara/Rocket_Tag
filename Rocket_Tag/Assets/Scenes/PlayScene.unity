@@ -3936,7 +3936,7 @@ GameObject:
   - component: {fileID: 1730321845}
   - component: {fileID: 1730321847}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Map_Spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3987,6 +3987,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapPrefabs:
   - {fileID: 7542247619924402807, guid: 0f3023ea1e0568d4ca8bbfbc7f05d1de, type: 3}
+  - {fileID: 7796018953007083276, guid: 2c12da63309384b42b07311fb43ba58a, type: 3}
   spawnPoint: {fileID: 1730321846}
 --- !u!1 &1768455695
 GameObject:
