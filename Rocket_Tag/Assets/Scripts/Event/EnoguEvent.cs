@@ -12,7 +12,7 @@ public class EnoguEvent : MonoBehaviourPun
     [SerializeField] GameObject enogu4_1;               // 目つぶしイベント用UI
     [SerializeField] GameObject enogu4_2;               // 目つぶしイベント用UI
 
-    /*[SerializeField] GameManager gameManager;
+    [SerializeField] GameManager gameManager;
 
     public void PaintOpen()
     {
@@ -22,20 +22,22 @@ public class EnoguEvent : MonoBehaviourPun
 
         foreach (GameObject player in alivePlayers)
         {
+            Debug.Log("発動しなきゃpvがnull");
             PhotonView pv = player.GetComponent<PhotonView>();
             if (pv != null)
             {
-                pv.RPC("BlindEffect", pv.Owner, true);
-                pv.RPC("positioning", pv.Owner);
+                Debug.Log("絵の具発動");
+                photonView.RPC("BlindEffect", pv.Owner, true);
+                photonView.RPC("positioning", pv.Owner);
             }
         }
-    }*/
-    public void PaintOpen()//全体付与成功例
+    }
+    /*public void PaintOpen()//全体付与成功例
     {
         Debug.Log("受け取り");
         photonView.RPC("BlindEffect", RpcTarget.All, true);
         photonView.RPC("positioning", RpcTarget.All);
-    }
+    }*/
 
     [PunRPC]
     void positioning()
@@ -49,8 +51,8 @@ public class EnoguEvent : MonoBehaviourPun
     [PunRPC]
     void BlindEffect(bool isBool)
     {
-        enogu4_1.SetActive(isBool);
-        enogu4_2.SetActive(isBool);
+        enogu4_1.SetActive(false);
+        enogu4_2.SetActive(false);
         blindEffect.SetActive(isBool);
     }
 

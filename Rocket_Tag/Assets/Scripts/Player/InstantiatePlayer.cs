@@ -59,26 +59,34 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
             UpdatePlayerCount();
         }
 
-        Application.targetFrameRate = 60;
-        // プレイヤーをリスポーン地点に生成
-        GameObject player = PhotonNetwork.Instantiate("Player", respawnPoint.position, Quaternion.identity);
-
-        //debuger.SetComponents(player);
-        skinGanarater.SkinGenerateWrapper(SkinGenerater.SkinGenerateProcces.IN_GAME_GENERATE);
-        // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
-        gameManager.playerController = player.GetComponent<PlayerController>();
-        gameManager.setPlayerBool = player.GetComponent<SetPlayerBool>();
+        StartCoroutine(WaitCameraAnimEnd());
     }
 #endif
 
-    void Update()
+    IEnumerator WaitCameraAnimEnd()
     {
-        StartCamera startCamera = waitCamera.GetComponent<StartCamera>();
-        if(startCamera != null && startCamera.isEndAnim)
+        while (true)
         {
-            waitCamera.SetActive(false);
-            playerCamera.SetActive(true);
-        }
+            StartCamera startCamera = waitCamera.GetComponent<StartCamera>();
+            if (startCamera != null && startCamera.isEndAnim)
+            {
+                // プレイヤーをリスポーン地点に生成
+                GameObject player = PhotonNetwork.Instantiate("Player", respawnPoint.position, Quaternion.identity);
+
+                //debuger.SetComponents(player);
+                skinGanarater.SkinGenerateWrapper(SkinGenerater.SkinGenerateProcces.IN_GAME_GENERATE);
+                // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
+                gameManager.playerController = player.GetComponent<PlayerController>();
+                gameManager.setPlayerBool = player.GetComponent<SetPlayerBool>();
+
+                waitCamera.SetActive(false);
+                playerCamera.SetActive(true);
+
+                yield break;
+            }
+
+            yield return null;
+        }        
     }
 
     // プレイヤーがルームから退出したとき

@@ -3,7 +3,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static Hook;
 using static UnityEngine.InputManagerEntry;
 
 public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト

@@ -99,8 +99,8 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             rocketObj.SetActive(true);
             compas.SetActive(true);
             Debug.Log("ÉçÉPÉbÉgÇéÛÇØéÊÇËÇ‹Ç∑");
-            rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
-            rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.GENERATE_FRAMES);
+            rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.SEARCH_ROCKET);
+            rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);
 
             if (photonView.IsMine && SceneManager.GetActiveScene().name == "PlayScene")
             {
