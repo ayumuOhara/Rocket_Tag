@@ -242,15 +242,23 @@ internal class RocketEffect : MonoBehaviour                                     
             await Task.Yield();
         }
     }
-    void SetDictionary()
+    void SetDictionary()    //  辞書が多変数を初期化
     {
         rocketEffectProcess = new Dictionary<RocketEffectProcess, Action>
         {
             {RocketEffectProcess.GENERATE_PLUNK, GeneratePlume },
             {RocketEffectProcess.SMOKE_DIFFUSION, SmokeDiffusion},
-            //{RocketEffectProcess.GENERATE_FRAMES, GenerateFrame },
-            //{RocketEffectProcess.GENERATE_FRAMES, GenerateFrame },
+            {RocketEffectProcess.SEARCH_ROCKET, SearchRocket},
         };
+        effectNameMap = new Dictionary<RocketEffectName, string>
+        {
+            {RocketEffectName.FIRST_ROCKET_FRAME, "FirstRocketFrame" },
+            {RocketEffectName.SECOND_ROCKET_FRAME, "SecondRocketFrame" },
+            {RocketEffectName.THIRD_ROCKET_FRAME, "ThirdRocketFrame" },
+            {RocketEffectName.LAST_ROCKET_FRAME, "LastRocketFrame" },
+            {RocketEffectName.FRAME_SMOKE, "FrameSmoke" },
+        };
+
     }
     internal void ChangeState(IEffectState newState)    //  状態遷移
     {
@@ -287,7 +295,7 @@ internal class RocketEffect : MonoBehaviour                                     
             ChangeState(new PrepareRocket());
         }
     }
-    void SaerchRocket()    //  ロケットを探索して取得する  
+    void SearchRocket()    //  ロケットを探索して取得する  
     {
         rocket = GameObject.Find("Rocket").GetComponent<Transform>();
         if(currentState is PrepareRocket)
