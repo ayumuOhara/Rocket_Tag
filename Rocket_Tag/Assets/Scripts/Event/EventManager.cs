@@ -160,7 +160,7 @@ public class EventManager : MonoBehaviourPunCallbacks
     // 目つぶしイベント
     IEnumerator BlindEvent()
     {
-        AudioManager.Instance.PlaySE(SEManager.SEType.Event_ink); //インクSE
+        //AudioManager.Instance.PlaySE(SEManager.SEType.Event_ink); //インクSE
         //List<GameObject> playerList = gameManager.GetPlayerList();
         float eventTime = 10.0f;
         enoguEvent.PaintOpen();
