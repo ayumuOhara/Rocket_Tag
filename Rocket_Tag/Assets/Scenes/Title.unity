@@ -1877,7 +1877,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2db9dd927b2feb94b81edb1a262b4367, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkTraverseSpeed: 7.5
+  linkTraverseSpeed: 8
 --- !u!1 &716665916
 GameObject:
   m_ObjectHideFlags: 0
@@ -2624,7 +2624,7 @@ MonoBehaviour:
   m_StartTransform: {fileID: 0}
   m_EndTransform: {fileID: 0}
   m_Activated: 1
-  m_Width: 4.96
+  m_Width: 3.5
   m_CostModifier: 5.05
   m_IsOverridingCost: 0
   m_Bidirectional: 1
@@ -2927,7 +2927,7 @@ MonoBehaviour:
   m_StartTransform: {fileID: 0}
   m_EndTransform: {fileID: 0}
   m_Activated: 1
-  m_Width: 4.96
+  m_Width: 3.5
   m_CostModifier: 5.05
   m_IsOverridingCost: 0
   m_Bidirectional: 1
@@ -4130,7 +4130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2db9dd927b2feb94b81edb1a262b4367, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkTraverseSpeed: 7.5
+  linkTraverseSpeed: 8
 --- !u!1 &1625139192
 GameObject:
   m_ObjectHideFlags: 0
