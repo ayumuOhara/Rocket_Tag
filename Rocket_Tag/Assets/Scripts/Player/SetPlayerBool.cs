@@ -106,7 +106,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             rocketEffect.IsFindNextRocket = true;
             //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.SEARCH_ROCKET);
             //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);
-            rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
+            //rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
 
             if (photonView.IsMine && SceneManager.GetActiveScene().name == "PlayScene")
             {
