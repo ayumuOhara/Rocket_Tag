@@ -320,8 +320,10 @@ internal class RocketEffect : MonoBehaviour                                     
     {
         if ((smokeDelTime -= Time.deltaTime) > 0)
         {
+            float smokeDiffuseSpd = 5.0f;
             smokeColorOverLifeTime.color = smokeGradient;
-            smokeEntity.transform.localScale = Vector3.Scale(smokeEntity.transform.localScale, smokeDiffusion);
+            //smokeEntity.transform.localScale = Vector3.Scale(smokeEntity.transform.localScale, smokeDiffusion);
+            smokeEntity.transform.localScale = Vector3.Lerp(smokeEntity.transform.localScale, smokeEffectEndScale, smokeDiffuseSpd * Time.deltaTime);
         }
         else
         {
