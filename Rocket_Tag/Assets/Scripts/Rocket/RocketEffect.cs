@@ -307,6 +307,10 @@ internal class RocketEffect : MonoBehaviour                                     
         Debug.Log("rocketStage" + rocketStage);
         if (rocketStage == 3)
         {
+            if(smokeEntity != null)
+            {
+                Destroy(smokeEntity);
+            }
             smokeEntity = Instantiate(loadedEffect[RocketEffectName.FRAME_SMOKE]);
             smokePS = smokeEntity.GetComponent<ParticleSystem>();
             smokeMainModule = smokePS.main;
@@ -314,7 +318,7 @@ internal class RocketEffect : MonoBehaviour                                     
             smokeColorOverLifeTime = smokePS.colorOverLifetime;
             smokeEntity.transform.position = rocket.position;
             rocketStage = 0;
-            Debug.Log("rocket smoke generate");
+            Debug.Log("rocket smoke generate and father is" + smokeEntity.transform.parent.position);
         }
     }
     void SmokeDiffusion()    //  煙幕拡散、煙幕をデストロイしたたらPrepareRocketStateに移動
