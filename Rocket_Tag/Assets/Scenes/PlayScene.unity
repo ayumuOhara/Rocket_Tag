@@ -2125,7 +2125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debuger: {fileID: 0}
-  skinGanarater: {fileID: 1958307098}
+  skinGanarater: {fileID: 0}
   eventEffect: {fileID: 804079635}
   playerCamera: {fileID: 1037090923}
   waitCamera: {fileID: 236845388}
@@ -4600,8 +4600,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1958307095}
-  - component: {fileID: 1958307098}
   - component: {fileID: 1958307097}
+  - component: {fileID: 1958307098}
   m_Layer: 0
   m_Name: SkinGenerater
   m_TagString: Untagged
@@ -4655,16 +4655,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1958307094}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2197e997e4c52749b2d2358bea683a2, type: 3}
+  m_Script: {fileID: 11500000, guid: c9a5887bc6abb8c448f15af41d2ab1da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSkinPrefab:
-  - {fileID: 1605695221224747473, guid: 2307fa5bbc76c0542b142fa7cad3bb6c, type: 3}
-  - {fileID: 4267768638012116440, guid: f2ab18b37acbe6a40ad7e4dd1dfc2420, type: 3}
-  - {fileID: 7609614381556733966, guid: abe266c1109e1d047aae7692b5428a9f, type: 3}
-  - {fileID: 7602658898106166659, guid: eb8ede19ab2471c4fb2b64260a08b916, type: 3}
-  - {fileID: 8792783436011826969, guid: f36d68458b37ab94a9a4aa0e61df23b5, type: 3}
-  - {fileID: 4612750710115207436, guid: aca2377b684434e4f9f3e57b7c3afb20, type: 3}
 --- !u!1 &2012229855
 GameObject:
   m_ObjectHideFlags: 0
