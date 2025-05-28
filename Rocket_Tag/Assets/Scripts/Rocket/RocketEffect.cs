@@ -19,7 +19,7 @@ internal class FirstStage : IEffectState    //  ロケット1段階目
     public void Enter(RocketEffect rocketEffect)
     {
         //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.GENERATE_FRAMES);    //  1段階目のエフェクト生成
-        rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
+        //rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
         Debug.Log("FirstStage");
     }
     public void Update(RocketEffect rocketEffect)
@@ -150,7 +150,7 @@ internal class RocketEffect : MonoBehaviour                                     
 
     float smokeDelTime;
     int rocketStage;
-    //bool didFalsed;    //  ロケット生成にタイミングを合わせるためのフラグ
+    bool isStartTime;  
     bool isInitialized;
     bool isFindNextRocket;
     const string rocketNotFound = "Error:Rocket Not Found";    //  msg for debug--------------
@@ -199,6 +199,7 @@ internal class RocketEffect : MonoBehaviour                                     
         smokeDelTime = 12;
         rocketStage = 0;
         isFindNextRocket = false;
+        isStartTime = true;
 
         await WaitTillNullTF(rocket);
         ChangeState(new FirstStage());
@@ -292,6 +293,7 @@ internal class RocketEffect : MonoBehaviour                                     
     }
     void GeneratePlume()    //  ロケットエフェクトを生成
     {
+        
         if(frameEntity != null)
         {
             Destroy(frameEntity);
