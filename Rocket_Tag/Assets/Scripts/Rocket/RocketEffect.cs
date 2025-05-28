@@ -244,7 +244,7 @@ internal class RocketEffect : MonoBehaviour                                     
     }
     async Task WaitTillNullTF(Transform variable)    //  変数がnullの間ループするタスク
     {
-        while (variable == null)
+        while (rocket == null)
         {
             await Task.Yield();
         }
