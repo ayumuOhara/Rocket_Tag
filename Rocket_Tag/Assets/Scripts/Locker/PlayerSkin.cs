@@ -49,6 +49,7 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
 
     void Initialize()     //  初期化                                                         ////  以下関数区  ////
     {
+        InitializeDicitonry();
         SceneManager.sceneUnloaded += SaveSkinNo;
         skinPrefab = SkinGenerater._SkinPrefab;
         headTF     = GameObject.Find("Head"      ).GetComponent<Transform>();
