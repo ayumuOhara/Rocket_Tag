@@ -161,9 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dccde1ad2bd062242a2ffa8cbd85e9b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knockbackForce: 100
-  upwardForce: 0
-  hitEffectPrefab: {fileID: 5024009746357069194, guid: ec3f674830402cc45bce805cf6493db7, type: 3}
+  hitEffectPrefab: {fileID: 6097779538034126439, guid: b6d3e2e4b8df2964eb3dfce561902f3e, type: 3}
 --- !u!114 &4018401999249896249
 MonoBehaviour:
   m_ObjectHideFlags: 0
