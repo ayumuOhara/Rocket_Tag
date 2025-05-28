@@ -292,6 +292,10 @@ internal class RocketEffect : MonoBehaviour                                     
     }
     void GeneratePlume()    //  ロケットエフェクトを生成
     {
+        if(frameEntity != null)
+        {
+            Destroy(frameEntity);
+        }
         frameEntity = Instantiate(loadedEffect[(RocketEffectName)rocketStage], rocket);
         if(rocketStage != 3)
         {
@@ -310,6 +314,7 @@ internal class RocketEffect : MonoBehaviour                                     
         if (rocketStage == 3)
         {
             smokeEntity = Instantiate(loadedEffect[RocketEffectName.FRAME_SMOKE]);
+            smokeEntity.transform.position = rocket.position;
         }
     }
     void SmokeDiffusion()    //  煙幕拡散、煙幕をデストロイしたたらPrepareRocketStateに移動
