@@ -147,6 +147,7 @@ internal class RocketEffect : MonoBehaviour                                     
     Vector3[] frameEffectScale;
     Vector3 smokeDiffusion;
     Vector3 smokeEffectScale;
+    Vector3 smokeEffectEndScale;
 
     float smokeDelTime;
     int rocketStage;
@@ -159,7 +160,7 @@ internal class RocketEffect : MonoBehaviour                                     
     const string scriptProssesFinish = "RocketEffect.cs's process is stop";    //  msg for debug------------------
     
     internal Transform Rocket
-    { set { rocket = value; } }
+    { set { rocket = value; } }    //  死んだあとエフェクト出ない問題
     internal TimeManager TimeMgr
     { get { return timeMgr; } }
     internal int _RocketStage
@@ -195,6 +196,7 @@ internal class RocketEffect : MonoBehaviour                                     
         frameEffectScale = new Vector3[] { new Vector3(1.21f, 1.21f, 1.21f), new Vector3(0.64f, 0.64f, 0.64f), new Vector3(0.56f, 0.61f, 0.5f), new Vector3(0.74f, 0.74f, 0.74f) };
         smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
         smokeEffectScale = new Vector3(1, 1, 1);
+        smokeEffectEndScale = new Vector3(50f, 50f, 50f);
 
         smokeDelTime = 12;
         rocketStage = 0;
