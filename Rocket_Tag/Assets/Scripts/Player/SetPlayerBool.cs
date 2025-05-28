@@ -102,7 +102,7 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
                 compas.SetActive(true);
             }
             Debug.Log("ÉçÉPÉbÉgÇéÛÇØéÊÇËÇ‹Ç∑");
-            rocketEffect.Rocket = GameObject.Find("Rocket").transform;
+            rocketEffect.Rocket = rocketObj.transform;
             rocketEffect.IsFindNextRocket = true;
             //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.SEARCH_ROCKET);
             //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);
