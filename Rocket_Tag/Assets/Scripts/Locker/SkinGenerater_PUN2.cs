@@ -119,13 +119,25 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
 
     void InstantiateSkin(int skinNo, int location, Transform parent)
     {
+        if (playerSkinPrefab == null || skinNo < 0 || skinNo >= playerSkinPrefab.Length || playerSkinPrefab[skinNo] == null)
+        {
+            Debug.LogError("Invalid skin prefab or index.");
+            return;
+        }
+
         if (location == 0)
         {
+            Transform head = parent.Find("root/Hip/Spine/Head");
+            if (head == null)
+            {
+                Debug.LogError("Head transform not found in player hierarchy.");
+                return;
+            }
+
             GameObject skin = PhotonNetwork.Instantiate(playerSkinPrefab[skinNo].name, Vector3.zero, Quaternion.identity);
-            skin.transform.SetParent(parent.Find("root/Hip/Spine/Head"), false);
+            skin.transform.SetParent(head, false);
         }
     }
-
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         if (changedProps.ContainsKey("SkinNo") && changedProps.ContainsKey("SkinLocation"))
@@ -134,9 +146,13 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
             int location = (int)changedProps["SkinLocation"];
 
             GameObject playerObj = GetPlayerObject(targetPlayer);
-            if (playerObj != null)
+            if (playerObj != null && playerSkinPrefab != null && skinNo >= 0 && skinNo < playerSkinPrefab.Length && playerSkinPrefab[skinNo] != null)
             {
                 InstantiateSkin(skinNo, location, playerObj.transform);
+            }
+            else
+            {
+                Debug.LogWarning("Skin instantiation skipped due to missing data.");
             }
         }
     }
