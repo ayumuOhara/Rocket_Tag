@@ -55,7 +55,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
         if (skillCoolTime == null)
         {
-            skillCoolTime = FindObjectOfType<SkillCoolTime>();
+            skillCoolTime = GameObject.Find("SkillCoolManager").GetComponent<SkillCoolTime>();
         }
     }
 
