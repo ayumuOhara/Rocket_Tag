@@ -14,6 +14,10 @@ public class EnoguEvent : MonoBehaviourPun
 
     [SerializeField] GameManager gameManager;
 
+    bool isInEvent = false;
+    bool isPlayerSurvival = false;
+    bool Close = false;
+
     public void PaintOpen()//ê¨å˜ó·
     {
         List<GameObject> alivePlayers = gameManager.GetPlayerList();
@@ -48,15 +52,51 @@ public class EnoguEvent : MonoBehaviourPun
     [PunRPC]
     void BlindEffect(bool isBool)
     {
-        enogu4_1.SetActive(false);
-        enogu4_2.SetActive(false);
         blindEffect.SetActive(isBool);
+        if (isBool == false)
+        {
+            enogu4_1.SetActive(false);
+            enogu4_2.SetActive(false);
+
+            isInEvent = false;
+        }
+    }
+
+    void Update()
+    {
+        if (isInEvent == false)
+        {
+            if (Close == true)
+            {
+                if (isPlayerSurvival == false)
+                {
+                    Debug.Log("éÄÇÒÇæ");
+                    //èIóπîªíË
+                }
+                Close = false;
+            }
+        }
+        else if (isInEvent == true)
+        {
+            List<GameObject> alivePlayers = gameManager.GetPlayerList();
+
+            foreach (GameObject player in alivePlayers)
+            {
+                PhotonView pv = player.GetComponent<PhotonView>();
+                if (pv.IsMine)
+                {
+                    isPlayerSurvival = true;
+                }
+            }
+            Close = true;
+        }
     }
 
     public void Positioning()
     {
         // 12
         // 43  âÊñ äÑÇË
+        isInEvent = true;
         RectTransform rect;
         int rnd_1 = Random.Range(1,5);
         bool rand = Random.value > 0.5;
