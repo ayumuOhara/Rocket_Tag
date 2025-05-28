@@ -18,7 +18,7 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
         IN_GAME_GENERATE,
     }
 
-    static GameObject[] playerSkinPrefab;
+    public GameObject[] playerSkinPrefab;
     static bool isSkinLoaded = false; // スキンロード完了フラグ
     GameObject skinEntityHead;
     Transform playerTF;
@@ -32,7 +32,7 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
     const string scriptProssesFinish = "SkinGenerater.cs's process is stop";
     static int skinLocation;
 
-    static internal GameObject[] _SkinPrefab { get { return playerSkinPrefab; } }
+    public GameObject[] _SkinPrefab { get { return playerSkinPrefab; } }
 
     void Start()
     {
@@ -46,7 +46,7 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
     {
         if (playerSkinPrefab == null)
         {
-            await PlayerSkinLord();
+            //await PlayerSkinLord();
         }
 
         playerTF = GameObject.Find("Player")?.transform;
@@ -239,29 +239,29 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
         return false;
     }
 
-    async Task PlayerSkinLord()
-    {
-        const int numOfSkin = 7;
-        string[] skinNames = new string[] { "NotWearing", "RedCap", "StrawHat", "Eringi", "Freeza", "Bear", "Star" };
+    //async Task PlayerSkinLord()
+    //{
+    //    const int numOfSkin = 7;
+    //    string[] skinNames = new string[] { "NotWearing", "RedCap", "StrawHat", "Eringi", "Freeza", "Bear", "Star" };
 
-        Task[] task = new Task[numOfSkin];
-        playerSkinPrefab = new GameObject[numOfSkin];
-        AsyncOperationHandle<GameObject>[] playerSkinLordHandle = new AsyncOperationHandle<GameObject>[numOfSkin];
+    //    Task[] task = new Task[numOfSkin];
+    //    playerSkinPrefab = new GameObject[numOfSkin];
+    //    AsyncOperationHandle<GameObject>[] playerSkinLordHandle = new AsyncOperationHandle<GameObject>[numOfSkin];
 
-        for (int i = 0; i < numOfSkin; i++)
-        {
-            playerSkinLordHandle[i] = Addressables.LoadAssetAsync<GameObject>(skinNames[i]);
-            task[i] = playerSkinLordHandle[i].Task;
-        }
+    //    for (int i = 0; i < numOfSkin; i++)
+    //    {
+    //        playerSkinLordHandle[i] = Addressables.LoadAssetAsync<GameObject>(skinNames[i]);
+    //        task[i] = playerSkinLordHandle[i].Task;
+    //    }
 
-        await Task.WhenAll(task);
+    //    await Task.WhenAll(task);
 
-        for (int i = 0; i < numOfSkin; i++)
-        {
-            playerSkinPrefab[i] = playerSkinLordHandle[i].Result;
-            await Task.Yield();
-        }
+    //    for (int i = 0; i < numOfSkin; i++)
+    //    {
+    //        playerSkinPrefab[i] = playerSkinLordHandle[i].Result;
+    //        await Task.Yield();
+    //    }
 
-        isSkinLoaded = true; // スキンロード完了フラグを立てる
-    }
+    //    isSkinLoaded = true; // スキンロード完了フラグを立てる
+    //}
 }
