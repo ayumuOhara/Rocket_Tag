@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq.Expressions;                                                               ////  ロッカーのプレイヤースキン変更スクリプト  ////
 using Unity.VisualScripting;
 using UnityEngine;
@@ -7,7 +8,7 @@ using static UnityEngine.InputManagerEntry;
 
 public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
 {
-    enum PlayerSkinNo    //  プレイヤースキン処理一覧
+    enum PlayerSkinNo    //  プレイヤースキン処理一覧                                        ////  以下宣言区    ////
     {
         NONE,
         RED_CAP,
@@ -26,6 +27,7 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         LEG,
     }
 
+    Dictionary<PlayerSkinNo, string> skinButtonNameMap ;
     GameObject[] skinPrefab;
     GameObject skinEntity;
     Transform headTF;
@@ -38,30 +40,43 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
     Button star;
 
     int tmpSkinNo;
-    int tmpSkinLocation;
+    int tmpSkinLocation;                                                                     ////  宣言区終了  ////
 
-    void Start()
+    void Start()                                                                             ////  以下処理区  ////
     {
         Initialize();
-    }
+    }                                                                                        ////  処理区終了  ////
 
-    void Initialize()     //  初期化
+    void Initialize()     //  初期化                                                         ////  以下関数区  ////
     {
         SceneManager.sceneUnloaded += SaveSkinNo;
         skinPrefab = SkinGenerater._SkinPrefab;
         headTF     = GameObject.Find("Head"      ).GetComponent<Transform>();
-        undress    = GameObject.Find("Undress"   ).GetComponent<Button>();
-        redCap = GameObject.Find("RedCap"    ).GetComponent<Button>();
-        strawHat = GameObject.Find("StrawHat"  ).GetComponent<Button>();
-        eringi = GameObject.Find("Eringi"    ).GetComponent<Button>();
-        freeza = GameObject.Find("Freeza"    ).GetComponent<Button>();
-        bear = GameObject.Find("Bear"      ).GetComponent<Button>();
-        star = GameObject.Find("Star"      ).GetComponent<Button>();
+        undress = GameObject.Find(skinButtonNameMap[PlayerSkinNo.NONE]).GetComponent<Button>();
+        redCap = GameObject.Find(skinButtonNameMap[PlayerSkinNo.RED_CAP]).GetComponent<Button>();
+        strawHat = GameObject.Find(skinButtonNameMap[PlayerSkinNo.STRAW_HAT]).GetComponent<Button>();
+        eringi = GameObject.Find(skinButtonNameMap[PlayerSkinNo.ERINGI]).GetComponent<Button>();
+        freeza = GameObject.Find(skinButtonNameMap[PlayerSkinNo.FREEZA]).GetComponent<Button>();
+        bear = GameObject.Find(skinButtonNameMap[PlayerSkinNo.BEAR]).GetComponent<Button>();
+        star = GameObject.Find(skinButtonNameMap[PlayerSkinNo.STAR]).GetComponent<Button>();
         SetSkinNoByButton();    //  ボタン反応追加
 
         tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", 0);
         tmpSkinLocation = PlayerPrefs.GetInt("PlayerSkinLocation", 0);
         SkinGenerate(tmpSkinLocation);
+    }
+    void InitializeDicitonry()    //  辞書が多変数初期化
+    {
+        skinButtonNameMap = new Dictionary<PlayerSkinNo, string>
+        {
+            {PlayerSkinNo.NONE, "Undress" },
+            {PlayerSkinNo.RED_CAP, "RedCap" },
+            {PlayerSkinNo.STRAW_HAT, "StrawHat"},
+            {PlayerSkinNo.ERINGI, "Eringi"},     //  辞書が多変数初期化途中------------------------------ここまで
+            {PlayerSkinNo.FREEZA, "Freeza"},
+            {PlayerSkinNo.BEAR, "Bear"},
+            {PlayerSkinNo.STAR, "Star"},
+        };
     }
     void SetSkinNoByButton()    //  ボタン押下に応じて、スキン番号変更関数を呼ぶ
     {
@@ -112,17 +127,5 @@ public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
         PlayerPrefs.SetInt("PlayerSkinNo", tmpSkinNo);
         PlayerPrefs.SetInt("PlayerSkinLocation", tmpSkinLocation);
         PlayerPrefs.Save();
-    }
-}
-//void ResourceLord()    //  Resourceフォルダ内のファイルを読み込む
-//{
-//    //if (skinPrefab == null)
-//    //{
-//    //    skinPrefab[1] = Resources.Load<GameObject>("RedCap");
-//    //    skinPrefab[2] = Resources.Load<GameObject>("StrawHat");
-//    //    skinPrefab[3] = Resources.Load<GameObject>("Eringi");
-//    //    skinPrefab[4] = Resources.Load<GameObject>("Freeza");
-//    //    skinPrefab[5] = Resources.Load<GameObject>("Bear");
-//    //    skinPrefab[6] = Resources.Load<GameObject>("Star");
-//    //}
-//}   
+    }                                                                                           ////  関数区終了  ////
+}                                            

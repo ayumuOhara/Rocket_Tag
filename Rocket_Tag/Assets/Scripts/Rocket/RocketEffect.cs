@@ -20,6 +20,7 @@ internal class FirstStage : IEffectState    //  ƒƒPƒbƒg1’iŠK–Ú
     {
         //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.GENERATE_FRAMES);    //  1’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
         rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
+        Debug.Log("FirstStage");
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -39,6 +40,7 @@ internal class SecondStage : IEffectState    //  ƒƒPƒbƒg2’iŠK–Ú
     {
         //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.GENERATE_FRAMES);  //  2’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
         rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
+        Debug.Log("SecondStage");
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -58,6 +60,7 @@ internal class ThirdStage : IEffectState    //  ƒƒPƒbƒg3’iŠK–Ú
     {
         //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.GENERATE_FRAMES);    //  3’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
         rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
+        Debug.Log("ThirdStage");
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -78,6 +81,7 @@ internal class LastStage : IEffectState    //  ƒƒPƒbƒgÅI’iŠK
         //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.GENERATE_FRAMES);    //  ÅI’iŠK‚ÌƒGƒtƒFƒNƒg¶¬
         //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.GENERATE_SMOKE);    //  ‰Œ‚ğæ“¾
         rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
+        Debug.Log("LastStage");
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -93,7 +97,7 @@ internal class PrepareRocket : IEffectState    //  Ÿ‚ÌƒƒPƒbƒg‚ğ—pˆÓ‚µ‚Ä‚¢‚éó‘
 {
     public void Enter(RocketEffect rocketEffect)
     {
-
+        Debug.Log("Prepare");
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -179,7 +183,7 @@ internal class RocketEffect : MonoBehaviour                                     
     {
         factory = new RealFactory();
 
-        SetDictionary();
+        InitializeDictionary();
         await RocketEffectLoad();
         //rocket = GameObject.Find("Cylinder").GetComponent<Transform>();    //  ƒtƒ@[ƒXƒgƒXƒe[ƒg“Ë“ü‚µ‚½‚ÌƒƒPƒbƒg‚ª¶¬‚³‚ê‚Ä‚È‚¢‚±‚Æ‚Ì–³—‚â‚è‚Ì‰ğÁ–@‚ÅƒoƒbƒN‚Ì‚½‚ß•Û‘¶
         smokeGradient = new Gradient();
@@ -240,12 +244,12 @@ internal class RocketEffect : MonoBehaviour                                     
     }
     async Task WaitTillNullTF(Transform variable)    //  •Ï”‚ªnull‚ÌŠÔƒ‹[ƒv‚·‚éƒ^ƒXƒN
     {
-        while (variable == null)
+        while (rocket == null)
         {
             await Task.Yield();
         }
     }
-    void SetDictionary()    //  «‘‚ª‘½•Ï”‚ğ‰Šú‰»
+    void InitializeDictionary()    //  «‘‚ª‘½•Ï”‚ğ‰Šú‰»
     {
         rocketEffectProcess = new Dictionary<RocketEffectProcess, Action>
         {
@@ -288,7 +292,21 @@ internal class RocketEffect : MonoBehaviour                                     
     }
     void GeneratePlume()    //  ƒƒPƒbƒgƒGƒtƒFƒNƒg‚ğ¶¬
     {
-        frameEntity = Instantiate(loadedEffect[(RocketEffectName)(rocketStage = rocketStage < 3 ? rocketStage++ : rocketStage = 0)], rocket);
+        frameEntity = Instantiate(loadedEffect[(RocketEffectName)rocketStage], rocket);
+        if(rocketStage != 3)
+        {
+            rocketStage++;
+            Debug.Log("rocekt stage increese");
+        }
+        else
+        {
+            rocketStage = 0;
+            Debug.Log("rocekt stage is 0");
+        }
+        //rocketStage = rocketStage < 3 ? rocketStage++ : rocketStage = 0;      //  ƒƒPƒbƒgƒXƒe[ƒW‚ª–ˆ‰ñ0ó‘Ô‚É‚È‚Á‚Ä‚¢‚é‚±‚±‚Ü‚Å----------------------------------ƒGƒtƒFƒNƒg‚ªd•¡¶¬‚³‚ê‚Ä‚à‚¢‚½B
+        frameEntity.transform.localPosition += frameEffectOffset;
+        frameEntity.transform.localScale = Vector3.Scale(frameEntity.transform.localScale, frameEffectScale[rocketStage]);
+        Debug.Log("rocketStage" + rocketStage);
         if (rocketStage == 3)
         {
             smokeEntity = Instantiate(loadedEffect[RocketEffectName.FRAME_SMOKE]);
