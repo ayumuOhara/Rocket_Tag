@@ -61,7 +61,7 @@ public class DestroyAndKnockback : MonoBehaviour
                 // 任意：プレイヤーに追従させたい場合
                 effect.transform.SetParent(other.transform);
 
-                Destroy(effect, 2f); // 2秒後に自動削除
+                Destroy(effect, 3f); // 2秒後に自動削除
             }
 
             // Spawner に通知 & 自分を削除
