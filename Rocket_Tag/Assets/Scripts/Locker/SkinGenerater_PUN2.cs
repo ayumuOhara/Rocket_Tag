@@ -13,90 +13,103 @@ using UnityEngine.SceneManagement;
 
 public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
 {
-    /*  スキンの種類等はPlayerSkin.csにenumで宣言してあります  */                          ////  以下宣言区  ////
-    internal enum SkinGenerateProcces    //  スキンジェネレート内の処理一覧
+    // スキン生成のプロセスを定義する列挙型
+    internal enum SkinGenerateProcces
     {
         IN_GAME_GENERATE,
     }
 
-    static GameObject[] playerSkinPrefab;   //  [0]はなにも着ていない状態を表現するために使っています
+    // プレイヤースキンのプレハブ配列
+    static GameObject[] playerSkinPrefab;
     GameObject skinEntityHead;
     Transform playerTF;
-    const string inGameSceneName = "PlayScene";                                     //  msg for debug--------------
-    const string skinLoadError = "Error:Skin is didn't load";                       //  msg for debug--------------
-    const string playerTFLoadError = "Error:Player's hip doesn't exist";            //  msg for debug--------------
-    const string playerTFIsAssignedThis = "PlayerTF is Assigned [This.transform]";  //  msg for debug--------------
-    const string gameMngNotFound = "Error: GameManager didn't find";                //  msg for debug--------------
-    const string couldntGetPlayerList = "Error: PlayerList couldn't get";           //  msg for debug--------------
-    const string playerPrefasUnexpectedValue = "Playerprefas value is strange";     //  msg for debug--------------
-    const string scriptProssesFinish = "SkinGenerater.cs's process is stop";        //  msg for debug--------------
+    const string inGameSceneName = "PlayScene";
+    const string skinLoadError = "Error:Skin is didn't load";
+    const string playerTFLoadError = "Error:Player's hip doesn't exist";
+    const string playerTFIsAssignedThis = "PlayerTF is Assigned [This.transform]";
+    const string gameMngNotFound = "Error: GameManager didn't find";
+    const string couldntGetPlayerList = "Error: PlayerList couldn't get";
+    const string playerPrefasUnexpectedValue = "Playerprefas value is strange";
+    const string scriptProssesFinish = "SkinGenerater.cs's process is stop";
     static int skinLocation;
+    static bool isSkinLoaded = false; // スキンがロードされたかどうかを示すフラグ
 
-    static internal GameObject[] _SkinPrefab { get { return playerSkinPrefab; } }   ////  宣言区終了  ////
+    static internal GameObject[] _SkinPrefab { get { return playerSkinPrefab; } }
 
-    void Start()                                                                    ////  以下処理区  ////
+    void Start()
     {
+        // ゲームシーンでない場合は初期化を行う
         if (SceneManager.GetActiveScene().name != inGameSceneName)
         {
             Initialize();
         }
-    }                                                                               ////  処理区終了  ////
+    }
 
-    async void Initialize()                                                         ////  以下関数区  ////
+    async void Initialize()
     {
+        // スキンプレハブがロードされていない場合はロードを行う
         if (playerSkinPrefab == null)
         {
             await PlayerSkinLord();
         }
 
+        // プレイヤーのTransformを取得
         playerTF = GameObject.Find("Player")?.transform;
-        if (IsNull_Variable(playerTF, false, playerTFLoadError))                        //  msg for debug------------------------------
+        if (IsNull_Variable(playerTF, false, playerTFLoadError))
         {
-            Debug.Log(playerTFIsAssignedThis);                                          //  msg for debug------------------------------
+            Debug.Log(playerTFIsAssignedThis);
             playerTF = this.transform;
         }
 
-        if (IsNull_Array(playerSkinPrefab, false, null, false, skinLoadError, null))    //  msg for debug------------------------------
+        // スキンプレハブが正しくロードされているか確認
+        if (IsNull_Array(playerSkinPrefab, false, null, false, skinLoadError, null))
         {
-            Debug.Log(scriptProssesFinish);                                             //  msg for debug------------------------------
+            Debug.Log(scriptProssesFinish);
             return;
         }
 
+        // 自分のプレイヤーの場合はスキンを生成
         if (photonView.IsMine)
         {
             SkinGenerate(playerTF);
         }
     }
 
-    internal void SkinGenerateWrapper(SkinGenerateProcces skinGenerateProcces)  // ロケットエフェクトのラッパー関数
+    internal void SkinGenerateWrapper(SkinGenerateProcces skinGenerateProcces)
     {
+        // スキン生成プロセスに応じて処理を分岐
         switch (skinGenerateProcces)
         {
-            case SkinGenerateProcces.IN_GAME_GENERATE:      //  インゲームスキン生成処理群
+            case SkinGenerateProcces.IN_GAME_GENERATE:
                 InGameGenerate();
                 break;
         }
     }
 
-    void InGameGenerate()   //  インゲームのスキン生成処理(プレイヤーがインゲームに生成されたタイミングで呼び出される)
+    void InGameGenerate()
     {
+        // ゲームマネージャーを取得
         GameManager gameManager = GameObject.Find("GameManager")?.GetComponent<GameManager>();
         if (IsNull_Variable(gameManager, false, gameMngNotFound)) return;
 
+        // プレイヤーリストを取得
         GameObject[] tmpPlayerList = gameManager.GetPlayerList().ToArray();
         if (IsNull_Array(tmpPlayerList, false, null, false, null, couldntGetPlayerList)) return;
 
+        // 各プレイヤーに対してスキンを生成
         foreach (var player in tmpPlayerList)
         {
             SkinGenerate(player.transform);
         }
     }
 
-    void SkinGenerate(Transform playerTF_)      //  プレイヤーのスキンの生成
+    void SkinGenerate(Transform playerTF_)
     {
+        // プレイヤーのスキン番号と位置を取得
         int tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", -1);
         int tmpSkinLocation = PlayerPrefs.GetInt("PlayerSkinLocation", -1);
 
+        // スキン番号と位置が不正な場合はデフォルト値を設定
         if (IsUnexpectedValue(new int[] { tmpSkinNo, tmpSkinLocation }, new int[] { -1, -1 }))
         {
             tmpSkinNo = 0;
@@ -104,6 +117,14 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
             Debug.Log(playerPrefasUnexpectedValue);
         }
 
+        // スキンがロードされていない場合はスキップ
+        if (!isSkinLoaded)
+        {
+            Debug.LogWarning("Skin not loaded yet. Skipping instantiation.");
+            return;
+        }
+
+        // スキン番号と位置をPhotonのカスタムプロパティに設定
         if (PhotonNetwork.InRoom)
         {
             ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
@@ -114,17 +135,20 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
         }
 
+        // スキンをインスタンス化
         InstantiateSkin(tmpSkinNo, tmpSkinLocation, playerTF_);
     }
 
     void InstantiateSkin(int skinNo, int location, Transform parent)
     {
+        // スキンプレハブが正しくロードされているか確認
         if (playerSkinPrefab == null || skinNo < 0 || skinNo >= playerSkinPrefab.Length || playerSkinPrefab[skinNo] == null)
         {
             Debug.LogError("Invalid skin prefab or index.");
             return;
         }
 
+        // スキンの位置が0の場合は頭にスキンを生成
         if (location == 0)
         {
             Transform head = parent.Find("root/Hip/Spine/Head");
@@ -138,8 +162,10 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
             skin.transform.SetParent(head, false);
         }
     }
+
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
+        // プレイヤーのプロパティが更新された場合の処理
         if (changedProps.ContainsKey("SkinNo") && changedProps.ContainsKey("SkinLocation"))
         {
             int skinNo = (int)changedProps["SkinNo"];
@@ -159,6 +185,7 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
 
     GameObject GetPlayerObject(Player player)
     {
+        // プレイヤーオブジェクトを取得
         foreach (var view in FindObjectsOfType<PhotonView>())
         {
             if (view.Owner == player)
@@ -169,8 +196,9 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
         return null;
     }
 
-    bool IsUnexpectedValue(int[] value, int[] unExpectedValue)      //  値チェック
+    bool IsUnexpectedValue(int[] value, int[] unExpectedValue)
     {
+        // 値が予期しないものであるかどうかを確認
         for (int i = 0; i < value.Length; i++)
         {
             if (value[i] == unExpectedValue[i])
@@ -179,8 +207,9 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
         return false;
     }
 
-    bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)     //  変数のヌルチェック、危険性があった場合強制クラッシュ
+    bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)
     {
+        // 変数がnullであるかどうかを確認
         if (value == null)
         {
             if (haveToClach)
@@ -193,8 +222,9 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
         return false;
     }
 
-    bool IsNull_Array<T>(T[] value, bool isCheckPoint, int[] checkPoint, bool haveToClach, string errorMsg_PointNull, string errorMsg_AllNull)      //  配列のヌルチェック、危険性があった場合強制クラッシュ
+    bool IsNull_Array<T>(T[] value, bool isCheckPoint, int[] checkPoint, bool haveToClach, string errorMsg_PointNull, string errorMsg_AllNull)
     {
+        // 配列がnullまたは空であるかどうかを確認
         if (value == null || value.Length == 0)
         {
             if (haveToClach)
@@ -205,6 +235,7 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
             return true;
         }
 
+        // 特定のインデックスがnullであるかどうかを確認
         if (isCheckPoint)
         {
             foreach (int index in checkPoint)
@@ -224,63 +255,34 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
         return false;
     }
 
-    async Task PlayerSkinLord()     //  プレイヤースキン読み込み
+    async Task PlayerSkinLord()
     {
+        // プレイヤースキンをロードする
         const int numOfSkin = 7;
         string[] skinNames = new string[] { "NotWearing", "RedCap", "StrawHat", "Eringi", "Freeza", "Bear", "Star" };
 
-        Task[] task = new Task[numOfSkin - 1];
+        Task[] task = new Task[numOfSkin];
         playerSkinPrefab = new GameObject[numOfSkin];
         AsyncOperationHandle<GameObject>[] playerSkinLordHandle = new AsyncOperationHandle<GameObject>[numOfSkin];
 
-        for (int i = 1; i < numOfSkin; i++)
+        // 各スキンを非同期でロード
+        for (int i = 0; i < numOfSkin; i++)
         {
             playerSkinLordHandle[i] = Addressables.LoadAssetAsync<GameObject>(skinNames[i]);
-            task[i - 1] = playerSkinLordHandle[i].Task;
+            task[i] = playerSkinLordHandle[i].Task;
         }
 
+        // すべてのスキンがロードされるまで待機
         await Task.WhenAll(task);
 
-        for (int i = 1; i < numOfSkin; i++)
+        // ロードされたスキンを配列に格納
+        for (int i = 0; i < numOfSkin; i++)
         {
             playerSkinPrefab[i] = playerSkinLordHandle[i].Result;
             await Task.Yield();
         }
-    }
-}                                                                                   ////  関数区終了  ////
 
-////  以下コード保存  ////
-//bool IsUnexpectedValue    //  値チェック
-//(bool isCompare, bool isCheckRange, bool isCheckBigger, int[] value, int[] unExpectedValue, int[] expectedValue_Bigger)
-//{
-//    if (isCompare)
-//    {
-//        if (isCheckRange)
-//        {
-//            for (int arrayNo = value.Length; arrayNo > 0; --arrayNo)
-//            {
-//                if (!(unExpectedValue[arrayNo] < value[arrayNo] && value[arrayNo] < expectedValue_Bigger[arrayNo]))
-//                {
-//                    return true;
-//                }
-//            }
-//            return false;
-//        }
-//        if (isCheckBigger)
-//        {
-//            for (int arrayNo = value.Length; arrayNo > 0; --arrayNo)
-//            {
-//                if (value[arrayNo] < unExpectedValue[arrayNo])
-//                {
-//                    return true;
-//                }
-//            }
-//            return false;
-//        }
-//    }
-//    if (value[0] == unExpectedValue[0])
-//    {
-//        return true;
-//    }
-//    return false;
-//}
+        // スキンがロードされたことを示すフラグを立てる
+        isSkinLoaded = true;
+    }
+}
