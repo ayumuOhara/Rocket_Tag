@@ -191,7 +191,7 @@ internal class RocketEffect : MonoBehaviour                                     
         //timeMgr = factory.CreateTimeMgr();
         timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 
-        frameEffectOffset = new Vector3(-0.39f, -2.85f, 0.74f);
+        frameEffectOffset = new Vector3(0.020708f, -2.74f, -0.36f);
         frameEffectScale = new Vector3[] { new Vector3(1.21f, 1.21f, 1.21f), new Vector3(0.64f, 0.64f, 0.64f), new Vector3(0.56f, 0.61f, 0.5f), new Vector3(0.74f, 0.74f, 0.74f) };
         smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
         smokeEffectScale = new Vector3(1, 1, 1);
@@ -300,7 +300,7 @@ internal class RocketEffect : MonoBehaviour                                     
         }
         frameEntity = Instantiate(loadedEffect[(RocketEffectName)rocketStage], rocket);
             //rocketStage = rocketStage < 3 ? rocketStage++ : rocketStage = 0;      //  ロケットステージが毎回0状態になっているここまで----------------------------------エフェクトが重複生成されてもいた。
-        frameEntity.transform.localPosition += frameEffectOffset;
+        frameEntity.transform.localPosition = frameEffectOffset;
         frameEntity.transform.localScale = Vector3.Scale(frameEntity.transform.localScale, frameEffectScale[rocketStage]);
         Debug.Log("rocketStage" + rocketStage);
         if (rocketStage == 3)
