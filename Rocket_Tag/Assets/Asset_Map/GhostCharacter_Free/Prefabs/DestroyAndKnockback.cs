@@ -51,17 +51,23 @@ public class DestroyAndKnockback : MonoBehaviour
             // エフェクトの再生位置を Player の上に
             if (hitEffectPrefab != null)
             {
-                Vector3 effectPos = other.transform.position + Vector3.up * 2.0f;
+                // プレイヤーの位置を取得
+                Vector3 effectPos = other.transform.position;
 
-                // X軸に -90度回転
+                // 高さを調整（例：+1.5f）
+                effectPos.y += 1.75f;
+
+                // 回転を指定（X軸 -90度）
                 Quaternion rotation = Quaternion.Euler(-90f, 0f, 0f);
 
+                // エフェクトを生成
                 GameObject effect = Instantiate(hitEffectPrefab, effectPos, rotation);
 
-                // 任意：プレイヤーに追従させたい場合
+                // 任意：プレイヤーに追従させたい場合（移動に合わせて表示位置も動く）
                 effect.transform.SetParent(other.transform);
 
-                Destroy(effect, 3f); // 2秒後に自動削除
+
+                Destroy(effect, 3f); // 3秒後に自動削除
             }
 
             // Spawner に通知 & 自分を削除
