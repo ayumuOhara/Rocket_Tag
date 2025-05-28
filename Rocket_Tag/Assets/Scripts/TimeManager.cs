@@ -21,7 +21,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
 
     float[] decreaseValue = { 1.0f, 3.0f, 6.0f };
     float[] decreaseUpTime = { 10, 20, 30 };
-    float[] stageUpTime = { 100, 70, 30, 7 };    //  １段階目になるタイミングも表現している
+    float[] stageUpTime = { 70, 30, 4 };    //  １段階目になるタイミングも表現している
 
     float floatStartTime = 2.2f;
     public bool isTimeStart = false;
@@ -155,6 +155,7 @@ public class TimeManager : MonoBehaviourPunCallbacks
     internal bool IsStageUpTime()    //  ロケット炎エフェクト変化時間か判定
     {
         return stageUpTime[rocketEffect._RocketStage] > rocketTime;
+        Debug.Log("IsStageupTime And rocket stage is" + rocketEffect._RocketStage);
     }
 
     // 加速度をリセットし、関連カウントを初期化
