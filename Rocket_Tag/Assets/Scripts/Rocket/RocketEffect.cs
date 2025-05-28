@@ -90,7 +90,7 @@ internal class LastStage : IEffectState    //  ロケット最終段階
     }
     public void Exit(RocketEffect rocketEffect)
     {
-        rocketEffect._RocketStage = 0;
+
     }
 }
 internal class PrepareRocket : IEffectState    //  次のロケットを用意している状態
@@ -311,6 +311,7 @@ internal class RocketEffect : MonoBehaviour                                     
             smokeMainModule.startColor = Color.white;
             smokeColorOverLifeTime = smokePS.colorOverLifetime;
             smokeEntity.transform.position = rocket.position;
+            rocketStage = 0;
         }
     }
     void SmokeDiffusion()    //  煙幕拡散、煙幕をデストロイしたたらPrepareRocketStateに移動
