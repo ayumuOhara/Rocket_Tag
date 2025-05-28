@@ -68,6 +68,7 @@ public class EnoguEvent : MonoBehaviourPun
         {
             if (Close == true)
             {
+                Debug.Log("èIÇÌÇ¡ÇΩ");
                 if (isPlayerSurvival == false)
                 {
                     Debug.Log("éÄÇÒÇæ");
@@ -78,6 +79,7 @@ public class EnoguEvent : MonoBehaviourPun
         }
         else if (isInEvent == true)
         {
+            Debug.Log("énÇ‹ÇË");
             List<GameObject> alivePlayers = gameManager.GetPlayerList();
 
             foreach (GameObject player in alivePlayers)
