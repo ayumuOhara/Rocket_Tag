@@ -16,7 +16,6 @@ public class EnoguEvent : MonoBehaviourPun
 
     bool isInEvent = false;
     bool isPlayerSurvival = false;
-    bool Close = false;
 
     public void PaintOpen()//成功例
     {
@@ -64,22 +63,8 @@ public class EnoguEvent : MonoBehaviourPun
 
     void Update()
     {
-        if (isInEvent == false)
+        if (isInEvent == true)
         {
-            if (Close == true)
-            {
-                Debug.Log("終わった");
-                if (isPlayerSurvival == false)
-                {
-                    Debug.Log("死んだ");
-                    //終了判定
-                }
-                Close = false;
-            }
-        }
-        else if (isInEvent == true)
-        {
-            Debug.Log("始まり");
             List<GameObject> alivePlayers = gameManager.GetPlayerList();
 
             foreach (GameObject player in alivePlayers)
@@ -90,7 +75,11 @@ public class EnoguEvent : MonoBehaviourPun
                     isPlayerSurvival = true;
                 }
             }
-            Close = true;
+            if (isPlayerSurvival == false)
+            {
+                Debug.Log("死んだ");
+                //終了判定
+            }
         }
     }
 
