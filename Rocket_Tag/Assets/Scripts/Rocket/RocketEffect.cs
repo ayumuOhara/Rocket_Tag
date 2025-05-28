@@ -188,8 +188,8 @@ internal class RocketEffect : MonoBehaviour                                     
         //rocket = GameObject.Find("Cylinder").GetComponent<Transform>();    //  ファーストステート突入した時のロケットが生成されてないことの無理やりの解消法でバックのため保存
         smokeGradient = new Gradient();
         smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.4f) };
-        timeMgr = factory.CreateTimeMgr();
-        //timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+        //timeMgr = factory.CreateTimeMgr();
+        timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 
         frameEffectOffset = new Vector3(-0.39f, -2.85f, 0.74f);
         frameEffectScale = new Vector3[] { new Vector3(1.21f, 1.21f, 1.21f), new Vector3(0.64f, 0.64f, 0.64f), new Vector3(0.56f, 0.61f, 0.5f), new Vector3(0.74f, 0.74f, 0.74f) };
