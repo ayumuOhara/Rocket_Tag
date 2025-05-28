@@ -99,8 +99,11 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
             rocketObj.SetActive(true);
             compas.SetActive(true);
             Debug.Log("ÉçÉPÉbÉgÇéÛÇØéÊÇËÇ‹Ç∑");
-            rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.SEARCH_ROCKET);
-            rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);
+            rocketEffect.Rocket = GameObject.Find("Rocket").transform;
+            rocketEffect.IsFindNextRocket = true;
+            //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.SEARCH_ROCKET);
+            //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);
+            rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
 
             if (photonView.IsMine && SceneManager.GetActiveScene().name == "PlayScene")
             {
@@ -122,7 +125,6 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
                 Debug.Log("timeManagerÇ™nullÇ≈Ç∑");
             }
             //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcces.SEARCH_ROCKET);
-
         }
         else
         {

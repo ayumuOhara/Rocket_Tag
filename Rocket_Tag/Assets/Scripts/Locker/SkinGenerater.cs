@@ -108,32 +108,7 @@ async void Initialize()     //  初期化                                          
             {
                 case 0:
                     {
-                        Transform head = playerTF_.Find("root/Hip/Spine/Head");
-
-                        if (playerTF_ == null)
-                        {
-                            Debug.LogError("SkinGenerateに渡されたplayerTF_がnullです");
-                            return;
-                        }
-
-                        if (head == null)
-                        {
-                            Debug.LogError("Head が見つかりません: " + playerTF_.name);
-                            return;
-                        }
-
-                        if (playerSkinPrefab == null || playerSkinPrefab.Length <= tmpSkinNo || playerSkinPrefab[tmpSkinNo] == null)
-                        {
-                            Debug.LogError($"playerSkinPrefabがないです。tmpSkinNo={tmpSkinNo}");
-                            return;
-                        }
-
-                        GameObject skin = PhotonNetwork.Instantiate(playerSkinPrefab[tmpSkinNo].name, head.position, head.rotation);
-
-                        // 生成されたスキンを親に設定
-                        skin.transform.SetParent(head, worldPositionStays: true);
-
-                        //skinEntityHead = Instantiate(playerSkinPrefab[tmpSkinNo], playerTF_.Find("root/Hip/Spine/Head"));
+                        skinEntityHead = Instantiate(playerSkinPrefab[tmpSkinNo], playerTF_.Find("root/Hip/Spine/Head"));
                         break;
                     }
             }

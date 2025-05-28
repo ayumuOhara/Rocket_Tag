@@ -1,9 +1,12 @@
 using System;                                                                                      ////  ƒƒPƒbƒgƒGƒtƒFƒNƒg¶¬EØ‚è‘Ö‚¦  ////
 using System.Collections.Generic;
+using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using static RocketEffect;
 
 internal interface IEffectState                                                                     ////  ˆÈ‰ºState‹æ  ////
 {
@@ -15,7 +18,9 @@ internal class FirstStage : IEffectState    //  ƒƒPƒbƒg1’iŠK–Ú
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);    //  1’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
+        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.GENERATE_FRAMES);    //  1’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
+        rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
+        Debug.Log("FirstStage");
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -33,7 +38,9 @@ internal class SecondStage : IEffectState    //  ƒƒPƒbƒg2’iŠK–Ú
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);  //  2’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
+        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.GENERATE_FRAMES);  //  2’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
+        rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
+        Debug.Log("SecondStage");
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -51,7 +58,9 @@ internal class ThirdStage : IEffectState    //  ƒƒPƒbƒg3’iŠK–Ú
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);    //  3’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
+        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.GENERATE_FRAMES);    //  3’iŠK–Ú‚ÌƒGƒtƒFƒNƒg¶¬
+        rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
+        Debug.Log("ThirdStage");
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -69,12 +78,15 @@ internal class LastStage : IEffectState    //  ƒƒPƒbƒgÅI’iŠK
 {
     public void Enter(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_FRAMES);    //  ÅI’iŠK‚ÌƒGƒtƒFƒNƒg¶¬
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.GENERATE_SMOKE);    //  ‰Œ‚ğæ“¾
+        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.GENERATE_FRAMES);    //  ÅI’iŠK‚ÌƒGƒtƒFƒNƒg¶¬
+        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.GENERATE_SMOKE);    //  ‰Œ‚ğæ“¾
+        rocketEffect.CallRocketEffectProcess(RocketEffect.RocketEffectProcess.GENERATE_PLUNK);
+        Debug.Log("LastStage");
     }
     public void Update(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.SMOKE_DIFFUSION);    //  ‰Œ‚ğŠgU
+        //rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcess.SMOKE_DIFFUSION);    //  ‰Œ‚ğŠgU
+        rocketEffect.CallRocketEffectProcess(RocketEffectProcess.SMOKE_DIFFUSION);    //  ‰Œ‚ğŠgU
     }
     public void Exit(RocketEffect rocketEffect)
     {
@@ -85,28 +97,29 @@ internal class PrepareRocket : IEffectState    //  Ÿ‚ÌƒƒPƒbƒg‚ğ—pˆÓ‚µ‚Ä‚¢‚éó‘
 {
     public void Enter(RocketEffect rocketEffect)
     {
-
+        Debug.Log("Prepare");
     }
     public void Update(RocketEffect rocketEffect)
     {
-        rocketEffect.RocketEffectWrapper(RocketEffect.RocketEffectProcce.SEARCH_ROCKET);
+        if(rocketEffect.IsFindNextRocket)
+        {
+            rocketEffect.ChangeState(new FirstStage());
+        }
     }
     public void Exit(RocketEffect rocketEffect)
     {
-
+        rocketEffect.IsFindNextRocket = false;
     }
 }                                                                                                  ////  State‹æI—¹@@////
-internal class RocketEffect : MonoBehaviour
+internal class RocketEffect : MonoBehaviour                                                        ////  ƒƒPƒbƒgƒGƒtƒFƒNƒg§Œä  ////
 {
-    internal enum RocketEffectProcce    //  ƒƒPƒbƒgƒGƒtƒFƒNƒg‚Ìˆ—ˆê——                          ////  ˆÈ‰ºéŒ¾‹æ  ////
+    internal enum RocketEffectProcess    //  ƒƒPƒbƒgƒGƒtƒFƒNƒg‚Ìˆ—ˆê——                          ////  ˆÈ‰ºéŒ¾‹æ  ////
     {
-        GENERATE_FRAMES,
-        GENERATE_SMOKE,
-        SEARCH_FRAME_SMOKE,
+        GENERATE_PLUNK,
         SMOKE_DIFFUSION,
         SEARCH_ROCKET,
     }
-    internal enum RocketEffectName
+    internal enum RocketEffectName    //  ƒƒPƒbƒgƒGƒtƒFƒNƒg‚Ì–¼‘Oˆê——
     {
         FIRST_ROCKET_FRAME,
         SECOND_ROCKET_FRAME,
@@ -114,22 +127,16 @@ internal class RocketEffect : MonoBehaviour
         LAST_ROCKET_FRAME,
         FRAME_SMOKE
     }
-    internal enum EffectNo    //  ƒGƒtƒFƒNƒg‚Ìí—Ş
-    {
-        FRAME,
-        SMOKE,
-    }
 
     IEffectState currentState;
+    IFactory factory;
 
-    Dictionary<RocketEffectProcce, Action> rocketEffectProcess;
-    Dictionary<RocketEffectName, GameObject> loadedEffect;
+    Dictionary<RocketEffectProcess, Action> rocketEffectProcess;
+    static Dictionary<RocketEffectName, GameObject> loadedEffect;
     Dictionary<RocketEffectName, string> effectNameMap;
-    GameObject[] frameEffectPrefab;
-    GameObject frameEffectEntity;
-    GameObject smokeEffectPrefab;
+    GameObject frameEntity;
     GameObject smokeEntity;
-    public Transform rocket;
+    Transform rocket;
     ParticleSystem smokePS;
     ParticleSystem.MainModule smokeMainModule;
     ParticleSystem.ColorOverLifetimeModule smokeColorOverLifeTime;
@@ -143,199 +150,167 @@ internal class RocketEffect : MonoBehaviour
 
     float smokeDelTime;
     int rocketStage;
-    bool didFalsed;    //  ƒƒPƒbƒg¶¬‚Éƒ^ƒCƒ~ƒ“ƒO‚ğ‡‚í‚¹‚é‚½‚ß‚Ìƒtƒ‰ƒO
-    bool isEffectLoaded;
-    bool isDestoroyRocket;
+    //bool didFalsed;    //  ƒƒPƒbƒg¶¬‚Éƒ^ƒCƒ~ƒ“ƒO‚ğ‡‚í‚¹‚é‚½‚ß‚Ìƒtƒ‰ƒO
+    bool isInitialized;
+    bool isFindNextRocket;
     const string rocketNotFound = "Error:Rocket Not Found";    //  msg for debug--------------
-    const string rocketIsAssginedThis = "Rocket variable is assigned [this.transform]";
+    const string rocketIsAssginedThis = "Rocket variable is assigned [this.transform]";    //  msg for debug--------------
     const string couldntGetTimemgr = "Error:Couldn't Get timeMgr";    //  msg for debug---------------------
     const string scriptProssesFinish = "RocketEffect.cs's process is stop";    //  msg for debug------------------
-
+    
+    internal Transform Rocket
+    { set { rocket = value; } }
     internal TimeManager TimeMgr
     { get { return timeMgr; } }
     internal int _RocketStage
-    { get { return rocketStage; } }                                                               ////  éŒ¾‹æI—¹  ////
-    internal bool _DidFalsed
-    { get { return didFalsed; } }
-    internal bool _IsDestoroyRocket
-    { set { isDestoroyRocket = value; } }
+    { get { return rocketStage; } }
+    internal bool IsFindNextRocket
+    { get { return isFindNextRocket; } set { isFindNextRocket = value; } }                                                          ////  éŒ¾‹æI—¹  ////
 
-    void OnEnable()                                                                                ////  ˆÈ‰ºˆ—‹æ  ////
+
+    void Start()
     {
-        /*  for debug---------------------------------------  */
-        ///*  ˆ—‡‚ğ‡‚í‚¹‚é‚½‚ßÅ‰‚ÉSetActive(false)‚É‚·‚é  */
-        //SetSetActive(didFalsed, this.gameObject);
-        //if (didFalsed)
-        //{
-        //    Initialize();    //  ‰Šú‰»
-        //}
-
-        Initialize();
+        Initialize();    //  ‰Šú‰»
     }
-    //void OnDisable()
-    //{
-    //    didFalsed = true;
-    //}
-    //void Start()
-    //{
-    /*  for debug--------------------------------  */
-    //Debug.Log("Start entire");
-    //while (!effectLoadTask.IsCompleted)
-    //{
-
-    //}
-    //}
     void Update()
     {
-        /*  for debug------------------------------------------*/
-        //Debug.Log(isloaded);
-        //Debug.Log(frameEffectPrefab[3].name);
-        if (isEffectLoaded)
+        if (isInitialized)    ////  ƒGƒ‰[‰ñ”ğ•û–@‰ü‘P  ƒtƒ@ƒCƒ‹‚ğ•ª‚¯‚éŠÔ‚ª‚È‚¢‚½‚ßif‚ÅƒGƒ‰[‰ñ”ğ
         {
             currentState.Update(this);
         }
-        //Debug.Log(rocketStage);    //  for debug-----------------------------------
     }                                                                                              ////  ˆ—‹æI—¹  ////
-    void SetSetActive(bool flag, GameObject obj)    //  SetActive‚ğİ’è‚·‚é                        ////  ˆÈ‰ºŠÖ”‹æ  ////
-    {
-        if (flag != obj.activeSelf)
-        {
-            obj.SetActive(flag);
-        }
-        else
-        {
-            obj.SetActive(false);
-        }
-    }
     async void Initialize()
     {
-        /*  for debug-----------------------  */
-        //effectLoadTask = RocketEffectLoad();
-        //await effectLoadTask;
+        factory = new RealFactory();
+
+        InitializeDictionary();
+        await RocketEffectLoad();
+        //rocket = GameObject.Find("Cylinder").GetComponent<Transform>();    //  ƒtƒ@[ƒXƒgƒXƒe[ƒg“Ë“ü‚µ‚½‚ÌƒƒPƒbƒg‚ª¶¬‚³‚ê‚Ä‚È‚¢‚±‚Æ‚Ì–³—‚â‚è‚Ì‰ğÁ–@‚ÅƒoƒbƒN‚Ì‚½‚ß•Û‘¶
+        smokeGradient = new Gradient();
+        smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.4f) };
+        timeMgr = factory.CreateTimeMgr();
+        //timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+
         frameEffectOffset = new Vector3(-0.39f, -2.85f, 0.74f);
         frameEffectScale = new Vector3[] { new Vector3(1.21f, 1.21f, 1.21f), new Vector3(0.64f, 0.64f, 0.64f), new Vector3(0.56f, 0.61f, 0.5f), new Vector3(0.74f, 0.74f, 0.74f) };
         smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
         smokeEffectScale = new Vector3(1, 1, 1);
 
+        smokeDelTime = 12;
         rocketStage = 0;
+        isFindNextRocket = false;
 
-        await RocketEffectLoad();
-
-        rocket = GameObject.Find("Cylinder").GetComponent<Transform>();
-        smokeGradient = new Gradient();
-
-        smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.4f) };
-        timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-
+        await WaitTillNullTF(rocket);
         ChangeState(new FirstStage());
 
-        smokeDelTime = 12;
-        isDestoroyRocket = false;
+        Debug.Log("Rocket is not null");
+        isInitialized = true;
+    }
+    async Task RocketEffectLoad()    //  ƒƒPƒbƒgƒGƒtƒFƒNƒg‚Ìƒ[ƒh
+    {
+        Debug.Log("Rocket effect load start");
+        List<Task> loadTasks;
+        Dictionary<RocketEffectName, AsyncOperationHandle<GameObject>> loadHandle;
 
+        const string loadFailMsg = "Load is failed";
 
-        if (IsNull_Variable(rocket, false, rocketNotFound))    //  msg for debug-----------------------
+        loadTasks = new List<Task>();
+        loadHandle = new Dictionary<RocketEffectName, AsyncOperationHandle<GameObject>>
         {
-            Debug.Log(rocketIsAssginedThis);    //  msg for debug-----------------
-            rocket = this.transform;
+            {RocketEffectName.FIRST_ROCKET_FRAME, default},
+            {RocketEffectName.SECOND_ROCKET_FRAME, default},
+            {RocketEffectName.THIRD_ROCKET_FRAME, default},
+            {RocketEffectName.LAST_ROCKET_FRAME, default},
+            {RocketEffectName.FRAME_SMOKE, default}
+        };
+
+        foreach (KeyValuePair<RocketEffectName, String> kvp in effectNameMap)
+        {
+            KeyValuePair<RocketEffectName, String> tmpKvp = kvp;
+            loadHandle[tmpKvp.Key] = Addressables.LoadAssetAsync<GameObject>(tmpKvp.Value);
+            loadTasks.Add(loadHandle[tmpKvp.Key].Task.ContinueWith(t =>
+            {
+                if (loadHandle[tmpKvp.Key].Status == AsyncOperationStatus.Succeeded)
+                {
+                    loadedEffect[tmpKvp.Key] = loadHandle[tmpKvp.Key].Result;
+                }
+                else
+                {
+                    Debug.LogWarning(loadFailMsg + tmpKvp.Key);    //  ƒfƒoƒbƒO—p--------------------------------------
+                }
+            }));
         }
-        if (IsNull_Variable(timeMgr, false, couldntGetTimemgr))
+        await Task.WhenAll(loadTasks);
+    }
+    async Task WaitTillNullTF(Transform variable)    //  •Ï”‚ªnull‚ÌŠÔƒ‹[ƒv‚·‚éƒ^ƒXƒN
+    {
+        while (rocket == null)
         {
-            Debug.Log(scriptProssesFinish);    //  msg for debug-------------------
-            return;
+            await Task.Yield();
         }
     }
-    void SetDictionary()
+    void InitializeDictionary()    //  «‘‚ª‘½•Ï”‚ğ‰Šú‰»
     {
-        //rocketEffectProcess[RocketEffectProcce.GENERATE_FRAMES, GenerateEffect]
+        rocketEffectProcess = new Dictionary<RocketEffectProcess, Action>
+        {
+            {RocketEffectProcess.GENERATE_PLUNK, GeneratePlume },
+            {RocketEffectProcess.SMOKE_DIFFUSION, SmokeDiffusion},
+        };
+        loadedEffect = new Dictionary<RocketEffectName, GameObject>
+        {
+            {RocketEffectName.FIRST_ROCKET_FRAME, null},
+            {RocketEffectName.SECOND_ROCKET_FRAME, null},
+            {RocketEffectName.THIRD_ROCKET_FRAME, null},
+            {RocketEffectName.LAST_ROCKET_FRAME, null},
+            {RocketEffectName.FRAME_SMOKE, null},
+        };
+        effectNameMap = new Dictionary<RocketEffectName, string>
+        {
+            {RocketEffectName.FIRST_ROCKET_FRAME, "FirstRocketFrame" },
+            {RocketEffectName.SECOND_ROCKET_FRAME, "SecondRocketFrame" },
+            {RocketEffectName.THIRD_ROCKET_FRAME, "ThirdRocketFrame" },
+            {RocketEffectName.LAST_ROCKET_FRAME, "LastRocketFrame" },
+            {RocketEffectName.FRAME_SMOKE, "FrameSmoke" },
+        };
+
     }
     internal void ChangeState(IEffectState newState)    //  ó‘Ô‘JˆÚ
     {
-        if (currentState != null)
+        if (rocket != null)
         {
-            currentState.Exit(this);
-        }
-        currentState = newState;
-        currentState.Enter(this);
-    }
-    internal void RocketEffectWrapper(RocketEffectProcce rocketEffectProcces)   // ƒƒPƒbƒgƒGƒtƒFƒNƒg‚Ìƒ‰ƒbƒp[ŠÖ”
-    {
-        switch (rocketEffectProcces)
-        {
-            case RocketEffectProcce.GENERATE_FRAMES:
-                {
-                    //Debug.Log(rocketStage);    //  for debug-------------------------
-
-                    GenerateEffect((int)EffectNo.FRAME, frameEffectPrefab[rocketStage], rocket, frameEffectOffset, frameEffectScale[rocketStage]);
-                    rocketStage = rocketStage != 3 ? ++rocketStage : 0;
-                    break;
-                }
-            case RocketEffectProcce.GENERATE_SMOKE:
-                {
-                    GenerateEffect((int)EffectNo.SMOKE, smokeEffectPrefab, rocket, frameEffectOffset, smokeEffectScale);    //  offset‚ÉframeEffectOffset‚ğg—p
-                    smokePS = smokeEntity.GetComponent<ParticleSystem>();
-                    smokeMainModule = smokePS.main;
-                    smokeMainModule.startColor = Color.white;
-                    smokeColorOverLifeTime = smokePS.colorOverLifetime;
-                    break;
-                }
-            case RocketEffectProcce.SEARCH_ROCKET:
-                {
-                    Debug.Log("SERACH_ROCKET entered");
-                    rocket = null;
-                    rocket = GameObject.Find("Rocket").GetComponent<Transform>();
-                    if (IsNull_Variable(rocket, false, rocketNotFound))    //  msg for debug-------------------
-                    {
-                        Debug.Log(rocketIsAssginedThis);    //  msg for debug--------------------
-                        rocket = this.transform;
-                    }
-                    if (currentState is PrepareRocket)
-                    {
-                        ChangeState(new FirstStage());
-                    }
-                    Debug.Log("SERACH_ROCKET exsited" + rocket);
-                    break;
-                }
-            case RocketEffectProcce.SMOKE_DIFFUSION:
-                {
-                    SmokeDiffusion();
-                    break;
-                }
-            default: break;
+            if (currentState != null)
+            {
+                currentState.Exit(this);
+            }
+            currentState = newState;
+            currentState.Enter(this);
         }
     }
-    void GenerateEffect(int effectNo, GameObject effect, Transform parent, Vector3 offset, Vector3 scale)    //  ƒGƒtƒFƒNƒg¶¬
+    internal void CallRocketEffectProcess(RocketEffectProcess process)    //  ŠÖ”ŒÄ‚Ño‚µ
     {
-
-        
-        switch (effectNo)
-        {
-            case 0:
-                {
-                    Vector3 fixScale;
-
-                    fixScale = new Vector3(1 / parent.localScale.x, 1 / parent.localScale.y, 1 / parent.localScale.z);
-
-                    if (!IsNull_Variable(frameEffectEntity, false, ""))
-                    {
-                        Destroy(frameEffectEntity);
-                    }
-                    frameEffectEntity = Instantiate(effect, parent);
-                    frameEffectEntity.transform.localPosition += offset;
-                    frameEffectEntity.transform.localScale = Vector3.Scale(frameEffectEntity.transform.localScale, fixScale);
-                    break;
-                }
-            case 1:
-                {
-                    smokeEntity = Instantiate(smokeEffectPrefab);
-                    smokeEntity.transform.position = rocket.position;
-                    break;
-                }
-            default: break;
-        }
+        rocketEffectProcess[process]();
     }
-    void GenerateFrame()
+    void GeneratePlume()    //  ƒƒPƒbƒgƒGƒtƒFƒNƒg‚ğ¶¬
     {
-
+        frameEntity = Instantiate(loadedEffect[(RocketEffectName)rocketStage], rocket);
+        if(rocketStage != 3)
+        {
+            rocketStage++;
+            Debug.Log("rocekt stage increese");
+        }
+        else
+        {
+            rocketStage = 0;
+            Debug.Log("rocekt stage is 0");
+        }
+        //rocketStage = rocketStage < 3 ? rocketStage++ : rocketStage = 0;      //  ƒƒPƒbƒgƒXƒe[ƒW‚ª–ˆ‰ñ0ó‘Ô‚É‚È‚Á‚Ä‚¢‚é‚±‚±‚Ü‚Å----------------------------------ƒGƒtƒFƒNƒg‚ªd•¡¶¬‚³‚ê‚Ä‚à‚¢‚½B
+        frameEntity.transform.localPosition += frameEffectOffset;
+        frameEntity.transform.localScale = Vector3.Scale(frameEntity.transform.localScale, frameEffectScale[rocketStage]);
+        Debug.Log("rocketStage" + rocketStage);
+        if (rocketStage == 3)
+        {
+            smokeEntity = Instantiate(loadedEffect[RocketEffectName.FRAME_SMOKE]);
+        }
     }
     void SmokeDiffusion()    //  ‰Œ–‹ŠgUA‰Œ–‹‚ğƒfƒXƒgƒƒC‚µ‚½‚½‚çPrepareRocketState‚ÉˆÚ“®
     {
@@ -348,10 +323,7 @@ internal class RocketEffect : MonoBehaviour
         {
             Debug.Log("TimeOut");    //  msg for debug----------------
             Destroy(smokeEntity.gameObject);
-            if (isDestoroyRocket)
-            {
-                ChangeState(new PrepareRocket());
-                isDestoroyRocket = false;            }
+            ChangeState(new PrepareRocket());
         }
     }
     bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)    //  •Ï”‚Ìƒkƒ‹ƒ`ƒFƒbƒNAŠëŒ¯«‚ª‚ ‚Á‚½ê‡‹­§ƒNƒ‰ƒbƒVƒ…
@@ -367,88 +339,8 @@ internal class RocketEffect : MonoBehaviour
         }
         return false;
     }
-    bool IsNull_Array<T>     //  ”z—ñ‚Ìƒkƒ‹ƒ`ƒFƒbƒNAŠëŒ¯«‚ª‚ ‚Á‚½ê‡‹­§ƒNƒ‰ƒbƒVƒ…
-    (T[] value, bool isCheckPoint, int[] checkPoint, bool haveToClach, string errorMsg_PointNull, string errorMsg_AllNull)
-    {
-        if (value == null || value.Length == 0)
-        {
-            if (haveToClach)
-            {
-                Environment.FailFast(errorMsg_AllNull);    //  ƒNƒ‰ƒbƒVƒ…
-            }
-            Debug.Log(errorMsg_AllNull);    //  debug------------------
-            return true;
-        }
-        if (isCheckPoint)
-        {
-            for (int arrayNo = checkPoint.Length - 1; arrayNo >= 0; arrayNo--)
-            {
-                if (value[checkPoint[arrayNo]] == null)
-                {
-                    if (haveToClach)
-                    {
-                        Environment.FailFast(errorMsg_PointNull);    //  ƒNƒ‰ƒbƒVƒ…
-                    }
-                    return true;
-                }
-                Debug.Log(errorMsg_PointNull);    //  debug-------------------
-                return false;
-            }
-            Debug.Log(errorMsg_PointNull);    //  debug--------------------------
-        }
-        return false;
-    }
-    async Task RocketEffectLoad()    //  ƒƒPƒbƒgƒGƒtƒFƒNƒg‚Ìƒ[ƒh
-    {
-        Debug.Log("TaskEntire");
-        Task[] loadTasks;
-
-        AsyncOperationHandle<GameObject>[] loadHandles;
-
-        const int numOfFrameEffect = 4;
-        const int numOfSmokeEffect = 1;
-        int loadHandleArrayNo;
-        string[] frameEffectNames = { "FirstRocketFrame", "SecondRocketFrame", "ThirdRocketFrame", "LastRocketFrame" };
-        string smokeEffectName;
-
-        loadTasks = new Task[numOfFrameEffect + numOfSmokeEffect];
-
-        frameEffectPrefab = new GameObject[numOfFrameEffect];
-
-        loadHandles = new AsyncOperationHandle<GameObject>[numOfFrameEffect + numOfSmokeEffect];
-
-        loadHandleArrayNo = 0;    //  “¯ˆê“I‚È”z—ñ‚Ì—v‘f”‚ğw’è‚·‚é‚½‚ß‚Ég‚¤‚Æ‚«‚à‚ ‚è‚Ü‚·
-        smokeEffectName = "FrameSmoke";
-
-        for (; loadHandleArrayNo < numOfFrameEffect + numOfSmokeEffect; loadHandleArrayNo++)
-        {
-            if (loadHandleArrayNo < numOfFrameEffect)
-            {
-                loadHandles[loadHandleArrayNo] = Addressables.LoadAssetAsync<GameObject>(frameEffectNames[loadHandleArrayNo]);
-            }
-            else
-            {
-                loadHandles[loadHandleArrayNo] = Addressables.LoadAssetAsync<GameObject>(smokeEffectName);
-            }
-            loadTasks[loadHandleArrayNo] = loadHandles[loadHandleArrayNo].Task;
-        }
-        await Task.WhenAll(loadTasks);
-        for (loadHandleArrayNo = 0; loadHandleArrayNo < numOfFrameEffect + numOfSmokeEffect; loadHandleArrayNo++)
-        {
-            if (loadHandleArrayNo < numOfFrameEffect)
-            {
-                frameEffectPrefab[loadHandleArrayNo] = loadHandles[loadHandleArrayNo].Result;
-            }
-            else
-            {
-                smokeEffectPrefab = loadHandles[loadHandleArrayNo].Result;
-            }
-        }
-        isEffectLoaded = true;
-        Debug.Log("load is completed");
-    }
 }
-                                                                                                   ////  ˆÈ‰ºƒR[ƒh•Û‘¶êŠ  ////
+////  ˆÈ‰ºƒR[ƒh•Û‘¶êŠ  ////
 /*    //void RocketEffectLoad()
     //{
     //    Task[] task;
@@ -486,6 +378,159 @@ internal class RocketEffect : MonoBehaviour
 //    frameEffectPrefab[3] = Resources.Load<GameObject>("LastRocketFrame");
 //    smokeEffectPrefab = Resources.Load<GameObject>("FrameSmoke");
 //}
+//GameObject[] frameEffectPrefab;
+//GameObject frameEffectEntity;
+//GameObject smokeEffectPrefab;
+//GameObject smokeEntity;
+// public transform rocket;
+//internal enum EffectNo    //  ƒGƒtƒFƒNƒg‚Ìí—Ş
+//{
+//    FRAME,
+//    SMOKE,
+//}
+//void OnEnable()                                                                                ////  ˆÈ‰ºˆ—‹æ  ////
+//{
+//    /*  for debug---------------------------------------  */
+//    ///*  ˆ—‡‚ğ‡‚í‚¹‚é‚½‚ßÅ‰‚ÉSetActive(false)‚É‚·‚é  */
+//    //SetSetActive(didFalsed, this.gameObject);
+//    //if (didFalsed)
+//    //{
+//    //    Initialize();    //  ‰Šú‰»
+//    //}
 
+//    Initialize();
+//}
+//void OnDisable()
+//{
+//    didFalsed = true;
+//}
+//void Start()
+//{
+/*  for debug--------------------------------  */
+//Debug.Log("Start entire");
+//while (!effectLoadTask.IsCompleted)
+//{
 
+//}
+//}
+/*  for debug------------------------------------------*/
+//Debug.Log(isloaded);
+//Debug.Log(frameEffectPrefab[3].name);
+//Debug.Log(rocketStage);    //  for debug-----------------------------------
+//void SetSetActive(bool flag, GameObject obj)    //  SetActive‚ğİ’è‚·‚é                        ////  ˆÈ‰ºŠÖ”‹æ  ////
+//{
+//    if (flag != obj.activeSelf)
+//    {
+//        obj.SetActive(flag);
+//    }
+//    else
+//    {
+//        obj.SetActive(false);
+//    }
+//}
+/*  for debug-----------------------  */
+//effectLoadTask = RocketEffectLoad();
+//await effectLoadTask;
+//void RocketEffectWrapper(RocketEffectProcess RocketEffectProcesss)   // ƒƒPƒbƒgƒGƒtƒFƒNƒg‚Ìƒ‰ƒbƒp[ŠÖ”
+//{
+//    switch (RocketEffectProcesss)
+//    {
+//        case RocketEffectProcess.GENERATE_FRAMES:
+//            {
+//                GenerateEffect((int)EffectNo.FRAME, frameEffectPrefab[rocketStage], rocket, frameEffectOffset, frameEffectScale[rocketStage]);
+//                rocketStage = rocketStage != 3 ? ++rocketStage : 0;
+//                break;
+//            }
+//        case RocketEffectProcess.GENERATE_SMOKE:
+//            {
+//                GenerateEffect((int)EffectNo.SMOKE, smokeEffectPrefab, rocket, frameEffectOffset, smokeEffectScale);    //  offset‚ÉframeEffectOffset‚ğg—p
+//                smokePS = smokeEntity.GetComponent<ParticleSystem>();
+//                smokeMainModule = smokePS.main;
+//                smokeMainModule.startColor = Color.white;
+//                smokeColorOverLifeTime = smokePS.colorOverLifetime;
+//                break;
+//            }
+//        case RocketEffectProcess.SEARCH_ROCKET:
+//            {
+//                Debug.Log("SERACH_ROCKET entered");
+//                rocket = null;
+//                rocket = GameObject.Find("Rocket").GetComponent<Transform>();
+//                if (IsNull_Variable(rocket, false, rocketNotFound))    //  msg for debug-------------------
+//                {
+//                    Debug.Log(rocketIsAssginedThis);    //  msg for debug--------------------
+//                    rocket = this.transform;
+//                }
+//                if (currentState is PrepareRocket)
+//                {
+//                    ChangeState(new FirstStage());
+//                }
+//                Debug.Log("SERACH_ROCKET exsited" + rocket);
+//                break;
+//            }
+//        case RocketEffectProcess.SMOKE_DIFFUSION:
+//            {
+//                SmokeDiffusion();
+//                break;
+//            }
+//        default: break;
+//    }
+////}
+///// void GenerateEffecct(int effectNo, GameObject effect, Transform parent, Vector3 offset, Vector3 scale)    //  ƒGƒtƒFƒNƒg¶¬
+//{
+//    switch (effectNo)
+//    {
+//        case 0:
+//            {
+//                Vector3 fixScale;
 
+//                fixScale = new Vector3(1 / parent.localScale.x, 1 / parent.localScale.y, 1 / parent.localScale.z);
+
+//                if (!IsNull_Variable(frameEffectEntity, false, ""))
+//                {
+//                    Destroy(frameEffectEntity);
+//                }
+//                frameEffectEntity = Instantiate(effect, parent);
+//                frameEffectEntity.transform.localPosition += offset;
+//                frameEffectEntity.transform.localScale = Vector3.Scale(frameEffectEntity.transform.localScale, fixScale);
+//                break;
+//            }
+//        case 1:
+//            {
+//                smokeEntity = Instantiate(smokeEffectPrefab);
+//                smokeEntity.transform.position = rocket.position;
+//                break;
+//            }
+//        default: break;
+//    }
+//}
+//bool IsNull_Array<T>     //  ”z—ñ‚Ìƒkƒ‹ƒ`ƒFƒbƒNAŠëŒ¯«‚ª‚ ‚Á‚½ê‡‹­§ƒNƒ‰ƒbƒVƒ…
+//   (T[] value, bool isCheckPoint, int[] checkPoint, bool haveToClach, string errorMsg_PointNull, string errorMsg_AllNull)
+//{
+//    if (value == null || value.Length == 0)
+//    {
+//        if (haveToClach)
+//        {
+//            Environment.FailFast(errorMsg_AllNull);    //  ƒNƒ‰ƒbƒVƒ…
+//        }
+//        Debug.Log(errorMsg_AllNull);    //  debug------------------
+//        return true;
+//    }
+//    if (isCheckPoint)
+//    {
+//        for (int arrayNo = checkPoint.Length - 1; arrayNo >= 0; arrayNo--)
+//        {
+//            if (value[checkPoint[arrayNo]] == null)
+//            {
+//                if (haveToClach)
+//                {
+//                    Environment.FailFast(errorMsg_PointNull);    //  ƒNƒ‰ƒbƒVƒ…
+//                }
+//                return true;
+//            }
+//            Debug.Log(errorMsg_PointNull);    //  debug-------------------
+//            return false;
+//        }
+//        Debug.Log(errorMsg_PointNull);    //  debug--------------------------
+//    }
+//    return false;
+//}
