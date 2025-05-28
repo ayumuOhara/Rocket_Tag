@@ -10,7 +10,6 @@ public class ReturnToLobby : MonoBehaviourPunCallbacks
     }
     public void GoToLobby()
     {
-        Cursor.visible = true;
         PhotonNetwork.Disconnect();
         SceneFadeManager.Instance.LoadScene("Lobby", 0.2f, 0.2f);
     }
