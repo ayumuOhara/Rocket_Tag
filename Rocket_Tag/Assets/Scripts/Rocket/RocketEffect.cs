@@ -304,6 +304,10 @@ internal class RocketEffect : MonoBehaviour                                     
         if (rocketStage == 3)
         {
             smokeEntity = Instantiate(loadedEffect[RocketEffectName.FRAME_SMOKE]);
+            smokePS = smokeEntity.GetComponent<ParticleSystem>();
+            smokeMainModule = smokePS.main;
+            smokeMainModule.startColor = Color.white;
+            smokeColorOverLifeTime = smokePS.colorOverLifetime;
             smokeEntity.transform.position = rocket.position;
         }
     }
