@@ -20,14 +20,20 @@ public class EnoguEvent : MonoBehaviourPun
 
         foreach (GameObject player in alivePlayers)
         {
-            AudioManager.Instance.PlaySE(SEManager.SEType.Event_ink); //ƒCƒ“ƒNSE
             PhotonView pv = player.GetComponent<PhotonView>();
             if (pv != null)
             {
+                photonView.RPC("PlayInkSE",   pv.Owner);
                 photonView.RPC("BlindEffect", pv.Owner, true);
                 photonView.RPC("positioning", pv.Owner);
             }
         }
+    }
+
+    [PunRPC]
+    void PlayInkSE()
+    {
+        AudioManager.Instance.PlaySE(SEManager.SEType.Event_ink);
     }
 
     [PunRPC]
