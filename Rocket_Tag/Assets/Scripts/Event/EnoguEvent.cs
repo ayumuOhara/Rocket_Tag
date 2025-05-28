@@ -22,7 +22,6 @@ public class EnoguEvent : MonoBehaviourPun
 
         foreach (GameObject player in alivePlayers)
         {
-            AudioManager.Instance.PlaySE(SEManager.SEType.Event_ink); //ƒCƒ“ƒNSE
             Debug.Log("”­“®‚µ‚È‚«‚ápv‚ªnull");
             PhotonView pv = player.GetComponent<PhotonView>();
             if (pv != null)
