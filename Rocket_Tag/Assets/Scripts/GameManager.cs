@@ -168,17 +168,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             if (playerCount <= 1)
             {
+                Cursor.visible = true;
                 Debug.Log("¶‘¶l”‚ª‚Pl‚É‚È‚Á‚½‚Ì‚ÅƒQ[ƒ€‚ðI—¹‚µ‚Ü‚·");
                 PhotonNetwork.Disconnect();
-                if(rankManager.playerRank == 1)
-                {
-                    SceneFadeManager.Instance.LoadScene("Result", 0.2f, 0.3f);
-                }
-                else
-                {
-                    SceneFadeManager.Instance.LoadScene("Lobby", 0.2f, 0.3f);
-                }
-
+                SceneFadeManager.Instance.LoadScene("Result", 0.2f, 0.3f);
                 yield break;
             }
             yield return null;

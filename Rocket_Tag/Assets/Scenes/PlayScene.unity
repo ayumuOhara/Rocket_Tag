@@ -2125,7 +2125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debuger: {fileID: 0}
-  skinGanarater: {fileID: 1958307096}
+  skinGanarater: {fileID: 0}
   eventEffect: {fileID: 804079635}
   playerCamera: {fileID: 1037090923}
   waitCamera: {fileID: 236845388}
@@ -4600,7 +4600,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1958307095}
-  - component: {fileID: 1958307096}
+  - component: {fileID: 1958307098}
   - component: {fileID: 1958307097}
   m_Layer: 0
   m_Name: SkinGenerater
@@ -4624,18 +4624,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1958307096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1958307094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9a5887bc6abb8c448f15af41d2ab1da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1958307097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4658,6 +4646,18 @@ MonoBehaviour:
   sceneViewId: 6
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &1958307098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958307094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2197e997e4c52749b2d2358bea683a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2012229855
 GameObject:
   m_ObjectHideFlags: 0
