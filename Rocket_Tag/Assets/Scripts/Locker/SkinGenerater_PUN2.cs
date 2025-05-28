@@ -1,4 +1,3 @@
-
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -13,13 +12,13 @@ using UnityEngine.SceneManagement;
 
 public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
 {
+    // スキン生成の種類を定義する列挙型
     internal enum SkinGenerateProcces
     {
         IN_GAME_GENERATE,
     }
 
-    static GameObject[] playerSkinPrefab;
-    static bool isSkinLoaded = false; // スキンロード完了フラグ
+    static GameObject[] playerSkinPrefab; // ロードされたスキンプレハブを格納
     GameObject skinEntityHead;
     Transform playerTF;
     const string inGameSceneName = "PlayScene";
@@ -30,12 +29,13 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
     const string couldntGetPlayerList = "Error: PlayerList couldn't get";
     const string playerPrefasUnexpectedValue = "Playerprefas value is strange";
     const string scriptProssesFinish = "SkinGenerater.cs's process is stop";
-    static int skinLocation;
+    static bool isSkinLoaded = false;
 
     static internal GameObject[] _SkinPrefab { get { return playerSkinPrefab; } }
 
     void Start()
     {
+        // ゲームシーンでなければ初期化
         if (SceneManager.GetActiveScene().name != inGameSceneName)
         {
             Initialize();
@@ -44,11 +44,13 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
 
     async void Initialize()
     {
+        // スキンが未ロードならロード
         if (playerSkinPrefab == null)
         {
             await PlayerSkinLord();
         }
 
+        // プレイヤーのTransform取得
         playerTF = GameObject.Find("Player")?.transform;
         if (IsNull_Variable(playerTF, false, playerTFLoadError))
         {
@@ -56,12 +58,14 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
             playerTF = this.transform;
         }
 
+        // スキンロード失敗チェック
         if (IsNull_Array(playerSkinPrefab, false, null, false, skinLoadError, null))
         {
             Debug.Log(scriptProssesFinish);
             return;
         }
 
+        // 自分のプレイヤーならスキン生成
         if (photonView.IsMine)
         {
             SkinGenerate(playerTF);
@@ -70,10 +74,10 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
 
     internal async void SkinGenerateWrapper(SkinGenerateProcces skinGenerateProcces)
     {
-        // スキンロードが完了するまで待機
+        // スキンロード完了まで待機
         while (!isSkinLoaded)
         {
-            await Task.Delay(100); // 100ms 待機
+            await Task.Delay(100);
         }
 
         switch (skinGenerateProcces)
@@ -86,12 +90,15 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
 
     void InGameGenerate()
     {
+        // GameManager取得
         GameManager gameManager = GameObject.Find("GameManager")?.GetComponent<GameManager>();
         if (IsNull_Variable(gameManager, false, gameMngNotFound)) return;
 
+        // プレイヤーリスト取得
         GameObject[] tmpPlayerList = gameManager.GetPlayerList().ToArray();
         if (IsNull_Array(tmpPlayerList, false, null, false, null, couldntGetPlayerList)) return;
 
+        // 各プレイヤーにスキン生成
         foreach (var player in tmpPlayerList)
         {
             SkinGenerate(player.transform);
@@ -100,6 +107,7 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
 
     void SkinGenerate(Transform playerTF_)
     {
+        // PlayerPrefsからスキン情報取得
         int tmpSkinNo = PlayerPrefs.GetInt("PlayerSkinNo", -1);
         int tmpSkinLocation = PlayerPrefs.GetInt("PlayerSkinLocation", -1);
 
@@ -110,6 +118,7 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
             Debug.Log(playerPrefasUnexpectedValue);
         }
 
+        // カスタムプロパティにスキン情報を設定
         if (PhotonNetwork.InRoom)
         {
             ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
@@ -120,54 +129,41 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
         }
 
-        // スキンロード完了を確認
-        if (!isSkinLoaded)
-        {
-            Debug.LogWarning("Skin not loaded yet. Skipping instantiation.");
-            return;
-        }
-
-        InstantiateSkin(tmpSkinNo, tmpSkinLocation, playerTF_);
+        // 自分のスキンを生成
+        LoadAndAttachSkin(tmpSkinNo, tmpSkinLocation, playerTF_);
     }
 
-    void InstantiateSkin(int skinNo, int location, Transform parent)
+    async void LoadAndAttachSkin(int skinNo, int location, Transform parent)
     {
-        // スキンプレハブとインデックスのチェック
-        if (playerSkinPrefab == null || skinNo < 0 || skinNo >= playerSkinPrefab.Length || playerSkinPrefab[skinNo] == null)
-        {
-            Debug.LogError("Invalid skin prefab or index.");
-            return;
-        }
+        string[] skinNames = new string[] { "NotWearing", "RedCap", "StrawHat", "Eringi", "Freeza", "Bear", "Star" };
+        var handle = Addressables.LoadAssetAsync<GameObject>(skinNames[skinNo]);
+        await handle.Task;
 
-        if (location == 0)
+        if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            Transform head = parent.Find("root/Hip/Spine/Head");
-            if (head == null)
+            GameObject skin = Instantiate(handle.Result);
+            if (location == 0)
             {
-                Debug.LogError("Head transform not found in player hierarchy.");
-                return;
+                Transform head = parent.Find("root/Hip/Spine/Head");
+                if (head != null)
+                {
+                    skin.transform.SetParent(head, false);
+                }
             }
-
-            GameObject skin = PhotonNetwork.Instantiate(playerSkinPrefab[skinNo].name, Vector3.zero, Quaternion.identity);
-            skin.transform.SetParent(head, false);
         }
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
+        // 他プレイヤーのスキン情報を受け取って生成
         if (changedProps.ContainsKey("SkinNo") && changedProps.ContainsKey("SkinLocation"))
         {
             int skinNo = (int)changedProps["SkinNo"];
             int location = (int)changedProps["SkinLocation"];
-
             GameObject playerObj = GetPlayerObject(targetPlayer);
-            if (playerObj != null && playerSkinPrefab != null && skinNo >= 0 && skinNo < playerSkinPrefab.Length && playerSkinPrefab[skinNo] != null)
+            if (playerObj != null)
             {
-                InstantiateSkin(skinNo, location, playerObj.transform);
-            }
-            else
-            {
-                Debug.LogWarning("Skin instantiation skipped due to missing data.");
+                LoadAndAttachSkin(skinNo, location, playerObj.transform);
             }
         }
     }
@@ -262,6 +258,6 @@ public class SkinGenerater_PUN2 : MonoBehaviourPunCallbacks
             await Task.Yield();
         }
 
-        isSkinLoaded = true; // スキンロード完了フラグを立てる
+        isSkinLoaded = true;
     }
 }
