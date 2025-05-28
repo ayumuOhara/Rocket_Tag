@@ -183,7 +183,7 @@ internal class RocketEffect : MonoBehaviour                                     
     {
         factory = new RealFactory();
 
-        SetDictionary();
+        InitializeDictionary();
         await RocketEffectLoad();
         //rocket = GameObject.Find("Cylinder").GetComponent<Transform>();    //  ファーストステート突入した時のロケットが生成されてないことの無理やりの解消法でバックのため保存
         smokeGradient = new Gradient();
@@ -249,7 +249,7 @@ internal class RocketEffect : MonoBehaviour                                     
             await Task.Yield();
         }
     }
-    void SetDictionary()    //  辞書が多変数を初期化
+    void InitializeDictionary()    //  辞書が多変数を初期化
     {
         rocketEffectProcess = new Dictionary<RocketEffectProcess, Action>
         {
@@ -293,7 +293,7 @@ internal class RocketEffect : MonoBehaviour                                     
     void GeneratePlume()    //  ロケットエフェクトを生成
     {
         frameEntity = Instantiate(loadedEffect[(RocketEffectName)rocketStage]);
-        rocketStage = rocketStage < 3 ? rocketStage++ : rocketStage = 0;
+        rocketStage = rocketStage < 3 ? rocketStage++ : rocketStage = 0;      //  ロケットステージが毎回0状態になっているここまで----------------------------------エフェクトが重複生成されてもいた。
         frameEntity.transform.localPosition += frameEffectOffset;
         frameEntity.transform.localScale = Vector3.Scale(frameEntity.transform.localScale, frameEffectScale[rocketStage]);
         Debug.Log("rocketStage" + rocketStage);
