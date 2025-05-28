@@ -292,7 +292,7 @@ internal class RocketEffect : MonoBehaviour                                     
     }
     void GeneratePlume()    //  ロケットエフェクトを生成
     {
-        frameEntity = Instantiate(loadedEffect[(RocketEffectName)rocketStage]);
+        frameEntity = Instantiate(loadedEffect[(RocketEffectName)rocketStage], rocket);
         rocketStage = rocketStage < 3 ? rocketStage++ : rocketStage = 0;      //  ロケットステージが毎回0状態になっているここまで----------------------------------エフェクトが重複生成されてもいた。
         frameEntity.transform.localPosition += frameEffectOffset;
         frameEntity.transform.localScale = Vector3.Scale(frameEntity.transform.localScale, frameEffectScale[rocketStage]);
