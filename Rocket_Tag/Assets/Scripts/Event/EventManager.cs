@@ -225,6 +225,7 @@ public class EventManager : MonoBehaviourPunCallbacks
 
         foreach (GameObject player in playerList)
         {
+            AudioManager.Instance.PlaySE(SEManager.SEType.Event_ChangeSpeed);
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
             int rndSpeed = Random.Range(minSpeed, maxSpeed);
             PhotonView photon = player.GetComponent<PhotonView>();
