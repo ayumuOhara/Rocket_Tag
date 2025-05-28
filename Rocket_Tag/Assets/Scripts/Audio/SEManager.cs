@@ -49,6 +49,7 @@ public class SEManager : MonoBehaviour
         Page,　　　　　// ページをめくる効果音
         Win,           // リザルト遷移時の効果音
         Countdown,     // ゲーム開始時のカウントダウン
+        Event_ChangeSpeed,
     }
 
     // SE再生メソッド
