@@ -31,7 +31,7 @@ internal class FirstStage : IEffectState    //  ロケット1段階目
     }
     public void Exit(RocketEffect rocketEffect)
     {
-
+        rocketEffect._RocketStage++;
     }
 }
 internal class SecondStage : IEffectState    //  ロケット2段階目
@@ -51,7 +51,7 @@ internal class SecondStage : IEffectState    //  ロケット2段階目
     }
     public void Exit(RocketEffect rocketEffect)
     {
-
+        rocketEffect._RocketStage++;
     }
 }
 internal class ThirdStage : IEffectState    //  ロケット3段階目
@@ -71,7 +71,7 @@ internal class ThirdStage : IEffectState    //  ロケット3段階目
     }
     public void Exit(RocketEffect rocketEffect)
     {
-
+        rocketEffect._RocketStage++;
     }
 }
 internal class LastStage : IEffectState    //  ロケット最終段階
@@ -90,7 +90,7 @@ internal class LastStage : IEffectState    //  ロケット最終段階
     }
     public void Exit(RocketEffect rocketEffect)
     {
-
+        rocketEffect._RocketStage = 0;
     }
 }
 internal class PrepareRocket : IEffectState    //  次のロケットを用意している状態
@@ -163,7 +163,7 @@ internal class RocketEffect : MonoBehaviour                                     
     internal TimeManager TimeMgr
     { get { return timeMgr; } }
     internal int _RocketStage
-    { get { return rocketStage; } }
+    { get { return rocketStage; } set { rocketStage = value; } }
     internal bool IsFindNextRocket
     { get { return isFindNextRocket; } set { isFindNextRocket = value; } }                                                          ////  宣言区終了  ////
 
@@ -297,17 +297,7 @@ internal class RocketEffect : MonoBehaviour                                     
             Destroy(frameEntity);
         }
         frameEntity = Instantiate(loadedEffect[(RocketEffectName)rocketStage], rocket);
-        if(rocketStage != 3)
-        {
-            rocketStage++;
-            Debug.Log("rocekt stage increese");
-        }
-        else
-        {
-            rocketStage = 0;
-            Debug.Log("rocekt stage is 0");
-        }
-        //rocketStage = rocketStage < 3 ? rocketStage++ : rocketStage = 0;      //  ロケットステージが毎回0状態になっているここまで----------------------------------エフェクトが重複生成されてもいた。
+            //rocketStage = rocketStage < 3 ? rocketStage++ : rocketStage = 0;      //  ロケットステージが毎回0状態になっているここまで----------------------------------エフェクトが重複生成されてもいた。
         frameEntity.transform.localPosition += frameEffectOffset;
         frameEntity.transform.localScale = Vector3.Scale(frameEntity.transform.localScale, frameEffectScale[rocketStage]);
         Debug.Log("rocketStage" + rocketStage);
