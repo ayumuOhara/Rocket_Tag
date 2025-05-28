@@ -97,7 +97,10 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         if (hasRocket)
         {
             rocketObj.SetActive(true);
-            compas.SetActive(true);
+            if (photonView.IsMine)
+            {
+                compas.SetActive(true);
+            }
             Debug.Log("ÉçÉPÉbÉgÇéÛÇØéÊÇËÇ‹Ç∑");
             rocketEffect.Rocket = GameObject.Find("Rocket").transform;
             rocketEffect.IsFindNextRocket = true;
@@ -129,7 +132,10 @@ public class SetPlayerBool : MonoBehaviourPunCallbacks
         else
         {
             rocketObj.SetActive(false);
-            compas.SetActive(false);
+            if (photonView.IsMine)
+            {
+                compas.SetActive(false);
+            }
 
             if (photonView.IsMine)
             {
