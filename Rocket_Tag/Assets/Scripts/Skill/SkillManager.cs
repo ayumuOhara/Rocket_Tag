@@ -54,11 +54,11 @@ public class SkillManager : MonoBehaviourPunCallbacks
         skillIdx = 4;
         SetSkill(skillDataBase.SkillData[skillIdx]);
 
-        if (skillCoolTime == null)
-        {
-            skillCoolTime = GameObject.Find("SkillCoolManager").GetComponent<SkillCoolTime>();
-            Debug.Log($"SkillCoolManager：{skillCoolTime}");
-        }
+        //if (skillCoolTime == null)
+        //{
+        //    skillCoolTime = GameObject.Find("SkillCoolManager").GetComponent<SkillCoolTime>();
+        //    Debug.Log($"SkillCoolManager：{skillCoolTime}");
+        //}
     }
 
     // 設定されているスキル使用
@@ -66,8 +66,8 @@ public class SkillManager : MonoBehaviourPunCallbacks
     {
         if (finishSkill == true)
         {
-            if (skillCoolTime.SkillCool == true)//クールタイム
-            {
+            //if (skillCoolTime.SkillCool == true)//クールタイム
+            //{
                 Debug.Log($"【{skillData.skillName}】を使用");
 
                 switch (skillData.skillId)
@@ -81,8 +81,8 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
                 //SendSkillData();
 
-                StartCoroutine(skillCoolTime.CoolTime(SkillCT));//クールタイム
-            }
+                //StartCoroutine(skillCoolTime.CoolTime(SkillCT));//クールタイム
+            //}
         }
     }
 
