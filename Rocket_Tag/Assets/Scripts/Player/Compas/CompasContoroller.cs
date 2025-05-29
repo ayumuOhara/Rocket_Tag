@@ -15,6 +15,9 @@ public class FollowUpCompas : MonoBehaviour
     float trackSpd;
     int xRotCap;
     bool isLoaded;
+    bool isFinishedGame;
+    public bool IsFinishedGame
+    { set { isFinishedGame = value; } }
 
     void Start()                                                                            ////  以下処理区  ////
     {
@@ -22,9 +25,12 @@ public class FollowUpCompas : MonoBehaviour
     }
     void Update()
     {
-        Vector3[] tmpPlayerPos = playersTF.Select(tf => tf.position).ToArray();
-        ChangeRot(bombPlayerTF, compas, GetCloserObj(bombPlayerTF.position, tmpPlayerPos), trackSpd, xRotCap);
-    }                                                                                       ////  処理区終了  ////
+        if (gameManager.playerNum > 1)
+        {
+            Vector3[] tmpPlayerPos = playersTF.Select(tf => tf.position).ToArray();
+            ChangeRot(bombPlayerTF, compas, GetCloserObj(bombPlayerTF.position, tmpPlayerPos), trackSpd, xRotCap);
+        }
+    }                                                                                    ////  処理区終了  ////
     void Initialize()    //  初期化
     {
         bombPlayerTF = this.transform.root;
@@ -35,6 +41,7 @@ public class FollowUpCompas : MonoBehaviour
         trackSpd = 11f;
         xRotCap = 36;
         isLoaded = true;
+        isFinishedGame = false;
     }
     void ChangeRot(Transform watcher,Transform changedObj, Vector3 target, float trackSpd, int xRotCap)    //  オブジェクトをターゲットの方向に向ける
     {
