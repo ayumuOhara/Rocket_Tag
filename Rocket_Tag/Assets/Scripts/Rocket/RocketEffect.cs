@@ -295,7 +295,6 @@ internal class RocketEffect : MonoBehaviour                                     
     }
     void GeneratePlume()    //  ロケットエフェクトを生成
     {
-        GameObject smokeEntity = new GameObject();
         if(frameEntity != null)
         {
             Destroy(frameEntity);
@@ -311,12 +310,14 @@ internal class RocketEffect : MonoBehaviour                                     
             {
                 Destroy(smokeEntity);
             }
+            smokeEntity = Instantiate(loadedEffect[RocketEffectName.FRAME_SMOKE]);
             smokePS = smokeEntity.GetComponent<ParticleSystem>();
-            smokeMainModule = smokePS.main;
+            smokeMainModule = smokePS.main;       ////--------------------------------------二回目以降スモークが見えないない、unity最新使用の性か、生成場所が悪いか
             smokeMainModule.startColor = Color.white;
             smokeColorOverLifeTime = smokePS.colorOverLifetime;
             smokeEntity.transform.position = rocket.position;
             rocketStage = 0;
+            Debug.Log("smoke Effect Generate");
         }
     }
     void SmokeDiffusion()    //  煙幕拡散、煙幕をデストロイしたたらPrepareRocketStateに移動
