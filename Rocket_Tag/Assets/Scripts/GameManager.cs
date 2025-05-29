@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] TimeManager timeManager;
     [SerializeField] InstantiatePlayer instantiatePlayer;
     [SerializeField] PlayerRankManager rankManager;
+    [SerializeField] EventEffect eventEffect;
 
     [SerializeField] PlayerReady playerReady;
     [SerializeField] TextMeshProUGUI playerCntText;     // ReadyŠ®—¹‚µ‚Ä‚¢‚éƒvƒŒƒCƒ„[”
@@ -125,6 +126,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             //StartCoroutine(CheckOverTime());
             //StartCoroutine(CheckRocketCnt());
         }
+        eventEffect.AssignPlayersTF();
     }
 
     public void ChooseRocketPlayer()
