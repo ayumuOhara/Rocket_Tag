@@ -93,6 +93,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         UpdatePlayerCount();
+        gameManager.playerNum--;
         Debug.Log($"プレイヤーが退出しました: {otherPlayer.NickName}");
     }
 
