@@ -307,7 +307,6 @@ internal class RocketEffect : MonoBehaviour                                     
         Debug.Log("rocketStage" + rocketStage);
         if (rocketStage == 3)
         {
-            Destroy(smokeEntity.gameObject);
             if(smokeEntity == null)
             {
                 smokeEntity = Instantiate(loadedEffect[RocketEffectName.FRAME_SMOKE]);
