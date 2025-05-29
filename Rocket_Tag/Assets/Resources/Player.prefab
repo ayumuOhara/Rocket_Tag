@@ -1762,12 +1762,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820cc424280cfe84bb7d0a22d8205e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldownMask: {fileID: 0}
-  SkillCool: 1
   player: {fileID: 7666606126202363588}
   rocketObj: {fileID: 4281978814399217487}
   stickyZone: {fileID: 5389891788530700, guid: 97e922af119d9f947936b1147ad629ef, type: 3}
-  skillIcon: {fileID: 0}
+  skillCTImage: {fileID: 0}
   finishSkill: 1
 --- !u!114 &7546664316037379923
 MonoBehaviour:
