@@ -1762,14 +1762,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820cc424280cfe84bb7d0a22d8205e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillCoolTime: {fileID: 0}
-  skillDataBase: {fileID: 11400000, guid: ed8d1036479547b4fab7294aaf68ed13, type: 2}
-  skillData:
-    skillId: 0
-    skillName: 4
-    skillIcon: {fileID: 0}
-  skillIdx: 0
-  observeDistance: {fileID: 474657300711981693}
+  cooldownMask: {fileID: 0}
+  SkillCool: 1
   player: {fileID: 7666606126202363588}
   rocketObj: {fileID: 4281978814399217487}
   stickyZone: {fileID: 5389891788530700, guid: 97e922af119d9f947936b1147ad629ef, type: 3}
