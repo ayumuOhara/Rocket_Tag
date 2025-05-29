@@ -98,6 +98,7 @@ internal class PrepareRocket : IEffectState    //  Ÿ‚ÌƒƒPƒbƒg‚ğ—pˆÓ‚µ‚Ä‚¢‚éó‘
     public void Enter(RocketEffect rocketEffect)
     {
         Debug.Log("Prepare");
+        rocketEffect.IsFindNextRocket = false;
     }
     public void Update(RocketEffect rocketEffect)
     {
@@ -198,7 +199,7 @@ internal class RocketEffect : MonoBehaviour                                     
         smokeEffectScale = new Vector3(1, 1, 1);
         smokeEffectEndScale = new Vector3(12f, 12f, 12f);
 
-        smokeDelTime = 12;
+        smokeDelTime = 1.5f;
         rocketStage = 0;
         isFindNextRocket = false;
         isStartTime = true;
@@ -295,10 +296,10 @@ internal class RocketEffect : MonoBehaviour                                     
     }
     void GeneratePlume()    //  ƒƒPƒbƒgƒGƒtƒFƒNƒg‚ğ¶¬
     {
-        if(frameEntity != null)
-        {
-            Destroy(frameEntity);
-        }
+        //if(frameEntity != null)
+        //{
+        //    Destroy(frameEntity);
+        //}
         frameEntity = Instantiate(loadedEffect[(RocketEffectName)rocketStage], rocket);
             //rocketStage = rocketStage < 3 ? rocketStage++ : rocketStage = 0;      //  ƒƒPƒbƒgƒXƒe[ƒW‚ª–ˆ‰ñ0ó‘Ô‚É‚È‚Á‚Ä‚¢‚é‚±‚±‚Ü‚Å----------------------------------ƒGƒtƒFƒNƒg‚ªd•¡¶¬‚³‚ê‚Ä‚à‚¢‚½B
         frameEntity.transform.localPosition = frameEffectOffset;
@@ -306,10 +307,6 @@ internal class RocketEffect : MonoBehaviour                                     
         Debug.Log("rocketStage" + rocketStage);
         if (rocketStage == 3)
         {
-            if(smokeEntity != null)
-            {
-                Destroy(smokeEntity);
-            }
             smokeEntity = Instantiate(loadedEffect[RocketEffectName.FRAME_SMOKE]);
             smokePS = smokeEntity.GetComponent<ParticleSystem>();
             smokeMainModule = smokePS.main;       ////--------------------------------------“ñ‰ñ–ÚˆÈ~ƒXƒ‚[ƒN‚ªŒ©‚¦‚È‚¢‚È‚¢AunityÅVg—p‚Ì«‚©A¶¬êŠ‚ªˆ«‚¢‚©
@@ -331,6 +328,7 @@ internal class RocketEffect : MonoBehaviour                                     
         }
         else
         {
+            smokeDelTime = 1.5f;
             Debug.Log("TimeOut");    //  msg for debug----------------
             Destroy(smokeEntity.gameObject);
             ChangeState(new PrepareRocket());
