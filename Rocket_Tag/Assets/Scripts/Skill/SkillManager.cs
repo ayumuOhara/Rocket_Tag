@@ -38,7 +38,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     // 設定されているスキル使用
     public void UseSkill()
     {
-        if (finishSkill == true && SkillCool == false)
+        if (finishSkill && SkillCool)
         {
             StartCoroutine(Dash());
         }
