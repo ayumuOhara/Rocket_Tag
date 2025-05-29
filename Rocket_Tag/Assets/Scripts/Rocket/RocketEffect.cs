@@ -195,7 +195,7 @@ internal class RocketEffect : MonoBehaviour                                     
 
         frameEffectOffset = new Vector3(0.020708f, -2.74f, -0.36f);
         frameEffectScale = new Vector3[] { new Vector3(1.21f, 1.21f, 1.21f), new Vector3(0.64f, 0.64f, 0.64f), new Vector3(0.56f, 0.61f, 0.5f), new Vector3(0.74f, 0.74f, 0.74f) };
-        smokeDiffusion = new Vector3(1.015f, 1.015f, 1.015f);
+        smokeDiffusion = new Vector3(1.011f, 1.011f, 1.011f);
         smokeEffectScale = new Vector3(1, 1, 1);
         smokeEffectEndScale = new Vector3(27f, 27f, 27f);
 
@@ -303,7 +303,6 @@ internal class RocketEffect : MonoBehaviour                                     
         frameEntity = Instantiate(loadedEffect[(RocketEffectName)rocketStage], rocket);
             //rocketStage = rocketStage < 3 ? rocketStage++ : rocketStage = 0;      //  ロケットステージが毎回0状態になっているここまで----------------------------------エフェクトが重複生成されてもいた。
         frameEntity.transform.localPosition = frameEffectOffset;
-        frameEntity.transform.localScale = Vector3.Scale(frameEntity.transform.localScale, frameEffectScale[rocketStage]);
         Debug.Log("rocketStage" + rocketStage);
         if (rocketStage == 3)
         {
@@ -332,8 +331,8 @@ internal class RocketEffect : MonoBehaviour                                     
         {
             float smokeDiffuseSpd = 1.0f;
             smokeColorOverLifeTime.color = smokeGradient;
-            //smokeEntity.transform.localScale = Vector3.Scale(smokeEntity.transform.localScale, smokeDiffusion);
-            smokeEntity.transform.localScale = Vector3.Lerp(smokeEntity.transform.localScale, smokeEffectEndScale, smokeDiffuseSpd * Time.deltaTime);
+            smokeEntity.transform.localScale = Vector3.Scale(smokeEntity.transform.localScale, smokeDiffusion);
+            //smokeEntity.transform.localScale = Vector3.Lerp(smokeEntity.transform.localScale, smokeEffectEndScale, smokeDiffuseSpd * Time.deltaTime);
         }
         else
         {
