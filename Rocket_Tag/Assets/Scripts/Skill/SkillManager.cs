@@ -39,6 +39,8 @@ public class SkillManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("クールタイムコルーチン開始");
 
+        skillCTImage = GameObject.Find("SkillCoolTime").GetComponent<Image>();
+
         skillCT = skillCTmax;
         skillReady = false;
         time = 0f;
@@ -63,8 +65,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
                 {
                     skillCTImage.fillAmount = cooltimeAmount; // ← ここでUI更新
                 }
-
-                yield return null;
             }
 
             yield return null;
