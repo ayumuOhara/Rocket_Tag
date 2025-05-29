@@ -71,6 +71,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
         }
 
         skillReady = true;
+        Debug.Log("クールタイム処理停止");
     }
 
 
