@@ -79,12 +79,9 @@ public class EnoguEvent : MonoBehaviourPun
 
             if (isPlayerSurvival == false)
             {
-                Debug.Log("€‚ñ‚¾");
-                //I—¹”»’è
-            }
-            else
-            {
-                Debug.Log("¶‚«‚Ä‚é``I");
+                blindEffect.SetActive(false);
+                enogu4_1.SetActive(false);
+                enogu4_2.SetActive(false);
             }
         }
     }
