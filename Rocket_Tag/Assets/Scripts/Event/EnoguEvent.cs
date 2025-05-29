@@ -15,7 +15,6 @@ public class EnoguEvent : MonoBehaviourPun
     [SerializeField] GameManager gameManager;
 
     bool isInEvent = false;
-    bool isPlayerSurvival = false;
 
     public void PaintOpen()//ê¨å˜ó·
     {
@@ -65,6 +64,8 @@ public class EnoguEvent : MonoBehaviourPun
     {
         if (isInEvent == true)
         {
+            bool isPlayerSurvival = false;
+
             List<GameObject> alivePlayers = gameManager.GetPlayerList();
 
             foreach (GameObject player in alivePlayers)
@@ -75,6 +76,7 @@ public class EnoguEvent : MonoBehaviourPun
                     isPlayerSurvival = true;
                 }
             }
+
             if (isPlayerSurvival == false)
             {
                 Debug.Log("éÄÇÒÇæ");
