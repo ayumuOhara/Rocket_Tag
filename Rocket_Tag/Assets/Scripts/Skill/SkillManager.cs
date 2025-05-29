@@ -68,7 +68,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
         }
 
         skillReady = true;
-        animator.SetTrigger("OnAnim");
+        //animator.SetTrigger("OnAnim");
         Debug.Log("クールタイム処理停止");
     }
 
