@@ -9,7 +9,8 @@ using static UnityEngine.GraphicsBuffer;
 
 public class SkillManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] SkillCoolTime skillCoolTime;
+    [SerializeField] Image cooldownMask;  // クール用
+    public bool SkillCool = true;
 
     PlayerMovement playerMovement;
     TimeManager timeManager;
@@ -31,26 +32,15 @@ public class SkillManager : MonoBehaviourPunCallbacks
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         skillIcon   = GameObject.Find("SkillIcon").GetComponent<Image>();
         Debug.Log($"SkillIcon：{skillIcon}");
-
-        //if (skillCoolTime == null)
-        //{
-        //    skillCoolTime = GameObject.Find("SkillCoolManager").GetComponent<SkillCoolTime>();
-        //    Debug.Log($"SkillCoolManager：{skillCoolTime}");
-        //}
+        cooldownMask = GameObject.Find("SkillCoolTime").GetComponent<Image>();
     }
 
     // 設定されているスキル使用
     public void UseSkill()
     {
-        if (finishSkill == true)
+        if (finishSkill == true && SkillCool == false)
         {
-            //if (skillCoolTime.SkillCool == true)//クールタイム
-            //{
             StartCoroutine(Dash());
-                //SendSkillData();
-
-                //StartCoroutine(skillCoolTime.CoolTime(SkillCT));//クールタイム
-            //}
         }
     }
 
@@ -82,6 +72,26 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
         finishSkill = true;
 
+        StartCoroutine(CoolTime(5));
+
         yield break;
+    }
+
+    public IEnumerator CoolTime(float SkillCT)//クールタイム
+    {
+        Debug.Log("呼ばれた");
+        float elapsed = 0f;
+        SkillCool = false;
+        cooldownMask.fillAmount = 1f;
+
+        while (elapsed < SkillCT)
+        {
+            elapsed += Time.deltaTime;
+            cooldownMask.fillAmount = 1f - (elapsed / SkillCT);
+            yield return null;
+        }
+
+        cooldownMask.fillAmount = 0f;
+        SkillCool = true;
     }
 }
