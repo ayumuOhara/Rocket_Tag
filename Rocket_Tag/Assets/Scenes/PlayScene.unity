@@ -1843,6 +1843,7 @@ MonoBehaviour:
   timeManager: {fileID: 1888650126}
   instantiatePlayer: {fileID: 897190058}
   rankManager: {fileID: 1419296573}
+  eventEffect: {fileID: 804079635}
   playerReady: {fileID: 0}
   playerCntText: {fileID: 411568704}
   infoText: {fileID: 1087369349}
@@ -2125,7 +2126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b81737bdf3279444a316b00d9767f6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debuger: {fileID: 0}
   skinGanarater: {fileID: 1958307098}
   eventEffect: {fileID: 804079635}
   playerCamera: {fileID: 1037090923}
