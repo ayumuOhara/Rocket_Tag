@@ -314,7 +314,6 @@ internal class RocketEffect : MonoBehaviour                                     
             else
             {
                 smokeEntity.transform.position = rocket.position;
-                smokePS.Clear();
                 smokePS.Play();
             }
             smokePS = smokeEntity.GetComponent<ParticleSystem>();
@@ -327,7 +326,7 @@ internal class RocketEffect : MonoBehaviour                                     
     }
     void SmokeDiffusion()    //  煙幕拡散、煙幕をデストロイしたたらPrepareRocketStateに移動
     {
-        float smokeDiffuseSpd = 0.2f;
+        float smokeDiffuseSpd = 0.5f;
         if ((smokeDelTime -= Time.deltaTime) > 0)
         {
             smokeColorOverLifeTime.color = smokeGradient;
@@ -340,6 +339,7 @@ internal class RocketEffect : MonoBehaviour                                     
             Debug.Log("TimeOut");    //  msg for debug----------------
             //Destroy(smokeEntity.gameObject);
             smokePS.Stop();
+            smokePS.Clear();
             smokeEntity.transform.localScale = Vector3.Lerp(smokeEntity.transform.localScale, smokeEffectEndScale, smokeDiffuseSpd * Time.deltaTime);
             ChangeState(new PrepareRocket());
             smokeEntity.transform.localScale = smokeEffectScale;
