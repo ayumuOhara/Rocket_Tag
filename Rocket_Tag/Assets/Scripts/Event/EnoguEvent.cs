@@ -80,6 +80,10 @@ public class EnoguEvent : MonoBehaviourPun
                 Debug.Log("€‚ñ‚¾");
                 //I—¹”»’è
             }
+            else
+            {
+                Debug.Log("¶‚«‚Ä‚é``I");
+            }
         }
     }
 
