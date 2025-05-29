@@ -195,9 +195,9 @@ internal class RocketEffect : MonoBehaviour                                     
 
         frameEffectOffset = new Vector3(0.020708f, -2.74f, -0.36f);
         frameEffectScale = new Vector3[] { new Vector3(1.21f, 1.21f, 1.21f), new Vector3(0.64f, 0.64f, 0.64f), new Vector3(0.56f, 0.61f, 0.5f), new Vector3(0.74f, 0.74f, 0.74f) };
-        smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
+        smokeDiffusion = new Vector3(1.015f, 1.015f, 1.015f);
         smokeEffectScale = new Vector3(1, 1, 1);
-        smokeEffectEndScale = new Vector3(30f, 30f, 30f);
+        smokeEffectEndScale = new Vector3(27f, 27f, 27f);
 
         smokeDelTime = 2.5f;
         rocketStage = 0;
@@ -330,7 +330,7 @@ internal class RocketEffect : MonoBehaviour                                     
     {
         if ((smokeDelTime -= Time.deltaTime) > 0)
         {
-            float smokeDiffuseSpd = 3.0f;
+            float smokeDiffuseSpd = 1.0f;
             smokeColorOverLifeTime.color = smokeGradient;
             //smokeEntity.transform.localScale = Vector3.Scale(smokeEntity.transform.localScale, smokeDiffusion);
             smokeEntity.transform.localScale = Vector3.Lerp(smokeEntity.transform.localScale, smokeEffectEndScale, smokeDiffuseSpd * Time.deltaTime);
