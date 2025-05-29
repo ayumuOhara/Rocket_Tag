@@ -21,7 +21,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
     public bool finishSkill = true;
     bool skillReady = true;
 
-    float time = 0;
     float skillCT = 0;
     float skillCTmax = 5.0f;
 
@@ -41,13 +40,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
         skillCT = skillCTmax;
         skillReady = false;
-        time = 0f;
-        float cooltimeAmount = skillCT / skillCTmax;
-
-        if (skillCTImage != null)
-        {
-            skillCTImage.fillAmount = cooltimeAmount; // ← ここでUI更新
-        }
+        skillCTImage.fillAmount = 1.0f;
 
         while (skillCT > 0)
         {
@@ -55,10 +48,9 @@ public class SkillManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("クールタイム処理開始");
 
-                time += Time.deltaTime;
-                skillCT -= time;
+                skillCT -= Time.deltaTime;
 
-                cooltimeAmount = skillCT / skillCTmax;
+                float cooltimeAmount = skillCT / skillCTmax;
                 if (skillCTImage != null)
                 {
                     skillCTImage.fillAmount = cooltimeAmount; // ← ここでUI更新
