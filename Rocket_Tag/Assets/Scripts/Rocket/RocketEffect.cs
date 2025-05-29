@@ -340,6 +340,7 @@ internal class RocketEffect : MonoBehaviour                                     
             Debug.Log("TimeOut");    //  msg for debug----------------
             //Destroy(smokeEntity.gameObject);
             smokePS.Stop();
+            smokePS.Clear();
             smokeEntity.transform.localScale = smokeEffectScale;
             ChangeState(new PrepareRocket());
         }
