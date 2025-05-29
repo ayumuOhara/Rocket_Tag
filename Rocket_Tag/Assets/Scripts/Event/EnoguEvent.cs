@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class EnoguEvent : MonoBehaviourPun
 {
-    [SerializeField] GameObject blindEffect;               // 目つぶしイベント用UI
-    [SerializeField] GameObject enogu1;               // 目つぶしイベント用UI
-    [SerializeField] GameObject enogu3;               // 目つぶしイベント用UI
-    [SerializeField] GameObject enogu4_1;               // 目つぶしイベント用UI
-    [SerializeField] GameObject enogu4_2;               // 目つぶしイベント用UI
+    [SerializeField] GameObject blindEffect;       // 目つぶしイベント用UI
+    [SerializeField] GameObject enogu1;            // 目つぶしイベント用UI
+    [SerializeField] GameObject enogu3;            // 目つぶしイベント用UI
+    [SerializeField] GameObject enogu4_1;          // 目つぶしイベント用UI
+    [SerializeField] GameObject enogu4_2;          // 目つぶしイベント用UI
 
     [SerializeField] GameManager gameManager;
 

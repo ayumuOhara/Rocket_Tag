@@ -225,10 +225,10 @@ public class EventManager : MonoBehaviourPunCallbacks
 
         foreach (GameObject player in playerList)
         {
-            AudioManager.Instance.PlaySE(SEManager.SEType.Event_ChangeSpeed);
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
             int rndSpeed = Random.Range(minSpeed, maxSpeed);
             PhotonView photon = player.GetComponent<PhotonView>();
+            photon.RPC("PlayChangeSpeedSE", photon.Owner);
             photon.RPC("SetMoveSpeed", RpcTarget.All, (float)rndSpeed);
         }
         photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcess.MOVE_SPD_AURA);    //  テレポートエフェクト生成
@@ -245,5 +245,11 @@ public class EventManager : MonoBehaviourPunCallbacks
             photon.RPC("SetMoveSpeed", RpcTarget.All, playerMovement.GetDefaultMoveSpeed());
         }
         photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcess.STOP_SPD_AURA);    //  テレポートエフェクト停止
+    }
+
+    [PunRPC]
+    void PlayChangeSpeedSE()
+    {
+        AudioManager.Instance.PlaySE(SEManager.SEType.Event_ChangeSpeed);
     }
 }
