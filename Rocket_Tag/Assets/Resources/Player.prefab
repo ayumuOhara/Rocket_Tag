@@ -1767,6 +1767,9 @@ MonoBehaviour:
   stickyZone: {fileID: 5389891788530700, guid: 97e922af119d9f947936b1147ad629ef, type: 3}
   skillCTImage: {fileID: 0}
   finishSkill: 1
+  skillReady: 1
+  skillCT: 0
+  skillCTmax: 10
 --- !u!114 &7546664316037379923
 MonoBehaviour:
   m_ObjectHideFlags: 0
