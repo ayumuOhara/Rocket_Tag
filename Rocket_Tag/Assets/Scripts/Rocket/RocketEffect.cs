@@ -197,9 +197,9 @@ internal class RocketEffect : MonoBehaviour                                     
         frameEffectScale = new Vector3[] { new Vector3(1.21f, 1.21f, 1.21f), new Vector3(0.64f, 0.64f, 0.64f), new Vector3(0.56f, 0.61f, 0.5f), new Vector3(0.74f, 0.74f, 0.74f) };
         smokeDiffusion = new Vector3(1.02f, 1.02f, 1.02f);
         smokeEffectScale = new Vector3(1, 1, 1);
-        smokeEffectEndScale = new Vector3(12f, 12f, 12f);
+        smokeEffectEndScale = new Vector3(30f, 30f, 30f);
 
-        smokeDelTime = 1.5f;
+        smokeDelTime = 2.5f;
         rocketStage = 0;
         isFindNextRocket = false;
         isStartTime = true;
@@ -328,7 +328,7 @@ internal class RocketEffect : MonoBehaviour                                     
         }
         else
         {
-            smokeDelTime = 1.5f;
+            smokeDelTime = 2.5f;
             Debug.Log("TimeOut");    //  msg for debug----------------
             Destroy(smokeEntity.gameObject);
             ChangeState(new PrepareRocket());
