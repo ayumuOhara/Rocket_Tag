@@ -21,6 +21,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     public bool finishSkill = true;
     [SerializeField] bool skillReady = true;
 
+    [SerializeField] float time = 0;
     [SerializeField] float skillCT = 0;
     [SerializeField] float skillCTmax = 10.0f;
 
@@ -40,7 +41,13 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
         skillCT = skillCTmax;
         skillReady = false;
-        skillCTImage.fillAmount = 1.0f;
+        time = 0f;
+        float cooltimeAmount = skillCT / skillCTmax;
+
+        if (skillCTImage != null)
+        {
+            skillCTImage.fillAmount = cooltimeAmount; // ← ここでUI更新
+        }
 
         while (skillCT > 0)
         {
@@ -48,9 +55,10 @@ public class SkillManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("クールタイム処理開始");
 
-                skillCT -= Time.deltaTime;
+                time += Time.deltaTime;
+                skillCT -= time;
 
-                float cooltimeAmount = skillCT / skillCTmax;
+                cooltimeAmount = skillCT / skillCTmax;
                 if (skillCTImage != null)
                 {
                     skillCTImage.fillAmount = cooltimeAmount; // ← ここでUI更新
@@ -58,15 +66,14 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
                 yield return null;
             }
-            else
-            {
-                yield return null;
-            }
+
+            yield return null;
         }
 
         skillReady = true;
         Debug.Log("クールタイム処理停止");
     }
+
 
 
     // 設定されているスキル使用
