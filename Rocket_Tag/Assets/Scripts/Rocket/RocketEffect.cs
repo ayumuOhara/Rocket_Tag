@@ -327,9 +327,9 @@ internal class RocketEffect : MonoBehaviour                                     
     }
     void SmokeDiffusion()    //  煙幕拡散、煙幕をデストロイしたたらPrepareRocketStateに移動
     {
+        float smokeDiffuseSpd = 0.2f;
         if ((smokeDelTime -= Time.deltaTime) > 0)
         {
-            float smokeDiffuseSpd = 0.2f;
             smokeColorOverLifeTime.color = smokeGradient;
             //smokeEntity.transform.localScale = Vector3.Scale(smokeEntity.transform.localScale, smokeDiffusion);
             smokeEntity.transform.localScale = Vector3.Lerp(smokeEntity.transform.localScale, smokeEffectEndScale, smokeDiffuseSpd * Time.deltaTime);
@@ -340,9 +340,10 @@ internal class RocketEffect : MonoBehaviour                                     
             Debug.Log("TimeOut");    //  msg for debug----------------
             //Destroy(smokeEntity.gameObject);
             smokePS.Stop();
-            smokePS.Clear();
-            smokeEntity.transform.localScale = smokeEffectScale;
+            smokeEntity.transform.localScale = Vector3.Lerp(smokeEntity.transform.localScale, smokeEffectEndScale, smokeDiffuseSpd * Time.deltaTime);
             ChangeState(new PrepareRocket());
+            smokeEntity.transform.localScale = smokeEffectScale;
+
         }
     }
     bool IsNull_Variable<T>(T value, bool haveToClach, string errorMsg)    //  変数のヌルチェック、危険性があった場合強制クラッシュ
