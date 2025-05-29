@@ -491,6 +491,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 62eddc8b6716793408cf12f511c4bb83, type: 3}
   - {fileID: 8300000, guid: 982736e088889b949bd2b91a36ccb1a0, type: 3}
   - {fileID: 8300000, guid: 3be980fe1938089418a945c6a49e631d, type: 3}
+  - {fileID: 8300000, guid: 0330e871cb980f44e9ddcec10c9b71a4, type: 3}
   seSlider: {fileID: 65807534}
   seSetting: {fileID: 11400000, guid: 15510d726025df449836fc9500f3d77b, type: 2}
 --- !u!1 &266376819
