@@ -6,7 +6,7 @@ using Photon.Realtime;
 
 public class InstantiatePlayer : MonoBehaviourPunCallbacks
 {
-    [SerializeField] Debuger debuger;
+    //[SerializeField] Debuger debuger;
     [SerializeField] SkinGenerater skinGanarater;
     [SerializeField] EventEffect eventEffect;
     [SerializeField] GameObject playerCamera;
