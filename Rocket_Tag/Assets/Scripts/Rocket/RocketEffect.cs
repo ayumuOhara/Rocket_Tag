@@ -189,7 +189,7 @@ internal class RocketEffect : MonoBehaviour                                     
         await RocketEffectLoad();
         //rocket = GameObject.Find("Cylinder").GetComponent<Transform>();    //  ファーストステート突入した時のロケットが生成されてないことの無理やりの解消法でバックのため保存
         smokeGradient = new Gradient();
-        smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.4f) };
+        smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.1f) };
         //timeMgr = factory.CreateTimeMgr();
         timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 
@@ -307,12 +307,21 @@ internal class RocketEffect : MonoBehaviour                                     
         Debug.Log("rocketStage" + rocketStage);
         if (rocketStage == 3)
         {
-            smokeEntity = Instantiate(loadedEffect[RocketEffectName.FRAME_SMOKE]);
-            smokePS = smokeEntity.GetComponent<ParticleSystem>();
-            smokeMainModule = smokePS.main;       ////--------------------------------------二回目以降スモークが見えないない、unity最新使用の性か、生成場所が悪いか
-            smokeMainModule.startColor = Color.white;
-            smokeColorOverLifeTime = smokePS.colorOverLifetime;
-            smokeEntity.transform.position = rocket.position;
+            if (smokeEntity == null)
+            {
+                smokeEntity = Instantiate(loadedEffect[RocketEffectName.FRAME_SMOKE]);
+                smokePS = smokeEntity.GetComponent<ParticleSystem>();
+            }
+            else
+            {
+                smokeEntity.transform.position = rocket.position;
+                smokeMainModule = smokePS.main;       ////--------------------------------------二回目以降スモークが見えないない、unity最新使用の性か、生成場所が悪いか
+                smokeMainModule.startColor = Color.white;
+                smokeColorOverLifeTime = smokePS.colorOverLifetime;
+                smokePS.Clear();
+                smokePS.Play();
+            }
+ 
             rocketStage = 0;
             Debug.Log("smoke Effect Generate");
         }
@@ -321,7 +330,7 @@ internal class RocketEffect : MonoBehaviour                                     
     {
         if ((smokeDelTime -= Time.deltaTime) > 0)
         {
-            float smokeDiffuseSpd = 9.0f;
+            float smokeDiffuseSpd = 3.0f;
             smokeColorOverLifeTime.color = smokeGradient;
             //smokeEntity.transform.localScale = Vector3.Scale(smokeEntity.transform.localScale, smokeDiffusion);
             smokeEntity.transform.localScale = Vector3.Lerp(smokeEntity.transform.localScale, smokeEffectEndScale, smokeDiffuseSpd * Time.deltaTime);
@@ -330,7 +339,8 @@ internal class RocketEffect : MonoBehaviour                                     
         {
             smokeDelTime = 2.5f;
             Debug.Log("TimeOut");    //  msg for debug----------------
-            Destroy(smokeEntity.gameObject);
+            //Destroy(smokeEntity.gameObject);
+            smokePS.Stop();
             ChangeState(new PrepareRocket());
         }
     }
