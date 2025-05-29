@@ -189,7 +189,7 @@ internal class RocketEffect : MonoBehaviour                                     
         await RocketEffectLoad();
         //rocket = GameObject.Find("Cylinder").GetComponent<Transform>();    //  ファーストステート突入した時のロケットが生成されてないことの無理やりの解消法でバックのため保存
         smokeGradient = new Gradient();
-        smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.1f) };
+        smokeGradient.alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0f), new GradientAlphaKey(0.0f, 0.3f) };
         //timeMgr = factory.CreateTimeMgr();
         timeMgr = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 
@@ -329,10 +329,10 @@ internal class RocketEffect : MonoBehaviour                                     
     {
         if ((smokeDelTime -= Time.deltaTime) > 0)
         {
-            float smokeDiffuseSpd = 1.0f;
+            float smokeDiffuseSpd = 0.2f;
             smokeColorOverLifeTime.color = smokeGradient;
-            smokeEntity.transform.localScale = Vector3.Scale(smokeEntity.transform.localScale, smokeDiffusion);
-            //smokeEntity.transform.localScale = Vector3.Lerp(smokeEntity.transform.localScale, smokeEffectEndScale, smokeDiffuseSpd * Time.deltaTime);
+            //smokeEntity.transform.localScale = Vector3.Scale(smokeEntity.transform.localScale, smokeDiffusion);
+            smokeEntity.transform.localScale = Vector3.Lerp(smokeEntity.transform.localScale, smokeEffectEndScale, smokeDiffuseSpd * Time.deltaTime);
         }
         else
         {
@@ -340,6 +340,7 @@ internal class RocketEffect : MonoBehaviour                                     
             Debug.Log("TimeOut");    //  msg for debug----------------
             //Destroy(smokeEntity.gameObject);
             smokePS.Stop();
+            smokeEntity.transform.localScale = smokeEffectScale;
             ChangeState(new PrepareRocket());
         }
     }
