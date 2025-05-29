@@ -20,8 +20,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
     public bool finishSkill = true;
     [SerializeField] bool skillReady = true;
-
-    [SerializeField] float time = 0;
     [SerializeField] float skillCT = 0;
     [SerializeField] float skillCTmax = 10.0f;
 
@@ -43,7 +41,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
         skillCT = skillCTmax;
         skillReady = false;
-        time = 0f;
         float cooltimeAmount = skillCT / skillCTmax;
 
         if (skillCTImage != null)
@@ -57,8 +54,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("クールタイム処理開始");
 
-                time += Time.deltaTime;
-                skillCT -= time;
+                skillCT -= Time.deltaTime;
 
                 cooltimeAmount = skillCT / skillCTmax;
                 if (skillCTImage != null)
