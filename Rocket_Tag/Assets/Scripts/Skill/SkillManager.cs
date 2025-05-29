@@ -48,7 +48,8 @@ public class SkillManager : MonoBehaviourPunCallbacks
         playerMovement = GetComponent<PlayerMovement>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        skillIcon   = GameObject.Find("SKillIcon").GetComponent<Image>();
+        skillIcon   = GameObject.Find("SkillIcon").GetComponent<Image>();
+        Debug.Log($"SkillIcon：{skillIcon}");
 
         skillIdx = 4;
         SetSkill(skillDataBase.SkillData[skillIdx]);
@@ -56,6 +57,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
         if (skillCoolTime == null)
         {
             skillCoolTime = GameObject.Find("SkillCoolManager").GetComponent<SkillCoolTime>();
+            Debug.Log($"SkillCoolManager：{skillCoolTime}");
         }
     }
 
@@ -66,8 +68,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
         {
             if (skillCoolTime.SkillCool == true)//クールタイム
             {
-                skillCoolTime.SkillCool = false;
-
                 Debug.Log($"【{skillData.skillName}】を使用");
 
                 switch (skillData.skillId)
