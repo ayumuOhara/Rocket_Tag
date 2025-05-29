@@ -22,7 +22,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
     bool skillReady = true;
 
     float skillCT = 0;
-    float skillCTmax = 5.0f;
+    float skillCTmax = 10.0f;
 
     private void Start()
     {
@@ -58,8 +58,10 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
                 yield return null;
             }
-
-            yield return null;
+            else
+            {
+                yield return null;
+            }
         }
 
         skillReady = true;
