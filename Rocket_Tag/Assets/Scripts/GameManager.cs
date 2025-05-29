@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     //[SerializeField] GameObject rocketEffect;           // ロケットのエフェクト管理オブジェクト
 
     private const int JOIN_CNT_MIN = 2;                 // 参加人数の最小値
+    public int playerNum = 4;
     private bool isGameStarted = false;                 // ゲームが開始されたかどうかのフラグ
     private bool hasPlayedCountdownSE = false;          // カウントダウンSEが再生されたかどうかの判定
     private Player currentRocketHolder;                 // 現在のロケット保持者
@@ -110,7 +111,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     void StartGame()
     {
         if (isGameStarted) return;
-
+        
         Debug.Log("ゲームを開始します");
         isGameStarted = true;
         timeManager.isTimeStart = true;
