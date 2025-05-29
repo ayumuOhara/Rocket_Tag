@@ -19,10 +19,10 @@ public class SkillManager : MonoBehaviourPunCallbacks
     [SerializeField] Image skillCTImage;
 
     public bool finishSkill = true;
-    bool skillReady = true;
+    [SerializeField] bool skillReady = true;
 
-    float skillCT = 0;
-    float skillCTmax = 10.0f;
+    [SerializeField] float skillCT = 0;
+    [SerializeField] float skillCTmax = 10.0f;
 
     private void Start()
     {
