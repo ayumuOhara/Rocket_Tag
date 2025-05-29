@@ -37,26 +37,40 @@ public class SkillManager : MonoBehaviourPunCallbacks
     // スキルのクールタイム
     IEnumerator SkillCoolTime()
     {
+        Debug.Log("クールタイムコルーチン開始");
+
         skillCT = skillCTmax;
         skillReady = false;
         time = 0f;
+        float cooltimeAmount = skillCT / skillCTmax;
+
+        if (skillCTImage != null)
+        {
+            skillCTImage.fillAmount = cooltimeAmount; // ← ここでUI更新
+        }
 
         while (skillCT > 0)
         {
-            time += Time.deltaTime;
-            skillCT = Mathf.Max(skillCTmax - time, 0f);
-
-            float cooltimeAmount = skillCT / skillCTmax;
-            if (skillCTImage != null)
+            if (finishSkill)
             {
-                skillCTImage.fillAmount = cooltimeAmount; // ← ここでUI更新
+                Debug.Log("クールタイム処理開始");
+
+                time += Time.deltaTime;
+                skillCT -= time;
+
+                cooltimeAmount = skillCT / skillCTmax;
+                if (skillCTImage != null)
+                {
+                    skillCTImage.fillAmount = cooltimeAmount; // ← ここでUI更新
+                }
+
+                yield return null;
             }
 
             yield return null;
         }
 
         skillReady = true;
-        time = 0f;
     }
 
 
