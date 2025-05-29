@@ -173,7 +173,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
             }
         }
     }
-    void AssignPlayersTF()    //  プレイヤーのトランスフォームを取得
+    public void AssignPlayersTF()    //  プレイヤーのトランスフォームを取得
     {
         if (players == null)
         {
