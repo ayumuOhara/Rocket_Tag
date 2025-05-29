@@ -307,21 +307,22 @@ internal class RocketEffect : MonoBehaviour                                     
         Debug.Log("rocketStage" + rocketStage);
         if (rocketStage == 3)
         {
-            if (smokeEntity == null)
+            Destroy(smokeEntity.gameObject);
+            if(smokeEntity == null)
             {
                 smokeEntity = Instantiate(loadedEffect[RocketEffectName.FRAME_SMOKE]);
-                smokePS = smokeEntity.GetComponent<ParticleSystem>();
+                smokeEntity.transform.position = rocket.position;
             }
             else
             {
                 smokeEntity.transform.position = rocket.position;
-                smokeMainModule = smokePS.main;       ////--------------------------------------二回目以降スモークが見えないない、unity最新使用の性か、生成場所が悪いか
-                smokeMainModule.startColor = Color.white;
-                smokeColorOverLifeTime = smokePS.colorOverLifetime;
                 smokePS.Clear();
                 smokePS.Play();
             }
- 
+            smokePS = smokeEntity.GetComponent<ParticleSystem>();
+            smokeMainModule = smokePS.main;       ////--------------------------------------二回目以降スモークが見えないない、unity最新使用の性か、生成場所が悪いか
+            smokeMainModule.startColor = Color.white;
+            smokeColorOverLifeTime = smokePS.colorOverLifetime;
             rocketStage = 0;
             Debug.Log("smoke Effect Generate");
         }
