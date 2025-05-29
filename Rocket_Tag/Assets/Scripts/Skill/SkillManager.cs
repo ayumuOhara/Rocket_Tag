@@ -9,9 +9,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class SkillManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] Image cooldownMask;  // クール用
-    public bool SkillCool = true;
-
     PlayerMovement playerMovement;
     TimeManager timeManager;
     GameManager gameManager;
@@ -19,27 +16,58 @@ public class SkillManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject player;
     [SerializeField] GameObject rocketObj;
     [SerializeField] GameObject stickyZone;
-    [SerializeField] Image skillIcon;
+    [SerializeField] Image skillCTImage;
 
     public bool finishSkill = true;
+    bool skillReady = true;
 
-    float SkillCT = 10.0f;//スキルのクールタイム
+    float time = 0;
+    float skillCT = 0;
+    float skillCTmax = 5.0f;
 
     private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        skillIcon   = GameObject.Find("SkillIcon").GetComponent<Image>();
-        Debug.Log($"SkillIcon：{skillIcon}");
-        cooldownMask = GameObject.Find("SkillCoolTime").GetComponent<Image>();
+        skillCTImage = GameObject.Find("SkillCoolTime").GetComponent<Image>();
+        Debug.Log($"SkillIcon：{skillCTImage}");
+    }
+
+    // スキルのクールタイム
+    IEnumerator SkillCoolTime()
+    {
+        skillCT = skillCTmax;
+
+        while (true)
+        {
+            if(finishSkill)
+            {
+                time += Time.deltaTime;
+                skillCT -= time;
+                float cooltimeAmount = skillCT / skillCTmax;
+
+                if (skillCT < 0)
+                {
+                    skillReady = true;
+                    skillCT = 0;
+                    time = 0;
+                }
+
+                yield return null;
+            }
+
+            yield return null;
+        }
+        
     }
 
     // 設定されているスキル使用
     public void UseSkill()
     {
-        if (finishSkill && SkillCool)
+        if (finishSkill && skillReady)
         {
+            StartCoroutine(SkillCoolTime());
             StartCoroutine(Dash());
         }
     }
@@ -71,27 +99,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
         playerMovement.SetMoveSpeed(speed);
 
         finishSkill = true;
-
-        StartCoroutine(CoolTime(5));
-
         yield break;
-    }
-
-    public IEnumerator CoolTime(float SkillCT)//クールタイム
-    {
-        Debug.Log("呼ばれた");
-        float elapsed = 0f;
-        SkillCool = false;
-        cooldownMask.fillAmount = 1f;
-
-        while (elapsed < SkillCT)
-        {
-            elapsed += Time.deltaTime;
-            cooldownMask.fillAmount = 1f - (elapsed / SkillCT);
-            yield return null;
-        }
-
-        cooldownMask.fillAmount = 0f;
-        SkillCool = true;
     }
 }
