@@ -79,6 +79,7 @@ public class EnoguEvent : MonoBehaviourPun
 
             if (isPlayerSurvival == false)
             {
+                Debug.Log("éÄÇÒÇæÇÒÇ∂Ç·Ç»Ç¢ÇÃÅ`ÅH");
                 blindEffect.SetActive(false);
                 enogu4_1.SetActive(false);
                 enogu4_2.SetActive(false);
