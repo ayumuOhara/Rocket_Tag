@@ -228,4 +228,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
         yield break;
     }
+
+    [PunRPC]
+    void PlayChangeSpeedSE()
+    {
+        AudioManager.Instance.PlaySE(SEManager.SEType.Event_ChangeSpeed);
+    }
 }

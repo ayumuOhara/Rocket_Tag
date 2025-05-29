@@ -246,10 +246,4 @@ public class EventManager : MonoBehaviourPunCallbacks
         }
         photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcess.STOP_SPD_AURA);    //  テレポートエフェクト停止
     }
-
-    [PunRPC]
-    void PlayChangeSpeedSE()
-    {
-        AudioManager.Instance.PlaySE(SEManager.SEType.Event_ChangeSpeed);
-    }
 }
