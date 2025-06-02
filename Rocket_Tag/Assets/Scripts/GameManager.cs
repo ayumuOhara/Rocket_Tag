@@ -79,35 +79,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         return currentCnt >= JOIN_CNT_MIN;
     }
 
-    //bool CheckAllPlayersReady()
-    //{
-    //    Player[] players = PhotonNetwork.PlayerList;
-    //    foreach (var player in players)
-    //    {
-    //        if (!player.CustomProperties.ContainsKey("IsReady") || !(bool)player.CustomProperties["IsReady"])
-    //        {
-    //            Debug.Log($"プレイヤー {player.NickName} がまだ準備完了していません");
-    //            return false;
-    //        }
-    //    }
-    //    return true;
-    //}
-
-    //int GetReadyPlayerCount()
-    //{
-    //    Player[] players = PhotonNetwork.PlayerList;
-    //    int readyCount = 0;
-
-    //    foreach (var player in players)
-    //    {
-    //        if (player.CustomProperties.ContainsKey("IsReady") && (bool)player.CustomProperties["IsReady"])
-    //        {
-    //            readyCount++;
-    //        }
-    //    }
-    //    return readyCount;
-    //}
-
     [PunRPC]
     void StartGame()
     {
@@ -121,6 +92,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             ChooseRocketPlayer();
+            StartCoroutine(CheckRocketCnt());
             StartCoroutine(eventManager.TriggerRandomEvent());
             rocketEffect.Rocket = GameObject.Find("Rocket").GetComponent<Transform>();
             //StartCoroutine(CheckOverTime());
@@ -181,19 +153,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    IEnumerator CheckOverTime()
-    {
-        while (true)
-        {
-            if(timeManager.rocketTime < -20.0f)
-            {
-                timeManager.ResetRocketCount();
-                ChooseRocketPlayer();
-            }
-            yield return null;
-        }
-    }
-
+    // ロケットが1個じゃないとき再配布
     IEnumerator CheckRocketCnt()
     {
         Debug.Log("コルーチンを開始します");
