@@ -189,6 +189,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
                 ChooseRocketPlayer();
             }
+
+            yield return null;
         }
     }
 
