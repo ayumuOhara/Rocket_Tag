@@ -28,8 +28,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
         playerMovement = GetComponent<PlayerMovement>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        skillCTImage = GameObject.Find("SkillCoolTime").GetComponent<Image>();
-        Debug.Log($"SkillIcon：{skillCTImage}");
     }
 
     // スキルのクールタイム

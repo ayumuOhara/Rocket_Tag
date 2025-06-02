@@ -92,11 +92,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             ChooseRocketPlayer();
-            StartCoroutine(CheckRocketCnt());
             StartCoroutine(eventManager.TriggerRandomEvent());
             rocketEffect.Rocket = GameObject.Find("Rocket").GetComponent<Transform>();
-            //StartCoroutine(CheckOverTime());
-            //StartCoroutine(CheckRocketCnt());
+            StartCoroutine(CheckRocketCnt());
         }
         eventEffect.AssignPlayersTF();
     }
@@ -156,7 +154,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     // ロケットが1個じゃないとき再配布
     IEnumerator CheckRocketCnt()
     {
-        Debug.Log("コルーチンを開始します");
+        Debug.Log("ロケットのカウントチェック開始");
         int rocketCnt = 0;
 
         while (true)
