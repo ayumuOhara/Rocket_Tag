@@ -14,6 +14,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     private const int MAX_PLAYER_PER_ROOM = 4;
     bool isMatching = false; // マッチング中かどうか
     public static PhotonMaster instance;
+    [SerializeField] GameObject lobbyButton;
 
     private void Awake()
     {
@@ -108,6 +109,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
             }
             else
             {
+                lobbyButton.SetActive(false);
                 statusText.text = "対戦相手が揃いました。バトルシーンに移動します。";
             }
         }
