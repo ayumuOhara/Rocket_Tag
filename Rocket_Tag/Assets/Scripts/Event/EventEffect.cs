@@ -113,7 +113,6 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
                 }
                 else
                 {
-                    Debug.LogWarning(loadFailMsg + tmpKvp.Key);    //  デバッグ用--------------------------------------
                 }
             }));
         }
@@ -217,33 +216,27 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
             if (playerMovement[playerIndex].GetMoveSpeed() > defaultPlayerMoveSpd)
             {
                 spdChagneAuraEntity = Instantiate(loadedEffects[EffectName.SPD_UP_AURA], players[playerIndex]);
-                Debug.Log(spdChagneAuraSystem[playerIndex]);    //  デバッグ用--------------------------------------
             }
             else if (playerMovement[playerIndex].GetMoveSpeed() < defaultPlayerMoveSpd)
             {
                 spdChagneAuraEntity = Instantiate(loadedEffects[EffectName.SPD_DOWN_AURA], players[playerIndex]);
-                Debug.Log(spdChagneAuraSystem[playerIndex]);    //  デバッグ用--------------------------------------
             }
             else
             {
                 spdChagneAuraEntity = Instantiate(loadedEffects[EffectName.SPD_UP_AURA], players[playerIndex]);
-                Debug.Log(spdChangingFailMsg);    //  デバッグ用--------------------------------------
             }
             spdChagneAuraSystem[playerIndex] = spdChagneAuraEntity.GetComponent<ParticleSystem>();
         }
     }
     void StopSpdChangeAura()    //  エフェクトを非表示にする
     {
-        Debug.Log("Stop Spd Change Method entire");
         StopEffect(spdChagneAuraSystem);    //  改善余地あり
     }
     void StopEffect(ParticleSystem[] effect)    //  エフェクト一時停止
     {
         foreach (ParticleSystem p in effect)
         {
-            Debug.Log("Effect Stop loop entire");
             p?.Stop();
         }
     }                                                                                           ////  関数区終了  ////
 }
-// void ReplayEffect(ParticleSystem effect, Vector3 playPos)    //  エフェクト再再生            ////  コード保存場所  ////
