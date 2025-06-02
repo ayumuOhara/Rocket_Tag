@@ -20,8 +20,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
 
     public bool finishSkill = true;
     [SerializeField] bool skillReady = true;
-
-    [SerializeField] float time = 0;
     [SerializeField] float skillCT = 0;
     [SerializeField] float skillCTmax = 10.0f;
 
@@ -30,8 +28,6 @@ public class SkillManager : MonoBehaviourPunCallbacks
         playerMovement = GetComponent<PlayerMovement>();
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        skillCTImage = GameObject.Find("SkillCoolTime").GetComponent<Image>();
-        Debug.Log($"SkillIcon：{skillCTImage}");
     }
 
     // スキルのクールタイム
@@ -40,10 +36,10 @@ public class SkillManager : MonoBehaviourPunCallbacks
         Debug.Log("クールタイムコルーチン開始");
 
         skillCTImage = GameObject.Find("SkillCoolTime").GetComponent<Image>();
+        Animator animator = skillCTImage.gameObject.GetComponent<Animator>();
 
         skillCT = skillCTmax;
         skillReady = false;
-        time = 0f;
         float cooltimeAmount = skillCT / skillCTmax;
 
         if (skillCTImage != null)
@@ -57,8 +53,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("クールタイム処理開始");
 
-                time += Time.deltaTime;
-                skillCT -= time;
+                skillCT -= Time.deltaTime;
 
                 cooltimeAmount = skillCT / skillCTmax;
                 if (skillCTImage != null)
@@ -71,6 +66,7 @@ public class SkillManager : MonoBehaviourPunCallbacks
         }
 
         skillReady = true;
+        //animator.SetTrigger("OnAnim");
         Debug.Log("クールタイム処理停止");
     }
 

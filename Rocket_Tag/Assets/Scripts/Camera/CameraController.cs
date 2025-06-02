@@ -14,6 +14,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private CameraController refCamera; 　       // カメラの水平回転を参照する用
     SetPlayerBool setPlayerBool;
     PlayerMovement playerMovement;
+    SetPlayerBool spb;
 
     [SerializeField] private float distance = 2.0f;               // 注視対象プレイヤーからカメラを離す距離
     [SerializeField] private float verticalAngle = 20.0f;         // 垂直回転角度
@@ -53,6 +54,7 @@ public class CameraController : MonoBehaviour
         playerTransform = player.GetComponent<Transform>();
         playerRightHandTransform = GameObject.Find("RightHand").GetComponent<Transform>();
         playerMovement = player.GetComponent<PlayerMovement>();
+        spb = player.GetComponent<SetPlayerBool>();
 
         // 回転の初期化
         verticalAngle = Mathf.Clamp(verticalAngle, minVerticalAngle, maxVerticalAngle);
@@ -74,7 +76,7 @@ public class CameraController : MonoBehaviour
     {
         turnSpeed = turnSpeedSetting.turnSpeed;
 
-        if (isShaking == false)
+        if (isShaking == false && !spb.isDead)
         {
             RotationCamera();
             if (setPlayerBool.isDead == true)

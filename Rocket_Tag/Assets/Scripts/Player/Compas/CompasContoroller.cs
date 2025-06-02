@@ -14,10 +14,7 @@ public class FollowUpCompas : MonoBehaviour
 
     float trackSpd;
     int xRotCap;
-    bool isLoaded;
-    bool isFinishedGame;
-    public bool IsFinishedGame
-    { set { isFinishedGame = value; } }
+    int tmpPlayerNum;
 
     void Start()                                                                            ////  以下処理区  ////
     {
@@ -25,6 +22,10 @@ public class FollowUpCompas : MonoBehaviour
     }
     void Update()
     {
+        if (gameManager.playerNum != tmpPlayerNum)
+        {
+            LetfRoomProcces();
+        }
         if (gameManager.playerNum > 1)
         {
             Vector3[] tmpPlayerPos = playersTF.Select(tf => tf.position).ToArray();
@@ -40,10 +41,9 @@ public class FollowUpCompas : MonoBehaviour
 
         trackSpd = 11f;
         xRotCap = 36;
-        isLoaded = true;
-        isFinishedGame = false;
+        tmpPlayerNum = gameManager.playerNum;
     }
-    void ChangeRot(Transform watcher,Transform changedObj, Vector3 target, float trackSpd, int xRotCap)    //  オブジェクトをターゲットの方向に向ける
+    void ChangeRot(Transform watcher, Transform changedObj, Vector3 target, float trackSpd, int xRotCap)    //  オブジェクトをターゲットの方向に向ける
     {
         Quaternion tmpAngle = Quaternion.LookRotation(target - watcher.position);
         tmpAngle.x *= 0;
@@ -65,7 +65,6 @@ public class FollowUpCompas : MonoBehaviour
                 tmpLineDis = Vector3.Distance(axis, poss[arrayNum]);   //  order is wired---------------------
                 if (minLineDis > tmpLineDis)
                 {
-                    Debug.Log("Closest is chagned");
                     minLineDis = tmpLineDis;
                     closestPlayerNo = arrayNum;
                 }
@@ -73,96 +72,13 @@ public class FollowUpCompas : MonoBehaviour
         }
         return poss[closestPlayerNo];
     }
+    void LetfRoomProcces()
+    {
+        playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
+        tmpPlayerNum = gameManager.playerNum;
+    }
+    public void SetPlayerTF()    //  プレイヤートランスフォーム取得
+    {
+        playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
+    }
 }
-//    internal class CompasFadin : MonoBehaviour
-//    {
-//        GameObject compas;
-//        List<Material> compasMaterials;
-
-//        bool isFadein;
-
-//        void OnEnable()
-//        {
-//            //Fading(compas, isFadeIn);    //  for debug-----------------
-//            //isFadein = false;    //  for debug-----------------
-//        }
-//        void Start()
-//        {
-//            //isFadeIn = false;    //  for debug-----------------
-//        }
-//        void Update()
-//        {
-//            //if(!transform.parent.Find("Rocket").gameObject.activeSelf)
-//            //{
-//            //    Fading(compas, isFadeIn);
-//            //}
-//        }
-//        void Initialize()    //  初期化
-//        {
-//            compas = this.gameObject;
-//            compasMaterials = new List<Material>();
-
-//            /*  for debug----------------  */
-//            //foreach (Renderer rend in GetComponentsInChildren<Renderer>())
-//            //{
-//            //    foreach (Material mat in rend.materials)
-//            //    {
-//            //        SetupMaterialWithFadeMode(mat);
-//            //        compasMaterials.Add(mat);
-//            //    }
-//            //}
-//        }
-
-//        void SetupMaterialWithFadeMode(Material mat)    //  マテリアルモード設定
-//        {
-//            if (mat.shader.name != "Standard") return;
-
-//            mat.SetFloat("_Mode", 2f);
-//            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-//            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-//            mat.SetInt("_ZWrite", 0);
-//            mat.DisableKeyword("_ALPHATEST_ON");
-//            mat.EnableKeyword("_ALPHABLEND_ON");
-//            mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-//            mat.renderQueue = 3000;
-//        }
-//        //IEnumerator Fading(GameObject obj, float FadingTime, bool fadeIn)    //  オブジェクトをフェード
-//        //{
-//        //    //if (isFadeIn)
-//        //    //{
-//        //    //    for (float elapsed = 0; elapsed < FadingTime; elapsed += Time.deltaTime)
-//        //    //    {
-//        //    //        float alpha = Mathf.Lerp(0f, 1f, elapsed / FadingTime);
-//        //    //        {
-//        //    //            foreach (Material mat in compasMaterials)
-//        //    //            {
-//        //    //                Color color = mat.color;
-//        //    //                color.a = alpha;
-//        //    //                mat.color = color;
-//        //    //            }
-//        //    //        }
-//        //    //        yield return null;
-//        //    //    }
-//        //    //}
-//        //    //else
-//        //    //{
-//        //    //    //if (isFadeIn)
-//        //    //    {
-//        //    //        for (float elapsed = 0; elapsed < FadingTime; elapsed += Time.deltaTime)
-//        //    //        {
-//        //    //            float alpha = Mathf.Lerp(0f, 1f, elapsed / FadingTime);
-//        //    //            {
-//        //    //                foreach (Material mat in compasMaterials)
-//        //    //                {
-//        //    //                    Color color = mat.color;
-//        //    //                    color.a = alpha;
-//        //    //                    mat.color = color;
-//        //    //                }
-//        //    //            }
-//        //    //            yield return null;
-//        //    //        }
-//        //    //    }
-//        //    //}
-//        //}
-//    }
-//}

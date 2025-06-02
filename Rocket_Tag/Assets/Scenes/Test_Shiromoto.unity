@@ -6972,6 +6972,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statusText: {fileID: 1930257757}
   cover: {fileID: 1213207670}
+  lobbyButton: {fileID: 249029242}
 --- !u!4 &1764528430
 Transform:
   m_ObjectHideFlags: 0

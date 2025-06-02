@@ -11,12 +11,12 @@ public class TutorialText : MonoBehaviour
     [SerializeField] private Text threeMain;
     void Start()
     {
-        One.text = "移動方法はWASDと矢印キーの両方に対応。";//ここに入力
-        Two.text = "ESCキーでメニュー画面を開くことができる！";//ここに入力
-        Three.text = "マウスを動かすと視点が変わり、\r\nESCキーを押すとマウスカーソルが出てきて設定を開いたりできるぞ‼";//ここに入力
-        Four.text = "Eキーを押してスキル発動‼";//ここに入力
-        twoMain.text = "マップ内では、定期的にイベントが発生。\r\nプレイヤーにランダムな効果を与える。\r\n何が起こるかは君次第‼";//ここに入力
-        threeMain.text = "ルールは時間経過で鬼が死亡していく\r\n鬼ごっこ式バトルロワイヤル。\r\n相手に接触することで、鬼の印の\r\nロケットを擦り付けて生き延びよう。";//ここに入力
+        One.text = "WASDと方向キーで移動";//ここに入力
+        Two.text = "ESCキーでメニュー画面を開く";//ここに入力
+        Three.text = "マウスで視点移動";//ここに入力
+        Four.text = "Eキーを押してスキル使用";//ここに入力
+        twoMain.text = "マップ内では、定期的に起きるイベントはプレイヤーに様々な影響を及ぼす。\r\nイベントを利用し、生き残ろう！\r\n";//ここに入力
+        threeMain.text = "体に装着されたロケットは時間経過で宙にぶっ飛んでいく！\r\nほかのプレイヤーにロケットを押しつけて最後まで生き残れ！";//ここに入力
     }
 
     public void NewText(Text mainText, int N)
