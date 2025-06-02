@@ -40,7 +40,6 @@ public class SkinGenerater : MonoBehaviour
 
     void Start()                                                                           ////  以下処理区  ////
     {
-        Debug.Log(42);
         if (SceneManager.GetActiveScene().name != inGameSceneName)
         {
             Initialize();    //  初期化
@@ -52,23 +51,18 @@ async void Initialize()     //  初期化                                          
         {
             await PlayerSkinLord();
         }
-        playerTF = GameObject.Find("Player").GetComponent<Transform>();
         if(IsNull_Variable(playerTF, false, playerTFLoadError))    //  msg for debug------------------------------
         {
-            Debug.Log(playerTFIsAssignedThis);    //  msg for debug------------
             playerTF = this.transform;   
         }
         if (IsNull_Array(playerSkinPrefab, false, null, false, skinLoadError, null))    //  msg for debug---------------------
         {
-            Debug.Log(scriptProssesFinish);    //  msg for debug---------------------
             return;
         }
         SkinGenerate(playerTF);
-        Debug.Log(65);
     }
     internal void SkinGenerateWrapper(SkinGenerateProcces skinGenerateProcces)   // ロケットエフェクトのラッパー関数
     {
-        Debug.Log(69);
         switch (skinGenerateProcces)
         {
             case SkinGenerateProcces.IN_GAME_GENERATE:    //  インゲームスキン生成処理群
@@ -100,7 +94,6 @@ async void Initialize()     //  初期化                                          
         {
             tmpSkinNo = 0;
             tmpSkinLocation = 0;
-            Debug.Log(playerPrefasUnexpectedValue);    //  debug--------------
         }
         if (tmpSkinNo != 0)
         {
@@ -133,7 +126,6 @@ async void Initialize()     //  初期化                                          
             {
                 Environment.FailFast(errorMsg);    //  クラッシュ
             }
-            Debug.Log(errorMsg);    //  debug--------------------------
             return true;
         }
         return false;
@@ -147,7 +139,6 @@ async void Initialize()     //  初期化                                          
             {
                 Environment.FailFast(errorMsg_AllNull);    //  クラッシュ
             }
-            Debug.Log(errorMsg_AllNull);    //  debug------------------
             return true;
         }
         if (isCheckPoint)
@@ -162,10 +153,8 @@ async void Initialize()     //  初期化                                          
                     }
                     return true;
                 }
-                Debug.Log(errorMsg_PointNull);    //  debug-------------------
                 return false;
             }
-            Debug.Log(errorMsg_PointNull);    //  debug--------------------------
         }
         return false;
     }
@@ -197,38 +186,3 @@ async void Initialize()     //  初期化                                          
         }
     }                                                                                      ////  関数区終了  ////
 }
-////  以下コード保存  ////
-//bool IsUnexpectedValue    //  値チェック
-//(bool isCompare, bool isCheckRange, bool isCheckBigger, int[] value, int[] unExpectedValue, int[] expectedValue_Bigger)
-//{
-//    if (isCompare)
-//    {
-//        if (isCheckRange)
-//        {
-//            for (int arrayNo = value.Length; arrayNo > 0; --arrayNo)
-//            {
-//                if (!(unExpectedValue[arrayNo] < value[arrayNo] && value[arrayNo] < expectedValue_Bigger[arrayNo]))
-//                {
-//                    return true;
-//                }
-//            }
-//            return false;
-//        }
-//        if (isCheckBigger)
-//        {
-//            for (int arrayNo = value.Length; arrayNo > 0; --arrayNo)
-//            {
-//                if (value[arrayNo] < unExpectedValue[arrayNo])
-//                {
-//                    return true;
-//                }
-//            }
-//            return false;
-//        }
-//    }
-//    if (value[0] == unExpectedValue[0])
-//    {
-//        return true;
-//    }
-//    return false;
-//}
