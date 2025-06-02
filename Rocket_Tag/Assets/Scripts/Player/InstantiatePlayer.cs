@@ -94,6 +94,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
     {
         UpdatePlayerCount();
         gameManager.playerNum--;
+        
         Debug.Log($"プレイヤーが退出しました: {otherPlayer.NickName}");
     }
 

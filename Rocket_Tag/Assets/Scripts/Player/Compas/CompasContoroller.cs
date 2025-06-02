@@ -14,6 +14,7 @@ public class FollowUpCompas : MonoBehaviour
 
     float trackSpd;
     int xRotCap;
+    int tmpPlayerNum;
     bool isLoaded;
     bool isFinishedGame;
     public bool IsFinishedGame
@@ -25,6 +26,10 @@ public class FollowUpCompas : MonoBehaviour
     }
     void Update()
     {
+        if (gameManager.playerNum != tmpPlayerNum)
+        {
+            LetfRoomProcces();
+        }
         if (gameManager.playerNum > 1)
         {
             Vector3[] tmpPlayerPos = playersTF.Select(tf => tf.position).ToArray();
@@ -40,10 +45,11 @@ public class FollowUpCompas : MonoBehaviour
 
         trackSpd = 11f;
         xRotCap = 36;
+        tmpPlayerNum = gameManager.playerNum;
         isLoaded = true;
         isFinishedGame = false;
     }
-    void ChangeRot(Transform watcher,Transform changedObj, Vector3 target, float trackSpd, int xRotCap)    //  オブジェクトをターゲットの方向に向ける
+    void ChangeRot(Transform watcher, Transform changedObj, Vector3 target, float trackSpd, int xRotCap)    //  オブジェクトをターゲットの方向に向ける
     {
         Quaternion tmpAngle = Quaternion.LookRotation(target - watcher.position);
         tmpAngle.x *= 0;
@@ -72,6 +78,15 @@ public class FollowUpCompas : MonoBehaviour
             }
         }
         return poss[closestPlayerNo];
+    }
+    void LetfRoomProcces()
+    {
+        playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
+        tmpPlayerNum = gameManager.playerNum;
+    }
+    public void SetPlayerTF()    //  プレイヤートランスフォーム取得
+    {
+        playersTF = gameManager.GetPlayerList().ConvertAll(x => x.transform).ToArray();
     }
 }
 //    internal class CompasFadin : MonoBehaviour
