@@ -51,6 +51,7 @@ async void Initialize()     //  èâä˙âª                                          
         {
             await PlayerSkinLord();
         }
+        playerTF = GameObject.Find("Player").GetComponent<Transform>();
         if(IsNull_Variable(playerTF, false, playerTFLoadError))    //  msg for debug------------------------------
         {
             playerTF = this.transform;   
