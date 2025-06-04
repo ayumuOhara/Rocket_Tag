@@ -14,6 +14,12 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
     [SerializeField] GameManager gameManager;
     [SerializeField] Transform respawnPoint;
     [SerializeField] GameObject inputPlayerName;
+    [SerializeField] GameObject resultUI;
+
+    private void Awake()
+    {
+        resultUI = GameObject.Find("ResultUI").gameObject;
+    }
 
 #if false
     void Start()
@@ -72,12 +78,15 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
             {
                 // プレイヤーをリスポーン地点に生成
                 GameObject player = PhotonNetwork.Instantiate("Player", respawnPoint.position, Quaternion.identity);
+                SetPlayerBool spb = player.GetComponent<SetPlayerBool>();
 
                 //debuger.SetComponents(player);
                 skinGanarater.SkinGenerateWrapper(SkinGenerater.SkinGenerateProcces.IN_GAME_GENERATE);
                 // 入室したプレイヤーのPlayerControllerコンポーネントをGameManagerに渡す
                 gameManager.playerController = player.GetComponent<PlayerController>();
                 gameManager.setPlayerBool = player.GetComponent<SetPlayerBool>();
+
+                spb.resultUI = resultUI;
 
                 waitCamera.SetActive(false);
                 playerCamera.SetActive(true);
@@ -86,7 +95,7 @@ public class InstantiatePlayer : MonoBehaviourPunCallbacks
             }
 
             yield return null;
-        }        
+        }
     }
 
     // プレイヤーがルームから退出したとき
