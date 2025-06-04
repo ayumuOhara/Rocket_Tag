@@ -90,7 +90,7 @@ public class PlayerRespawnTrigger : MonoBehaviour
             {
                 Vector3 respawnPosition = nearestStage.position + Vector3.up * 1.5f;
                 other.transform.position = respawnPosition;
-                Debug.Log("プレイヤーが近くのステージにリスポーンしました");
+               // Debug.Log("プレイヤーが近くのステージにリスポーンしました");
 
 
                 //Rigidbody rb = other.GetComponent<Rigidbody>();
@@ -105,7 +105,7 @@ public class PlayerRespawnTrigger : MonoBehaviour
                 {
                     rb.linearVelocity = Vector3.zero;
                     rb.angularVelocity = Vector3.zero;
-                    Debug.Log("プレイヤーの慣性をリセットしました。");
+                   // Debug.Log("プレイヤーの慣性をリセットしました。");
                 }
 
                 // 移動速度を3秒間だけ半分にする
@@ -117,7 +117,7 @@ public class PlayerRespawnTrigger : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("近くにステージが見つかりません！");
+               // Debug.LogWarning("近くにステージが見つかりません！");
             }
         }
     }

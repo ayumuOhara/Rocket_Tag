@@ -14,7 +14,7 @@ public class Fade_In : MonoBehaviour
 
         if (fadeImage == null)
         {
-            Debug.LogError("Image コンポーネントが見つかりません！");
+           // Debug.LogError("Image コンポーネントが見つかりません！");
             return;
         }
     }

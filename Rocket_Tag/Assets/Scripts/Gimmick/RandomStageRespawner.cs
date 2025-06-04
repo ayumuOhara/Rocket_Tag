@@ -16,7 +16,7 @@ public class RandomStageRespawner : MonoBehaviour
         {
             Vector3 respawnPosition = randomStage.position + Vector3.up * 1.5f;
             other.transform.position = respawnPosition;
-            Debug.Log("プレイヤーがランダムなステージにリスポーンしました");
+           // Debug.Log("プレイヤーがランダムなステージにリスポーンしました");
 
             // 慣性をリセット
             Rigidbody rb = other.GetComponent<Rigidbody>();
@@ -24,12 +24,12 @@ public class RandomStageRespawner : MonoBehaviour
             {
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
-                Debug.Log("プレイヤーの慣性をリセットしました。");
+               // Debug.Log("プレイヤーの慣性をリセットしました。");
             }
         }
         else
         {
-            Debug.LogWarning("範囲内にステージが見つかりません！");
+           // Debug.LogWarning("範囲内にステージが見つかりません！");
         }
     }
 
