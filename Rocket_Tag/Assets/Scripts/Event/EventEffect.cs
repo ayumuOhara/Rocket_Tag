@@ -129,7 +129,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
         {
             for (int i = 0; i < numOfPlayers; i++)
             {
-                if (players[i].gameObject.activeSelf)
+                if (players[i] != null && players[i].gameObject.activeSelf)
                 {
                     ReplayEffect(teleportSmokeSystem[i], players[i].position);
                 }
