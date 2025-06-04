@@ -23,7 +23,7 @@ public class RandomMapSpawner : MonoBehaviour
     {
         if (mapPrefabs.Length == 0 || spawnPoint == null)
         {
-            Debug.LogWarning("マッププレハブまたはスポーンポイントが未設定です。");
+            //Debug.LogWarning("マッププレハブまたはスポーンポイントが未設定です。");
             return;
         }
 
@@ -36,7 +36,7 @@ public class RandomMapSpawner : MonoBehaviour
             spawnPoint.rotation
         );
 
-        Debug.Log($"マップ「{selectedMap.name}」を生成しました。");
+        //Debug.Log($"マップ「{selectedMap.name}」を生成しました。");
 
         // もしMapAなら、特定のPrefabを表示
         if (selectedMap.name.Contains("MapA") && specialObjectPrefab != null)
@@ -49,7 +49,7 @@ public class RandomMapSpawner : MonoBehaviour
             Quaternion spawnRot = Quaternion.Euler(0, 90, 0);
 
             Instantiate(specialObjectPrefab, spawnPos, spawnRot);
-            Debug.Log("MapA用のオブジェクトをY軸90度回転で生成しました。");
+            //Debug.Log("MapA用のオブジェクトをY軸90度回転で生成しました。");
         }
 
     }

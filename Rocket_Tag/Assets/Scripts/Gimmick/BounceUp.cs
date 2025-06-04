@@ -27,7 +27,7 @@ public class BounceUp : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("AudioManager.Instance Ç™ null Ç≈Ç∑ÅB");
+                    //Debug.LogWarning("AudioManager.Instance Ç™ null Ç≈Ç∑ÅB");
                 }
             }
         }

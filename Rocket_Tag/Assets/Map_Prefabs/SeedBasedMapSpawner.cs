@@ -43,7 +43,7 @@ public class SeedBasedMapSpawner : MonoBehaviourPunCallbacks
             int seed = Random.Range(int.MinValue, int.MaxValue);
             Hashtable props = new Hashtable { { ROOM_SEED_KEY, seed } };
             PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-            Debug.Log($"Room にランダムシード {seed} を設定しました");
+            //Debug.Log($"Room にランダムシード {seed} を設定しました");
         }
     }
 
@@ -58,7 +58,7 @@ public class SeedBasedMapSpawner : MonoBehaviourPunCallbacks
         GameObject selected = mapPrefabs[index];
 
         Instantiate(selected, spawnPoint.position, spawnPoint.rotation);
-        Debug.Log($"[同期済] マップ「{selected.name}」を生成しました。");
+        //Debug.Log($"[同期済] マップ「{selected.name}」を生成しました。");
         mapSpawned = true;
 
         // MapA の時だけ特定のオブジェクトを表示
@@ -70,7 +70,7 @@ public class SeedBasedMapSpawner : MonoBehaviourPunCallbacks
             Quaternion rotation = Quaternion.Euler(0, 90, 0);
 
             Instantiate(specialObjectPrefab, spawnPos, rotation);
-            Debug.Log("MapA 用の特別なオブジェクトをY軸90度回転で表示しました。");
+            //Debug.Log("MapA 用の特別なオブジェクトをY軸90度回転で表示しました。");
         }
 
 

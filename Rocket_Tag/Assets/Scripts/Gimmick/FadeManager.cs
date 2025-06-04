@@ -28,7 +28,7 @@ public class FadeManager : MonoBehaviour
 
         if (fadeIn == null || fadeOut == null)
         {
-            Debug.LogError("Fade_In または Fade_Out のスクリプトが見つかりません！");
+            //Debug.LogError("Fade_In または Fade_Out のスクリプトが見つかりません！");
         }
     }
 

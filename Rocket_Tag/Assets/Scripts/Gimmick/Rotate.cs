@@ -69,7 +69,7 @@ public class Rotate : MonoBehaviourPun, IPunObservable
             Transform playerTransform = collision.transform;
             playersOnObject.Add(playerTransform);
 
-            Debug.Log($"プレイヤー {collision.gameObject.name} が回転オブジェクトに乗った。");
+           // Debug.Log($"プレイヤー {collision.gameObject.name} が回転オブジェクトに乗った。");
         }
     }
 
@@ -81,7 +81,7 @@ public class Rotate : MonoBehaviourPun, IPunObservable
             Transform playerTransform = collision.transform;
             playersOnObject.Remove(playerTransform);
 
-            Debug.Log($"プレイヤー {collision.gameObject.name} が回転オブジェクトから降りた。");
+           // Debug.Log($"プレイヤー {collision.gameObject.name} が回転オブジェクトから降りた。");
         }
     }
 

@@ -21,7 +21,7 @@ public class RollInCircle : MonoBehaviour
     {
         if (centerPoint == null)
         {
-            Debug.LogError("中心点 (centerPoint) が設定されていません。");
+            //Debug.LogError("中心点 (centerPoint) が設定されていません。");
             return;
         }
 
