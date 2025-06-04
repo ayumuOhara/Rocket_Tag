@@ -12,7 +12,6 @@ public class CameraController : MonoBehaviour
     Transform playerTransform;                                    // 注視対象プレイヤー
     Transform playerRightHandTransform;
     [SerializeField] private CameraController refCamera; 　       // カメラの水平回転を参照する用
-    SetPlayerBool setPlayerBool;
     PlayerMovement playerMovement;
     SetPlayerBool spb;
 
@@ -50,7 +49,6 @@ public class CameraController : MonoBehaviour
             }
         }
         Debug.Log("自機：" + player);
-        setPlayerBool = player.GetComponent<SetPlayerBool>();
         playerTransform = player.GetComponent<Transform>();
         playerRightHandTransform = GameObject.Find("RightHand").GetComponent<Transform>();
         playerMovement = player.GetComponent<PlayerMovement>();
@@ -76,18 +74,19 @@ public class CameraController : MonoBehaviour
     {
         turnSpeed = turnSpeedSetting.turnSpeed;
 
-        if (isShaking == false && !spb.isDead)
+        if (spb.isDead)
+        {
+            GetVelocity();
+            CameraMovement();
+        }
+        else
+        {
+            TrackingTarget();
+        }
+
+        if (!spb.isDead)
         {
             RotationCamera();
-            if (setPlayerBool.isDead == true)
-            {
-                GetVelocity();
-                CameraMovement();
-            }
-            else
-            {
-                TrackingTarget();
-            }
         }       
     }
 
@@ -99,7 +98,7 @@ public class CameraController : MonoBehaviour
         {
             hRotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * turnSpeed, 0);
 
-            if (setPlayerBool.isDead == true)
+            if (spb.isDead == true)
             {
                 var minVerticalAngle = -90.0f;         // カメラ独立後の垂直回転の最小角度
                 var maxVerticalAngle = 90.0f;      // カメラ独立後の垂直回転の最大角度
