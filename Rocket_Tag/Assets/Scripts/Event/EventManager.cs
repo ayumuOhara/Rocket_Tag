@@ -220,8 +220,8 @@ public class EventManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void ChangeSpeed(List<GameObject> playerList)
     {
-        int minSpeed = 10;
-        int maxSpeed = 30;
+        int minSpeed = 7;
+        int maxSpeed = 15;
 
         foreach (GameObject player in playerList)
         {
