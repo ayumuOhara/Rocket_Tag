@@ -244,6 +244,7 @@ public class EventManager : MonoBehaviourPunCallbacks
             PhotonView photon = player.GetComponent<PhotonView>();
             photon.RPC("SetMoveSpeed", RpcTarget.All, playerMovement.GetDefaultMoveSpeed());
         }
+        Debug.Log("イベントエフェクトのスピード停止処理呼び出し");
         photonView.RPC("CallEffectProcces", RpcTarget.All, (int)EventEffect.EventEffectProcess.STOP_SPD_AURA);    //  テレポートエフェクト停止
     }
 }
