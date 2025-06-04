@@ -164,7 +164,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
 
         for (int playerIndex = 0; playerIndex < numOfPlayers; playerIndex++)
         {
-            if (players[playerIndex].gameObject.activeSelf)
+            if (players[playerIndex] != null && players[playerIndex].gameObject.activeSelf)
             {
                 teleportSmokeEntity = Instantiate(loadedEffects[EffectName.TELEPORT_SMOKE]);
                 teleportSmokeEntity.transform.position = players[playerIndex].position;
