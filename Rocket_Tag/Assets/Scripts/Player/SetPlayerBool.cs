@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class SetPlayerBool : MonoBehaviourPunCallbacks
 {
-    [SerializeField] GameObject resultUI;
+    public GameObject resultUI;
 
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] RocketEffect rocketEffect;
