@@ -236,6 +236,7 @@ public class EventEffect : MonoBehaviourPunCallbacks                            
     {
         foreach (ParticleSystem p in effect)
         {
+            Debug.Log("spd aura stop “Ë“ü");
             p?.Stop();
         }
     }                                                                                           ////  ŠÖ”‹æI—¹  ////
