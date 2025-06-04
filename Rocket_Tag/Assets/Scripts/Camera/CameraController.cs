@@ -78,16 +78,13 @@ public class CameraController : MonoBehaviour
         {
             GetVelocity();
             CameraMovement();
+            RotationCamera();
         }
         else
         {
             TrackingTarget();
-        }
-
-        if (!spb.isDead)
-        {
             RotationCamera();
-        }       
+        }
     }
 
     // ƒJƒƒ‰‚Ì‰ñ“]‚Ì§Œä
