@@ -16,6 +16,6 @@ MonoBehaviour:
   - EVENT_TYPE: 0
     eventPercent: 30
   - EVENT_TYPE: 1
-    eventPercent: 35
+    eventPercent: 50
   - EVENT_TYPE: 2
-    eventPercent: 35
+    eventPercent: 20
