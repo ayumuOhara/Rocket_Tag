@@ -102,15 +102,18 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     {
         if(isMatching == true)
         {
-            int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-            if (playerCount != MAX_PLAYER_PER_ROOM)
+            if (PhotonNetwork.CurrentRoom != null)
             {
-                statusText.text = $"対戦相手を待っています。\n　　　　　　　　({playerCount}/{MAX_PLAYER_PER_ROOM})";
-            }
-            else
-            {
-                lobbyButton.SetActive(false);
-                statusText.text = "対戦相手が揃いました。バトルシーンに移動します。";
+                int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+                if (playerCount != MAX_PLAYER_PER_ROOM)
+                {
+                    statusText.text = $"対戦相手を待っています。\n　　　　　　　　({playerCount}/{MAX_PLAYER_PER_ROOM})";
+                }
+                else
+                {
+                    lobbyButton.SetActive(false);
+                    statusText.text = "対戦相手が揃いました。バトルシーンに移動します。";
+                }
             }
         }
     }

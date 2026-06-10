@@ -1,7 +1,5 @@
 using Photon.Pun;
 using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class Alpha_Rocket : MonoBehaviourPunCallbacks

@@ -6,12 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Test_Shiromoto.unity
-    guid: 3ccc57a08b2f0f7429e1ca349eb9e5a8
-  - enabled: 1
-    path: Assets/Scenes/Test_Takeshita.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
     path: Assets/Scenes/Title.unity
     guid: 6cff17bf83d44d44dbbea350c58b851e
   - enabled: 1
@@ -20,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Locker.unity
     guid: d89c6a0ec843f934da0f666954d8a463
+  - enabled: 1
+    path: Assets/Scenes/Test_Shiromoto.unity
+    guid: 3ccc57a08b2f0f7429e1ca349eb9e5a8
   - enabled: 1
     path: Assets/Scenes/PlayScene.unity
     guid: 363efedf2f0d48f4f806aae1abaa4bb8

@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;                                                               ////  ロッカーのプレイヤースキン変更スクリプト  ////
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEngine.InputManagerEntry;
 
 public class PlayerSkin : MonoBehaviour    //  プレイヤースキンスクリプト
 {
